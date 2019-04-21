@@ -47,7 +47,9 @@ export default class Layout extends Component {
         {this.state.socket !== null ? (
           <div>
             <div> Socket Connected </div>
-            <button onClick={this.handleClick}>Boop</button>
+            <button className="btn" onClick={this.handleClick}>
+              Boop
+            </button>
           </div>
         ) : (
           <div> Socket Offline </div>

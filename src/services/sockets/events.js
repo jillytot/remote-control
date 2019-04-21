@@ -1,3 +1,4 @@
 module.exports = {
-  TEST_EVENT: "TEST_EVENT"
+  TEST_EVENT: "TEST_EVENT",
+  TEST_RESPONSE: "TEST_RESPONSE"
 };

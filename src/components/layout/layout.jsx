@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import io from "socket.io-client";
-import { TEST_EVENT } from "../../services/sockets/events";
+import { TEST_EVENT, TEST_RESPONSE } from "../../services/sockets/events";
 
 const socketUrl = "http://localhost:3231";
 export default class Layout extends Component {
@@ -12,8 +12,9 @@ export default class Layout extends Component {
     };
   }
 
-  componentDidMount() {
-    this.initSocket();
+  async componentDidMount() {
+    await this.initSocket();
+    this.handleResponse();
   }
 
   initSocket = () => {
@@ -28,6 +29,16 @@ export default class Layout extends Component {
     const { socket } = this.state;
     socket.emit(TEST_EVENT);
     console.log("Message Sent: ", TEST_EVENT);
+  };
+
+  handleResponse = () => {
+    const { socket } = this.state;
+    if (socket !== null) {
+      socket.on(TEST_RESPONSE, () => {
+        console.log("Test Response!");
+        socket.emit("Emitting Things");
+      });
+    }
   };
 
   render() {

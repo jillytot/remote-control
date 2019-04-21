@@ -5,6 +5,10 @@ module.exports = function(socket) {
 
   socket.on(TEST_EVENT, () => {
     console.log("Test Event Recieved");
-    socket.emit(TEST_RESPONSE, "Beep!");
+    socket.emit(TEST_RESPONSE, testResponse("beep!"));
   });
 };
+
+function testResponse(test) {
+  return console.log("Test Response Sent: ", test);
+}

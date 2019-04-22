@@ -13,6 +13,7 @@
 .btn:hover {
   border: 2px solid #f3eb48; /* Green */
   margin: 4px;
+  cursor: pointer;
 }
 
 .btn:active {

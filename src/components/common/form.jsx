@@ -1,4 +1,3 @@
-//const Joi = require("joi-browser");
 import Joi from "joi-browser";
 import React, { Component } from "react";
 import Input from "./input";

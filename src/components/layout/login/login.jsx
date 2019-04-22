@@ -4,10 +4,10 @@ import "../../../styles/common.css";
 import Form from "../../common/form";
 import Joi from "joi-browser";
 
-export default class Login extends Form {
+class Login extends Form {
   state = {
-    username: "",
-    error: ""
+    data: { username: "", password: "", email: "" },
+    errors: {}
   };
 
   schema = {
@@ -16,20 +16,21 @@ export default class Login extends Form {
       .label("Username"),
     password: Joi.string()
       .required()
-      .label("Password")
+      .min(5)
+      .label("Password"),
+    email: Joi.string()
+      .email()
+      .required()
+      .label("Email")
+  };
+
+  doSubmit = () => {
+    console.log("Submitted!");
   };
 
   setUser = ({ user, isUser }) => {
     isUser ? this.setError("User name taken.") : this.setError("");
     this.props.setUser(user);
-  };
-
-  handleSubmit = e => {
-    e.preventDefault();
-    const { socket } = this.props;
-    const { username } = this.state;
-    socket.emit(VERIFY_USER, username, this.setUser);
-    console.log("Username Submitted: ", username);
   };
 
   handleChange = e => {
@@ -40,24 +41,28 @@ export default class Login extends Form {
     this.setState({ error });
   };
 
+  doSubmit = () => {
+    //Call the server
+    console.log("Submitted!");
+    const { socket } = this.props;
+    const { username } = this.state;
+    socket.emit(VERIFY_USER, username, this.setUser);
+    console.log("Username Submitted: ", username);
+  };
+
   render() {
-    const { username, error } = this.state;
     return (
       <div>
-        <form onSubmit={this.handleSubmit} className="login-form">
-          <input
-            placeholder="Login"
-            ref={input => {
-              this.textInput = input;
-            }}
-            type="text"
-            id="username"
-            value={username}
-            onChange={this.handleChange}
-          />
-          <div className="error">{error ? error : null}</div>
+        <h1>Register Account</h1>
+        <form onSubmit={this.handleSubmit}>
+          {this.renderInput("username", "Username")}
+          {this.renderInput("password", "Password", "password")}
+          {this.renderInput("email", "Email", "email")}
+          {this.renderButton("Register")}
         </form>
       </div>
     );
   }
 }
+
+export default Login;

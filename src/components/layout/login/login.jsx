@@ -1,16 +1,23 @@
-import React, { Component } from "react";
+import React from "react";
 import { VERIFY_USER } from "../../../services/sockets/events";
 import "../../../styles/common.css";
+import Form from "../../common/form";
+import Joi from "joi-browser";
 
-export default class Login extends Component {
-  constructor(props) {
-    super(props);
+export default class Login extends Form {
+  state = {
+    username: "",
+    error: ""
+  };
 
-    this.state = {
-      nickname: "",
-      error: ""
-    };
-  }
+  schema = {
+    username: Joi.string()
+      .required()
+      .label("Username"),
+    password: Joi.string()
+      .required()
+      .label("Password")
+  };
 
   setUser = ({ user, isUser }) => {
     isUser ? this.setError("User name taken.") : this.setError("");
@@ -20,12 +27,13 @@ export default class Login extends Component {
   handleSubmit = e => {
     e.preventDefault();
     const { socket } = this.props;
-    const { nickname } = this.state;
-    socket.emit(VERIFY_USER, nickname, this.setUser);
+    const { username } = this.state;
+    socket.emit(VERIFY_USER, username, this.setUser);
+    console.log("Username Submitted: ", username);
   };
 
   handleChange = e => {
-    this.setState({ nickname: e.target.value });
+    this.setState({ username: e.target.value });
   };
 
   setError = error => {
@@ -33,7 +41,7 @@ export default class Login extends Component {
   };
 
   render() {
-    const { nickname, error } = this.state;
+    const { username, error } = this.state;
     return (
       <div>
         <form onSubmit={this.handleSubmit} className="login-form">
@@ -43,8 +51,8 @@ export default class Login extends Component {
               this.textInput = input;
             }}
             type="text"
-            id="nickname"
-            value={nickname}
+            id="username"
+            value={username}
             onChange={this.handleChange}
           />
           <div className="error">{error ? error : null}</div>

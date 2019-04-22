@@ -3,6 +3,7 @@ import { VERIFY_USER } from "../../../services/sockets/events";
 import "../../../styles/common.css";
 import Form from "../../common/form";
 import Joi from "joi-browser";
+import "./login.css";
 
 export default class Login extends Form {
   state = {
@@ -30,7 +31,7 @@ export default class Login extends Form {
 
   setUser = ({ user, isUser }) => {
     isUser ? this.setError("User name taken.") : this.setError("");
-    this.props.setUser(user);
+    //this.props.setUser(user);
   };
 
   setError = error => {
@@ -41,14 +42,14 @@ export default class Login extends Form {
     //Call the server
     console.log("Submitted!");
     const { socket } = this.props;
-    const { username } = this.state.data;
-    socket.emit(VERIFY_USER, username, this.setUser);
-    console.log("Username Submitted: ", username);
+    const { data } = this.state;
+    socket.emit(VERIFY_USER, data.username, this.setUser);
+    console.log("Username Submitted: ", data);
   };
 
   render() {
     return (
-      <div>
+      <div className="register-form">
         <h1>Register Account</h1>
         <form onSubmit={this.handleSubmit}>
           {this.renderInput("username", "Username")}

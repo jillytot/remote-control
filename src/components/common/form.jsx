@@ -10,16 +10,14 @@ class Form extends Component {
   };
 
   validate = () => {
-    console.log("Validating");
     //Options for Joi
     const options = { abortEarly: false };
 
     //Validation using Joi
-    console.log(this.state.data, this.schema, options);
+    //console.log(this.state.data, this.schema, options);
     const { error } = Joi.validate(this.state.data, this.schema, options);
 
     if (!error) {
-      console.log("error free");
       return null;
     }
 

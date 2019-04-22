@@ -5,7 +5,8 @@ const {
   TEST_RESPONSE,
   VERIFY_USER,
   USER_CONNECTED,
-  USER_DISCONNECTED
+  USER_DISCONNECTED,
+  LOGOUT
 } = require("./events");
 
 let connectedUsers = {};
@@ -35,9 +36,14 @@ module.exports = function(socket) {
 
   socket.on(USER_CONNECTED, user => {
     connectedUsers = addUser(connectedUsers, user);
-    socket.user = user;
-    //io.emit(USER_CONNECTED, connectedUsers);
+    //socket.user = user;
     console.log("Connected Users: ", connectedUsers);
+  });
+
+  socket.on(LOGOUT, user => {
+    //connectedUsers = removeUser(connectedUsers, socket.user.name)
+    io.emit(USER_DISCONNECTED, user);
+    console.log("Disconnect", user);
   });
 };
 

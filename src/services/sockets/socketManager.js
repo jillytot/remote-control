@@ -9,7 +9,7 @@ module.exports = function(socket) {
   socket.on(TEST_EVENT, () => {
     console.log("Test Event Recieved");
     const beep = "beep";
-    socket.emit(TEST_RESPONSE, testResponse(beep));
+    io.emit(TEST_RESPONSE, testResponse(beep));
   });
 };
 

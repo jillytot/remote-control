@@ -18,3 +18,10 @@
 .btn:active {
   transform: translateY(4px);
 }
+
+.error {
+  text-align: center;
+  margin: 5px 0;
+  padding: 5px 10px;
+  color: #c92c43;
+}

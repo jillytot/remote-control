@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import Login from "./login/login";
 import io from "socket.io-client";
 import { TEST_EVENT, TEST_RESPONSE } from "../../services/sockets/events";
 
@@ -50,6 +51,7 @@ export default class Layout extends Component {
             <button className="btn" onClick={this.handleClick}>
               Boop
             </button>
+            <Login socket={this.state.socket} />
           </div>
         ) : (
           <div> Socket Offline </div>

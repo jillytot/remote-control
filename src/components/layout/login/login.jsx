@@ -4,7 +4,7 @@ import "../../../styles/common.css";
 import Form from "../../common/form";
 import Joi from "joi-browser";
 
-class Login extends Form {
+export default class Login extends Form {
   state = {
     data: { username: "", password: "", email: "" },
     errors: {}
@@ -33,10 +33,6 @@ class Login extends Form {
     this.props.setUser(user);
   };
 
-  handleChange = e => {
-    this.setState({ username: e.target.value });
-  };
-
   setError = error => {
     this.setState({ error });
   };
@@ -45,7 +41,7 @@ class Login extends Form {
     //Call the server
     console.log("Submitted!");
     const { socket } = this.props;
-    const { username } = this.state;
+    const { username } = this.state.data;
     socket.emit(VERIFY_USER, username, this.setUser);
     console.log("Username Submitted: ", username);
   };
@@ -64,5 +60,3 @@ class Login extends Form {
     );
   }
 }
-
-export default Login;

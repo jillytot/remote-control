@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import Login from "./login/login";
+import User from "./nav/user";
 import io from "socket.io-client";
 import {
   TEST_EVENT,
@@ -66,10 +67,21 @@ export default class Layout extends Component {
     }
   };
 
+  handleLogout = user => {
+    const { socket } = this.state;
+    user !== null
+      ? socket.emit(LOGOUT, user => {
+          console.log("Logging Out");
+          //this.setState({ user: null });
+        })
+      : console.log("User Logout Error");
+  };
+
   render() {
-    const { user } = this.state;
+    const { user, socket } = this.state;
     if (this.state.user !== null) {
       console.log("User Connected: ", this.state.user);
+      console.log(user.name);
     }
     return (
       <div>
@@ -82,7 +94,14 @@ export default class Layout extends Component {
             {!user ? (
               <Login socket={this.state.socket} setUser={this.setUser} />
             ) : (
-              <div>Successfully logged in as: {user.name} </div>
+              <div>
+                Successfully logged in as:{" "}
+                <User
+                  user={user}
+                  socket={socket}
+                  onLogout={this.handleLogout}
+                />{" "}
+              </div>
             )}
           </div>
         ) : (

@@ -16,6 +16,7 @@ export default class Login extends Form {
   schema = {
     username: Joi.string()
       .required()
+      .min(3)
       .label("Username")
     // password: Joi.string()
     //   .required()
@@ -33,6 +34,8 @@ export default class Login extends Form {
 
   setUser = ({ user, isUser }) => {
     isUser ? this.setError("User name taken.") : this.setError("");
+
+    //Currently this function is getting called from Layout
     this.props.setUser(user);
   };
 

@@ -1,6 +1,12 @@
 const io = require("./sockets").io;
 const { createUser, createMessage, createChat } = require("./factories");
-const { TEST_EVENT, TEST_RESPONSE, VERIFY_USER } = require("./events");
+const {
+  TEST_EVENT,
+  TEST_RESPONSE,
+  VERIFY_USER,
+  USER_CONNECTED,
+  USER_DISCONNECTED
+} = require("./events");
 
 let connectedUsers = {};
 module.exports = function(socket) {
@@ -26,11 +32,30 @@ module.exports = function(socket) {
       console.log("Connected Users: ", connectedUsers);
     }
   });
+
+  socket.on(USER_CONNECTED, user => {
+    connectedUsers = addUser(connectedUsers, user);
+    socket.user = user;
+    //io.emit(USER_CONNECTED, connectedUsers);
+    console.log("Connected Users: ", connectedUsers);
+  });
 };
 
 function testResponse(test) {
   console.log("Test Response Sent: ", test);
   return test;
+}
+
+/*
+Adds user to list passed in
+@param userList { object } Object with key value pairs of users
+@param user { user } the user to be added to the list
+@return userList { object } Object with key value pairs of users */
+function addUser(userList, user) {
+  console.log("Add User: ", userList, user);
+  let newList = Object.assign({}, userList);
+  newList[user.name] = user;
+  return newList;
 }
 
 /*

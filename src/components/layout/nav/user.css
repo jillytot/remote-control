@@ -1,0 +1,9 @@
+.user {
+  color: cyan;
+  background-color: rgb(33, 33, 59);
+}
+
+.user-logout {
+  font-size: 12px;
+  color: royalblue;
+}

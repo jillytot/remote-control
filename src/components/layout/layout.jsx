@@ -1,7 +1,12 @@
 import React, { Component } from "react";
 import Login from "./login/login";
 import io from "socket.io-client";
-import { TEST_EVENT, TEST_RESPONSE } from "../../services/sockets/events";
+import {
+  TEST_EVENT,
+  TEST_RESPONSE,
+  USER_CONNECTED,
+  LOGOUT
+} from "../../services/sockets/events";
 
 const socketUrl = "http://localhost:3231";
 export default class Layout extends Component {
@@ -9,7 +14,8 @@ export default class Layout extends Component {
     super(props);
 
     this.state = {
-      socket: null
+      socket: null,
+      user: null
     };
   }
 
@@ -26,6 +32,19 @@ export default class Layout extends Component {
     this.setState({ socket });
   };
 
+  setUser = user => {
+    const { socket } = this.state;
+    socket.emit(USER_CONNECTED, user);
+    this.setState({ user });
+  };
+
+  //Sets the user property in state to null
+  logout = () => {
+    const { socket } = this.state;
+    socket.emit(LOGOUT);
+    this.setState({ user: null });
+  };
+
   handleClick = e => {
     const { socket } = this.state;
     socket.emit(TEST_EVENT);
@@ -39,10 +58,19 @@ export default class Layout extends Component {
         console.log("Test Response!");
         socket.emit("Emitting Things");
       });
+      socket.on(USER_CONNECTED, user => {
+        user
+          ? this.setState({ user: user })
+          : console.log("Unable to get User");
+      });
     }
   };
 
   render() {
+    const { user } = this.state;
+    if (this.state.user !== null) {
+      console.log("User Connected: ", this.state.user);
+    }
     return (
       <div>
         {this.state.socket !== null ? (
@@ -51,7 +79,11 @@ export default class Layout extends Component {
             <button className="btn" onClick={this.handleClick}>
               Boop
             </button>
-            <Login socket={this.state.socket} />
+            {!user ? (
+              <Login socket={this.state.socket} setUser={this.setUser} />
+            ) : (
+              <div>Successfully logged in as: {user.name} </div>
+            )}
           </div>
         ) : (
           <div> Socket Offline </div>

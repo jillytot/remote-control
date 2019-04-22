@@ -6,23 +6,25 @@ import Joi from "joi-browser";
 import "./login.css";
 
 export default class Login extends Form {
+  //Leaving placeholders for future verification steps
   state = {
-    data: { username: "", password: "", email: "" },
+    // data: { username: "", password: "", email: "" },
+    data: { username: "" },
     errors: {}
   };
 
   schema = {
     username: Joi.string()
       .required()
-      .label("Username"),
-    password: Joi.string()
-      .required()
-      .min(5)
-      .label("Password"),
-    email: Joi.string()
-      .email()
-      .required()
-      .label("Email")
+      .label("Username")
+    // password: Joi.string()
+    //   .required()
+    //   .min(5)
+    //   .label("Password"),
+    // email: Joi.string()
+    //   .email()
+    //   .required()
+    //   .label("Email")
   };
 
   doSubmit = () => {
@@ -31,7 +33,7 @@ export default class Login extends Form {
 
   setUser = ({ user, isUser }) => {
     isUser ? this.setError("User name taken.") : this.setError("");
-    //this.props.setUser(user);
+    this.props.setUser(user);
   };
 
   setError = error => {
@@ -40,22 +42,20 @@ export default class Login extends Form {
 
   doSubmit = () => {
     //Call the server
-    console.log("Submitted!");
     const { socket } = this.props;
     const { data } = this.state;
-    socket.emit(VERIFY_USER, data.username, this.setUser);
-    console.log("Username Submitted: ", data);
+    socket.emit(VERIFY_USER, data, this.setUser);
   };
 
   render() {
     return (
       <div className="register-form">
-        <h1>Register Account</h1>
+        {/* <h1>Enter a Username</h1> */}
         <form onSubmit={this.handleSubmit}>
           {this.renderInput("username", "Username")}
-          {this.renderInput("password", "Password", "password")}
-          {this.renderInput("email", "Email", "email")}
-          {this.renderButton("Register")}
+          {/* {this.renderInput("password", "Password", "password")}
+          {this.renderInput("email", "Email", "email")} */}
+          {this.renderButton("Submit")}
         </form>
       </div>
     );

@@ -13,14 +13,17 @@ module.exports = function(socket) {
     io.emit(TEST_RESPONSE, testResponse(beep));
   });
 
-  socket.on(VERIFY_USER, (username, callback) => {
-    //console.log(username, password, email);
-    if (isUser(connectedUsers, username)) {
+  socket.on(VERIFY_USER, (data, callback) => {
+    console.log(data);
+    const { username } = data;
+
+    if (isUser(connectedUsers)) {
       console.log("verifying user");
       callback({ isUser: true, user: null });
     } else {
       console.log("Add User! ", username);
       callback({ isUser: false, user: createUser({ name: username }) });
+      console.log("Connected Users: ", connectedUsers);
     }
   });
 };

@@ -7,7 +7,8 @@ import {
   TEST_RESPONSE,
   USER_CONNECTED,
   USER_DISCONNECTED,
-  LOGOUT
+  LOGOUT,
+  USERS
 } from "../../services/sockets/events";
 
 const socketUrl = "http://localhost:3231";
@@ -76,6 +77,9 @@ export default class Layout extends Component {
           );
         }
       });
+      socket.on(USERS, users => {
+        console.log("USERS", users);
+      });
     }
   };
 
@@ -92,8 +96,7 @@ export default class Layout extends Component {
   render() {
     const { user, socket } = this.state;
     if (this.state.user !== null) {
-      console.log("User Connected: ", this.state.user);
-      console.log(user.name);
+      //console.log("User Connected: ", this.state.user);
     }
     return (
       <div>

@@ -6,7 +6,8 @@ const {
   VERIFY_USER,
   USER_CONNECTED,
   USER_DISCONNECTED,
-  LOGOUT
+  LOGOUT,
+  USERS
 } = require("./events");
 
 let connectedUsers = {};
@@ -36,7 +37,7 @@ module.exports = function(socket) {
 
   socket.on(USER_CONNECTED, user => {
     connectedUsers = addUser(connectedUsers, user);
-    //socket.user = user;
+    io.emit(USERS, connectedUsers);
     console.log("Connected Users: ", connectedUsers);
   });
 

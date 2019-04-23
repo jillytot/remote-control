@@ -1,5 +1,7 @@
 import React, { Component } from "react";
 import { USERS } from "../../../services/sockets/events";
+import UserList from "./userList.jsx";
+import "./chat.css";
 
 export default class Chat extends Component {
   //This component will rely entirely on props passed into it to build the state.
@@ -25,10 +27,6 @@ export default class Chat extends Component {
         ? this.setState({ socket: this.props.socket })
         : console.log("loading socket");
     }
-
-    if (this.state.users && this.state.users !== prevState.users) {
-      this.displayUsers();
-    }
   }
 
   chatListener = () => {
@@ -41,22 +39,14 @@ export default class Chat extends Component {
     }
   };
 
-  displayUsers = () => {
-    if (this.state.users) {
-      let { users } = this.state;
-      Object.keys(users).map(user => {
-        console.log(user);
-        return <li key="id"> {user["name"]}</li>;
-      });
-    } else {
-      return <div>Loading Users</div>;
-    }
-  };
-
   render() {
     return (
       <div>
-        <ul>{this.displayUsers()}</ul>
+        {this.state.users ? (
+          <UserList users={this.state.users} />
+        ) : (
+          <div>Loading Users</div>
+        )}
       </div>
     );
   }

@@ -2,13 +2,13 @@ import React, { Component } from "react";
 import Login from "./login/login";
 import User from "./nav/user";
 import io from "socket.io-client";
+import Chat from "./chat/chat";
 import {
   TEST_EVENT,
   TEST_RESPONSE,
   USER_CONNECTED,
   USER_DISCONNECTED,
-  LOGOUT,
-  USERS
+  LOGOUT
 } from "../../services/sockets/events";
 
 const socketUrl = "http://localhost:3231";
@@ -77,9 +77,6 @@ export default class Layout extends Component {
           );
         }
       });
-      socket.on(USERS, users => {
-        console.log("USERS", users);
-      });
     }
   };
 
@@ -118,6 +115,7 @@ export default class Layout extends Component {
         ) : (
           <div> Socket Offline </div>
         )}
+        <Chat socket={socket} />
       </div>
     );
   }

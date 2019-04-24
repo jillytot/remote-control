@@ -16,8 +16,13 @@ const { heartBeat } = require("./settings");
 
 let connectedUsers = {};
 let localChat = createChat();
+let heartBeatStarted = false;
 
 module.exports = function(socket) {
+  if (!heartBeatStarted) {
+    beat(io);
+    heartBeatStarted = true;
+  }
   //Socket will emit this message with successful connection
   //console.log("Socket Id:" + socket.id);
 
@@ -103,4 +108,16 @@ function removeUser(userList, username) {
   let newList = Object.assign({}, userList);
   delete newList[username];
   return newList;
+}
+
+//Heartbeat
+function beat(io) {
+  let timerId = setTimeout(
+    (tick = () => {
+      console.log("badum!");
+      io.emit(HEARTBEAT);
+      timerId = setTimeout(tick, heartBeat); // (*)
+    }),
+    heartBeat
+  );
 }

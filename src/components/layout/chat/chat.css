@@ -37,3 +37,35 @@
   grid-column-start: 3;
   grid-column-end: 4;
 }
+
+.gray {
+  color: #636363;
+}
+
+.blue {
+  color: #47b5ff;
+}
+
+.cyan {
+  color: #00ffff;
+}
+
+.green {
+  color: #91ff42;
+}
+
+.yellow {
+  color: #f6ff47;
+}
+
+.orange {
+  color: #ffa557;
+}
+
+.pink {
+  color: #ff5ca3;
+}
+
+.purple {
+  color: #e500ff;
+}

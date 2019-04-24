@@ -7,10 +7,15 @@ const {
   USER_CONNECTED,
   USER_DISCONNECTED,
   LOGOUT,
-  USERS
+  USERS,
+  LOCAL_CHAT
 } = require("./events");
 
+const { heartBeat } = require("./settings");
+
 let connectedUsers = {};
+let localChat = createChat();
+
 module.exports = function(socket) {
   //Socket will emit this message with successful connection
   //console.log("Socket Id:" + socket.id);
@@ -46,6 +51,17 @@ module.exports = function(socket) {
     io.emit(USER_DISCONNECTED, user);
     io.emit(USERS, connectedUsers);
     //console.log("Disconnect", user, "User List UpdateD: ", connectedUsers);
+  });
+
+  //Get Community Chat
+  socket.on(LOCAL_CHAT, callback => {
+    //console.log("community chat: ", communityChat);
+    callback(localChat);
+  });
+
+  //How do i tell which user?
+  socket.on("disconnect", () => {
+    console.log("Lost connection to user: ");
   });
 };
 

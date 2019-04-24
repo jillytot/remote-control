@@ -1,6 +1,6 @@
 .user-list {
-  font-size: 12px;
-  background-color: rgb(41, 41, 55);
+  font-size: 14px;
+  /* background-color: rgb(41, 41, 55); */
   margin: 1px 0px 0px 0px;
 }
 
@@ -10,7 +10,8 @@
 }
 
 .chat-container {
-  background-color: rgb(51, 51, 65);
+  /* background-color: rgb(51, 51, 65); */
+  background-color: rgb(22, 19, 32);
   display: grid;
 }
 
@@ -36,6 +37,8 @@
   display: grid;
   grid-column-start: 3;
   grid-column-end: 4;
+  justify-content: left;
+  text-align: left;
 }
 
 .gray {

@@ -9,9 +9,10 @@ const UserList = ({ users }) => {
     "yellow",
     "orange",
     "pink",
-    "pruple"
+    "purple"
   ];
 
+  //TODO: Make user colors perminent for the duration the user is in the chatroom
   let color = colors => {
     return colors[Math.floor(Math.random() * colors.length)];
   };

@@ -2,15 +2,14 @@ import React, { Component } from "react";
 import io from "socket.io-client";
 import Layout from "./layout/layout";
 import { socketUrl } from "../settings/clientSettings";
+import { HEARTBEAT } from "../services/sockets/events";
 
 //Will likely move most of the interaction with the server to here.
 export default class EventHandler extends Component {
   constructor(props) {
     super(props);
-
     this.state = {
-      socket: null,
-      user: null
+      socket: null
     };
   }
 
@@ -29,6 +28,11 @@ export default class EventHandler extends Component {
 
   handleResponse = () => {
     const { socket } = this.state;
+    if (socket !== null) {
+      socket.on(HEARTBEAT, () => {
+        socket.emit(HEARTBEAT, socket.id);
+      });
+    }
   };
 
   render() {

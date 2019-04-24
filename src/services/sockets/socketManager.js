@@ -44,7 +44,7 @@ module.exports = function(socket) {
   socket.on(USER_CONNECTED, user => {
     connectedUsers = addUser(connectedUsers, user);
     io.emit(USERS_UPDATED, connectedUsers);
-    //console.log("Connected Users: ", connectedUsers);
+    console.log("Connected Users: ", connectedUsers);
   });
 
   socket.on(LOGOUT, user => {
@@ -56,7 +56,6 @@ module.exports = function(socket) {
 
   //Get Community Chat
   socket.on(LOCAL_CHAT, callback => {
-    //console.log("community chat: ", communityChat);
     callback(localChat);
   });
 
@@ -81,7 +80,6 @@ Adds user to list passed in
 @param user { user } the user to be added to the list
 @return userList { object } Object with key value pairs of users */
 function addUser(userList, user) {
-  console.log("Add User: ", userList, user);
   let newList = Object.assign({}, userList);
   newList[user.name] = user;
   return newList;
@@ -104,6 +102,5 @@ Removes user from the list passed in
 function removeUser(userList, username) {
   let newList = Object.assign({}, userList);
   delete newList[username];
-  //console.log("Removing ", username, " from userlist: ", userList);
   return newList;
 }

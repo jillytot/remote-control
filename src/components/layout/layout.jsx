@@ -11,42 +11,38 @@ import {
 } from "../../services/sockets/events";
 
 export default class Layout extends Component {
+  _isMounted = false;
   constructor(props) {
     super(props);
-
     this.state = {
-      socket: null,
       user: null
     };
   }
 
   //Will slowly move all the event handling to the Event Handler.
   componentDidMount() {
-    this.setState({ socket: this.props.socket });
+    this._isMounted = true;
     this.handleResponse();
   }
 
+  componentWillUnmount() {
+    this._isMounted = false;
+  }
+
   setUser = user => {
-    const { socket } = this.state;
+    const { socket } = this.props;
     socket.emit(USER_CONNECTED, user);
     this.setState({ user });
   };
 
-  //Sets the user property in state to null
-  logout = () => {
-    const { socket } = this.state;
-    socket.emit(LOGOUT);
-    this.setState({ user: null });
-  };
-
   handleClick = e => {
-    const { socket } = this.state;
+    const { socket } = this.props;
     socket.emit(TEST_EVENT);
     console.log("Message Sent: ", TEST_EVENT);
   };
 
   handleResponse = () => {
-    const { socket } = this.state;
+    const { socket } = this.props;
     if (socket !== null) {
       socket.on(TEST_RESPONSE, () => {
         console.log("Test Response!");
@@ -70,7 +66,8 @@ export default class Layout extends Component {
   };
 
   handleLogout = () => {
-    const { socket, user } = this.state;
+    const { user } = this.state;
+    const { socket } = this.props;
     console.log("Handle Logout: ", user);
     user !== null
       ? socket.emit(LOGOUT, user, () => {
@@ -80,10 +77,8 @@ export default class Layout extends Component {
   };
 
   render() {
-    const { user, socket } = this.state;
-    if (this.state.user !== null) {
-      //console.log("User Connected: ", this.state.user);
-    }
+    const { user } = this.state;
+    const { socket } = this.props;
     return (
       <div>
         {this.state.socket !== null ? (
@@ -97,14 +92,14 @@ export default class Layout extends Component {
             ) : (
               <div>
                 Successfully logged in as:{" "}
-                <User user={user} socket={socket} onClick={this.handleLogout} />{" "}
+                <User user={user} socket={socket} onClick={this.handleLogout} />
               </div>
             )}
+            <Chat socket={socket} user={user} />
           </div>
         ) : (
           <div> Socket Offline </div>
         )}
-        <Chat socket={socket} />
       </div>
     );
   }

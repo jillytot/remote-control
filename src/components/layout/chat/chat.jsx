@@ -5,36 +5,28 @@ import Messages from "./messages";
 import "./chat.css";
 
 export default class Chat extends Component {
+  _isMounted = false;
   //This component will rely entirely on props passed into it to build the state.
   //@param socket { object } is the websocket listener passed in
   //@param users { object } gets populated when socket receives USERS event
   state = {};
 
-  async componentDidMount() {
-    const { socket } = (await this.props.socket) !== null;
-    socket ? this.setState({ socket: socket }) : console.log("Loading Socket");
+  componentDidMount() {
+    this._isMounted = true;
     this.chatListener();
   }
 
-  componentDidUpdate(prevProps) {
-    if (this.props.socket !== prevProps.socket) {
-      const { socket } = this.props;
-      //console.log("Updated state in Chat");
-      this.setState({ socket: socket });
-    }
-
-    if (this.state.socket === null || this.state.socket === undefined) {
-      this.props.socket
-        ? this.setState({ socket: this.props.socket })
-        : console.log("loading socket");
-    }
+  componentWillUnmount() {
+    this._isMounted = false;
   }
 
   chatListener = () => {
-    if (this.state.socket) {
-      const { socket } = this.state;
+    console.log("Chat Listener is Listening...");
+    const { socket } = this.props;
+    console.log(socket);
+    if (socket && this._isMounted) {
       socket.on(USERS_UPDATED, users => {
-        //console.log("USERS", users);
+        console.log("USERS", users);
         this.setState({ users });
       });
     }

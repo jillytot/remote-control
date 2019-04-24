@@ -67,8 +67,6 @@ export default class Layout extends Component {
           : console.log("Unable to get User");
       });
       socket.on(USER_DISCONNECTED, disconnectUser => {
-        //console.log("User to disconnect: ", disconnectUser, this.state.user);
-
         if (disconnectUser && disconnectUser["id"] === this.state.user["id"]) {
           this.setState({ user: null });
         } else {

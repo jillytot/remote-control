@@ -13,7 +13,7 @@ const {
 let connectedUsers = {};
 module.exports = function(socket) {
   //Socket will emit this message with successful connection
-  console.log("Socket Id:" + socket.id);
+  //console.log("Socket Id:" + socket.id);
 
   socket.on(TEST_EVENT, () => {
     console.log("Test Event Recieved");
@@ -26,25 +26,26 @@ module.exports = function(socket) {
     const { username } = data;
 
     if (isUser(connectedUsers)) {
-      console.log("verifying user");
+      //console.log("verifying user");
       callback({ isUser: true, user: null });
     } else {
-      console.log("Add User! ", username);
+      //console.log("Add User! ", username);
       callback({ isUser: false, user: createUser({ name: username }) });
-      console.log("Connected Users: ", connectedUsers);
+      //console.log("Connected Users: ", connectedUsers);
     }
   });
 
   socket.on(USER_CONNECTED, user => {
     connectedUsers = addUser(connectedUsers, user);
     io.emit(USERS, connectedUsers);
-    console.log("Connected Users: ", connectedUsers);
+    //console.log("Connected Users: ", connectedUsers);
   });
 
   socket.on(LOGOUT, user => {
-    //connectedUsers = removeUser(connectedUsers, socket.user.name)
+    connectedUsers = removeUser(connectedUsers, user["name"]);
     io.emit(USER_DISCONNECTED, user);
-    console.log("Disconnect", user);
+    io.emit(USERS, connectedUsers);
+    //console.log("Disconnect", user, "User List UpdateD: ", connectedUsers);
   });
 };
 
@@ -59,7 +60,7 @@ Adds user to list passed in
 @param user { user } the user to be added to the list
 @return userList { object } Object with key value pairs of users */
 function addUser(userList, user) {
-  console.log("Add User: ", userList, user);
+  //console.log("Add User: ", userList, user);
   let newList = Object.assign({}, userList);
   newList[user.name] = user;
   return newList;
@@ -72,4 +73,16 @@ Checks if the user is in the list passed in.
 @return userList { object } Object with key value pairs of Users */
 function isUser(userList, username) {
   return username in userList;
+}
+
+/*
+Removes user from the list passed in
+@param userList { object } Object with key value pairs of Users
+@param username { string } name of user to be removed
+@return userList { object } Object with key value pairs of Users */
+function removeUser(userList, username) {
+  let newList = Object.assign({}, userList);
+  delete newList[username];
+  console.log("Removing ", username, " from userlist: ", userList);
+  return newList;
 }

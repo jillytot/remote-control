@@ -1,7 +1,7 @@
 import React from "react";
 
 const UserList = ({ users }) => {
-  console.log("Users from UserList", users);
+  //console.log("Users from UserList", users);
   return (
     <div className="user-list-container">
       <div className="ulist">

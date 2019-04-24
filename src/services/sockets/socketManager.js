@@ -60,7 +60,7 @@ Adds user to list passed in
 @param user { user } the user to be added to the list
 @return userList { object } Object with key value pairs of users */
 function addUser(userList, user) {
-  //console.log("Add User: ", userList, user);
+  console.log("Add User: ", userList, user);
   let newList = Object.assign({}, userList);
   newList[user.name] = user;
   return newList;
@@ -83,6 +83,6 @@ Removes user from the list passed in
 function removeUser(userList, username) {
   let newList = Object.assign({}, userList);
   delete newList[username];
-  console.log("Removing ", username, " from userlist: ", userList);
+  //console.log("Removing ", username, " from userlist: ", userList);
   return newList;
 }

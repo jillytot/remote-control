@@ -19,7 +19,7 @@ export default class Chat extends Component {
   componentDidUpdate(prevProps) {
     if (this.props.socket !== prevProps.socket) {
       const { socket } = this.props;
-      console.log("Updated state in Chat");
+      //console.log("Updated state in Chat");
       this.setState({ socket: socket });
     }
 
@@ -34,7 +34,7 @@ export default class Chat extends Component {
     if (this.state.socket) {
       const { socket } = this.state;
       socket.on(USERS, users => {
-        console.log("USERS", users);
+        //console.log("USERS", users);
         this.setState({ users });
       });
     }

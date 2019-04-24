@@ -1,7 +1,12 @@
 .user-list {
   font-size: 12px;
   background-color: rgb(41, 41, 55);
-  margin: 1px;
+  margin: 1px 0px 0px 0px;
+}
+
+.user-list:hover {
+  background-color: rgb(60, 60, 70);
+  cursor: pointer;
 }
 
 .chat-container {
@@ -21,8 +26,10 @@
 .chat-window {
   background-color: rgb(22, 19, 32);
   display: grid;
+  margin: 1px;
   grid-column-start: 1;
   grid-column-end: 3;
+  min-height: 400px;
 }
 
 .user-list-container {

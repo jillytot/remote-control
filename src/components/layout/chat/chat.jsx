@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { USERS } from "../../../services/sockets/events";
+import { USERS_UPDATED } from "../../../services/sockets/events";
 import UserList from "./userList.jsx";
 import Messages from "./messages";
 import "./chat.css";
@@ -33,7 +33,7 @@ export default class Chat extends Component {
   chatListener = () => {
     if (this.state.socket) {
       const { socket } = this.state;
-      socket.on(USERS, users => {
+      socket.on(USERS_UPDATED, users => {
         //console.log("USERS", users);
         this.setState({ users });
       });

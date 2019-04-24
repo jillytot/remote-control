@@ -7,8 +7,9 @@ const {
   USER_CONNECTED,
   USER_DISCONNECTED,
   LOGOUT,
-  USERS,
-  LOCAL_CHAT
+  USERS_UPDATED,
+  LOCAL_CHAT,
+  HEARTBEAT
 } = require("./events");
 
 const { heartBeat } = require("./settings");
@@ -42,14 +43,14 @@ module.exports = function(socket) {
 
   socket.on(USER_CONNECTED, user => {
     connectedUsers = addUser(connectedUsers, user);
-    io.emit(USERS, connectedUsers);
+    io.emit(USERS_UPDATED, connectedUsers);
     //console.log("Connected Users: ", connectedUsers);
   });
 
   socket.on(LOGOUT, user => {
     connectedUsers = removeUser(connectedUsers, user["name"]);
     io.emit(USER_DISCONNECTED, user);
-    io.emit(USERS, connectedUsers);
+    io.emit(USERS_UPDATED, connectedUsers);
     //console.log("Disconnect", user, "User List UpdateD: ", connectedUsers);
   });
 
@@ -62,6 +63,10 @@ module.exports = function(socket) {
   //How do i tell which user?
   socket.on("disconnect", () => {
     console.log("Lost connection to user: ");
+  });
+
+  socket.on(HEARTBEAT, user => {
+    console.log("heartbeat from: ", user);
   });
 };
 

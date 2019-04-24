@@ -1,7 +1,6 @@
 import React, { Component } from "react";
 import Login from "./login/login";
 import User from "./nav/user";
-import io from "socket.io-client";
 import Chat from "./chat/chat";
 import {
   TEST_EVENT,
@@ -11,7 +10,6 @@ import {
   LOGOUT
 } from "../../services/sockets/events";
 
-const socketUrl = "http://localhost:3231";
 export default class Layout extends Component {
   constructor(props) {
     super(props);
@@ -22,18 +20,11 @@ export default class Layout extends Component {
     };
   }
 
-  async componentDidMount() {
-    await this.initSocket();
+  //Will slowly move all the event handling to the Event Handler.
+  componentDidMount() {
+    this.setState({ socket: this.props.socket });
     this.handleResponse();
   }
-
-  initSocket = () => {
-    const socket = io(socketUrl);
-    socket.on("connect", () => {
-      console.log("Socket Connected: ", socket["id"]);
-    });
-    this.setState({ socket });
-  };
 
   setUser = user => {
     const { socket } = this.state;
@@ -102,7 +93,7 @@ export default class Layout extends Component {
               Boop
             </button>
             {!user ? (
-              <Login socket={this.state.socket} setUser={this.setUser} />
+              <Login socket={socket} setUser={this.setUser} />
             ) : (
               <div>
                 Successfully logged in as:{" "}

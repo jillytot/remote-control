@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import { USERS } from "../../../services/sockets/events";
 import UserList from "./userList.jsx";
+import Messages from "./messages";
 import "./chat.css";
 
 export default class Chat extends Component {
@@ -15,7 +16,7 @@ export default class Chat extends Component {
     this.chatListener();
   }
 
-  componentDidUpdate(prevProps, prevState) {
+  componentDidUpdate(prevProps) {
     if (this.props.socket !== prevProps.socket) {
       const { socket } = this.props;
       console.log("Updated state in Chat");
@@ -43,7 +44,10 @@ export default class Chat extends Component {
     return (
       <div>
         {this.state.users ? (
-          <UserList users={this.state.users} />
+          <div className="chat-container">
+            <Messages />
+            <UserList users={this.state.users} />
+          </div>
         ) : (
           <div>Loading Users</div>
         )}

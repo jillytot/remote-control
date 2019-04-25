@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import { USERS_UPDATED } from "../../../services/sockets/events";
 import UserList from "./userList.jsx";
 import Messages from "./messages";
+import SendChat from "./sendChat";
 import "./chat.css";
 
 export default class Chat extends Component {
@@ -35,6 +36,7 @@ export default class Chat extends Component {
         {this.state.users ? (
           <div className="chat-container">
             <Messages />
+            <SendChat />
             <UserList users={this.state.users} />
           </div>
         ) : (

@@ -9,7 +9,8 @@ const {
   LOGOUT,
   USERS_UPDATED,
   LOCAL_CHAT,
-  HEARTBEAT
+  HEARTBEAT,
+  MESSAGE_SENT
 } = require("./events");
 
 const { heartBeat } = require("./settings");
@@ -71,6 +72,10 @@ module.exports = function(socket) {
 
   socket.on(HEARTBEAT, user => {
     console.log("heartbeat from: ", user);
+  });
+
+  socket.on(MESSAGE_SENT, message => {
+    console.log("Message from User", message);
   });
 };
 

@@ -72,3 +72,15 @@
 .purple {
   color: #e500ff;
 }
+
+.chat-message {
+  font-size: 14px;
+  color: #00ffff;
+  background-color: #242327;
+  margin: 1px;
+  text-align: left;
+}
+
+.chat-user-name {
+  color: white;
+}

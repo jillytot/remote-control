@@ -69,3 +69,13 @@ module.exports = {
   createChat,
   createUser
 };
+
+user_prototype = {
+  id: 000000,
+  username: "user9000",
+  sessions: [],
+  rooms: [
+    { room_id: 9592345, roomName: "chatroom", room_icon: "/imgs/roomIcon" }
+  ],
+  _settings: [{ chat_filter: true }]
+};

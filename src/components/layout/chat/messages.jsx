@@ -1,7 +1,64 @@
-import React from "react";
+import React, { Component } from "react";
+import Message from "./message";
 
-const Messages = () => {
-  return <div className="chat-window">Loading Chat </div>;
-};
+export default class Messages extends Component {
+  state = {};
 
-export default Messages;
+  componentWillMount() {
+    this.setState({ chatMessages: chatMessages });
+    //  this.props.chatMessage
+    //    ? this.setState(this.props)
+    //    : this.setState({ chatMessages });
+  }
+
+  displayMessages = messages => {
+    return messages.map(message => {
+      console.log("mapping messages");
+      return <Message message={message} key={message["_id"]} />;
+    });
+  };
+
+  render() {
+    return (
+      <div className="chat-window">
+        Loading Chat <div>{this.displayMessages(this.state.chatMessages)}</div>
+      </div>
+    );
+  }
+}
+
+const chatMessages = [
+  {
+    username: "user-name",
+    message: "This is a message from a user",
+    _id: "25802-2352-25435245-254"
+  },
+  {
+    username: "a User",
+    message: "This is a response to the message",
+    _id: "25802-2352-25435245-255"
+  },
+  {
+    username: "Am a user",
+    message: "I like sending messages because it makes me feel important",
+    _id: "25802-2352-25435245-256"
+  },
+  {
+    username: "the worst user",
+    message: "Read this message and behold my splendor!",
+    _id: "25802-2352-25435245-257"
+  }
+];
+
+// testMessages = {
+//    message : {
+//       username: "user-name",
+//       message: "This is a message from a user",
+//       type: "standard",
+//       display: true,
+//       room: "AwesomeBot9000",
+//       badges: {},
+//       color: "light",
+//       avatar: "/img"
+//     }
+// }

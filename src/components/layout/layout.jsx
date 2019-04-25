@@ -44,6 +44,7 @@ export default class Layout extends Component {
     console.log("Message Sent: ", TEST_EVENT);
   };
 
+  //TODO: MOve these into the event handler
   handleResponse = () => {
     const { socket } = this.props;
     if (socket !== null) {

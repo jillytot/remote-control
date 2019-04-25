@@ -10,6 +10,8 @@ import {
   LOGOUT
 } from "../../services/sockets/events";
 
+import { LOGIN_TRUE } from "../localEvents";
+
 export default class Layout extends Component {
   _isMounted = false;
   constructor(props) {
@@ -33,6 +35,7 @@ export default class Layout extends Component {
     const { socket } = this.props;
     socket.emit(USER_CONNECTED, user);
     this.setState({ user });
+    this.props.onEvent(LOGIN_TRUE, user);
   };
 
   handleClick = e => {
@@ -49,9 +52,12 @@ export default class Layout extends Component {
         socket.emit("Emitting Things");
       });
       socket.on(USER_CONNECTED, user => {
-        user
-          ? this.setState({ user: user })
-          : console.log("Unable to get User");
+        if (user) {
+          this.setState({ user: user });
+          console.log("User Connected: ", user);
+        } else {
+          console.log("Unable to get User");
+        }
       });
       socket.on(USER_DISCONNECTED, disconnectUser => {
         if (disconnectUser && disconnectUser["id"] === this.state.user["id"]) {
@@ -92,7 +98,12 @@ export default class Layout extends Component {
             ) : (
               <div>
                 Successfully logged in as:{" "}
-                <User user={user} socket={socket} onClick={this.handleLogout} />
+                <User
+                  user={user}
+                  socket={socket}
+                  onClick={this.handleLogout}
+                  onEvent={this.props.onEvent}
+                />
               </div>
             )}
             <Chat socket={socket} user={user} />

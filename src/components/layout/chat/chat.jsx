@@ -21,12 +21,9 @@ export default class Chat extends Component {
   }
 
   chatListener = () => {
-    console.log("Chat Listener is Listening...");
     const { socket } = this.props;
-    console.log(socket);
     if (socket && this._isMounted) {
       socket.on(USERS_UPDATED, users => {
-        console.log("USERS", users);
         this.setState({ users });
       });
     }

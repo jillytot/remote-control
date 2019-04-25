@@ -1,10 +1,10 @@
 import Form from "../../common/form";
 import React from "react";
 import Joi from "joi-browser";
+import { SEND_CHAT } from "../../localEvents";
 
 export default class SendChat extends Form {
   state = {
-    // data: { username: "", password: "", email: "" },
     data: { sendChat: "" },
     errors: {}
   };
@@ -15,11 +15,13 @@ export default class SendChat extends Form {
       .min(1)
       .max(180)
       .trim()
-      .label("Send Chat")
+      .label("Chat Message")
   };
 
   doSubmit = () => {
-    console.log("Submitted!");
+    const { onEvent } = this.props;
+    const { sendChat } = this.state.data;
+    onEvent(SEND_CHAT, sendChat);
   };
 
   setError = error => {

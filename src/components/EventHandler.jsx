@@ -3,7 +3,7 @@ import io from "socket.io-client";
 import Layout from "./layout/layout";
 import { socketUrl } from "../settings/clientSettings";
 import { HEARTBEAT } from "../services/sockets/events";
-import { LOGIN_TRUE } from "./localEvents";
+import { LOGIN_TRUE, SEND_CHAT } from "./localEvents";
 
 //Will likely move most of the interaction with the server to here.
 export default class EventHandler extends Component {
@@ -40,6 +40,10 @@ export default class EventHandler extends Component {
   handleEvents = (event, obj) => {
     if (event === LOGIN_TRUE) {
       this.setState({ user: obj });
+    }
+
+    if (event === SEND_CHAT) {
+      console.log("Send Chat to Server: ", obj);
     }
   };
 

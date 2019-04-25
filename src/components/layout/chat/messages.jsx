@@ -20,7 +20,7 @@ export default class Messages extends Component {
 
   render() {
     return (
-      <div className="chat-window">
+      <div>
         Loading Chat <div>{this.displayMessages(this.state.chatMessages)}</div>
       </div>
     );

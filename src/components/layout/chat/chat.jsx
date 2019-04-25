@@ -31,12 +31,16 @@ export default class Chat extends Component {
   };
 
   render() {
+    const { onEvent } = this.props;
     return (
       <div>
         {this.state.users ? (
           <div className="chat-container">
-            <Messages />
-            <SendChat />
+            <div className="messages-container">
+              <Messages />
+              <SendChat onEvent={onEvent} />
+            </div>
+
             <UserList users={this.state.users} />
           </div>
         ) : (

@@ -38,9 +38,7 @@ export default class EventHandler extends Component {
   };
 
   handleEvents = (event, obj) => {
-    console.log("event!");
     if (event === LOGIN_TRUE) {
-      console.log("Event Triggered: ", obj);
       this.setState({ user: obj });
     }
   };

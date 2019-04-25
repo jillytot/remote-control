@@ -28,11 +28,12 @@ const createUser = ({ name = "" } = {}) => ({
  *		message {string}
  *		sender {string}
  */
-const createMessage = ({ message = "", sender = "" } = {}) => ({
+const createMessage = ({ message = "", sender = "", senderId = "" } = {}) => ({
   id: uuidv4(),
   time: getTime(new Date(Date.now())),
   message,
-  sender
+  sender,
+  senderId
 });
 
 /*
@@ -50,7 +51,7 @@ const createMessage = ({ message = "", sender = "" } = {}) => ({
  */
 const createChat = ({ messages = [], name = "", users = [] } = {}) => ({
   id: uuidv4(),
-  name,
+  name: "Robo Chat",
   messages,
   users,
   typingUsers: []

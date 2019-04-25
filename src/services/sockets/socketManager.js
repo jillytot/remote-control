@@ -10,7 +10,8 @@ const {
   USERS_UPDATED,
   LOCAL_CHAT,
   HEARTBEAT,
-  MESSAGE_SENT
+  MESSAGE_SENT,
+  MESSAGE_RECIEVED
 } = require("./events");
 
 const { heartBeat } = require("./settings");
@@ -19,10 +20,17 @@ let connectedUsers = {};
 let localChat = createChat();
 let heartBeatStarted = false;
 
+let initChat = false;
+
 module.exports = function(socket) {
   if (!heartBeatStarted) {
     beat(io);
     heartBeatStarted = true;
+  }
+
+  if (!initChat) {
+    console.log("Chat Room: ", localChat.name);
+    initChat = true;
   }
   //Socket will emit this message with successful connection
   //console.log("Socket Id:" + socket.id);
@@ -49,7 +57,13 @@ module.exports = function(socket) {
 
   socket.on(USER_CONNECTED, user => {
     connectedUsers = addUser(connectedUsers, user);
+    socket.user = user;
+    console.log(socket.user);
+
+    sendMessageToChatFromUser = sendMessageToChat(user.name);
+
     io.emit(USERS_UPDATED, connectedUsers);
+    socket.emit(LOCAL_CHAT, localChat);
     console.log("Connected Users: ", connectedUsers);
   });
 
@@ -75,7 +89,7 @@ module.exports = function(socket) {
   });
 
   socket.on(MESSAGE_SENT, message => {
-    console.log("Message from User", message);
+    sendMessageToChatFromUser(localChat.id, message.message);
   });
 };
 
@@ -125,4 +139,19 @@ function beat(io) {
     }),
     heartBeat
   );
+}
+
+/*
+ * Returns a function that will take a chat id and message
+ * and then emit a broadcast to the chat id.
+ * @param sender {string} username of sender
+ * @return function(chatId, message)
+ */
+function sendMessageToChat(sender) {
+  return (chatId, message) => {
+    io.emit(
+      `${MESSAGE_RECIEVED}-${chatId}`,
+      createMessage({ message, sender })
+    );
+  };
 }

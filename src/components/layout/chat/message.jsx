@@ -5,7 +5,7 @@ const Message = ({ message }) => {
   return (
     <div>
       <div className="chat-message">
-        <span className="chat-user-name">{`${message.username}:  `}</span>
+        <span className="chat-user-name">{`${message.sender}:  `}</span>
         <span>{message.message}</span>
       </div>
     </div>

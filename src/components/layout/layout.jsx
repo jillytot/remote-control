@@ -85,7 +85,7 @@ export default class Layout extends Component {
 
   render() {
     const { user } = this.state;
-    const { socket, onEvent } = this.props;
+    const { socket, onEvent, chatroom } = this.props;
     return (
       <div>
         {this.state.socket !== null ? (
@@ -107,7 +107,12 @@ export default class Layout extends Component {
                 />
               </div>
             )}
-            <Chat socket={socket} user={user} onEvent={onEvent} />
+            <Chat
+              socket={socket}
+              user={user}
+              onEvent={onEvent}
+              chatroom={chatroom}
+            />
           </div>
         ) : (
           <div> Socket Offline </div>

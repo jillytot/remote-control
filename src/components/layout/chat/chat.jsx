@@ -10,6 +10,7 @@ export default class Chat extends Component {
   //This component will rely entirely on props passed into it to build the state.
   //@param socket { object } is the websocket listener passed in
   //@param users { object } gets populated when socket receives USERS event
+
   state = {};
 
   componentDidMount() {
@@ -37,7 +38,11 @@ export default class Chat extends Component {
         {this.state.users ? (
           <div className="chat-container">
             <div className="messages-container">
-              <Messages />
+              <Messages
+                messages={
+                  this.props.chatroom ? this.props.chatroom.messages : []
+                }
+              />
               <SendChat onEvent={onEvent} />
             </div>
 

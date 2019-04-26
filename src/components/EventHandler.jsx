@@ -2,7 +2,12 @@ import React, { Component } from "react";
 import io from "socket.io-client";
 import Layout from "./layout/layout";
 import { socketUrl } from "../settings/clientSettings";
-import { HEARTBEAT, MESSAGE_SENT } from "../services/sockets/events";
+import {
+  HEARTBEAT,
+  MESSAGE_SENT,
+  LOCAL_CHAT,
+  MESSAGE_RECIEVED
+} from "../services/sockets/events";
 import { LOGIN_TRUE, SEND_CHAT } from "./localEvents";
 
 //Will likely move most of the interaction with the server to here.
@@ -34,6 +39,19 @@ export default class EventHandler extends Component {
           : socket["id"];
         socket.emit(HEARTBEAT, checkUser);
       });
+      socket.on(LOCAL_CHAT, chat => {
+        //console.log("Get chat from server: ", chat);
+        this.setState({ chatroom: chat });
+      });
+
+      socket.on(MESSAGE_RECIEVED, message => {
+        console.log("Chat message recieved: ", message);
+        if (this.state.chatroom) {
+          let { chatroom } = this.state;
+          chatroom.messages.push(message);
+          this.setState({ chatroom });
+        }
+      });
     }
   };
 
@@ -44,7 +62,7 @@ export default class EventHandler extends Component {
     }
 
     if (event === SEND_CHAT) {
-      console.log("Send Chat to Server: ", obj);
+      //console.log("Send Chat to Server: ", obj);
       socket.emit(MESSAGE_SENT, {
         username: user.name,
         userId: user.id,
@@ -54,9 +72,14 @@ export default class EventHandler extends Component {
   };
 
   render() {
-    const { socket, user } = this.state;
+    const { socket, user, chatroom } = this.state;
     return socket !== null ? (
-      <Layout socket={socket} user={user} onEvent={this.handleEvents} />
+      <Layout
+        socket={socket}
+        user={user}
+        onEvent={this.handleEvents}
+        chatroom={chatroom ? chatroom : null}
+      />
     ) : (
       <div>Error, Cannot connect to server!</div>
     );

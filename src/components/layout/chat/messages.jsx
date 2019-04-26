@@ -5,15 +5,14 @@ export default class Messages extends Component {
   state = {};
 
   componentWillMount() {
-    this.setState({ chatMessages: chatMessages });
-    //  this.props.chatMessage
-    //    ? this.setState(this.props)
-    //    : this.setState({ chatMessages });
+    if (this.props.messages !== null) {
+      this.setState({ messages: this.props.messages });
+    }
   }
 
   displayMessages = messages => {
-    return messages.map(message => {
-      console.log("mapping messages");
+    return this.props.messages.map(message => {
+      console.log("mapping messages: ");
       return <Message message={message} key={message["_id"]} />;
     });
   };
@@ -21,7 +20,7 @@ export default class Messages extends Component {
   render() {
     return (
       <div>
-        Loading Chat <div>{this.displayMessages(this.state.chatMessages)}</div>
+        Loading Chat <div>{this.displayMessages(this.state.messages)}</div>
       </div>
     );
   }

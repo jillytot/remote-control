@@ -149,9 +149,6 @@ function beat(io) {
  */
 function sendMessageToChat(sender) {
   return (chatId, message) => {
-    io.emit(
-      `${MESSAGE_RECIEVED}-${chatId}`,
-      createMessage({ message, sender })
-    );
+    io.emit(MESSAGE_RECIEVED, createMessage({ message, sender }));
   };
 }

@@ -57,6 +57,10 @@ export default class EventHandler extends Component {
 
   handleEvents = (event, obj) => {
     const { socket, user } = this.state;
+    //  if (event === USERNAME_TAKEN) {
+    //    console.log("Username Taken!", obj);
+    //    this.setState({ usernameTaken: obj });
+    //  }
     if (event === LOGIN_TRUE) {
       this.setState({ user: obj });
     }

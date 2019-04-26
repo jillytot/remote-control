@@ -32,6 +32,7 @@ export default class Layout extends Component {
   }
 
   setUser = user => {
+    //console.log("set user", user);
     const { socket } = this.props;
     socket.emit(USER_CONNECTED, user);
     this.setState({ user });
@@ -95,7 +96,7 @@ export default class Layout extends Component {
               Boop
             </button>
             {!user ? (
-              <Login socket={socket} setUser={this.setUser} />
+              <Login socket={socket} setUser={this.setUser} onEvent={onEvent} />
             ) : (
               <div>
                 Successfully logged in as:{" "}

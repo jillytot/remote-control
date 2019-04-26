@@ -42,29 +42,32 @@ module.exports = function(socket) {
   });
 
   socket.on(VERIFY_USER, (data, callback) => {
-    console.log(data);
     const { username } = data;
 
-    if (isUser(connectedUsers)) {
-      //console.log("verifying user");
+    if (isUser(connectedUsers, username)) {
       callback({ isUser: true, user: null });
     } else {
-      //console.log("Add User! ", username);
-      callback({ isUser: false, user: createUser({ name: username }) });
-      //console.log("Connected Users: ", connectedUsers);
+      let user = createUser({ name: username });
+      callback({ isUser: false, user: user });
+
+      socket.user = user;
+      socket.join(`${socket.user.id}`);
     }
   });
 
   socket.on(USER_CONNECTED, user => {
+    //Note to self: Use chat.id instead of chat name at some point
+    let chat = localChat;
     connectedUsers = addUser(connectedUsers, user);
-    socket.user = user;
+
     console.log(socket.user);
 
     sendMessageToChatFromUser = sendMessageToChat(user.name);
 
     io.emit(USERS_UPDATED, connectedUsers);
-    socket.emit(LOCAL_CHAT, localChat);
-    console.log("Connected Users: ", connectedUsers);
+    socket.emit(LOCAL_CHAT, chat);
+    console.log("chat stuff: ", chat.name, chat);
+    socket.join(chat.name);
   });
 
   socket.on(LOGOUT, user => {
@@ -84,12 +87,10 @@ module.exports = function(socket) {
     console.log("Lost connection to user: ");
   });
 
-  socket.on(HEARTBEAT, user => {
-    console.log("heartbeat from: ", user);
-  });
+  socket.on(HEARTBEAT, user => {});
 
   socket.on(MESSAGE_SENT, message => {
-    sendMessageToChatFromUser(localChat.id, message.message);
+    sendMessageToChatFromUser(localChat.name, message.message);
   });
 };
 
@@ -133,7 +134,7 @@ function removeUser(userList, username) {
 function beat(io) {
   let timerId = setTimeout(
     (tick = () => {
-      console.log("badum!");
+      //console.log("badum!");
       io.emit(HEARTBEAT);
       timerId = setTimeout(tick, heartBeat); // (*)
     }),
@@ -148,7 +149,7 @@ function beat(io) {
  * @return function(chatId, message)
  */
 function sendMessageToChat(sender) {
-  return (chatId, message) => {
-    io.emit(MESSAGE_RECIEVED, createMessage({ message, sender }));
+  return (chatroom, message) => {
+    io.to(chatroom).emit(MESSAGE_RECIEVED, createMessage({ message, sender }));
   };
 }

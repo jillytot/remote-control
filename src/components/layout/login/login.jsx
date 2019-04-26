@@ -31,19 +31,19 @@ export default class Login extends Form {
     //   .label("Email")
   };
 
-  doSubmit = () => {
-    console.log("Submitted!");
-  };
-
   setUser = ({ user, isUser }) => {
-    isUser ? this.setError("User name taken.") : this.setError("");
-
-    //Currently this function is getting called from Layout
-    this.props.setUser(user);
+    console.log("Is User?: ", isUser);
+    if (isUser === true) {
+      this.setError("User name taken.");
+      this.validate();
+    } else {
+      this.props.setUser(user);
+      this.setError("");
+    }
   };
 
   setError = error => {
-    this.setState({ error });
+    this.setState({ errors: error });
   };
 
   doSubmit = () => {

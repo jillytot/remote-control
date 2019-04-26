@@ -22,6 +22,7 @@ export default class SendChat extends Form {
     const { onEvent } = this.props;
     const { sendChat } = this.state.data;
     onEvent(SEND_CHAT, sendChat);
+    this.setState({ data: { sendChat: "" } });
   };
 
   setError = error => {

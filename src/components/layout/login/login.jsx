@@ -31,6 +31,13 @@ export default class Login extends Form {
     //   .label("Email")
   };
 
+  // componentDidMount() {
+  //   this._isMounted = true;
+  // }
+  // componentWillUnmount() {
+  //   this._isMounted = false;
+  // }
+
   setUser = ({ user, isUser }) => {
     console.log("Is User?: ", isUser);
     if (isUser === true) {

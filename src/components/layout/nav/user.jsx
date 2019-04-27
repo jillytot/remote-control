@@ -3,7 +3,6 @@ import "./user.css";
 
 const User = ({ user, onClick }) => {
   const displayName = user["name"];
-  console.log("Logged in as: ", user["name"]);
 
   return (
     <div>

@@ -4,6 +4,7 @@
   font-size: calc(4px + 2vmin);
   padding: 5px 10px 5px 10px;
   background: -webkit-linear-gradient(-45deg, #d64eb8 0%, #003fee 100%);
+  text-align: right;
 }
 
 .user-logout {

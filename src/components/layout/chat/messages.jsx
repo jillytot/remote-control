@@ -19,9 +19,13 @@ export default class Messages extends Component {
 
   render() {
     return (
-      <div>
-        Loading Chat <div>{this.displayMessages(this.state.messages)}</div>
-      </div>
+      <React.Fragment>
+        <div className="chat-header">
+          {" "}
+          chat header
+          {this.displayMessages(this.state.messages)}
+        </div>
+      </React.Fragment>
     );
   }
 }

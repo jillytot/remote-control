@@ -13,11 +13,12 @@
   /* background-color: rgb(51, 51, 65); */
   background-color: rgb(22, 19, 32);
   display: grid;
+  grid-template-columns: 1fr 200px;
 }
 
-.chat-container > div {
+/* .chat-container > div {
   margin: 1px;
-}
+} */
 
 .ulist {
   list-style-type: none;
@@ -26,10 +27,11 @@
 
 .user-list-container {
   display: grid;
-  grid-column-start: 3;
-  grid-column-end: 4;
+
   justify-content: left;
   text-align: left;
+  padding: 2%;
+  background-color: #221b3a;
 }
 
 .gray {
@@ -64,16 +66,29 @@
   color: #e500ff;
 }
 
+.chat-header {
+  background-color: #1c1829;
+  padding: 2% 0 2% 0;
+  font-size: 21px;
+}
+
 .chat-message {
   font-size: 14px;
   color: #00ffff;
-  background-color: #242327;
+  background-color: #221b3a;
   margin: 1px;
   text-align: left;
 }
 
 .messages-container {
+  display: grid;
+  grid-template-columns: 1fr;
+  grid-template-rows: 400px 150px;
+  justify-content: left;
+  text-align: left;
+  padding: 2%;
   font-size: 14px;
+  /* outline: solid red; */
 }
 
 .chat-user-name {

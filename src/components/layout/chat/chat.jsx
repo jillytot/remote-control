@@ -45,7 +45,6 @@ export default class Chat extends Component {
               />
               <SendChat onEvent={onEvent} />
             </div>
-
             <UserList users={this.state.users} />
           </div>
         ) : (

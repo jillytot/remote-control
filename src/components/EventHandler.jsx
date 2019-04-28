@@ -12,7 +12,13 @@ import {
 } from "../services/sockets/events";
 import { LOGIN_TRUE, SEND_CHAT } from "./localEvents";
 
-//Will likely move most of the interaction with the server to here.
+/*
+
+This is the main state management component
+Socket info will be past to components for emitting events
+The server responses will all route through here before getting passed back down as props
+
+*/
 export default class EventHandler extends Component {
   state = {
     socket: null,
@@ -95,12 +101,6 @@ export default class EventHandler extends Component {
     }
 
     if (event === SEND_CHAT) {
-      //console.log("Send Chat to Server: ", obj);
-      socket.emit(MESSAGE_SENT, {
-        username: user.name,
-        userId: user.id,
-        message: obj
-      });
     }
   };
 

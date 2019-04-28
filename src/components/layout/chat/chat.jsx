@@ -22,17 +22,17 @@ export default class Chat extends Component {
     this._isMounted = false;
   }
 
-  chatListener = () => {
+  chatListener = async () => {
     const { socket } = this.props;
     if (socket && this._isMounted) {
-      socket.on(USERS_UPDATED, users => {
+      await socket.on(USERS_UPDATED, users => {
         this.setState({ users });
       });
     }
   };
 
   render() {
-    const { onEvent } = this.props;
+    const { onEvent, user, socket } = this.props;
     return (
       <div>
         {this.state.users ? (
@@ -43,7 +43,7 @@ export default class Chat extends Component {
                   this.props.chatroom ? this.props.chatroom.messages : []
                 }
               />
-              <SendChat onEvent={onEvent} />
+              <SendChat onEvent={onEvent} user={user} socket={socket} />
             </div>
             <UserList users={this.state.users} />
           </div>

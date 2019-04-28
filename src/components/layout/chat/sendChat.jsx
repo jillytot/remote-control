@@ -1,7 +1,8 @@
 import Form from "../../common/form";
 import React from "react";
 import Joi from "joi-browser";
-import { SEND_CHAT } from "../../localEvents";
+
+import { MESSAGE_SENT } from "../../../services/sockets/events";
 
 export default class SendChat extends Form {
   state = {
@@ -19,10 +20,19 @@ export default class SendChat extends Form {
   };
 
   doSubmit = () => {
-    const { onEvent } = this.props;
+    const { user, socket } = this.props;
     const { sendChat } = this.state.data;
-    onEvent(SEND_CHAT, sendChat);
-    this.setState({ data: { sendChat: "" } });
+    if (user !== null) {
+      socket.emit(MESSAGE_SENT, {
+        username: user.name,
+        userId: user.id,
+        message: sendChat
+      });
+
+      this.setState({ data: { sendChat: "" } });
+    } else {
+      console.log("Userlogout Error");
+    }
   };
 
   setError = error => {

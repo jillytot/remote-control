@@ -4,13 +4,12 @@ import Layout from "./layout/layout";
 import { socketUrl } from "../settings/clientSettings";
 import {
   HEARTBEAT,
-  MESSAGE_SENT,
   LOCAL_CHAT,
   MESSAGE_RECIEVED,
   USER_CONNECTED,
   USER_DISCONNECTED
 } from "../services/sockets/events";
-import { LOGIN_TRUE, SEND_CHAT } from "./localEvents";
+import { LOGIN_TRUE } from "./localEvents";
 
 /*
 
@@ -91,16 +90,13 @@ export default class EventHandler extends Component {
   };
 
   handleEvents = (event, obj) => {
-    const { socket, user } = this.state;
+    //const { socket, user } = this.state;
     //  if (event === USERNAME_TAKEN) {
     //    console.log("Username Taken!", obj);
     //    this.setState({ usernameTaken: obj });
     //  }
     if (event === LOGIN_TRUE) {
       this.setState({ user: obj });
-    }
-
-    if (event === SEND_CHAT) {
     }
   };
 

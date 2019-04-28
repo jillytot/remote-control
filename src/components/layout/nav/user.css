@@ -1,13 +1,15 @@
 .user {
   color: cyan;
-  background-color: rgb(49, 55, 107);
+  background-color: rgb(6, 6, 12);
   font-size: calc(4px + 2vmin);
   padding: 5px 10px 5px 10px;
-  background: -webkit-linear-gradient(-45deg, #d64eb8 0%, #003fee 100%);
+  /* background: -webkit-linear-gradient(-45deg, #d64eb8 0%, #003fee 100%); */
   text-align: right;
 }
 
 .user-logout {
   font-size: 12px;
   color: royalblue;
+  margin: 2px -2px 2px 6px;
+  padding: 2px;
 }

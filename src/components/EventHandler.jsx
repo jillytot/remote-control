@@ -6,14 +6,17 @@ import {
   HEARTBEAT,
   MESSAGE_SENT,
   LOCAL_CHAT,
-  MESSAGE_RECIEVED
+  MESSAGE_RECIEVED,
+  USER_CONNECTED,
+  USER_DISCONNECTED
 } from "../services/sockets/events";
 import { LOGIN_TRUE, SEND_CHAT } from "./localEvents";
 
 //Will likely move most of the interaction with the server to here.
 export default class EventHandler extends Component {
   state = {
-    socket: null
+    socket: null,
+    user: null
   };
 
   async componentDidMount() {
@@ -21,6 +24,14 @@ export default class EventHandler extends Component {
     this.handleResponse();
     this.handleEvents();
   }
+
+  setUser = async user => {
+    //console.log("set user", user);
+    const { socket } = this.state;
+    await socket.emit(USER_CONNECTED, user);
+    this.setState({ user });
+    this.handleEvents(LOGIN_TRUE, user);
+  };
 
   initSocket = () => {
     const socket = io(socketUrl);
@@ -32,6 +43,24 @@ export default class EventHandler extends Component {
 
   handleResponse = () => {
     const { socket } = this.state;
+
+    socket.on(USER_CONNECTED, user => {
+      if (user) {
+        this.setState({ user: user });
+        console.log("User Connected: ", user);
+      } else {
+        console.log("Unable to get User");
+      }
+    });
+    socket.on(USER_DISCONNECTED, disconnectUser => {
+      if (disconnectUser && disconnectUser["id"] === this.state.user["id"]) {
+        this.setState({ user: null });
+      } else {
+        console.log(
+          "Either someone else logged out, or there was an error with logging out"
+        );
+      }
+    });
     if (socket !== null) {
       socket.on(HEARTBEAT, () => {
         let checkUser = this.state.user
@@ -83,6 +112,7 @@ export default class EventHandler extends Component {
         user={user}
         onEvent={this.handleEvents}
         chatroom={chatroom ? chatroom : null}
+        setUser={this.setUser}
       />
     ) : (
       <div>Error, Cannot connect to server!</div>

@@ -1,9 +1,19 @@
 import React from "react";
 import "./user.css";
 import "./../../../styles/common.css";
+import { LOGOUT } from "../../../services/sockets/events";
 
-const User = ({ user, onClick }) => {
+const User = ({ user, socket }) => {
   const displayName = user["name"];
+
+  const handleClick = user => {
+    console.log("Handle Logout: ", user);
+    user !== null
+      ? socket.emit(LOGOUT, user, () => {
+          console.log("Logging Out");
+        })
+      : console.log("User Logout Error");
+  };
 
   return (
     <div>
@@ -12,7 +22,7 @@ const User = ({ user, onClick }) => {
         <button
           className="user-logout btn"
           onClick={() => {
-            onClick(user);
+            handleClick(user);
           }}
         >
           logout

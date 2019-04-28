@@ -3,8 +3,6 @@ import Login from "./login/login";
 import User from "./nav/user";
 import Chat from "./chat/chat";
 import {
-  TEST_EVENT,
-  TEST_RESPONSE,
   USER_CONNECTED,
   USER_DISCONNECTED,
   LOGOUT
@@ -40,19 +38,14 @@ export default class Layout extends Component {
   };
 
   handleClick = e => {
-    const { socket } = this.props;
-    socket.emit(TEST_EVENT);
-    console.log("Message Sent: ", TEST_EVENT);
+    console.log("Handle Click");
   };
 
   //TODO: MOve these into the event handler
   handleResponse = () => {
     const { socket } = this.props;
     if (socket !== null) {
-      socket.on(TEST_RESPONSE, () => {
-        console.log("Test Response!");
-        socket.emit("Emitting Things");
-      });
+      //If there is a socket, do stuff!
       socket.on(USER_CONNECTED, user => {
         if (user) {
           this.setState({ user: user });
@@ -88,30 +81,20 @@ export default class Layout extends Component {
     const { user } = this.state;
     const { socket, onEvent, chatroom } = this.props;
     return (
-      <div>
+      <React.Fragment>
         {this.state.socket !== null ? (
-          <div>
-            <div> Socket Connected </div>
-            <button className="btn" onClick={this.handleClick}>
-              Boop
-            </button>
+          <React.Fragment>
             {!user ? (
-              <Login
-                socket={socket}
-                setUser={this.setUser}
-                onEvent={onEvent}
-                handleLogin={this.handleLogin}
-              />
+              <Login socket={socket} setUser={this.setUser} onEvent={onEvent} />
             ) : (
-              <div>
-                Successfully logged in as:{" "}
+              <React.Fragment>
                 <User
                   user={user}
                   socket={socket}
                   onClick={this.handleLogout}
                   onEvent={onEvent}
                 />
-              </div>
+              </React.Fragment>
             )}
             <Chat
               socket={socket}
@@ -119,11 +102,11 @@ export default class Layout extends Component {
               onEvent={onEvent}
               chatroom={chatroom}
             />
-          </div>
+          </React.Fragment>
         ) : (
-          <div> Socket Offline </div>
+          <div> Connection Offline </div>
         )}
-      </div>
+      </React.Fragment>
     );
   }
 }

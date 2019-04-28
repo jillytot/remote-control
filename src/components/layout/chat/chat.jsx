@@ -49,7 +49,7 @@ export default class Chat extends Component {
             <UserList users={this.state.users} />
           </div>
         ) : (
-          <div>Loading Users</div>
+          <div>Please login!</div>
         )}
       </div>
     );

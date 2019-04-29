@@ -27,9 +27,11 @@ const createUser = ({ name = "" } = {}) => ({
  *	createMessage
  *	Creates a messages object.
  * 	@prop id {string}
- * 	@prop time {Date} the time in 24hr format i.e. 14:22
+ * 	@prop time {Date} the current date and time in 24hr format i.e. 14:22
  * 	@prop message {string} actual string message
  * 	@prop sender {string} sender of the message
+ *  @prop senderId { string } Id of the sender
+ *  @prop display { bool } message won't be printed to chat if set to false
  *	@param {object}
  *		message {string}
  *		sender {string}
@@ -39,7 +41,8 @@ const createMessage = ({ message = "", sender = "", senderId = "" } = {}) => ({
   time: getTime(new Date(Date.now())),
   message,
   sender,
-  senderId
+  senderId,
+  display: true
 });
 
 /*
@@ -79,14 +82,4 @@ module.exports = {
   createMessage,
   createChat,
   createUser
-};
-
-user_prototype = {
-  id: 000000,
-  username: "user9000",
-  sessions: [],
-  rooms: [
-    { room_id: 9592345, roomName: "chatroom", room_icon: "/imgs/roomIcon" }
-  ],
-  _settings: [{ chat_filter: true }]
 };

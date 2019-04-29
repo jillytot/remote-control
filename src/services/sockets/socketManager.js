@@ -1,8 +1,6 @@
 const io = require("./sockets").io;
 const { createUser, createMessage, createChat } = require("./factories");
 const {
-  TEST_EVENT,
-  TEST_RESPONSE,
   VERIFY_USER,
   USER_CONNECTED,
   USER_DISCONNECTED,
@@ -46,18 +44,16 @@ module.exports = function(socket) {
       callback({ isUser: false, user: user });
 
       socket.user = user;
-      userRoom = `${socket.user.name}`;
+      userRoom = `${socket.user.id}`;
       socket.join(userRoom);
     }
   });
 
+  //User connects to chat
   socket.on(USER_CONNECTED, user => {
     //Note to self: Use chat.id instead of chat name at some point
     let chat = localChat;
     connectedUsers = addUser(connectedUsers, user);
-
-    console.log(socket.user);
-
     sendMessageToChatFromUser = sendMessageToChat(user);
 
     io.emit(USERS_UPDATED, connectedUsers);
@@ -84,7 +80,9 @@ module.exports = function(socket) {
     console.log("Lost connection to user: ");
   });
 
-  socket.on(HEARTBEAT, user => {});
+  socket.on(HEARTBEAT, checkUser => {
+    checkStatus(checkUser, userRoom);
+  });
 
   socket.on(MESSAGE_SENT, message => {
     sendMessageToChatFromUser(localChat.name, message.message);
@@ -123,15 +121,26 @@ function removeUser(userList, username) {
 }
 
 //Heartbeat
-function beat(io) {
+function beat(io, userRoom) {
   let timerId = setTimeout(
     (tick = () => {
-      //console.log("badum!");
-      io.emit(HEARTBEAT);
+      console.log("badum!");
+      userRoom ? io.to(userRoom).emit(HEARTBEAT) : io.emit(HEARTBEAT);
       timerId = setTimeout(tick, heartBeat); // (*)
     }),
     heartBeat
   );
+}
+
+function checkStatus(checkUser, thisUser) {
+  const { userId, socketId } = checkUser;
+  userId
+    ? userId === thisUser
+      ? console.log("This user is online!", userId)
+      : console.log("Can't identify User")
+    : socketId
+    ? console.log("Unknown user connected: ", socketId)
+    : console.log("Can't identify User");
 }
 
 /*

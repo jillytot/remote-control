@@ -83,12 +83,11 @@ export default class EventHandler extends Component {
     if (socket !== null) {
       socket.on(HEARTBEAT, () => {
         let checkUser = this.state.user
-          ? `${this.state.user["name"]}-${socket["id"]}`
-          : socket["id"];
+          ? { userId: this.state.user.id, socketId: socket["id"] }
+          : { userId: null, socketId: socket["id"] };
         socket.emit(HEARTBEAT, checkUser);
       });
       socket.on(LOCAL_CHAT, chat => {
-        //console.log("Get chat from server: ", chat);
         this.setState({ chatroom: chat });
       });
 
@@ -97,7 +96,7 @@ export default class EventHandler extends Component {
           message: "hi there"
           sender: "submit"
           senderId: ""
-          time: "19:05" } */
+          time: "04/29/2019-19:05:09" } */
 
       socket.on(MESSAGE_RECIEVED, message => {
         console.log("Chat message recieved: ", message);

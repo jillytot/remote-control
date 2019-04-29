@@ -68,7 +68,11 @@ const createChat = ({ messages = [], name = "", users = [] } = {}) => ({
  *	@return a string represented in 24hr time i.e. '11:30', '19:30'
  */
 const getTime = date => {
-  return `${date.getHours()}:${("0" + date.getMinutes()).slice(-2)}`;
+  return `${("0" + (date.getMonth() + 1)).slice(-2)}/${(
+    "0" + date.getDate()
+  ).slice(-2)}/${date.getFullYear()}-${date.getHours()}:${(
+    "0" + date.getMinutes()
+  ).slice(-2)}:${("0" + date.getSeconds()).slice(-2)}`;
 };
 
 module.exports = {

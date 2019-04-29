@@ -21,6 +21,7 @@ let localChat = createChat();
 let heartBeatStarted = false;
 
 let initChat = false;
+let userRoom = "";
 
 module.exports = function(socket) {
   if (!heartBeatStarted) {
@@ -51,7 +52,8 @@ module.exports = function(socket) {
       callback({ isUser: false, user: user });
 
       socket.user = user;
-      socket.join(`${socket.user.id}`);
+      userRoom = `${socket.user.name}`;
+      socket.join(userRoom);
     }
   });
 
@@ -75,6 +77,7 @@ module.exports = function(socket) {
     io.emit(USER_DISCONNECTED, user);
     io.emit(USERS_UPDATED, connectedUsers);
     //console.log("Disconnect", user, "User List UpdateD: ", connectedUsers);
+    io.to(userRoom).emit(userRoom, " is no longer here yo!");
   });
 
   //Get Community Chat

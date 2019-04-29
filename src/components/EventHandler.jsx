@@ -13,8 +13,21 @@ import {
 /*
 
 This is the main state management component
-Socket info will be past to components for emitting events
-The server responses will all route through here before getting passed back down as props
+Socket, User, & Session info will be passed down to components as props
+Some components will emit data back to the server, 
+This event handler will listen for the responses in most cases and
+send updated data back down the pipe to trigger subsquent component behavior. 
+
+Data struct prototype: 
+{ 
+  socket:     {},
+  user: {     name: "", 
+              id: "", 
+              login: bool },
+  session: {  sessionId: "",
+              server: {}, 
+              newMessages: [{}] }
+}
 
 */
 export default class EventHandler extends Component {
@@ -54,7 +67,10 @@ export default class EventHandler extends Component {
       }
     });
     socket.on(USER_DISCONNECTED, disconnectUser => {
-      if (disconnectUser && disconnectUser["id"] === this.state.user["id"]) {
+      if (
+        disconnectUser &&
+        disconnectUser["name"] === this.state.user["name"]
+      ) {
         this.setState({ user: null });
       } else {
         console.log(
@@ -73,6 +89,13 @@ export default class EventHandler extends Component {
         //console.log("Get chat from server: ", chat);
         this.setState({ chatroom: chat });
       });
+
+      /* Current Chat Message: {
+          id: "fb862528-bec1-4846-b21a-97b7ff960454"
+          message: "hi there"
+          sender: "submit"
+          senderId: ""
+          time: "19:05" } */
 
       socket.on(MESSAGE_RECIEVED, message => {
         console.log("Chat message recieved: ", message);

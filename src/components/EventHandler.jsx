@@ -10,6 +10,8 @@ import {
   USER_DISCONNECTED
 } from "../services/sockets/events";
 
+const UserContext = React.createContext();
+
 /*
 
 This is the main state management component
@@ -111,12 +113,14 @@ export default class EventHandler extends Component {
   render() {
     const { socket, user, chatroom } = this.state;
     return socket !== null ? (
-      <Layout
-        socket={socket}
-        user={user}
-        chatroom={chatroom ? chatroom : null}
-        setUser={this.setUser}
-      />
+      <UserContext.Provider value={{ socket, user }}>
+        <Layout
+          socket={socket}
+          user={user}
+          chatroom={chatroom ? chatroom : null}
+          setUser={this.setUser}
+        />
+      </UserContext.Provider>
     ) : (
       <div>Error, Cannot connect to server!</div>
     );

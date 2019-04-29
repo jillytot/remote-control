@@ -21,7 +21,7 @@ let localChat = createChat();
 let heartBeatStarted = false;
 
 let initChat = false;
-let userRoom = "";
+let userRoom = ""; //Used to emit events to individual users
 
 module.exports = function(socket) {
   if (!heartBeatStarted) {

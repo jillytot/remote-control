@@ -9,12 +9,18 @@ const { heartBeat } = require("./settings");
  *	@prop name {string}
  *	@param {object}
  *		name {string}
+
+ *  status:  online, idle, offline, hidden
  */
 
 const createUser = ({ name = "" } = {}) => ({
   id: uuidv4(),
-  data: { heartBeat: heartBeat },
-  name
+  name,
+  data: {
+    status: "",
+    heartBeat: heartBeat,
+    created: getTime(new Date(Date.now()))
+  }
 });
 
 /*

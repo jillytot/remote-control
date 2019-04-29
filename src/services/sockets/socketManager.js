@@ -36,12 +36,6 @@ module.exports = function(socket) {
   //Socket will emit this message with successful connection
   //console.log("Socket Id:" + socket.id);
 
-  socket.on(TEST_EVENT, () => {
-    console.log("Test Event Recieved");
-    const beep = "beep";
-    io.emit(TEST_RESPONSE, testResponse(beep));
-  });
-
   socket.on(VERIFY_USER, (data, callback) => {
     const { username } = data;
 
@@ -64,7 +58,7 @@ module.exports = function(socket) {
 
     console.log(socket.user);
 
-    sendMessageToChatFromUser = sendMessageToChat(user.name);
+    sendMessageToChatFromUser = sendMessageToChat(user);
 
     io.emit(USERS_UPDATED, connectedUsers);
     socket.emit(LOCAL_CHAT, chat);
@@ -96,11 +90,6 @@ module.exports = function(socket) {
     sendMessageToChatFromUser(localChat.name, message.message);
   });
 };
-
-function testResponse(test) {
-  console.log("Test Response Sent: ", test);
-  return test;
-}
 
 /*
 Adds user to list passed in
@@ -151,8 +140,14 @@ function beat(io) {
  * @param sender {string} username of sender
  * @return function(chatId, message)
  */
-function sendMessageToChat(sender) {
+function sendMessageToChat(getSender) {
+  const sender = getSender.name;
+  const senderId = getSender.id;
+
   return (chatroom, message) => {
-    io.to(chatroom).emit(MESSAGE_RECIEVED, createMessage({ message, sender }));
+    io.to(chatroom).emit(
+      MESSAGE_RECIEVED,
+      createMessage({ message, sender, senderId })
+    );
   };
 }

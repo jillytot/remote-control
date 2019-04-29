@@ -28,7 +28,6 @@ export default class SendChat extends Form {
         userId: user.id,
         message: sendChat
       });
-
       this.setState({ data: { sendChat: "" } });
     } else {
       console.log("Userlogout Error");

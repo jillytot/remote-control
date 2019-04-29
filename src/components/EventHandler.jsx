@@ -9,7 +9,6 @@ import {
   USER_CONNECTED,
   USER_DISCONNECTED
 } from "../services/sockets/events";
-import { LOGIN_TRUE } from "./localEvents";
 
 /*
 
@@ -27,15 +26,12 @@ export default class EventHandler extends Component {
   async componentDidMount() {
     await this.initSocket();
     this.handleResponse();
-    this.handleEvents();
   }
 
   setUser = async user => {
-    //console.log("set user", user);
     const { socket } = this.state;
     await socket.emit(USER_CONNECTED, user);
     this.setState({ user });
-    this.handleEvents(LOGIN_TRUE, user);
   };
 
   initSocket = () => {
@@ -89,24 +85,12 @@ export default class EventHandler extends Component {
     }
   };
 
-  handleEvents = (event, obj) => {
-    //const { socket, user } = this.state;
-    //  if (event === USERNAME_TAKEN) {
-    //    console.log("Username Taken!", obj);
-    //    this.setState({ usernameTaken: obj });
-    //  }
-    if (event === LOGIN_TRUE) {
-      this.setState({ user: obj });
-    }
-  };
-
   render() {
     const { socket, user, chatroom } = this.state;
     return socket !== null ? (
       <Layout
         socket={socket}
         user={user}
-        onEvent={this.handleEvents}
         chatroom={chatroom ? chatroom : null}
         setUser={this.setUser}
       />

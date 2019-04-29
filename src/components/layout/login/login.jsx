@@ -10,7 +10,8 @@ export default class Login extends Form {
   state = {
     // data: { username: "", password: "", email: "" },
     data: { username: "" },
-    errors: {}
+    errors: {},
+    isUser: null
   };
 
   schema = {
@@ -39,14 +40,22 @@ export default class Login extends Form {
   // }
 
   setUser = ({ user, isUser }) => {
-    console.log("Is User?: ", isUser);
+    // console.log("Is User?: ", isUser);
     if (isUser === true) {
       this.setError("User name taken.");
+      this.setState({ isUser: false });
       this.validate();
     } else {
       this.props.setUser(user);
       this.setError("");
     }
+  };
+
+  handleFeedback = () => {
+    const { isUser } = this.state;
+    return isUser === false
+      ? "Username taken, please try another."
+      : "Username";
   };
 
   setError = error => {
@@ -65,7 +74,7 @@ export default class Login extends Form {
       <div className="register-form">
         {/* <h1>Enter a Username</h1> */}
         <form onSubmit={this.handleSubmit}>
-          {this.renderInput("username", "Username")}
+          {this.renderInput("username", this.handleFeedback())}
           {/* {this.renderInput("password", "Password", "password")}
           {this.renderInput("email", "Email", "email")} */}
           {this.renderButton("Submit")}

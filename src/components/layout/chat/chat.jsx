@@ -66,7 +66,6 @@ export default class Chat extends Component {
       }
       return messages;
     });
-    console.log(messages, users);
     return messages;
   };
 

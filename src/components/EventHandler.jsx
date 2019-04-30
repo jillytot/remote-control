@@ -95,7 +95,6 @@ export default class EventHandler extends Component {
           time: "04/29/2019-19:05:09" } */
 
       socket.on(MESSAGE_RECIEVED, message => {
-        console.log("Chat message recieved: ", message);
         if (this.state.chatroom) {
           let { chatroom } = this.state;
           chatroom.messages.push(message);

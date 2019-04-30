@@ -1,8 +1,6 @@
 import React from "react";
 
 const Message = ({ message, color }) => {
-  console.log("message: ", message);
-
   const types = {
     default: "",
     admin: "admin",

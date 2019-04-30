@@ -60,14 +60,6 @@ export default class EventHandler extends Component {
   handleResponse = () => {
     const { socket } = this.state;
 
-    socket.on(USER_CONNECTED, user => {
-      if (user) {
-        this.setState({ user: user });
-        console.log("User Connected: ", user);
-      } else {
-        console.log("Unable to get User");
-      }
-    });
     socket.on(USER_DISCONNECTED, disconnectUser => {
       if (
         disconnectUser &&

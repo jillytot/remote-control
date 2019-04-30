@@ -32,6 +32,8 @@
   text-align: left;
   padding: 2%;
   background-color: #221b3a;
+  /* margin: 5% 5% 5% 0;
+  border-radius: 12px; */
 }
 
 .gray {
@@ -39,19 +41,19 @@
 }
 
 .blue {
-  color: #47b5ff;
+  color: #1f93ff;
 }
 
 .cyan {
-  color: #00ffff;
+  color: #00dfd3;
 }
 
 .green {
-  color: #91ff42;
+  color: #7cff1e;
 }
 
 .yellow {
-  color: #f6ff47;
+  color: #f7ff66;
 }
 
 .orange {
@@ -63,20 +65,23 @@
 }
 
 .purple {
-  color: #e500ff;
+  color: #b251eb;
 }
 
 .chat-header {
   background-color: #1c1829;
   padding: 2% 0 2% 0;
   font-size: 21px;
+  /* border-radius: 12px; */
 }
 
 .chat-message {
   font-size: 14px;
   background-color: #221b3a;
-  margin: 1px;
+  margin: 2px;
   text-align: left;
+  padding: 3px 3px 3px 6px;
+  border-radius: 6px;
 }
 
 .messages-container {
@@ -87,6 +92,7 @@
   text-align: left;
   padding: 2%;
   font-size: 14px;
+
   /* outline: solid red; */
 }
 

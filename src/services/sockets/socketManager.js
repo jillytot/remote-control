@@ -93,7 +93,8 @@ module.exports = function(socket) {
   });
 
   socket.on(MESSAGE_SENT, message => {
-    sendMessageToChatFromUser(localChat.name, message.message);
+    console.log("Message from chat: ", message);
+    sendMessageToChatFromUser(localChat.name, message);
   });
 };
 
@@ -132,7 +133,7 @@ function removeUser(userList, username) {
 function beat(io, userRoom) {
   let timerId = setTimeout(
     (tick = () => {
-      console.log("badum!");
+      //console.log("badum!");
       userRoom ? io.to(userRoom).emit(HEARTBEAT) : io.emit(HEARTBEAT);
       timerId = setTimeout(tick, heartBeat); // (*)
     }),
@@ -143,13 +144,7 @@ function beat(io, userRoom) {
 function checkStatus(checkUser, thisUser) {
   const { userId, socketId } = checkUser;
 
-  userId
-    ? userId === thisUser
-      ? userId
-      : console.log("Can't identify User")
-    : socketId
-    ? socketId
-    : console.log("Can't identify User");
+  userId ? (userId === thisUser ? userId : null) : socketId ? socketId : null;
 }
 
 /*
@@ -158,14 +153,20 @@ function checkStatus(checkUser, thisUser) {
  * @param sender {string} username of sender
  * @return function(chatId, message)
  */
+
 function sendMessageToChat(getSender) {
   const sender = getSender.name;
   const senderId = getSender.id;
+  //console.log("sender and sender ID: ", sender, senderId);
 
   return (chatroom, message) => {
     io.to(chatroom).emit(
       MESSAGE_RECIEVED,
-      createMessage({ message, sender, senderId })
+      createMessage({
+        message: message.message,
+        sender: message.username,
+        senderId: message.userId
+      })
     );
   };
 }

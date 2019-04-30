@@ -36,7 +36,7 @@ export default class Chat extends Component {
     Object.keys(users).map(mapUser => {
       if (!mapUser.color) {
         let getColor = colors[Math.floor(Math.random() * colors.length)];
-        users[mapUser].color = getColor;
+        return (users[mapUser].color = getColor);
       }
       return users;
     });

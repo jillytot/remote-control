@@ -2,20 +2,11 @@ import React, { Component } from "react";
 import Message from "./message";
 
 export default class Messages extends Component {
-  state = {};
-
-  componentWillMount() {
-    if (this.props.messages !== null) {
-      this.setState({ messages: this.props.messages });
-    }
-    if (this.props.users !== null) {
-      this.setState({ users: this.props.users });
-    }
-  }
-
   displayMessages = messages => {
+    console.log("messages", messages);
+
     return messages.map(message => {
-      console.log("Mapping Messages: ", message);
+      console.log("Mapping Messages: ", message.sender);
       return (
         <Message
           message={message}

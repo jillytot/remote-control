@@ -1,10 +1,11 @@
 import React from "react";
 
-const Message = ({ message }) => {
+const Message = ({ message, color }) => {
   console.log("message: ", message);
+
   return (
     <div>
-      <div className="chat-message">
+      <div className={`chat-message ${color}`}>
         <span className="chat-user-name">{`${message.sender}:  `}</span>
         <span>{message.message}</span>
       </div>

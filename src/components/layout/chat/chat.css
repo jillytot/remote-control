@@ -74,7 +74,6 @@
 
 .chat-message {
   font-size: 14px;
-  color: #00ffff;
   background-color: #221b3a;
   margin: 1px;
   text-align: left;
@@ -92,5 +91,5 @@
 }
 
 .chat-user-name {
-  color: white;
+  font-weight: bold;
 }

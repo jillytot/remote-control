@@ -8,12 +8,21 @@ export default class Messages extends Component {
     if (this.props.messages !== null) {
       this.setState({ messages: this.props.messages });
     }
+    if (this.props.users !== null) {
+      this.setState({ users: this.props.users });
+    }
   }
 
   displayMessages = messages => {
-    return this.props.messages.map(message => {
-      console.log("mapping messages: ");
-      return <Message message={message} key={message["id"]} />;
+    return messages.map(message => {
+      console.log("Mapping Messages: ", message);
+      return (
+        <Message
+          message={message}
+          key={message["id"]}
+          color={this.props.users[message.sender].color}
+        />
+      );
     });
   };
 
@@ -23,7 +32,7 @@ export default class Messages extends Component {
         <div className="chat-header">
           {" "}
           chat header
-          {this.displayMessages(this.state.messages)}
+          {this.displayMessages(this.props.messages)}
         </div>
       </React.Fragment>
     );

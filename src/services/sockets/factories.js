@@ -42,7 +42,8 @@ const createMessage = ({ message = "", sender = "", senderId = "" } = {}) => ({
   message,
   sender,
   senderId,
-  display: true
+  display: true,
+  type: ""
 });
 
 /*

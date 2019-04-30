@@ -3,16 +3,12 @@ import Message from "./message";
 
 export default class Messages extends Component {
   displayMessages = messages => {
-    console.log("messages", messages);
+    //console.log("messages", messages);
 
     return messages.map(message => {
-      console.log("Mapping Messages: ", message.sender);
+      //console.log("Mapping Messages: ", message.sender);
       return (
-        <Message
-          message={message}
-          key={message["id"]}
-          color={this.props.users[message.sender].color}
-        />
+        <Message message={message} key={message["id"]} color={message.color} />
       );
     });
   };

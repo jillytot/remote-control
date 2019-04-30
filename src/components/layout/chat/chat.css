@@ -99,3 +99,8 @@
 .chat-user-name {
   font-weight: bold;
 }
+
+.special {
+  color: white;
+  background: -webkit-linear-gradient(-45deg, #954ed6 0%, #009bee 100%);
+}

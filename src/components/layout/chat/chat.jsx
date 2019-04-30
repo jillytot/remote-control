@@ -4,6 +4,7 @@ import UserList from "./userList.jsx";
 import Messages from "./messages";
 import SendChat from "./sendChat";
 import "./chat.css";
+import { colors } from "../../../settings/colors.js";
 
 export default class Chat extends Component {
   _isMounted = false;
@@ -26,13 +27,25 @@ export default class Chat extends Component {
     const { socket } = this.props;
     if (socket && this._isMounted) {
       await socket.on(USERS_UPDATED, users => {
-        this.setState({ users });
+        this.colorUsers(users);
       });
     }
   };
 
+  colorUsers = users => {
+    Object.keys(users).map(mapUser => {
+      if (!mapUser.color) {
+        let getColor = colors[Math.floor(Math.random() * colors.length)];
+        users[mapUser].color = getColor;
+      }
+      return users;
+    });
+    this.setState({ users });
+  };
+
   render() {
     const { onEvent, user, socket } = this.props;
+
     return (
       <div>
         {this.state.users ? (
@@ -42,10 +55,11 @@ export default class Chat extends Component {
                 messages={
                   this.props.chatroom ? this.props.chatroom.messages : []
                 }
+                users={this.state.users}
               />
               <SendChat onEvent={onEvent} user={user} socket={socket} />
             </div>
-            <UserList users={this.state.users} />
+            <UserList users={this.state.users} colors={colors} />
           </div>
         ) : (
           <div>Please login!</div>

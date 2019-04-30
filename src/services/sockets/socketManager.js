@@ -82,6 +82,14 @@ module.exports = function(socket) {
 
   socket.on(HEARTBEAT, checkUser => {
     checkStatus(checkUser, userRoom);
+    try {
+      if (socket.user) {
+        socket.user.data.status = "online";
+        console.log(socket.user.name, " is online");
+      }
+    } catch (error) {
+      console.log("Error: ", error);
+    }
   });
 
   socket.on(MESSAGE_SENT, message => {
@@ -134,12 +142,13 @@ function beat(io, userRoom) {
 
 function checkStatus(checkUser, thisUser) {
   const { userId, socketId } = checkUser;
+
   userId
     ? userId === thisUser
-      ? console.log("This user is online!", userId)
+      ? userId
       : console.log("Can't identify User")
     : socketId
-    ? console.log("Unknown user connected: ", socketId)
+    ? socketId
     : console.log("Can't identify User");
 }
 

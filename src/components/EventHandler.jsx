@@ -61,15 +61,19 @@ export default class EventHandler extends Component {
     const { socket } = this.state;
 
     socket.on(USER_DISCONNECTED, disconnectUser => {
-      if (
-        disconnectUser &&
-        disconnectUser["name"] === this.state.user["name"]
-      ) {
-        this.setState({ user: null });
-      } else {
-        console.log(
-          "Either someone else logged out, or there was an error with logging out"
-        );
+      try {
+        if (
+          disconnectUser &&
+          disconnectUser["name"] === this.state.user["name"]
+        ) {
+          this.setState({ user: null });
+        } else {
+          console.log(
+            "Either someone else logged out, or there was an error with logging out"
+          );
+        }
+      } catch (error) {
+        console.log("disconnection error: ", error);
       }
     });
     if (socket !== null) {

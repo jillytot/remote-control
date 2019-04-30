@@ -58,7 +58,7 @@ module.exports = function(socket) {
 
     io.emit(USERS_UPDATED, connectedUsers);
     socket.emit(LOCAL_CHAT, chat);
-    console.log("chat stuff: ", chat.name, chat);
+    //console.log("chat stuff: ", chat.name, chat);
     socket.join(chat.name);
   });
 
@@ -77,7 +77,7 @@ module.exports = function(socket) {
 
   //How do i tell which user?
   socket.on("disconnect", () => {
-    console.log("Lost connection to user: ");
+    //console.log("Lost connection to user: ");
   });
 
   socket.on(HEARTBEAT, checkUser => {
@@ -85,7 +85,7 @@ module.exports = function(socket) {
     try {
       if (socket.user) {
         socket.user.data.status = "online";
-        console.log(socket.user.name, " is online");
+        //console.log(socket.user.name, " is online");
       }
     } catch (error) {
       console.log("Error: ", error);
@@ -93,8 +93,12 @@ module.exports = function(socket) {
   });
 
   socket.on(MESSAGE_SENT, message => {
-    console.log("Message from chat: ", message);
-    sendMessageToChatFromUser(localChat.name, message);
+    //console.log("Message from chat: ", message);
+    try {
+      sendMessageToChatFromUser(localChat.name, message);
+    } catch (err) {
+      console.log("Oops: ", err);
+    }
   });
 };
 

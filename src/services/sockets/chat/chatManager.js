@@ -1,26 +1,48 @@
 module.exports = message => {
   const command = RegExp("/");
 
-  console.log(message.message.charAt(0));
+  //Check entry character & assign message types
   if (message.message.charAt(0) === "/") message.type = "site-command";
   if (message.message.charAt(0) === ".") message.type = "robot-command";
   if (message.message.charAt(0) === "#") message.type = "donate";
 
-  const commands = doCommand => {
-    console.log("Do Command!");
-    let scrubCommand = doCommand
-      .substr(1)
-      .split(" ")[0]
-      .toLowerCase();
+  //execute based on message types
+  if (message.type === "site-command") siteCommands(message);
 
-    if (scrubCommand === "me") message.type = "self";
-    console.log("Do Command: ", scrubCommand);
-  };
-  if (message.type === "site-command") commands(message.message);
-
-  console.log(message);
+  //send final message to chat
   return message;
 };
 
-// var words = codelines[i].split(" ");
-//   firstWords.push(words[0]);
+//commands for managing the site through chat
+siteCommands = message => {
+  let updateCommand = message;
+  let scrubCommand = message.message
+    .substr(1)
+    .split(" ")[0]
+    .toLowerCase();
+
+  if (scrubCommand === "me") updateCommand = me(updateCommand);
+  if (scrubCommand === "w") message.type = "whisper";
+  if (scrubCommand === "timeout") message.type = "moderation";
+  if (scrubCommand === "mod") message.type = "moderation";
+  if (scrubCommand === "unmod") message.type = "moderation";
+
+  console.log("Do Command: ", scrubCommand);
+  message = updateCommand;
+  updateCommand.message = scrubCommand;
+  return message;
+};
+
+me = message => {
+  message.type = "self";
+  message.message = message.message.substr(1);
+  console.log(message.message);
+  return message;
+};
+
+//Moderate
+moderate = (moderate, validate) => {
+  //Does the command ( moderate ) come from a moderator ( validate )?
+  //If so, grab the name of the person to be moderated.
+  //execute moderation commands.
+};

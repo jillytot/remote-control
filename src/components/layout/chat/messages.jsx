@@ -2,6 +2,24 @@ import React, { Component } from "react";
 import Message from "./message";
 
 export default class Messages extends Component {
+  constructor(props) {
+    super(props);
+    this.scrollDown = this.scrollDown.bind(this);
+  }
+
+  scrollDown() {
+    const { container } = this.refs;
+    container.scrollTop = container.scrollHeight;
+  }
+
+  componentDidMount() {
+    this.scrollDown();
+  }
+
+  componentDidUpdate(prevProps, prevState) {
+    this.scrollDown();
+  }
+
   displayMessages = messages => {
     //console.log("messages", messages);
 
@@ -19,7 +37,9 @@ export default class Messages extends Component {
         <div className="chat-header">
           {" "}
           chat header
-          {this.displayMessages(this.props.messages)}
+          <div ref="container" className="chat-scroll">
+            {this.displayMessages(this.props.messages)}
+          </div>
         </div>
       </React.Fragment>
     );

@@ -10,16 +10,16 @@ const Message = ({ message, color }) => {
     self: "self"
   };
 
-  const { special } = types;
-
   return (
     <div>
       <div
         className={`chat-message ${color} ${
-          message.type === types.self ? special : ""
+          message.type === types.self ? types.self : ""
         }`}
       >
-        <span className="chat-user-name">{`${message.sender}:  `}</span>
+        <span className="chat-user-name">{`${message.sender}${
+          message.type === types.self ? "" : ":"
+        }  `}</span>
         <span>{message.message}</span>
       </div>
     </div>

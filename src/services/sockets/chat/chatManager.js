@@ -29,13 +29,12 @@ siteCommands = message => {
 
   console.log("Do Command: ", scrubCommand);
   message = updateCommand;
-  updateCommand.message = scrubCommand;
   return message;
 };
 
 me = message => {
   message.type = "self";
-  message.message = message.message.substr(1);
+  message.message = message.message.substr(4);
   console.log(message.message);
   return message;
 };

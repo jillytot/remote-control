@@ -115,6 +115,7 @@
 
 .chat-user-name {
   font-weight: bold;
+  cursor: pointer;
 }
 
 .special {
@@ -124,4 +125,8 @@
 
 .self {
   font-style: italic;
+}
+
+.emote {
+  height: 24px;
 }

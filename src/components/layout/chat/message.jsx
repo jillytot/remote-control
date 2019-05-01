@@ -1,4 +1,5 @@
 import React from "react";
+import Emotes from "../../../emotes/emotes";
 
 const Message = ({ message, color }) => {
   const types = {
@@ -20,7 +21,10 @@ const Message = ({ message, color }) => {
         <span className="chat-user-name">{`${message.sender}${
           message.type === types.self ? "" : ":"
         }  `}</span>
-        <span>{message.message}</span>
+        <span>
+          {message.message}
+          <img className="emote" src={Emotes.robot} alt="" />
+        </span>
       </div>
     </div>
   );

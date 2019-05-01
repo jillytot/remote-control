@@ -15,20 +15,17 @@ const Message = ({ message, color }) => {
     //break message into substrings
     //search each word in message array to match an emote code
     let filter = [];
+
     filterMessage.split(" ").forEach((word, i) => {
-      console.log("word", i, word);
-      Object.keys(Emotes).forEach(emote => {
-        if (word === emote) {
-          filter.push(
-            <span key={`${emote}${i}`}>
-              <img className="emote" src={Emotes[emote]} alt={word} />{" "}
-            </span>
-          );
-        } else {
-          //filter[i] = <React.Fragment>{word}</React.Fragment>;
-          filter.push(word + " ");
-        }
-      });
+      if (Emotes.hasOwnProperty(word)) {
+        filter.push(
+          <span key={`${word}${i}`}>
+            <img className="emote" src={Emotes[word]} alt={word} />{" "}
+          </span>
+        );
+      } else {
+        filter.push(word + " ");
+      }
     });
 
     // <React.Fragment>Normal text {emote} normal text.</React.Fragment>

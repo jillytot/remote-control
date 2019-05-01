@@ -83,7 +83,7 @@
 
 .chat-scroll::-webkit-scrollbar-track {
   box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
-  background-color: #cac8ee;
+  background-color: #372e50;
 }
 .chat-scroll::-webkit-scrollbar {
   width: 5px;

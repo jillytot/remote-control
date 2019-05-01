@@ -5,7 +5,9 @@ const Message = ({ message, color }) => {
     default: "",
     admin: "admin",
     channel: "channel",
-    special: "special"
+    special: "special",
+    siteCommand: "site-command",
+    self: "self"
   };
 
   const { special } = types;
@@ -14,7 +16,7 @@ const Message = ({ message, color }) => {
     <div>
       <div
         className={`chat-message ${color} ${
-          message.sender === "admin" ? special : ""
+          message.type === types.self ? special : ""
         }`}
       >
         <span className="chat-user-name">{`${message.sender}:  `}</span>

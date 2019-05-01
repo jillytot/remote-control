@@ -36,14 +36,19 @@ const createUser = ({ name = "" } = {}) => ({
  *		message {string}
  *		sender {string}
  */
-const createMessage = ({ message = "", sender = "", senderId = "" } = {}) => ({
+const createMessage = ({
+  message = "",
+  sender = "",
+  senderId = "",
+  type = ""
+} = {}) => ({
   id: uuidv4(),
   time: getTime(new Date(Date.now())),
   message,
   sender,
   senderId,
   display: true,
-  type: ""
+  type
 });
 
 /*

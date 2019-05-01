@@ -11,6 +11,7 @@ const {
   MESSAGE_SENT,
   MESSAGE_RECIEVED
 } = require("./events");
+const ChatManager = require("./chat/chatManager");
 
 const { heartBeat } = require("./settings");
 
@@ -95,7 +96,8 @@ module.exports = function(socket) {
   socket.on(MESSAGE_SENT, message => {
     //console.log("Message from chat: ", message);
     try {
-      sendMessageToChatFromUser(localChat.name, message);
+      let checkMessage = ChatManager(message);
+      sendMessageToChatFromUser(localChat.name, checkMessage);
     } catch (err) {
       console.log("Oops: ", err);
     }
@@ -164,12 +166,14 @@ function sendMessageToChat(getSender) {
   //console.log("sender and sender ID: ", sender, senderId);
 
   return (chatroom, message) => {
+    console.log("Check Message: ", message);
     io.to(chatroom).emit(
       MESSAGE_RECIEVED,
       createMessage({
         message: message.message,
         sender: message.username,
-        senderId: message.userId
+        senderId: message.userId,
+        type: message.type
       })
     );
   };

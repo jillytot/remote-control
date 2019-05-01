@@ -1,5 +1,7 @@
+import robot from "./imgs/robot.png";
+
 const emotes = {
-  robot: "imgs/robot.png"
+  robot: robot
 };
 
 export default emotes;

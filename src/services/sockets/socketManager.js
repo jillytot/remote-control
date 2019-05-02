@@ -46,17 +46,10 @@ module.exports = function(socket) {
       let user = createUser({ name: username });
       callback({ isUser: false, user: user });
 
-      const text = "INSERT INTO test(username) VALUES($1) RETURNING *";
-      const values = [username];
+      //DB STUFF
+      dbStore("test", "username", [username]);
 
-      try {
-        const res = await db.query(text, values);
-        console.log(res.rows[0]);
-        // { name: 'brianc', email: 'brian.m.carlson@gmail.com' }
-      } catch (err) {
-        console.log(err.stack);
-      }
-
+      //SOCKET STUFF
       socket.user = user;
       userRoom = `${socket.user.id}`;
       socket.join(userRoom);
@@ -80,7 +73,6 @@ module.exports = function(socket) {
     connectedUsers = removeUser(connectedUsers, user["name"]);
     io.emit(USER_DISCONNECTED, user);
     io.emit(USERS_UPDATED, connectedUsers);
-    //console.log("Disconnect", user, "User List UpdateD: ", connectedUsers);
     io.to(userRoom).emit(userRoom, " is no longer here yo!");
   });
 
@@ -99,7 +91,6 @@ module.exports = function(socket) {
     try {
       if (socket.user) {
         socket.user.data.status = "online";
-        //console.log(socket.user.name, " is online");
       }
     } catch (error) {
       console.log("Error: ", error);
@@ -107,7 +98,6 @@ module.exports = function(socket) {
   });
 
   socket.on(MESSAGE_SENT, message => {
-    //console.log("Message from chat: ", message);
     try {
       let checkMessage = ChatManager(message);
       sendMessageToChatFromUser(localChat.name, checkMessage);
@@ -152,7 +142,6 @@ function removeUser(userList, username) {
 function beat(io, userRoom) {
   let timerId = setTimeout(
     (tick = () => {
-      //console.log("badum!");
       userRoom ? io.to(userRoom).emit(HEARTBEAT) : io.emit(HEARTBEAT);
       timerId = setTimeout(tick, heartBeat); // (*)
     }),
@@ -162,7 +151,6 @@ function beat(io, userRoom) {
 
 function checkStatus(checkUser, thisUser) {
   const { userId, socketId } = checkUser;
-
   userId ? (userId === thisUser ? userId : null) : socketId ? socketId : null;
 }
 
@@ -176,7 +164,6 @@ function checkStatus(checkUser, thisUser) {
 function sendMessageToChat(getSender) {
   const sender = getSender.name;
   const senderId = getSender.id;
-  //console.log("sender and sender ID: ", sender, senderId);
 
   return (chatroom, message) => {
     console.log("Check Message: ", message);
@@ -191,3 +178,14 @@ function sendMessageToChat(getSender) {
     );
   };
 }
+
+dbStore = async (table, column, values) => {
+  //3rd value always needs to be an array
+  const text = `INSERT INTO ${table}(${column}) VALUES($1) RETURNING *`;
+  try {
+    const res = await db.query(text, values);
+    console.log(res.rows[0]);
+  } catch (err) {
+    console.log(err.stack);
+  }
+};

@@ -1,5 +1,7 @@
+//Import Socket.io
 const io = require("./sockets").io;
-const { createUser, createMessage, createChat } = require("./factories");
+
+//Import Socket Events
 const {
   VERIFY_USER,
   USER_CONNECTED,
@@ -11,32 +13,43 @@ const {
   MESSAGE_SENT,
   MESSAGE_RECIEVED
 } = require("./events");
-const ChatManager = require("./chat/chatManager");
 
+//Import Global Settings
 const { heartBeat } = require("./settings");
-
-let connectedUsers = {};
-let localChat = createChat();
 let heartBeatStarted = false;
 
+//Import Factories
+const { createUser, createMessage, createChat } = require("./factories");
+let connectedUsers = {};
+let localChat = createChat();
+
+//Import DB Stuff
+const db = require("../db/db");
+const { dbStore } = db;
+
+//Import Chat Manager, initialize other chat logic
+const ChatManager = require("./chat/chatManager");
 let initChat = false;
 let userRoom = ""; //Used to emit events to individual users
 
-const db = require("../db/db");
-
+/*
+*
+*
+Socket Manager */
 module.exports = function(socket) {
+  //Initialize Heartbeat
   if (!heartBeatStarted) {
     beat(io);
     heartBeatStarted = true;
   }
 
+  //Temporary: Initialize a chatroom
   if (!initChat) {
     console.log("Chat Room: ", localChat.name);
     initChat = true;
   }
-  //Socket will emit this message with successful connection
-  //console.log("Socket Id:" + socket.id);
 
+  //When user first logs in from the client
   socket.on(VERIFY_USER, async (data, callback) => {
     const { username } = data;
 
@@ -108,10 +121,7 @@ module.exports = function(socket) {
 };
 
 /*
-Adds user to list passed in
-@param userList { object } Object with key value pairs of users
-@param user { user } the user to be added to the list
-@return userList { object } Object with key value pairs of users */
+Adds user to list passed in*/
 function addUser(userList, user) {
   let newList = Object.assign({}, userList);
   newList[user.name] = user;
@@ -119,19 +129,13 @@ function addUser(userList, user) {
 }
 
 /*
-Checks if the user is in the list passed in.
-@param userList { object } Object with key value pairs of Users
-@param username { string }
-@return userList { object } Object with key value pairs of Users */
+Checks if the user is in the list passed in.*/
 function isUser(userList, username) {
   return username in userList;
 }
 
 /*
-Removes user from the list passed in
-@param userList { object } Object with key value pairs of Users
-@param username { string } name of user to be removed
-@return userList { object } Object with key value pairs of Users */
+Removes user from the list passed in */
 function removeUser(userList, username) {
   let newList = Object.assign({}, userList);
   delete newList[username];
@@ -155,12 +159,7 @@ function checkStatus(checkUser, thisUser) {
 }
 
 /*
- * Returns a function that will take a chat id and message
- * and then emit a broadcast to the chat id.
- * @param sender {string} username of sender
- * @return function(chatId, message)
- */
-
+ * Returns a function that will take a chat id and message*/
 function sendMessageToChat(getSender) {
   const sender = getSender.name;
   const senderId = getSender.id;
@@ -178,14 +177,3 @@ function sendMessageToChat(getSender) {
     );
   };
 }
-
-dbStore = async (table, column, values) => {
-  //3rd value always needs to be an array
-  const text = `INSERT INTO ${table}(${column}) VALUES($1) RETURNING *`;
-  try {
-    const res = await db.query(text, values);
-    console.log(res.rows[0]);
-  } catch (err) {
-    console.log(err.stack);
-  }
-};

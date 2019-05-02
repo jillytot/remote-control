@@ -12,8 +12,6 @@ const Message = ({ message, color }) => {
   };
 
   const handleEmotes = filterMessage => {
-    //break message into substrings
-    //search each word in message array to match an emote code
     let filter = [];
 
     filterMessage.split(" ").forEach((word, i) => {
@@ -27,9 +25,6 @@ const Message = ({ message, color }) => {
         filter.push(word + " ");
       }
     });
-
-    // <React.Fragment>Normal text {emote} normal text.</React.Fragment>
-    console.log("Filter: ", filter);
     return filter;
   };
 

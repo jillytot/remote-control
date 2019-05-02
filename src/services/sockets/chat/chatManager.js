@@ -45,3 +45,7 @@ moderate = (moderate, validate) => {
   //If so, grab the name of the person to be moderated.
   //execute moderation commands.
 };
+
+// commandList = {
+//    timeout: timeout,
+// }

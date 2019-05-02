@@ -14,7 +14,7 @@ export default class SendChat extends Form {
     sendChat: Joi.string()
       .required()
       .min(1)
-      .max(180)
+      .max(512)
       .trim()
       .label("Chat Message")
   };

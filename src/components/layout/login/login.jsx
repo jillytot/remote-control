@@ -17,8 +17,8 @@ export default class Login extends Form {
   schema = {
     username: Joi.string()
       .required()
-      .min(3)
-      .max(18)
+      .min(4)
+      .max(25)
       .alphanum()
       .trim()
       .label("Username")

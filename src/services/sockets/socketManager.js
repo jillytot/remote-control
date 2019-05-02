@@ -22,6 +22,8 @@ let heartBeatStarted = false;
 let initChat = false;
 let userRoom = ""; //Used to emit events to individual users
 
+const db = require("../db/db");
+
 module.exports = function(socket) {
   if (!heartBeatStarted) {
     beat(io);
@@ -35,7 +37,7 @@ module.exports = function(socket) {
   //Socket will emit this message with successful connection
   //console.log("Socket Id:" + socket.id);
 
-  socket.on(VERIFY_USER, (data, callback) => {
+  socket.on(VERIFY_USER, async (data, callback) => {
     const { username } = data;
 
     if (isUser(connectedUsers, username)) {
@@ -43,6 +45,17 @@ module.exports = function(socket) {
     } else {
       let user = createUser({ name: username });
       callback({ isUser: false, user: user });
+
+      const text = "INSERT INTO test(username) VALUES($1) RETURNING *";
+      const values = [username];
+
+      try {
+        const res = await db.query(text, values);
+        console.log(res.rows[0]);
+        // { name: 'brianc', email: 'brian.m.carlson@gmail.com' }
+      } catch (err) {
+        console.log(err.stack);
+      }
 
       socket.user = user;
       userRoom = `${socket.user.id}`;

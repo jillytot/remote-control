@@ -75,7 +75,11 @@ export default class Login extends Form {
     //Call the server
     const { socket } = this.props;
     const { data } = this.state;
-    socket.emit(VERIFY_USER, data, this.setUser);
+    socket.emit(
+      VERIFY_USER,
+      { username: data.username, password: data.password, email: data.email },
+      this.setUser
+    );
   };
 
   render() {

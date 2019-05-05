@@ -51,6 +51,7 @@ module.exports = function(socket) {
   //When user first logs in from the client
   socket.on(VERIFY_USER, async (data, callback) => {
     const { username } = data;
+    console.log("Verify User Data: ", data);
 
     if (isUser(connectedUsers, username)) {
       callback({ isUser: true, user: null });

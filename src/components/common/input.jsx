@@ -1,4 +1,5 @@
 import React from "react";
+import "../../styles/common.css";
 
 const Input = ({ name, label, error, ...rest }) => {
   return (

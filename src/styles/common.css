@@ -27,3 +27,17 @@
   padding: 5px 10px;
   color: #c92c43;
 }
+
+.alert {
+  font-size: 12px;
+  padding: 5px;
+  background-color: red;
+}
+
+.alert-danger {
+  font-size: 12px;
+}
+
+.form-group {
+  font-size: calc(3px + 2vmin);
+}

@@ -6,10 +6,8 @@ import Joi from "joi-browser";
 import "./login.css";
 
 export default class Login extends Form {
-  //Leaving placeholders for future verification steps
   state = {
-    // data: { username: "", password: "", email: "" },
-    data: { username: "" },
+    data: { username: "", password: "", confirm: "", email: "" },
     errors: {},
     isUser: null
   };
@@ -21,15 +19,26 @@ export default class Login extends Form {
       .max(25)
       .alphanum()
       .trim()
-      .label("Username")
-    // password: Joi.string()
-    //   .required()
-    //   .min(5)
-    //   .label("Password"),
-    // email: Joi.string()
-    //   .email()
-    //   .required()
-    //   .label("Email")
+      .label("Username"),
+    password: Joi.string()
+      .required()
+      .min(5)
+      .label("Password"),
+    confirm: Joi.string()
+      .required()
+      .equal(Joi.ref("password"))
+      .options({
+        language: {
+          any: {
+            allowOnly: "!!Passwords do not match"
+          }
+        }
+      })
+      .label("Confirm Password"),
+    email: Joi.string()
+      .email()
+      .required()
+      .label("Email")
   };
 
   // componentDidMount() {
@@ -72,11 +81,11 @@ export default class Login extends Form {
   render() {
     return (
       <div className="register-form">
-        {/* <h1>Enter a Username</h1> */}
         <form onSubmit={this.handleSubmit}>
           {this.renderInput("username", this.handleFeedback())}
-          {/* {this.renderInput("password", "Password", "password")}
-          {this.renderInput("email", "Email", "email")} */}
+          {this.renderInput("password", "Password", "password")}
+          {this.renderInput("confirm", "Confirm Password", "confirm")}
+          {this.renderInput("email", "Email", "email")}
           {this.renderButton("Submit")}
         </form>
       </div>

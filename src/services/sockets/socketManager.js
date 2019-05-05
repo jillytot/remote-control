@@ -15,7 +15,7 @@ const {
 } = require("./events");
 
 //Import Global Settings
-const { heartBeat } = require("./settings");
+const { heartBeat } = require("../../config/serverSettings");
 let heartBeatStarted = false;
 
 //Import Factories
@@ -25,7 +25,6 @@ let localChat = createChat();
 
 //Import DB Stuff
 const db = require("../db/db");
-const { dbStore } = db;
 
 //Import Chat Manager, initialize other chat logic
 const ChatManager = require("./chat/chatManager");
@@ -177,3 +176,14 @@ function sendMessageToChat(getSender) {
     );
   };
 }
+
+dbStore = async (table, column, values) => {
+  //3rd value always needs to be an array
+  const text = `INSERT INTO ${table}(${column}) VALUES($1) RETURNING *`;
+  try {
+    const res = await db.query(text, values);
+    console.log(res.rows[0]);
+  } catch (err) {
+    console.log(err.stack);
+  }
+};

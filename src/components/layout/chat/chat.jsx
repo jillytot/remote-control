@@ -4,7 +4,7 @@ import UserList from "./userList.jsx";
 import Messages from "./messages";
 import SendChat from "./sendChat";
 import "./chat.css";
-import { colors } from "../../../settings/colors.js";
+import { colors } from "../../../config/colors";
 
 export default class Chat extends Component {
   _isMounted = false;

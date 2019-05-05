@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import io from "socket.io-client";
 import Layout from "./layout/layout";
-import { socketUrl } from "../settings/clientSettings";
+import { socketUrl } from "../config/clientSettings";
 import {
   HEARTBEAT,
   LOCAL_CHAT,

@@ -1,6 +1,6 @@
 //Original Reference: https://github.com/vlw0052/Tutorial---ReactJS-and-Socket.io-Chat-App/blob/master/src/Factories.js
 const uuidv4 = require("uuid/v4");
-const { heartBeat } = require("./settings");
+const { heartBeat } = require("../../config/serverSettings");
 
 const createUser = ({ name = "" } = {}) => ({
   id: uuidv4(),

@@ -64,11 +64,15 @@ module.exports = function(socket) {
       callback({ isUser: false, user: user });
 
       //DB STUFF
-      dbStore("test", "username", [username]);
+      const dbCheck = await dbStore("test", "username", [username]);
+      console.log("DB Status: ", dbCheck.status);
+      //Is this user in the DB alreadY?
 
       //ENCRYPT PASSWORD:
       bcrypt.genSalt(saltRounds, function(err, salt) {
+        if (err) console.log("Encryption Error: ", err);
         bcrypt.hash(data.password, salt, function(err, hash) {
+          if (err) console.log("Encryption Error: ", err);
           // Store hash in your password DB.
           console.log("Hash: ", hash);
         });
@@ -76,8 +80,9 @@ module.exports = function(socket) {
 
       //SOCKET STUFF
       socket.user = user;
-      userRoom = `${socket.user.id}`;
+      userRoom = `${socket.user.id}`; //Allows sending a message to a single user
       socket.join(userRoom);
+      io.to(userRoom).emit(userRoom, dbCheck.status);
     }
   });
 
@@ -191,12 +196,28 @@ function sendMessageToChat(getSender) {
 }
 
 dbStore = async (table, column, values) => {
-  //3rd value always needs to be an array
-  const text = `INSERT INTO ${table}(${column}) VALUES($1) RETURNING *`;
+  let sendRes = { status: "" }; //return status
+
+  const checkDb = `SELECT exists ( SELECT 1 FROM ${table} WHERE ${column} = '${values}' LIMIT 1 );`;
+  const checkRes = await db.query(checkDb);
+  const { exists } = checkRes.rows[0];
+
   try {
-    const res = await db.query(text, values);
-    console.log(res.rows[0]);
+    if (exists === false) {
+      const text = `INSERT INTO ${table}(${column}) VALUES($1) RETURNING *`;
+      try {
+        const res = await db.query(text, values);
+        console.log("db insertion result: ", res.rows[0]);
+        sendRes.status = "New account created!";
+      } catch (err) {
+        console.log(err.stack);
+      }
+    } else {
+      // console.log("This user already exists in DB");
+      sendRes.status = "This username already exists, please try another";
+    }
   } catch (err) {
     console.log(err.stack);
   }
+  return sendRes;
 };

@@ -31,6 +31,10 @@ const ChatManager = require("./chat/chatManager");
 let initChat = false;
 let userRoom = ""; //Used to emit events to individual users
 
+//Bcrypt
+const bcrypt = require("bcrypt");
+const saltRounds = 10;
+
 /*
 *
 *
@@ -61,6 +65,14 @@ module.exports = function(socket) {
 
       //DB STUFF
       dbStore("test", "username", [username]);
+
+      //ENCRYPT PASSWORD:
+      bcrypt.genSalt(saltRounds, function(err, salt) {
+        bcrypt.hash(data.password, salt, function(err, hash) {
+          // Store hash in your password DB.
+          console.log("Hash: ", hash);
+        });
+      });
 
       //SOCKET STUFF
       socket.user = user;

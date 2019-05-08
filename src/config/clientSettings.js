@@ -1,3 +1,5 @@
+const { serverPort } = require("./serverSettings");
+
 module.exports = {
-  socketUrl: "http://localhost:3231"
+  socketUrl: `http://localhost:${serverPort}`
 };

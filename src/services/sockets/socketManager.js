@@ -33,7 +33,7 @@ let userRoom = ""; //Used to emit events to individual users
 
 //Bcrypt
 const bcrypt = require("bcrypt");
-const saltRounds = 10;
+const saltRounds = 10; //!!!!!!Don't leave this on a public repo. !!!!!!!!
 
 /*
 *
@@ -61,12 +61,10 @@ module.exports = function(socket) {
       callback({ isUser: true, user: null });
     } else {
       let user = createUser({ name: username });
-      callback({ isUser: false, user: user });
 
       //DB STUFF
       const dbCheck = await dbStore("test", "username", [username]);
       console.log("DB Status: ", dbCheck.status);
-      //Is this user in the DB alreadY?
 
       //ENCRYPT PASSWORD:
       bcrypt.genSalt(saltRounds, function(err, salt) {
@@ -83,6 +81,8 @@ module.exports = function(socket) {
       userRoom = `${socket.user.id}`; //Allows sending a message to a single user
       socket.join(userRoom);
       io.to(userRoom).emit(userRoom, dbCheck.status);
+
+      callback({ isUser: false, user: user });
     }
   });
 

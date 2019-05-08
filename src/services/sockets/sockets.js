@@ -3,7 +3,7 @@ var io = (module.exports.io = require("socket.io")(app));
 const { serverPort } = require("../../config/serverSettings");
 
 const PORT = process.env.PORT || serverPort;
-const SocketManager = require("./socketManager");
+const SocketManager = require("./socketManager").default;
 
 io.on("connection", SocketManager);
 

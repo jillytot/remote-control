@@ -1,10 +1,11 @@
 const router = require("express").Router();
 
-//Routing Test
 router.get("/", (req, res) => {
-  res.status(200).json({ greeting: "Oh hi there." });
+  return res.send({ login: "login" });
 });
 
-router.use(`/api`, require("./api"));
+router.post("/", (req, res) => {
+  // post request
+});
 
 module.exports = router;

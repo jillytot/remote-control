@@ -17,11 +17,6 @@ app.use(express.static(path.join(__dirname, "public")));
 //models and routes:
 app.use(require("../../routes"));
 
-app.get("/protected", jwt({ secret: "poop" }), function(req, res) {
-  if (!req.user.admin) return res.sendStatus(401);
-  res.sendStatus(200);
-});
-
 //run server
 const server = app.listen(port, () => {
   if (app.get("env") === "test") return;

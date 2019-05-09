@@ -10,12 +10,18 @@ module.exports.createAuthToken = user => {
 
 module.exports.createUser = async ({ username, password, email }) => {
   console.log("Add User: ", username, password, email);
-  let result = this.checkUsername(username);
+  let result = await this.checkUsername(username);
+  console.log("result: ", await result);
   if (result !== null) return result;
-  return "poop";
+  return "Username approved";
 };
 
-module.exports.checkUsername = async ({ username }) => {
-  console.log("checking username!");
-  username === "jill" ? "This username already exists, please try again" : null;
+module.exports.checkUsername = username => {
+  if (username === "jill") {
+    //Database stuff !?!?!?!
+
+    return "This username already exists, please try again";
+  } else {
+    return null;
+  }
 };

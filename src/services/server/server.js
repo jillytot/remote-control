@@ -4,10 +4,15 @@ const express = require("express");
 const bodyParser = require("body-parser");
 const path = require("path");
 const { serverPort } = require("../../config/serverSettings");
-const jwt = require("express-jwt");
 
 const app = express();
 const port = serverPort;
+
+//Very important function, never remove.
+app.use((req, res, next) => {
+  res.setHeader("X-Powered-By", "Rainbows & Hamburgers");
+  next();
+});
 
 //setup express
 app.use(bodyParser.urlencoded({ extended: false }));
@@ -17,11 +22,13 @@ app.use(express.static(path.join(__dirname, "public")));
 //models and routes:
 app.use(require("../../routes"));
 
+// const event = require("../../events");
+
 //open socket:
 const http = require("http").Server(app);
 const io = require("socket.io")(http);
-io.on("connection", () => {
-  console.log("Sockets Activated!");
+io.on("connection", socket => {
+  console.log("Socket: ", socket.id);
 });
 
 //run server

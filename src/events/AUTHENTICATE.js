@@ -10,4 +10,5 @@ module.exports = async (socket, data) => {
 
   user.createUser(user);
   socket.send(JSON.stringify(["AUTHENTICATED"]));
+  return socket;
 };

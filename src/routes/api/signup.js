@@ -6,10 +6,8 @@ router.get("/", (req, res) => {
 });
 
 router.post("/", async (req, res) => {
-  const { username, password, email } = req.query;
   // post request
-  console.log("Login Req: ", username, password, email);
-  const createUser = await user.createUser(req.query);
+  const createUser = await user.createUser(req.body);
   createUser !== null ? res.send(createUser) : res.send("ok");
 });
 

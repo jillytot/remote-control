@@ -15,7 +15,7 @@ You will also see any lint errors in the console.
 
 ### `npm run server`
 
-This runs the express server for user authentication via JWT & Passport.
+This runs the express server for user authentication via JWT & Passport.<br>
 Currently not integrated into the main project.
 
 ### `npm test`

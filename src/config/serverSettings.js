@@ -1,4 +1,4 @@
 module.exports = {
-  serverPort: 5000,
+  serverPort: 3231,
   heartBeat: 5000
 };

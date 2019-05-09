@@ -17,5 +17,21 @@ app.use(express.static(path.join(__dirname, "public")));
 //models and routes:
 app.use(require("../../routes"));
 
+app.get("/protected", jwt({ secret: "poop" }), function(req, res) {
+  if (!req.user.admin) return res.sendStatus(401);
+  res.sendStatus(200);
+});
+
 //run server
-app.listen(port, () => console.log(`Example app listening on port ${port}!`));
+const server = app.listen(port, () => {
+  if (app.get("env") === "test") return;
+  console.log(`Server listening on port ${port}!`);
+});
+
+server.on("close", () => {
+  console.log("Closed express server");
+
+  db.pool.end(() => {
+    console.log("Shut down connection pool");
+  });
+});

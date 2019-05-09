@@ -9,6 +9,7 @@ const jwt = require("express-jwt");
 const app = express();
 const port = serverPort;
 
+//setup express
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 app.use(express.static(path.join(__dirname, "public")));
@@ -16,15 +17,5 @@ app.use(express.static(path.join(__dirname, "public")));
 //models and routes:
 app.use(require("../../routes"));
 
-// app.get("/", (req, res) => res.send("Hello World!"));
-
-// app.post("/signup", (req, res) => {
-//   res.send("Got a POST ... maybe");
-// });
-
-// app.get("/protected", jwt({ secret: "shhhhhhared-secret" }), (req, res) => {
-//   if (!req.user.admin) return res.sendStatus(401);
-//   res.sendStatus(200);
-// });
-
+//run server
 app.listen(port, () => console.log(`Example app listening on port ${port}!`));

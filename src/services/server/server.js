@@ -17,8 +17,15 @@ app.use(express.static(path.join(__dirname, "public")));
 //models and routes:
 app.use(require("../../routes"));
 
+//open socket:
+const http = require("http").Server(app);
+const io = require("socket.io")(http);
+io.on("connection", () => {
+  console.log("Sockets Activated!");
+});
+
 //run server
-const server = app.listen(port, () => {
+const server = http.listen(port, () => {
   if (app.get("env") === "test") return;
   console.log(`Server listening on port ${port}!`);
 });

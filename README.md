@@ -1,5 +1,30 @@
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
+Current Map:
+
+src <br>
+. |\_components<br>
+. | |\_common<br>
+. | |\_layout<br>
+. | |\_chat<br>
+. | |\_login<br>
+. | |\_nav<br>
+. |\_config<br>
+. | |\_env<br>
+. |\_emotes<br>
+. | |\_imgs<br>
+. |\_events<br>
+. |\_icons<br>
+. |\_routes<br>
+. | |\_api<br>
+. | |\_modules<br>
+. |\_services<br>
+. | |\_db<br>
+. | |\_server<br>
+. | |\_sockets<br>
+. | |\_chat<br>
+. |\_styles<br>
+
 ## Available Scripts
 
 In the project directory, you can run:

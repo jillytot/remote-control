@@ -13,6 +13,11 @@ This command will also boot the websocket server, currently running on port: 323
 The page will reload if you make edits.<br>
 You will also see any lint errors in the console.
 
+### `npm run server`
+
+This runs the express server for user authentication via JWT & Passport.
+Currently not integrated into the main project.
+
 ### `npm test`
 
 Launches the test runner in the interactive watch mode.<br>

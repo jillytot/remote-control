@@ -10,10 +10,12 @@ module.exports.createAuthToken = user => {
 
 module.exports.createUser = async ({ username, password, email }) => {
   console.log("Add User: ", username, password, email);
-  console.log(checkUsername(username));
-  return;
+  let result = this.checkUsername(username);
+  if (result !== null) return result;
+  return "poop";
 };
 
 module.exports.checkUsername = async ({ username }) => {
+  console.log("checking username!");
   username === "jill" ? "This username already exists, please try again" : null;
 };

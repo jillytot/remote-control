@@ -1,4 +1,4 @@
-//Generate unique ID
+//GENERATE UNIQUE ID
 module.exports.makeId = () => {
   const uuidv4 = require("uuid/v4");
   const generate = uuidv4();
@@ -18,4 +18,8 @@ module.exports.hash = async pw => {
     });
   });
   return hashed;
+};
+
+module.exports.createTimeStamp = () => {
+  return Date.now();
 };

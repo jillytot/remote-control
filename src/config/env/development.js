@@ -1,8 +1,8 @@
 module.exports = {
   db: {
-    user: "",
+    user: "postgres",
     password: "",
-    database: "",
+    database: "remote_control",
     host: "localhost",
     port: 5432,
     max: 50,

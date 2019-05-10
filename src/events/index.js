@@ -1,5 +1,8 @@
-const AUTHENTICATE = require("./AUTHENTICATE");
+//Import Socket.io
+const io = require("./sockets").io;
 
-handler = async (socket, event, data) => {
-  if (event === "AUTHENTICATE") await AUTHENTICATE(socket, data);
-};
+const authenticate = require("./authenticate");
+
+socket.on("AUTHENTICATE", data => {
+  authenticate(socket, data);
+});

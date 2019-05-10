@@ -1,4 +1,5 @@
 const jwt = require("jsonwebtoken");
+const db = require("../services/db");
 
 module.exports.createAuthToken = user => {
   return jwt.sign({ user }, config.JWT_SECRET, {
@@ -8,20 +9,25 @@ module.exports.createAuthToken = user => {
   });
 };
 
-module.exports.createUser = async ({ username, password, email }) => {
-  console.log("Add User: ", username, password, email);
-  let result = await this.checkUsername(username);
-  console.log("result: ", await result);
-  if (result !== null) return result;
-  return "Username approved";
+module.exports.createUser = async user => {
+  console.log("Add User: ", user);
+  const { username, id, password, email } = user;
+  let result = await this.checkUsername(user.username);
+  console.log("result: ", result);
+  if (result !== false) return { status: "you done messed up!" };
+  const dbPut = `INSERT INTO test (username, id, password, email) VALUES($1, $2, $3, $4) RETURNING *`;
+  try {
+    const res = await db.query(dbPut, [username, id, password, email]);
+    console.log("db insertion result: ", res.rows[0]);
+    return { status: "New account created!" };
+  } catch (err) {
+    console.log(err.stack);
+  }
 };
 
-module.exports.checkUsername = username => {
-  if (username === "jill") {
-    //Database stuff !?!?!?!
-
-    return "This username already exists, please try again";
-  } else {
-    return null;
-  }
+module.exports.checkUsername = async user => {
+  const { username } = user;
+  const checkName = `SELECT exists ( SELECT 1 FROM test WHERE username = $1 )`;
+  const checkRes = await db.query(checkName, [username]);
+  return checkRes.rows[0]["exists"];
 };

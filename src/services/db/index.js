@@ -1,7 +1,7 @@
-const { Client } = require("pg");
+const { Pool } = require("pg");
 const config = require("../../config");
 const winston = require("winston");
-const client = new Client({ user: "postgres", database: "remote_control" });
+//const client = new Client({ user: "postgres", database: "remote_control" });
 
 const dbConfig = {
   user: config.db.user,
@@ -13,7 +13,7 @@ const dbConfig = {
   idleTimeoutMillis: config.db.idleTimeoutMillis
 };
 
-const pool = new client.Pool(dbConfig);
+const pool = new Pool(dbConfig);
 pool.on("error", function(err) {
   winston.error("idle client error", err.message, err.stack);
 });
@@ -25,5 +25,5 @@ module.exports = {
   }
 };
 
-client.connect();
-module.exports = client;
+pool.connect();
+module.exports = pool;

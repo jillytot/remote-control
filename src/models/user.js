@@ -1,5 +1,6 @@
 const jwt = require("jsonwebtoken");
 const db = require("../services/db");
+const { makeId, hash } = require("../modules/utilities");
 
 module.exports.createAuthToken = user => {
   return jwt.sign({ user }, config.JWT_SECRET, {
@@ -10,11 +11,15 @@ module.exports.createAuthToken = user => {
 };
 
 module.exports.createUser = async user => {
-  console.log("Add User: ", user);
-  const { username, id, password, email } = user;
   let result = await this.checkUsername(user);
-  console.log("result: ", result);
   if (result === false) return { status: "you done messed up!" };
+
+  //generate unique user ID
+  user.id = makeId();
+  user.password = await hash(user.password);
+  // console.log("Add User: ", user);
+  const { username, id, password, email } = user;
+
   const dbPut = `INSERT INTO test (username, id, password, email) VALUES($1, $2, $3, $4) RETURNING *`;
   try {
     const res = await db.query(dbPut, [username, id, password, email]);

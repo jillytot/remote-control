@@ -1,14 +1,7 @@
 const jwt = require("jsonwebtoken");
 const db = require("../services/db");
 const { makeId, hash, createTimeStamp } = require("../modules/utilities");
-
-module.exports.createAuthToken = user => {
-  return jwt.sign({ user }, config.JWT_SECRET, {
-    subject: user.username,
-    expiresIn: config.JWT_EXPIRY,
-    algorithm: "HS256"
-  });
-};
+const tempSecret = "temp_secret";
 
 module.exports.createUser = async user => {
   //Does this username or email exist?
@@ -34,7 +27,9 @@ module.exports.createUser = async user => {
   try {
     const res = await db.query(dbPut, [username, id, password, email, created]);
     console.log("db insertion result: ", res.rows[0]);
-    return { status: "New account created!" };
+    const token = this.createAuthToken(user);
+    console.log("Verified: ", await this.verifyAuthToken(token));
+    return { status: "Account successfully created", token: token };
   } catch (err) {
     console.log(err.stack);
   }
@@ -71,4 +66,25 @@ module.exports.checkEmail = async user => {
   } else {
     return true;
   }
+};
+
+module.exports.checkPassword = async user => {
+  const { password, id } = user;
+  console.log(password, id);
+};
+
+module.exports.createAuthToken = user => {
+  const { id } = user;
+  return jwt.sign({ id: id }, tempSecret, {
+    subject: "",
+    expiresIn: "30d",
+    algorithm: "HS256"
+  });
+};
+
+module.exports.verifyAuthToken = async token => {
+  const checkToken = jwt.verify(token, tempSecret)["id"];
+  const query = `SELECT * FROM test WHERE id = $1 LIMIT 1`;
+  const result = await db.query(query, [checkToken]);
+  return result.rows[0];
 };

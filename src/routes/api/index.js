@@ -4,6 +4,7 @@ const request = require("../../modules/requests");
 //example route: router.use(/route, require('./path-to-route'));
 router.use("/users", require("./users"));
 router.use("/signup", require("./signup"));
+router.use("/login", require("./login"));
 
 //test API
 router.get("/", (req, res) => res.send("API Test!"));

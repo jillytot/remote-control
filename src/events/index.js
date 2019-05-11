@@ -5,10 +5,8 @@ console.log(test);
 
 module.exports.socketEvents = (socket, io) => {
   socket.on("AUTHENTICATE", async data => {
-    console.log("AUTHENTICATING!", data);
-
+    // console.log("AUTHENTICATING!", data);
     let verify = false;
-
     const getUser = await user.verifyAuthToken(data.token);
 
     if (getUser !== null && getUser !== undefined) {
@@ -18,7 +16,7 @@ module.exports.socketEvents = (socket, io) => {
       socket.user = getUser;
       const userRoom = `${socket.user.id}`;
       socket.join(userRoom);
-      io.to(userRoom).emit(userRoom, verify);
+      io.to(userRoom).emit("VALIDATED", verify);
     }
   });
 };

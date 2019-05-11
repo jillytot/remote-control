@@ -60,6 +60,10 @@ export default class EventHandler extends Component {
   handleResponse = () => {
     const { socket } = this.state;
 
+    socket.on("VALIDATED", data => {
+      console.log(data);
+    });
+
     socket.on(USER_DISCONNECTED, disconnectUser => {
       try {
         if (

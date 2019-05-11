@@ -19,11 +19,6 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 app.use(express.static(path.join(__dirname, "public")));
 
-//PASSPORT STUFF:
-// app.use(passport.initialize());
-// passport.use('local', localStrategy);
-// passport.use(jwtStrategy);
-
 //models and routes:
 app.use(require("../../routes"));
 

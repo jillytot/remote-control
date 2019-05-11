@@ -82,6 +82,11 @@ export default class Signup extends Form {
       .then(function(response) {
         console.log(response);
         socket.emit("AUTHENTICATE", { token: response.data.token });
+        localStorage.setItem("token", response.data.token);
+        console.log(
+          "Check if token got stored: ",
+          localStorage.getItem("token")
+        );
       })
       .catch(function(error) {
         console.log(error);

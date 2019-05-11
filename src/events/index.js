@@ -16,7 +16,10 @@ module.exports.socketEvents = (socket, io) => {
       socket.user = getUser;
       const userRoom = `${socket.user.id}`;
       socket.join(userRoom);
-      io.to(userRoom).emit("VALIDATED", verify);
+      io.to(userRoom).emit("VALIDATED", {
+        username: getUser.username,
+        id: getUser.id
+      });
     }
   });
 };

@@ -41,12 +41,22 @@ export default class EventHandler extends Component {
   async componentDidMount() {
     await this.initSocket();
     this.handleResponse();
+    this.checkLocalStorage();
   }
 
   setUser = async user => {
     const { socket } = this.state;
     await socket.emit(USER_CONNECTED, user);
     this.setState({ user });
+  };
+
+  checkLocalStorage = () => {
+    const { socket } = this.state;
+    const checkToken = localStorage.getItem("token");
+    if (checkToken !== undefined && checkToken !== null) {
+      socket.emit("AUTHENTICATE", { token: checkToken });
+      console.log("Check Token: ", checkToken);
+    }
   };
 
   initSocket = () => {
@@ -90,13 +100,6 @@ export default class EventHandler extends Component {
       socket.on(LOCAL_CHAT, chat => {
         this.setState({ chatroom: chat });
       });
-
-      /* Current Chat Message: {
-          id: "fb862528-bec1-4846-b21a-97b7ff960454"
-          message: "hi there"
-          sender: "submit"
-          senderId: ""
-          time: "04/29/2019-19:05:09" } */
 
       socket.on(MESSAGE_RECIEVED, message => {
         if (this.state.chatroom) {

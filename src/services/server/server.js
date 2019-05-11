@@ -9,7 +9,6 @@ const { socketEvents } = require("../../events");
 
 const app = express();
 const port = serverPort;
-const http = require("http").Server(app);
 
 app.use(cors());
 //Very important function, never remove.
@@ -29,12 +28,13 @@ app.use(require("../../routes"));
 // const event = require("../../events");
 
 //open socket:
-
+const http = require("http").Server(app);
 module.exports.io = require("socket.io")(http);
 const io = this.io;
+
 io.on("connection", socket => {
   console.log("New Connection: ", socket.id);
-  socketEvents(socket);
+  socketEvents(socket, io);
 });
 
 //run server

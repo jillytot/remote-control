@@ -1,11 +1,9 @@
-//Import Socket.io
-// const { io } = require("../services/server/server");
 const user = require("../models/user");
-const test = require("../services/server/server");
-const { io } = require("../services/server/server");
+const test = require("../services/server/server.js");
+// const { io } = require("../services/server/server");
 console.log(test);
 
-module.exports.socketEvents = socket => {
+module.exports.socketEvents = (socket, io) => {
   socket.on("AUTHENTICATE", async data => {
     console.log("AUTHENTICATING!", data);
 
@@ -14,13 +12,12 @@ module.exports.socketEvents = socket => {
     const getUser = await user.verifyAuthToken(data.token);
 
     if (getUser !== null && getUser !== undefined) {
-      console.log("verification complete!", getUser);
+      // console.log("verification complete!", getUser);
       verify = true;
 
       socket.user = getUser;
       const userRoom = `${socket.user.id}`;
       socket.join(userRoom);
-      console.log("io: ", io);
       io.to(userRoom).emit(userRoom, verify);
     }
   });

@@ -3,10 +3,12 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "axios": "^0.18.0",
     "bcrypt": "^3.0.6",
     "body-parser": "^1.19.0",
     "bootstrap": "^4.3.1",
     "concurrently": "^4.1.0",
+    "cors": "^2.8.5",
     "express": "^4.16.4",
     "express-jwt": "^5.3.1",
     "joi-browser": "^13.4.0",
@@ -21,7 +23,7 @@
     "winston": "^3.2.1"
   },
   "scripts": {
-    "start": "concurrently 'npm run react' 'npm run sockets'",
+    "start": "concurrently 'npm run react' 'npm run server'",
     "react": "react-scripts start",
     "sockets": "nodemon src/services/sockets/sockets.js",
     "server": "nodemon src/services/server/server.js",

@@ -26,9 +26,9 @@ module.exports.createUser = async user => {
   const dbPut = `INSERT INTO test (username, id, password, email, created) VALUES($1, $2, $3, $4, $5) RETURNING *`;
   try {
     const res = await db.query(dbPut, [username, id, password, email, created]);
-    console.log("db insertion result: ", res.rows[0]);
+    //console.log("db insertion result: ", res.rows[0]);
     const token = this.createAuthToken(user);
-    console.log("Verified: ", await this.verifyAuthToken(token));
+    //console.log("Verified: ", await this.verifyAuthToken(token));
     return { status: "Account successfully created", token: token };
   } catch (err) {
     console.log(err.stack);
@@ -83,8 +83,18 @@ module.exports.createAuthToken = user => {
 };
 
 module.exports.verifyAuthToken = async token => {
-  const checkToken = jwt.verify(token, tempSecret)["id"];
+  const checkToken = await new Promise((resolve, reject) => {
+    console.log(token.token);
+    jwt.verify(token, tempSecret, "HS256", (err, res) => {
+      if (err) reject(err);
+      resolve(res);
+    });
+  });
+
+  console.log("Check Token: ", checkToken);
+
   const query = `SELECT * FROM test WHERE id = $1 LIMIT 1`;
-  const result = await db.query(query, [checkToken]);
+  const result = await db.query(query, [checkToken["id"]]);
+  console.log("Get user from DB: ", result.rows[0]);
   return result.rows[0];
 };

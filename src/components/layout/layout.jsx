@@ -2,6 +2,7 @@ import React from "react";
 import Login from "./login/login";
 import User from "./nav/user";
 import Chat from "./chat/chat";
+import Signup from "./login/signup";
 
 const Layout = ({ socket, chatroom, user, setUser }) => {
   return (
@@ -9,7 +10,7 @@ const Layout = ({ socket, chatroom, user, setUser }) => {
       {socket !== null ? (
         <React.Fragment>
           {!user ? (
-            <Login socket={socket} setUser={setUser} />
+            <Signup socket={socket} setUser={setUser} />
           ) : (
             <React.Fragment>
               <User user={user} socket={socket} />

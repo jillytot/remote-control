@@ -4,10 +4,14 @@ const express = require("express");
 const bodyParser = require("body-parser");
 const path = require("path");
 const { serverPort } = require("../../config/serverSettings");
+const cors = require("cors");
+const { socketEvents } = require("../../events");
 
 const app = express();
 const port = serverPort;
+const http = require("http").Server(app);
 
+app.use(cors());
 //Very important function, never remove.
 app.use((req, res, next) => {
   res.setHeader("X-Powered-By", "Rainbows & Hamburgers");
@@ -25,10 +29,12 @@ app.use(require("../../routes"));
 // const event = require("../../events");
 
 //open socket:
-const http = require("http").Server(app);
-const io = require("socket.io")(http);
+
+module.exports.io = require("socket.io")(http);
+const io = this.io;
 io.on("connection", socket => {
-  console.log("Socket: ", socket.id);
+  console.log("New Connection: ", socket.id);
+  socketEvents(socket);
 });
 
 //run server

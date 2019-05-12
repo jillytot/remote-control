@@ -2,6 +2,9 @@ import React, { Component } from "react";
 import io from "socket.io-client";
 import Layout from "./layout/layout";
 import { socketUrl } from "../config/clientSettings";
+import axios from "axios";
+import { apiUrl } from "../config/clientSettings";
+
 import {
   HEARTBEAT,
   LOCAL_CHAT,
@@ -54,7 +57,15 @@ export default class EventHandler extends Component {
     const { socket } = this.state;
     const checkToken = localStorage.getItem("token");
     if (checkToken !== undefined && checkToken !== null) {
-      socket.emit("AUTHENTICATE", { token: checkToken });
+      //socket.emit("AUTHENTICATE", { token: checkToken });
+      axios
+        .post(`${apiUrl}/auth`, { token: checkToken })
+        .then(response => {
+          console.log("response: ", response);
+        })
+        .catch(error => {
+          console.log(error);
+        });
       console.log("Check Token: ", checkToken);
     }
   };

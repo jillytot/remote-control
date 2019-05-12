@@ -4,6 +4,7 @@ import Form from "../../common/form";
 import Joi from "joi-browser";
 import "./login.css";
 import axios from "axios";
+import { apiUrl } from "../../../config/clientSettings";
 
 export default class Signup extends Form {
   state = {
@@ -42,8 +43,9 @@ export default class Signup extends Form {
   };
 
   async componentDidMount() {
+    //Just a test to see my API stuff is working
     await axios
-      .get("http://localhost:3231/api/")
+      .get(apiUrl)
       .then(function(response) {
         console.log(response);
       })
@@ -74,12 +76,12 @@ export default class Signup extends Form {
     const { socket } = this.props;
     const { data } = this.state;
     await axios
-      .post("http://localhost:3231/api/signup", {
+      .post(`${apiUrl}/signup`, {
         username: data.username,
         password: data.password,
         email: data.email
       })
-      .then(function(response) {
+      .then(response => {
         console.log(response);
         socket.emit("AUTHENTICATE", { token: response.data.token });
         localStorage.setItem("token", response.data.token);

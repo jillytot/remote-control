@@ -13,6 +13,8 @@ const User = ({ user, socket }) => {
           console.log("Logging Out");
         })
       : console.log("User Logout Error");
+    console.log("Clearing token from local storage");
+    localStorage.removeItem("token");
   };
 
   return (

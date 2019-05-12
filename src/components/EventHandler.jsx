@@ -71,7 +71,8 @@ export default class EventHandler extends Component {
     const { socket } = this.state;
 
     socket.on("VALIDATED", data => {
-      console.log(data);
+      // console.log(data);
+      this.setState({ user: data });
     });
 
     socket.on(USER_DISCONNECTED, disconnectUser => {

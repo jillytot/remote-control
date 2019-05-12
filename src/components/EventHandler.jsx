@@ -44,7 +44,7 @@ export default class EventHandler extends Component {
   async componentDidMount() {
     await this.initSocket();
     this.handleResponse();
-    this.checkLocalStorage();
+    this.handleAuth(this.checkToken());
   }
 
   setUser = async user => {
@@ -53,11 +53,14 @@ export default class EventHandler extends Component {
     this.setState({ user });
   };
 
-  checkLocalStorage = () => {
-    const checkToken = localStorage.getItem("token");
-    if (checkToken !== undefined && checkToken !== null) {
+  checkToken = () => {
+    return localStorage.getItem("token");
+  };
+
+  handleAuth = token => {
+    if (token !== undefined && token !== null) {
       axios
-        .post(`${apiUrl}/auth`, { token: checkToken })
+        .post(`${apiUrl}/auth`, { token: token })
         .then(response => {
           console.log("response: ", response.data);
           this.setState({ user: response.data });
@@ -130,6 +133,7 @@ export default class EventHandler extends Component {
           user={user}
           chatroom={chatroom ? chatroom : null}
           setUser={this.setUser}
+          handleAuth={this.handleAuth}
         />
       </UserContext.Provider>
     ) : (

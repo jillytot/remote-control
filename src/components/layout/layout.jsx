@@ -4,13 +4,13 @@ import User from "./nav/user";
 import Chat from "./chat/chat";
 import Signup from "./login/signup";
 
-const Layout = ({ socket, chatroom, user, setUser }) => {
+const Layout = ({ socket, chatroom, user, setUser, handleAuth }) => {
   return (
     <React.Fragment>
       {socket !== null ? (
         <React.Fragment>
           {!user ? (
-            <Signup socket={socket} setUser={setUser} />
+            <Signup socket={socket} setUser={setUser} handleAuth={handleAuth} />
           ) : (
             <React.Fragment>
               <User user={user} socket={socket} />

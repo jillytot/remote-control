@@ -3,6 +3,17 @@ const db = require("../services/db");
 const { makeId, hash, createTimeStamp } = require("../modules/utilities");
 const tempSecret = "temp_secret";
 
+//Store current user
+let currentUser = {};
+module.exports.setUser = data => {
+  currentUser = data;
+  console.log("Current User Set: ", data);
+};
+
+module.exports.getUser = () => {
+  return currentUser;
+};
+
 module.exports.createUser = async user => {
   //Does this username or email exist?
   let result = await this.checkUsername(user);

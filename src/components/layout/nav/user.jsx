@@ -4,7 +4,7 @@ import "./../../../styles/common.css";
 import { LOGOUT } from "../../../services/sockets/events";
 
 const User = ({ user, socket }) => {
-  const displayName = user["name"];
+  const displayName = user["username"];
 
   const handleClick = user => {
     console.log("Handle Logout: ", user);

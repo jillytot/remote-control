@@ -73,7 +73,6 @@ export default class Signup extends Form {
   };
 
   doSubmit = async () => {
-    const { socket } = this.props;
     const { data } = this.state;
     await axios
       .post(`${apiUrl}/signup`, {
@@ -82,13 +81,10 @@ export default class Signup extends Form {
         email: data.email
       })
       .then(response => {
+        const { handleAuth } = this.props;
         console.log(response);
-        socket.emit("AUTHENTICATE", { token: response.data.token });
         localStorage.setItem("token", response.data.token);
-        console.log(
-          "Check if token got stored: ",
-          localStorage.getItem("token")
-        );
+        handleAuth(localStorage.getItem("token"));
       })
       .catch(function(error) {
         console.log(error);

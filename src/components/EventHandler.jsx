@@ -54,19 +54,17 @@ export default class EventHandler extends Component {
   };
 
   checkLocalStorage = () => {
-    const { socket } = this.state;
     const checkToken = localStorage.getItem("token");
     if (checkToken !== undefined && checkToken !== null) {
-      //socket.emit("AUTHENTICATE", { token: checkToken });
       axios
         .post(`${apiUrl}/auth`, { token: checkToken })
         .then(response => {
-          console.log("response: ", response);
+          console.log("response: ", response.data);
+          this.setState({ user: response.data });
         })
         .catch(error => {
           console.log(error);
         });
-      console.log("Check Token: ", checkToken);
     }
   };
 

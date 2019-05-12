@@ -6,7 +6,10 @@ router.post("/", async (req, res) => {
   const getUser = await verifyAuthToken(req.body.token);
   if (getUser !== null && getUser !== undefined) {
     // console.log("verification complete!", getUser);
-    res.send(getUser);
+    res.send({
+      username: getUser.username,
+      id: getUser.id
+    });
   } else {
     res.send("api/auth: Unable to get user");
   }

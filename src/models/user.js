@@ -9,6 +9,10 @@ const {
 const tempSecret = "temp_secret";
 
 module.exports.createUser = async user => {
+  //ALWAYS SAVE EMAIL AS LOWERCASE!!!!!
+  const email = user.email.toLowerCase();
+  console.log("check email to lowercase ", email);
+
   //Does this username or email exist?
   let result = await this.checkUsername(user);
   let emailResult = await this.checkEmail(user);
@@ -27,7 +31,7 @@ module.exports.createUser = async user => {
   user.password = await hash(user.password);
   user.created = createTimeStamp();
 
-  const { username, id, password, email, created } = user;
+  const { username, id, password, created } = user;
   const dbPut = `INSERT INTO test (username, id, password, email, created) VALUES($1, $2, $3, $4, $5) RETURNING *`;
   try {
     const res = await db.query(dbPut, [username, id, password, email, created]);
@@ -50,7 +54,7 @@ module.exports.checkUsername = async user => {
   const { username } = user;
   const checkName = `SELECT COUNT(*) FROM test WHERE username = $1 LIMIT 1`;
   const checkRes = await db.query(checkName, [username]);
-  console.log(checkRes.rows[0].count);
+  //console.log(checkRes.rows[0].count);
   if (checkRes.rows[0].count > 0) {
     return false;
   } else {
@@ -63,7 +67,7 @@ module.exports.checkEmail = async user => {
   const { email } = user;
   const checkName = `SELECT COUNT(*) FROM test WHERE email = $1 LIMIT 1`;
   const checkRes = await db.query(checkName, [email]);
-  console.log(checkRes.rows[0].count);
+  //console.log(checkRes.rows[0].count);
   if (checkRes.rows[0].count > 0) {
     return false;
   } else {
@@ -72,7 +76,7 @@ module.exports.checkEmail = async user => {
 };
 
 module.exports.checkPassword = async user => {
-  console.log(user);
+  //console.log(user);
   const { password, id } = user;
   //DB Call
   const query = `SELECT * FROM test WHERE id = $1 LIMIT 1`;
@@ -100,10 +104,10 @@ module.exports.verifyAuthToken = async token => {
     });
   });
 
-  console.log("Check Token: ", checkToken);
+  //console.log("Check Token: ", checkToken);
 
   const query = `SELECT * FROM test WHERE id = $1 LIMIT 1`;
   const result = await db.query(query, [checkToken["id"]]);
-  console.log("Get user from DB: ", result.rows[0]);
+  //console.log("Get user from DB: ", result.rows[0]);
   return result.rows[0];
 };

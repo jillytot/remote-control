@@ -1,5 +1,5 @@
 const router = require("express").Router();
-const { verifyAuthToken, setUser } = require("../../models/user");
+const { verifyAuthToken } = require("../../models/user");
 
 router.post("/", async (req, res) => {
   const getUser = await verifyAuthToken(req.body.token);

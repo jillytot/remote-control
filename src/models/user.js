@@ -31,9 +31,7 @@ module.exports.createUser = async user => {
   const dbPut = `INSERT INTO test (username, id, password, email, created) VALUES($1, $2, $3, $4, $5) RETURNING *`;
   try {
     const res = await db.query(dbPut, [username, id, password, email, created]);
-    //console.log("db insertion result: ", res.rows[0]);
     const token = this.createAuthToken(user);
-    //console.log("Verified: ", await this.verifyAuthToken(token));
     return { status: "Account successfully created", token: token };
   } catch (err) {
     console.log(err.stack);
@@ -81,8 +79,7 @@ module.exports.checkPassword = async user => {
   const queryResult = await db.query(query, [id]);
 
   //Check Hash
-  console.log(await checkHash(password, queryResult.rows[0]["password"]));
-  return id;
+  return await checkHash(password, queryResult.rows[0]["password"]);
 };
 
 module.exports.createAuthToken = user => {

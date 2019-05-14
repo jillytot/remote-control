@@ -5,7 +5,11 @@ router.post("/", async (req, res) => {
   // post request
   const checkPassword = await user.checkPassword(req.body);
 
-  checkPassword ? res.send("ok") : res.send("not ok");
+  //TODO: Edge Cases for successfull login, but user has no / expired token.
+
+  checkPassword
+    ? res.send("Password Correct") //Authenticate / Re-Authenticate User
+    : res.send("Login Incorrect, please try again");
 });
 
 module.exports = router;

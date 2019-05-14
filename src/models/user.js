@@ -1,18 +1,12 @@
 const jwt = require("jsonwebtoken");
 const db = require("../services/db");
-const { makeId, hash, createTimeStamp } = require("../modules/utilities");
+const {
+  makeId,
+  hash,
+  checkHash,
+  createTimeStamp
+} = require("../modules/utilities");
 const tempSecret = "temp_secret";
-
-//Store current user
-let currentUser = {};
-module.exports.setUser = data => {
-  currentUser = data;
-  console.log("Current User Set: ", data);
-};
-
-module.exports.getUser = () => {
-  return currentUser;
-};
 
 module.exports.createUser = async user => {
   //Does this username or email exist?
@@ -80,8 +74,15 @@ module.exports.checkEmail = async user => {
 };
 
 module.exports.checkPassword = async user => {
+  console.log(user);
   const { password, id } = user;
-  console.log(password, id);
+  //DB Call
+  const query = `SELECT * FROM test WHERE id = $1 LIMIT 1`;
+  const queryResult = await db.query(query, [id]);
+
+  //Check Hash
+  console.log(await checkHash(password, queryResult.rows[0]["password"]));
+  return id;
 };
 
 module.exports.createAuthToken = user => {

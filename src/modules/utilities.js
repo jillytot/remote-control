@@ -20,6 +20,19 @@ module.exports.hash = async pw => {
   return hashed;
 };
 
+module.exports.checkHash = (pw, hash) => {
+  console.log("Check Hash: ", pw, hash);
+  const bcrypt = require("bcrypt");
+  const checkHash = new Promise((resolve, reject) => {
+    bcrypt.compare(pw, hash, function(err, res) {
+      if (err) reject(err);
+      console.log(res);
+      resolve(res);
+    });
+  });
+  return checkHash;
+};
+
 module.exports.createTimeStamp = () => {
   return Date.now();
 };

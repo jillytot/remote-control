@@ -58,7 +58,9 @@ export default class EventHandler extends Component {
   };
 
   handleAuth = token => {
+    const { socket } = this.state;
     if (token !== undefined && token !== null) {
+      socket.emit("AUTHENTICATE", { token: token });
       axios
         .post(`${apiUrl}/auth`, { token: token })
         .then(response => {
@@ -83,8 +85,7 @@ export default class EventHandler extends Component {
     const { socket } = this.state;
 
     socket.on("VALIDATED", data => {
-      // console.log(data);
-      this.setState({ user: data });
+      console.log("User socket session validated: ", data);
     });
 
     socket.on(USER_DISCONNECTED, disconnectUser => {

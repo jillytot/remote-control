@@ -20,7 +20,7 @@ const User = ({ user, socket }) => {
   return (
     <div>
       <div className="user">
-        {displayName}
+        {displayName}{" "}
         <button
           className="user-logout btn"
           onClick={() => {

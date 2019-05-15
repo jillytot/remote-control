@@ -1,8 +1,9 @@
 import React from "react";
-import Login from "./login/login";
+//import Login from "./login/login";
 import User from "./nav/user";
 import Chat from "./chat/chat";
 import Signup from "./login/signup";
+import RobotServer from "./robotServer/robotServer";
 
 const Layout = ({ socket, chatroom, user, setUser, handleAuth }) => {
   return (
@@ -16,6 +17,7 @@ const Layout = ({ socket, chatroom, user, setUser, handleAuth }) => {
               <User user={user} socket={socket} />
             </React.Fragment>
           )}
+          <RobotServer socket={socket} user={user} />
           <Chat socket={socket} user={user} chatroom={chatroom} />
         </React.Fragment>
       ) : (

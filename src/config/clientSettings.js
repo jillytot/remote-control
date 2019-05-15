@@ -8,7 +8,9 @@ const api = {
   api: "/api",
   signup: "/signup",
   auth: "/auth",
-  login: "/login"
+  login: "/login",
+  robotServers: "/robot-server",
+  listRobotServers: "/list"
 };
 
 module.exports = {
@@ -16,5 +18,8 @@ module.exports = {
   apiUrl: `${host.local}:${serverPort}${api.api}`,
   apiAuth: `${host.local}:${serverPort}${api.api}${api.auth}`,
   apiSignup: `${host.local}:${serverPort}${api.api}${api.signup}`,
-  apiLogin: `${host.local}:${serverPort}${api.api}${api.login}`
+  apiLogin: `${host.local}:${serverPort}${api.api}${api.login}`,
+  listRobotServers: `${host.local}:${serverPort}${api.api}${api.robotServers}${
+    api.listRobotServers
+  }`
 };

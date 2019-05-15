@@ -1,6 +1,8 @@
 import React, { Component } from "react";
 import { listRobotServers } from "../../../config/clientSettings";
 import axios from "axios";
+import DisplayRobotServer from "./displayRobotServer";
+import "./robotServer.css";
 
 export default class RobotServer extends Component {
   state = {
@@ -21,7 +23,13 @@ export default class RobotServer extends Component {
   displayServers = servers => {
     console.log("From Servers: ", servers);
     return servers.map(server => {
-      return <div key={server.server_id}> {server.server_name}</div>;
+      console.log("Server Name: ", server.server_name);
+      return (
+        <DisplayRobotServer
+          key={server.server_id}
+          serverName={server.server_name}
+        />
+      );
     });
   };
 

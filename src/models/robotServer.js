@@ -67,10 +67,7 @@ module.exports.getRobotServers = async () => {
   return result.rows;
 };
 
-const ServerEvents = require("../events/serverEvents");
-const serverEvents = new ServerEvents();
 module.exports.updateRobotServer = () => {
-  // const { socketEvents } = require("../events/");
-  // console.log("Socket Events: ", socketEvents);
-  serverEvents.emit("ROBOT_SERVER_UPDATED");
+  const { io } = require("../services/server/server");
+  io.emit("ROBOT_SERVER_UPDATED");
 };

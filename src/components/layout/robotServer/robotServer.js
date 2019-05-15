@@ -11,6 +11,7 @@ export default class RobotServer extends Component {
 
   async componentDidMount() {
     await this.getServers();
+    this.handleUpdateServers();
   }
 
   handleUpdateServers = () => {

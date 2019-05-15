@@ -22,7 +22,7 @@ module.exports.createRobotServer = async server => {
   buildServer.channels = robotServer.channels;
   buildServer.users = [];
 
-  this.saveServer(buildServer);
+  await this.saveServer(buildServer);
   console.log("Server Generated: ", buildServer);
   return buildServer;
 };
@@ -55,4 +55,13 @@ module.exports.saveServer = async server => {
     console.log(err.stack);
   }
   //Save to DB
+};
+
+module.exports.getRobotServers = async () => {
+  //TODO: Some kind of sorting / capping list #
+  const db = require("../services/db");
+  const query = `SELECT * FROM robot_servers`;
+  result = await db.query(query);
+  console.log(result.rows);
+  return result.rows;
 };

@@ -1,5 +1,8 @@
 const router = require("express").Router();
-const { createRobotServer } = require("../../models/robotServer");
+const {
+  createRobotServer,
+  getRobotServers
+} = require("../../models/robotServer");
 
 router.post("/create", async (req, res) => {
   // post request
@@ -8,6 +11,11 @@ router.post("/create", async (req, res) => {
   buildRobotServer !== null
     ? res.send(buildRobotServer)
     : res.send("Error generating server");
+});
+
+router.get("/list", async (req, res) => {
+  let display = await getRobotServers();
+  res.send(display);
 });
 
 module.exports = router;

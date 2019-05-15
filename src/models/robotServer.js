@@ -15,12 +15,14 @@ module.exports.createRobotServer = async server => {
   const { id, serverName } = server;
   console.log(id);
   let buildServer = {};
-  buildServer.OwnerId = id;
-  buildServer.serverName = serverName;
-  buildServer.id = makeId();
+  buildServer.owner_id = id;
+  buildServer.server_name = serverName;
+  buildServer.server_id = makeId();
   buildServer.created = createTimeStamp();
   buildServer.channels = robotServer.channels;
+  buildServer.users = [];
 
+  this.saveServer(buildServer);
   console.log("Server Generated: ", buildServer);
   return buildServer;
 };
@@ -32,4 +34,25 @@ const robotServer = {
   channels: ["Welcome", "General"],
   users: [],
   created: ""
+};
+
+module.exports.saveServer = async server => {
+  const db = require("../services/db");
+  console.log("Saving Server: ", server);
+  const { server_id, server_name, owner_id, channels, users, created } = server;
+
+  const dbPut = `INSERT INTO robot_servers (server_id, server_name, owner_id, channels, users, created ) VALUES($1, $2, $3, $4, $5, $6) RETURNING *`;
+  try {
+    await db.query(dbPut, [
+      server_id,
+      server_name,
+      owner_id,
+      channels,
+      users,
+      created
+    ]);
+  } catch (err) {
+    console.log(err.stack);
+  }
+  //Save to DB
 };

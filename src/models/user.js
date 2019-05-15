@@ -76,8 +76,8 @@ module.exports.checkEmail = async user => {
 };
 
 module.exports.checkPassword = async user => {
-  //console.log(user);
   const { password, id } = user;
+
   //DB Call
   const query = `SELECT * FROM test WHERE id = $1 LIMIT 1`;
   const queryResult = await db.query(query, [id]);

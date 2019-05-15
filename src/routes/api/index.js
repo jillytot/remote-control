@@ -7,6 +7,8 @@ router.use("/signup", require("./signup"));
 router.use("/login", require("./login"));
 router.use("/auth", require("./auth"));
 
+router.use("/robot-server", require("./robotServer"));
+
 //test API
 router.get("/", (req, res) => {
   const displayRoutes = {
@@ -16,6 +18,7 @@ router.get("/", (req, res) => {
   };
   res.send(displayRoutes);
 });
+
 router.get("/ip", (req, res) => {
   //Test for proxy
   res.status(200).json({ ip: request.ip(req) });

@@ -74,6 +74,8 @@ export default class Chat extends Component {
 
     return (
       <div>
+        {" "}
+        Chat Loaded
         {this.state.users ? (
           <div className="chat-container">
             <div className="messages-container">

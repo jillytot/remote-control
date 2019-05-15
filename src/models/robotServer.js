@@ -22,6 +22,7 @@ module.exports.createRobotServer = async server => {
   buildServer.channels = robotServer.channels;
   buildServer.users = [];
 
+  await this.createChatRooms(buildServer);
   await this.saveServer(buildServer);
   console.log("Server Generated: ", buildServer);
   return buildServer;
@@ -70,4 +71,21 @@ module.exports.getRobotServers = async () => {
 module.exports.updateRobotServer = () => {
   const { io } = require("../services/server/server");
   io.emit("ROBOT_SERVER_UPDATED");
+};
+
+//Automatically generate the intial chat rooms for each server
+//save them to the DB with a reference to the parent server
+//client can request channels / chatrooms from the API to join
+//subscribing and events are done through socket.io
+//Chat messages are also saved into the DB ... maybe
+module.exports.createChatRooms = robotServer => {
+  //Will make a more proper method for adding custom chatrooms later
+  const { createChatRoom } = require("./chatRoom");
+
+  robotServer.channels.forEach(channel => {
+    createChatRoom({
+      name: channel,
+      host_id: robotServer.server_id
+    });
+  });
 };

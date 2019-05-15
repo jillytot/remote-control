@@ -3,13 +3,7 @@ const test = require("../services/server/server.js");
 const ServerEvents = require("./serverEvents");
 console.log(test);
 
-const serverEvents = new ServerEvents();
 module.exports.socketEvents = (socket, io) => {
-  serverEvents.on("ROBOT_SERVER_UPDATED", () => {
-    console.log("Server Event Triggered");
-    io.emit("ROBOT_SERVER_UPDATED");
-  });
-
   socket.on("AUTHENTICATE", async data => {
     let verify = false;
     const getUser = await user.verifyAuthToken(data.token);

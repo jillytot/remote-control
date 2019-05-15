@@ -55,6 +55,7 @@ module.exports.saveServer = async server => {
     console.log(err.stack);
   }
   //Save to DB
+  this.updateRobotServer();
 };
 
 module.exports.getRobotServers = async () => {
@@ -64,4 +65,12 @@ module.exports.getRobotServers = async () => {
   result = await db.query(query);
   console.log(result.rows);
   return result.rows;
+};
+
+const ServerEvents = require("../events/serverEvents");
+const serverEvents = new ServerEvents();
+module.exports.updateRobotServer = () => {
+  // const { socketEvents } = require("../events/");
+  // console.log("Socket Events: ", socketEvents);
+  serverEvents.emit("ROBOT_SERVER_UPDATED");
 };

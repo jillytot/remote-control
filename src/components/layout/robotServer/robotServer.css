@@ -7,3 +7,18 @@
   font-size: 12px;
   margin-bottom: 8px;
 }
+
+.display-robot-server-container:hover {
+  /* border-style: solid;
+  border-width: 5px; */
+  /* border-color: blueviolet; */
+  border-left: 6px solid cyan;
+}
+
+.robot-server-panel {
+  background-color: rgb(57, 57, 75);
+  width: 100px;
+  padding-top: 8px;
+  /* display: grid;
+  grid-template-rows: 1fr; */
+}

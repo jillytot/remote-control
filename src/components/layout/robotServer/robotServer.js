@@ -13,6 +13,13 @@ export default class RobotServer extends Component {
     await this.getServers();
   }
 
+  handleUpdateServers = () => {
+    const { socket } = this.props;
+    socket.on("ROBOT_SERVER_UPDATED", async () => {
+      await this.getServers();
+    });
+  };
+
   getServers = async () => {
     axios.get(listRobotServers).then(response => {
       console.log(response);
@@ -35,11 +42,11 @@ export default class RobotServer extends Component {
 
   render() {
     return (
-      <React.Fragment>
+      <div className="robot-server-panel">
         {this.state.robotServers !== []
           ? this.displayServers(this.state.robotServers)
           : "Fetching Servers"}
-      </React.Fragment>
+      </div>
     );
   }
 }

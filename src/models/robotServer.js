@@ -1,4 +1,7 @@
 const { makeId, createTimeStamp } = require("../modules/utilities");
+const {
+  ACTIVE_USERS_UPDATED
+} = require("../services/sockets/events").socketEvents;
 
 /* 
 Robot server is owned by a user
@@ -10,6 +13,7 @@ List of Members / Subscribers
 List of online / Active Members
 */
 
+//Used to generate / create a new robot server
 module.exports.createRobotServer = async server => {
   console.log("About to build server: ", server);
   const { id, serverName } = server;
@@ -29,6 +33,7 @@ module.exports.createRobotServer = async server => {
   return buildServer;
 };
 
+//Template for robot server object
 const robotServer = {
   serverName: "",
   serverId: "",
@@ -38,6 +43,7 @@ const robotServer = {
   created: ""
 };
 
+//Saves robot server to the Database
 module.exports.saveServer = async server => {
   const db = require("../services/db");
   console.log("Saving Server: ", server);
@@ -74,11 +80,13 @@ module.exports.initActiveServers = async () => {
   }
 };
 
+//add a new active server to the active servers list
 module.exports.pushToActiveServers = robotServer => {
   activeServers.push(robotServer);
   console.log("Active Servers Updated: ", activeServers);
 };
 
+//return specified server from the list of active servers
 module.exports.getActiveServer = server_id => {
   let pickServer = activeServers.filter(
     server => server.server_id === server_id
@@ -87,6 +95,7 @@ module.exports.getActiveServer = server_id => {
   return pickServer[0];
 };
 
+//Add an active user to a live robot server
 module.exports.addActiveUser = async (userId, server_id) => {
   let dontUpdate = false;
   console.log("Add User to Robot Server: ", userId, server_id);
@@ -106,6 +115,7 @@ module.exports.addActiveUser = async (userId, server_id) => {
         if (server_id === server.server_id) {
           server.users = activeUsers;
           console.log("Updated Active Users: ", server);
+          this.activeUsersUpdated(server_id);
         }
       });
     }
@@ -114,6 +124,7 @@ module.exports.addActiveUser = async (userId, server_id) => {
   }
 };
 
+//Get all the robot servers currently saved in the database
 module.exports.getRobotServers = async () => {
   //TODO: Some kind of sorting / capping list #
   const db = require("../services/db");
@@ -128,11 +139,15 @@ module.exports.updateRobotServer = () => {
   io.emit("ROBOT_SERVER_UPDATED");
 };
 
-//Automatically generate the intial chat rooms for each server
-//save them to the DB with a reference to the parent server
-//client can request channels / chatrooms from the API to join
-//subscribing and events are done through socket.io
-//Chat messages are also saved into the DB ... maybe
+//Sends updated active user list to all users on a robot server
+module.exports.activeUsersUpdated = async server_id => {
+  let pickServer = await this.getActiveServer(server_id);
+  const { io } = require("../services/server/server");
+  console.log("Send Active Users: ", server_id);
+  io.to(server_id).emit(ACTIVE_USERS_UPDATED, pickServer.users);
+};
+
+//Used to add the default chatrooms to a robot server when it's created
 module.exports.createChatRooms = robotServer => {
   //Will make a more proper method for adding custom chatrooms later
   const { createChatRoom } = require("./chatRoom");

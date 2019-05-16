@@ -34,6 +34,7 @@ module.exports.socketEvents = (socket, io) => {
 
   socket.on(GET_CHAT_ROOMS, async data => {
     addActiveUser(data.user, data.robot_server);
+    socket.join(data.robot_server);
     io.to(userRoom).emit(
       DISPLAY_CHAT_ROOMS,
       await getChatRooms(data.robot_server)

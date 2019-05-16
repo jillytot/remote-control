@@ -1,11 +1,17 @@
 const user = require("../models/user");
 const { getChatRooms } = require("../models/chatRoom");
 const test = require("../services/server/server.js");
+const {
+  GET_CHAT_ROOMS,
+  DISPLAY_CHAT_ROOMS,
+  AUTHENTICATE,
+  VALIDATED
+} = require("../services/sockets/events").socketEvents;
 console.log(test);
 
 module.exports.socketEvents = (socket, io) => {
   let userRoom = "";
-  socket.on("AUTHENTICATE", async data => {
+  socket.on(AUTHENTICATE, async data => {
     let verify = false;
     const getUser = await user.verifyAuthToken(data.token);
     if (getUser !== null && getUser !== undefined) {
@@ -18,15 +24,18 @@ module.exports.socketEvents = (socket, io) => {
       socket.join(userRoom);
 
       //Confirm Validation:
-      io.to(userRoom).emit("VALIDATED", {
+      io.to(userRoom).emit(VALIDATED, {
         username: getUser.username,
         id: getUser.id
       });
     }
   });
 
-  socket.on("GET_CHAT_ROOMS", async data => {
-    io.to(userRoom).emit("YOU_SUCK", await getChatRooms(data.robot_server));
+  socket.on(GET_CHAT_ROOMS, async data => {
+    io.to(userRoom).emit(
+      DISPLAY_CHAT_ROOMS,
+      await getChatRooms(data.robot_server)
+    );
     //get selected chats from DB
     console.log(data);
   });

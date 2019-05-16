@@ -34,10 +34,6 @@ export default class Chat extends Component {
     }
   };
 
-  getChatRooms = async () => {
-    //
-  };
-
   generateColor = () => {
     return colors[Math.floor(Math.random() * colors.length)];
   };

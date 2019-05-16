@@ -33,11 +33,12 @@ module.exports.saveChatRoom = async chatRoom => {
 
 //Get chatrooms that belong to a robot server
 module.exports.getChatRooms = async server_id => {
+  console.log("Server Id from getChatRooms: ", server_id);
   const db = require("../services/db");
-  const query = `SELECT host_id FROM chat_rooms WHERE host_id = ${server_id}`;
+  const query = `SELECT name, id FROM chat_rooms WHERE host_id = '${server_id}'`;
   try {
     result = await db.query(query);
-    console.log(result.rows);
+    console.log("Get Chatrooms Result:", result.rows);
     return result.rows;
   } catch (err) {
     console.log(err);

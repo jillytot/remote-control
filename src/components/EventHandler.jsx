@@ -13,6 +13,9 @@ import {
   USER_DISCONNECTED
 } from "../services/sockets/events";
 
+import { socketEvents } from "../services/sockets/events";
+const { AUTHENTICATE } = socketEvents;
+
 const UserContext = React.createContext();
 
 /*
@@ -60,7 +63,7 @@ export default class EventHandler extends Component {
   handleAuth = token => {
     const { socket } = this.state;
     if (token !== undefined && token !== null) {
-      socket.emit("AUTHENTICATE", { token: token });
+      socket.emit(AUTHENTICATE, { token: token });
       axios
         .post(`${apiUrl}/auth`, { token: token })
         .then(response => {

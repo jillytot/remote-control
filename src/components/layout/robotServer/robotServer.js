@@ -2,8 +2,10 @@ import React, { Component } from "react";
 import { listRobotServers } from "../../../config/clientSettings";
 import axios from "axios";
 import DisplayRobotServer from "./displayRobotServer";
-import Chat from "../chat/chat";
+import Channels from "./channels";
 import "./robotServer.css";
+import { socketEvents } from "../../../services/sockets/events";
+const { ROBOT_SERVER_UPDATED, GET_CHAT_ROOMS } = socketEvents;
 
 export default class RobotServer extends Component {
   state = {
@@ -17,7 +19,7 @@ export default class RobotServer extends Component {
 
   handleUpdateServers = () => {
     const { socket } = this.props;
-    socket.on("ROBOT_SERVER_UPDATED", async () => {
+    socket.on(ROBOT_SERVER_UPDATED, async () => {
       await this.getServers();
     });
   };
@@ -47,7 +49,7 @@ export default class RobotServer extends Component {
   handleClick = e => {
     console.log("Get Chat: ", e);
     const { socket, user } = this.props;
-    socket.emit("GET_CHAT_ROOMS", { user: user.id, robot_server: e });
+    socket.emit(GET_CHAT_ROOMS, { user: user.id, robot_server: e });
   };
 
   render() {
@@ -60,7 +62,7 @@ export default class RobotServer extends Component {
             : "Fetching Servers"}
         </div>
 
-        <Chat socket={socket} user={user} />
+        <Channels socket={socket} user={user} />
       </React.Fragment>
     );
   }

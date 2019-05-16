@@ -2,11 +2,12 @@ import React, { Component } from "react";
 import Chat from "../chat/chat";
 import { socketEvents } from "../../../services/sockets/events";
 
-const { DISPLAY_CHAT_ROOMS, GET_CHAT } = socketEvents;
+const { DISPLAY_CHAT_ROOMS, GET_CHAT, ACTIVE_USERS_UPDATED } = socketEvents;
 
 export default class Channels extends Component {
   state = {
-    channels: []
+    channels: [],
+    users: []
   };
 
   //not sure if needed, but why not
@@ -26,6 +27,10 @@ export default class Channels extends Component {
     if (socket && this._isMounted) {
       await socket.on(DISPLAY_CHAT_ROOMS, data => {
         this.setState({ channels: data });
+      });
+      await socket.on(ACTIVE_USERS_UPDATED, users => {
+        console.log("Get Active Users: ", users);
+        this.setState({ users: users });
       });
     }
   };
@@ -53,10 +58,11 @@ export default class Channels extends Component {
 
   render() {
     const { socket, user } = this.props;
+    const { users } = this.state;
     return (
       <React.Fragment>
         <div>{this.displayChannels()}</div>
-        <Chat user={user} socket={socket} />
+        <Chat user={user} socket={socket} users={users} />
       </React.Fragment>
     );
   }

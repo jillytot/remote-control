@@ -1,8 +1,6 @@
 import React, { Component } from "react";
 import {
-  USERS_UPDATED,
   MESSAGE_RECIEVED,
-  LOCAL_CHAT,
   socketEvents
 } from "../../../services/sockets/events";
 import UserList from "./userList.jsx";
@@ -10,6 +8,7 @@ import Messages from "./messages";
 import SendChat from "./sendChat";
 import "./chat.css";
 import { colors } from "../../../config/colors";
+const { SEND_CHAT } = socketEvents;
 
 export default class Chat extends Component {
   _isMounted = false;
@@ -18,12 +17,14 @@ export default class Chat extends Component {
   //@param users { object } gets populated when socket receives USERS event
 
   state = {
-    storeUsers: []
+    storeUsers: [],
+    users: []
   };
 
   componentDidMount() {
     this._isMounted = true;
     this.chatListener();
+    this.setState({ users: this.props.users });
   }
 
   componentWillUnmount() {
@@ -33,10 +34,7 @@ export default class Chat extends Component {
   chatListener = async () => {
     const { socket } = this.props;
     if (socket && this._isMounted) {
-      await socket.on(USERS_UPDATED, users => {
-        this.colorUsers(users);
-      });
-      socket.on(LOCAL_CHAT, chat => {
+      socket.on(SEND_CHAT, chat => {
         this.setState({ chatroom: chat });
       });
       socket.on(MESSAGE_RECIEVED, message => {
@@ -53,15 +51,16 @@ export default class Chat extends Component {
     return colors[Math.floor(Math.random() * colors.length)];
   };
 
+  //Fix this later
   colorUsers = users => {
-    Object.keys(users).map(mapUser => {
-      if (!mapUser.color) {
-        let getColor = this.generateColor();
-        return (users[mapUser].color = getColor);
-      }
-      return users;
-    });
-    this.setState({ users });
+    // Object.keys(users).map(mapUser => {
+    //   if (!mapUser.color) {
+    //     let getColor = this.generateColor();
+    //     return (users[mapUser].color = getColor);
+    //   }
+    //   return users;
+    // });
+    // this.setState({ users });
   };
 
   setMessageColor = (messages, users) => {

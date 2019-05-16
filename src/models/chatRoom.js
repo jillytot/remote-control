@@ -52,8 +52,8 @@ module.exports.getChat = async chatId => {
   const query = `SELECT * FROM chat_rooms WHERE id = $1 LIMIT 1`;
   try {
     result = await db.query(query, [chatId]);
-    console.log("Get Chat Result:", result.rows);
-    return result.rows;
+    console.log("Get Chat Result:", result.rows[0]);
+    return result.rows[0];
   } catch (err) {
     console.log(err);
   }

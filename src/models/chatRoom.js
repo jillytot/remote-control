@@ -35,10 +35,24 @@ module.exports.saveChatRoom = async chatRoom => {
 module.exports.getChatRooms = async server_id => {
   console.log("Server Id from getChatRooms: ", server_id);
   const db = require("../services/db");
-  const query = `SELECT name, id FROM chat_rooms WHERE host_id = '${server_id}'`;
+  const query = `SELECT name, id FROM chat_rooms WHERE host_id = $1`;
   try {
-    result = await db.query(query);
+    result = await db.query(query, [server_id]);
     console.log("Get Chatrooms Result:", result.rows);
+    return result.rows;
+  } catch (err) {
+    console.log(err);
+  }
+};
+
+//Get a single chatroom & all its contents
+module.exports.getChat = async chatId => {
+  console.log("Server Id from getChatRooms: ", chatId);
+  const db = require("../services/db");
+  const query = `SELECT * FROM chat_rooms WHERE id = $1 LIMIT 1`;
+  try {
+    result = await db.query(query, [chatId]);
+    console.log("Get Chat Result:", result.rows);
     return result.rows;
   } catch (err) {
     console.log(err);

@@ -26,17 +26,20 @@ export default class RobotServer extends Component {
 
   getServers = async () => {
     axios.get(listRobotServers).then(response => {
-      console.log(response);
+      //console.log(response);
       this.setState({ robotServers: response.data });
     });
   };
 
   displayServers = servers => {
-    console.log("From Servers: ", servers);
+    //console.log("From Servers: ", servers);
     return servers.map(server => {
-      console.log("Server Name: ", server.server_name);
+      //console.log("Server Name: ", server.server_name);
       return (
-        <div onClick={() => this.handleClick(server.server_id)}>
+        <div
+          key={server.server_id}
+          onClick={() => this.handleClick(server.server_id)}
+        >
           <DisplayRobotServer
             key={server.server_id}
             serverName={server.server_name}
@@ -47,7 +50,7 @@ export default class RobotServer extends Component {
   };
 
   handleClick = e => {
-    console.log("Get Chat: ", e);
+    //console.log("Get Chat: ", e);
     const { socket, user } = this.props;
     socket.emit(GET_CHAT_ROOMS, { user: user.id, robot_server: e });
   };

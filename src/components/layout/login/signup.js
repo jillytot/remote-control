@@ -73,7 +73,7 @@ export default class Signup extends Form {
   };
 
   doSubmit = async () => {
-    const { data, socket } = this.state;
+    const { data } = this.state;
     await axios
       .post(`${apiUrl}/signup`, {
         username: data.username,

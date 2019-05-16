@@ -1,5 +1,10 @@
 import React, { Component } from "react";
-import { USERS_UPDATED } from "../../../services/sockets/events";
+import {
+  USERS_UPDATED,
+  MESSAGE_RECIEVED,
+  LOCAL_CHAT,
+  socketEvents
+} from "../../../services/sockets/events";
 import UserList from "./userList.jsx";
 import Messages from "./messages";
 import SendChat from "./sendChat";
@@ -30,6 +35,16 @@ export default class Chat extends Component {
     if (socket && this._isMounted) {
       await socket.on(USERS_UPDATED, users => {
         this.colorUsers(users);
+      });
+      socket.on(LOCAL_CHAT, chat => {
+        this.setState({ chatroom: chat });
+      });
+      socket.on(MESSAGE_RECIEVED, message => {
+        if (this.state.chatroom) {
+          let { chatroom } = this.state;
+          chatroom.messages.push(message);
+          this.setState({ chatroom });
+        }
       });
     }
   };

@@ -5,13 +5,7 @@ import { socketUrl } from "../config/clientSettings";
 import axios from "axios";
 import { apiUrl } from "../config/clientSettings";
 
-import {
-  HEARTBEAT,
-  LOCAL_CHAT,
-  MESSAGE_RECIEVED,
-  USER_CONNECTED,
-  USER_DISCONNECTED
-} from "../services/sockets/events";
+import { USER_CONNECTED } from "../services/sockets/events";
 
 import { socketEvents } from "../services/sockets/events";
 const { AUTHENTICATE } = socketEvents;
@@ -86,41 +80,7 @@ export default class EventHandler extends Component {
 
   handleResponse = () => {
     const { socket } = this.state;
-
-    // socket.on(USER_DISCONNECTED, disconnectUser => {
-    //   try {
-    //     if (
-    //       disconnectUser &&
-    //       disconnectUser["name"] === this.state.user["name"]
-    //     ) {
-    //       this.setState({ user: null });
-    //     } else {
-    //       console.log(
-    //         "Either someone else logged out, or there was an error with logging out"
-    //       );
-    //     }
-    //   } catch (error) {
-    //     console.log("disconnection error: ", error);
-    //   }
-    // });
     if (socket !== null) {
-      // socket.on(HEARTBEAT, () => {
-      //   let checkUser = this.state.user
-      //     ? { userId: this.state.user.id, socketId: socket["id"] }
-      //     : { userId: null, socketId: socket["id"] };
-      //   socket.emit(HEARTBEAT, checkUser);
-      // });
-      socket.on(LOCAL_CHAT, chat => {
-        this.setState({ chatroom: chat });
-      });
-
-      // socket.on(MESSAGE_RECIEVED, message => {
-      //   if (this.state.chatroom) {
-      //     let { chatroom } = this.state;
-      //     chatroom.messages.push(message);
-      //     this.setState({ chatroom });
-      //   }
-      // });
     }
   };
 

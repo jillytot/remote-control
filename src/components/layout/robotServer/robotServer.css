@@ -22,3 +22,12 @@
   /* display: grid;
   grid-template-rows: 1fr; */
 }
+
+.list-channels {
+  background-color: rgb(70, 70, 99);
+  font-size: 14px;
+}
+
+.list-channels:hover {
+  background-color: rgb(83, 83, 119);
+}

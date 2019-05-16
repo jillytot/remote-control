@@ -1,5 +1,6 @@
 const user = require("../models/user");
 const { getChatRooms, getChat } = require("../models/chatRoom");
+const { getActiveServer, addActiveUser } = require("../models/robotServer");
 const {
   GET_CHAT_ROOMS,
   DISPLAY_CHAT_ROOMS,
@@ -32,10 +33,14 @@ module.exports.socketEvents = (socket, io) => {
   });
 
   socket.on(GET_CHAT_ROOMS, async data => {
+    addActiveUser(data.user, data.robot_server);
     io.to(userRoom).emit(
       DISPLAY_CHAT_ROOMS,
       await getChatRooms(data.robot_server)
     );
+
+    // addUser(data.user, data.robot_server);
+    // let clients = io.sockets.clients(data.robot_server);
     //get selected chats from DB
     // Add users to the server
     // console.log(data);

@@ -25,6 +25,7 @@ module.exports.createRobotServer = async server => {
   await this.createChatRooms(buildServer);
   await this.saveServer(buildServer);
   console.log("Server Generated: ", buildServer);
+  await this.pushToActiveServers(buildServer);
   return buildServer;
 };
 
@@ -57,6 +58,50 @@ module.exports.saveServer = async server => {
   }
   //Save to DB
   this.updateRobotServer();
+};
+
+//Keep list of active users in memmory for now
+let activeServers = [];
+module.exports.initActiveServers = async () => {
+  const db = require("../services/db");
+  const query = `SELECT * FROM robot_servers`;
+  try {
+    result = await db.query(query);
+    console.log("Active Servers Initailized", result.rows);
+    activeServers = result.rows;
+  } catch (err) {
+    console.log(err);
+  }
+};
+
+module.exports.pushToActiveServers = robotServer => {
+  activeServers.push(robotServer);
+  console.log("Active Servers Updated: ", activeServers);
+};
+
+module.exports.getActiveServer = server_id => {
+  let pickServer = activeServers.filter(
+    server => server.server_id === server_id
+  );
+  console.log("Pick Active Robot Server: ", pickServer);
+  return pickServer[0];
+};
+
+module.exports.addActiveUser = async (userId, server_id) => {
+  console.log("Add User to Robot Server: ", userId, server_id);
+  try {
+    let getRobotServer = await this.getActiveServer(server_id);
+    let activeUsers = getRobotServer.users;
+    activeUsers.push(userId);
+    activeServers.filter(server => {
+      if (server_id === server.server_id) {
+        server.users = activeUsers;
+        console.log("Updated Active Users: ", server);
+      }
+    });
+  } catch (err) {
+    console.log(err);
+  }
 };
 
 module.exports.getRobotServers = async () => {

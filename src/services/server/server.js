@@ -10,6 +10,8 @@ const { socketEvents } = require("../../events");
 const app = express();
 const port = serverPort;
 
+const { initActiveServers } = require("../../models/robotServer");
+
 app.use(cors());
 //Very important function, never remove.
 app.use((req, res, next) => {
@@ -25,7 +27,9 @@ app.use(express.static(path.join(__dirname, "public")));
 //models and routes:
 app.use(require("../../routes"));
 
-// const event = require("../../events");
+//Initalize Active Servers:
+//This is used for storing active users on a server
+initActiveServers();
 
 //open socket:
 const http = require("http").Server(app);

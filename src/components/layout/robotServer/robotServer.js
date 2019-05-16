@@ -46,8 +46,8 @@ export default class RobotServer extends Component {
 
   handleClick = e => {
     console.log("Get Chat: ", e);
-    const { socket } = this.props;
-    socket.emit("GET_CHAT_ROOMS", e);
+    const { socket, user } = this.props;
+    socket.emit("GET_CHAT_ROOMS", { user: user.id, robot_server: e });
   };
 
   render() {

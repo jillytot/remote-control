@@ -88,17 +88,27 @@ module.exports.getActiveServer = server_id => {
 };
 
 module.exports.addActiveUser = async (userId, server_id) => {
+  let dontUpdate = false;
   console.log("Add User to Robot Server: ", userId, server_id);
   try {
     let getRobotServer = await this.getActiveServer(server_id);
     let activeUsers = getRobotServer.users;
-    activeUsers.push(userId);
-    activeServers.filter(server => {
-      if (server_id === server.server_id) {
-        server.users = activeUsers;
-        console.log("Updated Active Users: ", server);
+
+    activeUsers.forEach(activeUser => {
+      if (activeUser === userId) {
+        dontUpdate = true;
+        // break addActiveUser;
       }
     });
+    if (!dontUpdate) {
+      activeUsers.push(userId);
+      activeServers.filter(server => {
+        if (server_id === server.server_id) {
+          server.users = activeUsers;
+          console.log("Updated Active Users: ", server);
+        }
+      });
+    }
   } catch (err) {
     console.log(err);
   }

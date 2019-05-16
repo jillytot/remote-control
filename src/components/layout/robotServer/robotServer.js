@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import { listRobotServers } from "../../../config/clientSettings";
 import axios from "axios";
 import DisplayRobotServer from "./displayRobotServer";
+import Chat from "../chat/chat";
 import "./robotServer.css";
 
 export default class RobotServer extends Component {
@@ -33,21 +34,34 @@ export default class RobotServer extends Component {
     return servers.map(server => {
       console.log("Server Name: ", server.server_name);
       return (
-        <DisplayRobotServer
-          key={server.server_id}
-          serverName={server.server_name}
-        />
+        <div onClick={() => this.handleClick(server.server_id)}>
+          <DisplayRobotServer
+            key={server.server_id}
+            serverName={server.server_name}
+          />
+        </div>
       );
     });
   };
 
+  handleClick = e => {
+    console.log("Get Chat: ", e);
+    const { socket } = this.props;
+    socket.emit("GET_CHAT_ROOMS", e);
+  };
+
   render() {
+    const { socket, user } = this.props;
     return (
-      <div className="robot-server-panel">
-        {this.state.robotServers !== []
-          ? this.displayServers(this.state.robotServers)
-          : "Fetching Servers"}
-      </div>
+      <React.Fragment>
+        <div className="robot-server-panel">
+          {this.state.robotServers !== []
+            ? this.displayServers(this.state.robotServers)
+            : "Fetching Servers"}
+        </div>
+
+        <Chat socket={socket} user={user} />
+      </React.Fragment>
     );
   }
 }

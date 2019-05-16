@@ -34,6 +34,10 @@ export default class Chat extends Component {
     }
   };
 
+  getChatRooms = async () => {
+    //
+  };
+
   generateColor = () => {
     return colors[Math.floor(Math.random() * colors.length)];
   };
@@ -74,7 +78,6 @@ export default class Chat extends Component {
 
     return (
       <div>
-        {" "}
         Chat Loaded
         {this.state.users ? (
           <div className="chat-container">
@@ -95,7 +98,7 @@ export default class Chat extends Component {
             <UserList users={this.state.users} colors={colors} />
           </div>
         ) : (
-          <div>Please login!</div>
+          <div>Wait.. where did the chat go?</div>
         )}
       </div>
     );

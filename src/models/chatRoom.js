@@ -30,3 +30,11 @@ module.exports.saveChatRoom = async chatRoom => {
     console.log(err.stack);
   }
 };
+
+module.exports.getChatRooms = async server_id => {
+  const db = require("../services/db");
+  const query = `SELECT * FROM chat_rooms`;
+  result = await db.query(query);
+  console.log(result.rows);
+  return result.rows;
+};

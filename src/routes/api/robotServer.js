@@ -4,6 +4,8 @@ const {
   getRobotServers
 } = require("../../models/robotServer");
 
+const { getChatRooms } = require("../../models/chatRoom");
+
 router.post("/create", async (req, res) => {
   // post request
   console.log("Generating Robot Server ", req.body);

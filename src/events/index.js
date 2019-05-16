@@ -1,6 +1,5 @@
 const user = require("../models/user");
 const test = require("../services/server/server.js");
-const ServerEvents = require("./serverEvents");
 console.log(test);
 
 module.exports.socketEvents = (socket, io) => {

@@ -10,7 +10,7 @@ export default class Channels extends Component {
     users: []
   };
 
-  //not sure if needed, but why not
+  // //not sure if needed, but why not
   // componentDidUpdate(prevState) {
   //   if (prevState !== this.state) {
   //     this.displayChannels();
@@ -62,7 +62,11 @@ export default class Channels extends Component {
     return (
       <React.Fragment>
         <div>{this.displayChannels()}</div>
-        <Chat user={user} socket={socket} users={users} />
+        {users !== [] ? (
+          <Chat user={user} socket={socket} users={users} />
+        ) : (
+          <React.Fragment />
+        )}
       </React.Fragment>
     );
   }

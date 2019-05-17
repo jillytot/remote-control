@@ -97,6 +97,7 @@ module.exports.getActiveServer = server_id => {
 
 //Add an active user to a live robot server
 module.exports.addActiveUser = async (userId, server_id) => {
+  const { getPublicUserInfo } = require("./user");
   let dontUpdate = false;
   console.log("Add User to Robot Server: ", userId, server_id);
   try {
@@ -104,13 +105,16 @@ module.exports.addActiveUser = async (userId, server_id) => {
     let activeUsers = getRobotServer.users;
 
     activeUsers.forEach(activeUser => {
-      if (activeUser === userId) {
+      console.log("Check Active User: ", activeUsers);
+      if (activeUser.id === userId) {
         dontUpdate = true;
+        console.log("DONT UPDATE ACTIVE USERS!");
         // break addActiveUser;
       }
     });
     if (!dontUpdate) {
-      activeUsers.push(userId);
+      //Get the rest of the user info from the DB
+      activeUsers.push(await getPublicUserInfo(userId));
       activeServers.filter(server => {
         if (server_id === server.server_id) {
           server.users = activeUsers;

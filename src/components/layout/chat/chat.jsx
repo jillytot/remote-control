@@ -21,6 +21,11 @@ export default class Chat extends Component {
     users: []
   };
 
+  componentDidUpdate() {
+    if (this.state.users !== this.props.users)
+      this.setState({ users: this.props.users });
+  }
+
   componentDidMount() {
     this._isMounted = true;
     this.chatListener();
@@ -53,14 +58,14 @@ export default class Chat extends Component {
 
   //Fix this later
   colorUsers = users => {
-    // Object.keys(users).map(mapUser => {
-    //   if (!mapUser.color) {
-    //     let getColor = this.generateColor();
-    //     return (users[mapUser].color = getColor);
-    //   }
-    //   return users;
-    // });
-    // this.setState({ users });
+    Object.keys(users).map(mapUser => {
+      if (!mapUser.color) {
+        let getColor = this.generateColor();
+        return (users[mapUser].color = getColor);
+      }
+      return users;
+    });
+    this.setState({ users });
   };
 
   setMessageColor = (messages, users) => {

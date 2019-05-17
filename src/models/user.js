@@ -111,3 +111,17 @@ module.exports.verifyAuthToken = async token => {
   //console.log("Get user from DB: ", result.rows[0]);
   return result.rows[0];
 };
+
+//Get public info about a user from the DB
+module.exports.getPublicUserInfo = async userId => {
+  let userInfo = {};
+  try {
+    const query = `SELECT username, id, created FROM test WHERE id = $1 LIMIT 1`;
+    const result = await db.query(query, [userId]);
+    userInfo = result.rows[0];
+    console.log(userInfo);
+  } catch (err) {
+    console.log(err);
+  }
+  return userInfo;
+};

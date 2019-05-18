@@ -1,4 +1,5 @@
 const { makeId, createTimeStamp } = require("../modules/utilities");
+const { getActiveServer } = require("./robotServer");
 
 module.exports.createChatRoom = chat => {
   let chatRoom = {};
@@ -65,4 +66,18 @@ module.exports.getChat = async chatId => {
 module.exports.chatEvents = (chatRoom, socket) => {
   const { io } = require("../services/server/server");
   io.to(chatRoom).emit("SUBBED TO CHAT EVENTS", "Hi");
+
+  socket.on("MESSAGE_SENT", data => {
+    console.log("Message Received: ", data);
+  });
 };
+
+// module.exports.getActiveChatFromServer = (serverId, chatId ) => {
+//   //get the specified chatroom from the list of active servers
+//   let activeServer = getActiveServer(serverId);
+//   return activeServer.chatId;
+// }
+
+// module.exports.setActiveChatFromServer = () => {
+//   //Once a message is added, send that to the server & update active servers
+// }

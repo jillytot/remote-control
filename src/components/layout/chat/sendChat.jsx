@@ -20,14 +20,20 @@ export default class SendChat extends Form {
   };
 
   doSubmit = () => {
-    const { user, socket } = this.props;
+    const { user, socket, chatId } = this.props;
     const { sendChat } = this.state.data;
-    if (user !== null) {
+    if (user !== null && chatId !== "") {
       socket.emit(MESSAGE_SENT, {
-        username: user.name,
+        username: user.username,
         userId: user.id,
-        message: sendChat
+        message: sendChat,
+        chatId: chatId
       });
+      console.log(
+        `SEND TO CHAT, user: ${user.username} userId ${
+          user.id
+        } message ${sendChat} chatId ${chatId}`
+      );
       this.setState({ data: { sendChat: "" } });
     } else {
       console.log("Userlogout Error");

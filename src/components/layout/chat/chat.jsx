@@ -97,6 +97,7 @@ export default class Chat extends Component {
 
   render() {
     const { onEvent, user, socket } = this.props;
+    const { chatroom } = this.state;
 
     return (
       <div>
@@ -115,7 +116,12 @@ export default class Chat extends Component {
                 }
                 users={this.state.users}
               />
-              <SendChat onEvent={onEvent} user={user} socket={socket} />
+              <SendChat
+                onEvent={onEvent}
+                user={user}
+                socket={socket}
+                chatId={chatroom ? chatroom.id : ""}
+              />
             </div>
             <UserList users={this.state.users} colors={colors} />
           </div>

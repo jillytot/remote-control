@@ -1,4 +1,5 @@
 const { makeId, createTimeStamp } = require("../modules/utilities");
+const { getActiveChat } = require("./chatRoom");
 
 module.exports.createMessage = message => {
   //build the message:
@@ -11,6 +12,8 @@ module.exports.createMessage = message => {
   makeMess.time_stamp = createTimeStamp();
   makeMess.displayMessage = true;
   makeMess.type = "";
+
+  console.log("Get Active Chat: ", getActiveChat(makeMess.chat_id));
 };
 
 module.exports.messageType = message => {

@@ -1,5 +1,6 @@
 const { makeId, createTimeStamp } = require("../modules/utilities");
 const { getActiveServer } = require("./robotServer");
+const { createMessage } = require("./chatMessage");
 
 module.exports.createChatRoom = chat => {
   let chatRoom = {};
@@ -42,6 +43,7 @@ module.exports.pushToActiveChats = chat => {
 };
 
 module.exports.getActiveChat = chatId => {
+  console.log("From Get Active Chat - chatId: ", chatId);
   let pickChat = activeChats.filter(chat => activeChats.id === chatId);
   return pickChat[0];
 };
@@ -94,8 +96,9 @@ module.exports.chatEvents = (chatRoom, socket) => {
   const { io } = require("../services/server/server");
   io.to(chatRoom).emit("SUBBED TO CHAT EVENTS", "Hi");
 
-  socket.on("MESSAGE_SENT", data => {
-    console.log("Message Received: ", data);
+  socket.on("MESSAGE_SENT", message => {
+    console.log("Message Received: ", message);
+    createMessage(message);
   });
 };
 

@@ -22,15 +22,16 @@ export default class Chat extends Component {
   };
 
   componentDidUpdate(prevProps) {
-    if (this.state.storeUsers !== this.props.users)
-      this.setState({ storeUsers: this.props.users });
+    if (prevProps.users !== this.props.users) {
+      console.log("Test state change");
+      this.colorUsers(this.props.users);
+    }
   }
 
   componentDidMount() {
     this._isMounted = true;
     this.chatListener();
-    this.setState({ storeUsers: this.props.users });
-    this.colorUsers(this.state.storeUsers);
+    this.setState({ users: this.props.users });
   }
 
   componentWillUnmount() {
@@ -57,9 +58,10 @@ export default class Chat extends Component {
     return colors[Math.floor(Math.random() * colors.length)];
   };
 
-  //Fix this later
+  //Get users from props
+  //See if user is in state, if so do nothing, if not add a color, and save them
+  //V-2 if a user has been removed from props, remove them from state
   colorUsers = users => {
-    console.log("test 1 ", users);
     Object.keys(users).map(mapUser => {
       console.log("test 2 ", mapUser);
       if (!mapUser.color) {

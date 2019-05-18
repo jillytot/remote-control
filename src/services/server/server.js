@@ -11,6 +11,7 @@ const app = express();
 const port = serverPort;
 
 const { initActiveServers } = require("../../models/robotServer");
+const { initActiveChats } = require("../../models/chatRoom");
 
 app.use(cors());
 //Very important function, never remove.
@@ -30,6 +31,7 @@ app.use(require("../../routes"));
 //Initalize Active Servers:
 //This is used for storing active users on a server
 initActiveServers();
+initActiveChats();
 
 //open socket:
 const http = require("http").Server(app);

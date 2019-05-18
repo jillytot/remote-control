@@ -19,6 +19,33 @@ const chatRoomPrototype = {
   messages: []
 };
 
+//TODO: Put this into some kind of global instead of here
+let activeChats = [];
+
+//This function is called once in 'src/services/server/server.js'
+//Initalize all chatrooms in memmory that are stored in the DB when server starts
+module.exports.initActiveChats = async () => {
+  const db = require("../services/db");
+  const query = `SELECT * FROM chat_rooms`;
+  try {
+    result = await db.query(query);
+    console.log("Active Chatrooms Initialized", result.rows);
+    activeChats = result.rows;
+  } catch (err) {
+    console.log(err);
+  }
+};
+
+module.exports.pushToActiveChats = chat => {
+  activeChats.push(chat);
+  console.log("Active Chats Updated: ", activeChats);
+};
+
+module.exports.getActiveChat = chatId => {
+  let pickChat = activeChats.filter(chat => activeChats.id === chatId);
+  return pickChat[0];
+};
+
 module.exports.saveChatRoom = async chatRoom => {
   const db = require("../services/db");
   console.log("Saving Chat Room: ", chatRoom);
@@ -39,7 +66,7 @@ module.exports.getChatRooms = async server_id => {
   const query = `SELECT name, id FROM chat_rooms WHERE host_id = $1`;
   try {
     result = await db.query(query, [server_id]);
-    console.log("Get Chatrooms Result:", result.rows);
+    console.log("Get Chatrooms from DB Result:", result.rows);
     return result.rows;
   } catch (err) {
     console.log(err);

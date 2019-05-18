@@ -67,7 +67,9 @@ module.exports.saveServer = async server => {
 };
 
 //Keep list of active users in memmory for now
-let activeServers = [];
+let activeServers = []; //Make this a global
+//This function is called once in 'src/services/server/server.js'
+//It initializes the active server sessions in memmory for all the servers currently stored in the database
 module.exports.initActiveServers = async () => {
   const db = require("../services/db");
   const query = `SELECT * FROM robot_servers`;

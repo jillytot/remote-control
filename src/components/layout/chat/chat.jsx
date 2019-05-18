@@ -21,15 +21,16 @@ export default class Chat extends Component {
     users: []
   };
 
-  componentDidUpdate() {
-    if (this.state.users !== this.props.users)
-      this.setState({ users: this.props.users });
+  componentDidUpdate(prevProps) {
+    if (this.state.storeUsers !== this.props.users)
+      this.setState({ storeUsers: this.props.users });
   }
 
   componentDidMount() {
     this._isMounted = true;
     this.chatListener();
-    this.setState({ users: this.props.users });
+    this.setState({ storeUsers: this.props.users });
+    this.colorUsers(this.state.storeUsers);
   }
 
   componentWillUnmount() {
@@ -58,14 +59,18 @@ export default class Chat extends Component {
 
   //Fix this later
   colorUsers = users => {
+    console.log("test 1 ", users);
     Object.keys(users).map(mapUser => {
+      console.log("test 2 ", mapUser);
       if (!mapUser.color) {
         let getColor = this.generateColor();
+        console.log("test 3");
         return (users[mapUser].color = getColor);
       }
       return users;
     });
-    this.setState({ users });
+    console.log("Users from colorUsers: ", users);
+    this.setState({ users: users });
   };
 
   setMessageColor = (messages, users) => {

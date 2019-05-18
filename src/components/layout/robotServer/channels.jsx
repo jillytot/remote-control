@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import Chat from "../chat/chat";
 import { socketEvents } from "../../../services/sockets/events";
 
-const { DISPLAY_CHAT_ROOMS, GET_CHAT, ACTIVE_USERS_UPDATED } = socketEvents;
+const { SEND_ROBOT_SERVER_INFO, GET_CHAT, ACTIVE_USERS_UPDATED } = socketEvents;
 
 export default class Channels extends Component {
   state = {
@@ -10,26 +10,25 @@ export default class Channels extends Component {
     users: []
   };
 
-  // //not sure if needed, but why not
-  // componentDidUpdate(prevState) {
-  //   if (prevState !== this.state) {
-  //     this.displayChannels();
-  //   }
-  // }
+  //not sure if needed, but why not
+  componentDidUpdate(prevState) {
+    if (prevState !== this.state) {
+      this.displayChannels();
+    }
+  }
 
   componentDidMount() {
     this._isMounted = true;
     this.channelListener();
   }
 
-  channelListener = async () => {
+  channelListener = () => {
     const { socket } = this.props;
     if (socket && this._isMounted) {
-      await socket.on(DISPLAY_CHAT_ROOMS, data => {
-        this.setState({ channels: data });
+      socket.on(SEND_ROBOT_SERVER_INFO, data => {
+        this.setState({ channels: data.channels, users: data.users });
       });
-      await socket.on(ACTIVE_USERS_UPDATED, users => {
-        console.log("Get Active Users: ", users);
+      socket.on(ACTIVE_USERS_UPDATED, users => {
         this.setState({ users: users });
       });
     }

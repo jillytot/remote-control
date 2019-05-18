@@ -1,5 +1,5 @@
 const user = require("../models/user");
-const { getChatRooms, getChat } = require("../models/chatRoom");
+const { getChatRooms, getChat, chatEvents } = require("../models/chatRoom");
 const { getActiveServer, addActiveUser } = require("../models/robotServer");
 const {
   GET_CHAT_ROOMS,
@@ -10,6 +10,7 @@ const {
   SEND_CHAT
 } = require("../services/sockets/events").socketEvents;
 
+//Main websocket Interface
 module.exports.socketEvents = (socket, io) => {
   let userRoom = "";
   socket.on(AUTHENTICATE, async data => {
@@ -32,6 +33,7 @@ module.exports.socketEvents = (socket, io) => {
     }
   });
 
+  //Send list of chatrooms to user, subscribe user to robot server events
   socket.on(GET_CHAT_ROOMS, async data => {
     addActiveUser(data.user, data.robot_server);
     socket.join(data.robot_server);
@@ -39,50 +41,21 @@ module.exports.socketEvents = (socket, io) => {
       channels: await getChatRooms(data.robot_server),
       users: getActiveServer(data.robot_server).users
     });
-
-    // addUser(data.user, data.robot_server);
-    // let clients = io.sockets.clients(data.robot_server);
-    //get selected chats from DB
-    // Add users to the server
-    // console.log(data);
   });
 
+  //Subscribe user to a specified chatroom, and send them all the specific info about it
   socket.on(GET_CHAT, async chatId => {
     console.log("GET CHAT Chat Id: ", chatId);
     io.to(userRoom).emit(SEND_CHAT, await getChat(chatId));
 
     //Subscribe user to chat
-    //return chat
+    const chatRoom = `${chatId}`;
+    socket.join(chatRoom);
+    console.log(
+      `Subbing user: ${socket.user.username} to chatroom: ${chatRoom}`
+    );
+    chatEvents(chatRoom, socket);
   });
 
   //More socket Events
 };
-
-// const serverEvents = new ServerEvents();
-// serverEvents.on("event", () => {
-//   console.log("an event occurred!");
-// });
-// serverEvents.emit("event");
-
-/*
-User has a websocket
-
-User is authenticated separately via the API
-
-Authenticated user needs to subscribe websocket events
-
-
-
-
-Authorize user & subscribe to self
-VERIFY_USER, token => {
-socket.user = user.verifyAuthToken(token);
-const userRoom = `${socket.user.id}`; //Allows sending a message to a single user
-socket.join(userRoom);
-io.to(userRoom).emit(userRoom, dbCheck.status);
-}
-
-LOGOUT
-CREATE_SERVER
-DELETE_SERVER
- */

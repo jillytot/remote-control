@@ -25,6 +25,7 @@ export default class Channels extends Component {
   channelListener = () => {
     const { socket } = this.props;
     if (socket && this._isMounted) {
+      //Currently doesn't handle channels being dynamically updated
       socket.on(SEND_ROBOT_SERVER_INFO, data => {
         this.setState({ channels: data.channels, users: data.users });
       });
@@ -35,7 +36,7 @@ export default class Channels extends Component {
   };
 
   handleClick = chatId => {
-    console.log("Clicked!");
+    console.log("GET CHAT! ", chatId);
     const { socket } = this.props;
     socket.emit(GET_CHAT, chatId);
   };

@@ -58,3 +58,11 @@ module.exports.getChat = async chatId => {
     console.log(err);
   }
 };
+
+//Subscribe user to chat room under server ID
+//Send & Recieve Messages to users subbed in chat
+//Remove users that leave chat...
+module.exports.chatEvents = (chatRoom, socket) => {
+  const { io } = require("../services/server/server");
+  io.to(chatRoom).emit("SUBBED TO CHAT EVENTS", "Hi");
+};

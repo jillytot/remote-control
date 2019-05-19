@@ -43,8 +43,8 @@ module.exports.pushToActiveChats = chat => {
 };
 
 module.exports.getActiveChat = chatId => {
-  console.log("From Get Active Chat - chatId: ", chatId);
-  let pickChat = activeChats.filter(chat => activeChats.id === chatId);
+  //console.log("From Get Active Chat - chatId: ", chatId, activeChats);
+  let pickChat = activeChats.filter(activeChat => activeChat.id === chatId);
   return pickChat[0];
 };
 
@@ -100,6 +100,34 @@ module.exports.chatEvents = (chatRoom, socket) => {
     console.log("Message Received: ", message);
     createMessage(message);
   });
+};
+
+//actvieChats.filter(activeChat => activeChat.chat_id == message.chat_id).messages = getChat.messages
+
+// module.exports.saveMessageToActiveChat = message => {
+//   let getChat = this.getActiveChat(message.chat_id);
+//   getChat.messages.push(message);
+//   activeChats.map(activeChat => {
+//     if (activeChat.chat_id === message.chat_id) {
+//       activeChat.messages = getChat.messages;
+//     }
+//   });
+//   console.log("Pushed Message to Active Chat: ", activeChats);
+// };
+
+module.exports.saveMessageToActiveChat = message => {
+  const activeChat = activeChats.find(
+    currentActiveChat => currentActiveChat.chat_id === message.chatId
+  );
+  if (!activeChat) {
+    throw new Error(`Couldn't find an activeChat with id ${message.chatId}`);
+  }
+
+  activeChat.messages.push(message);
+  console.log(
+    "Pushed Message to Active Chat: ",
+    JSON.stringify(activeChats, null, 2)
+  );
 };
 
 // module.exports.getActiveChatFromServer = (serverId, chatId ) => {

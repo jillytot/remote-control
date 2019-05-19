@@ -1,7 +1,7 @@
 const { makeId, createTimeStamp } = require("../modules/utilities");
-const { getActiveChat } = require("./chatRoom");
 
 module.exports.createMessage = message => {
+  const { saveMessageToActiveChat } = require("./chatRoom");
   //build the message:
   let makeMess = {};
   makeMess.message = message.message;
@@ -13,7 +13,17 @@ module.exports.createMessage = message => {
   makeMess.displayMessage = true;
   makeMess.type = "";
 
-  console.log("Get Active Chat: ", getActiveChat(makeMess.chat_id));
+  //Turn this back on once you start removing active chats from memmory
+  //saveMessageToActiveChat(makeMess);
+
+  this.sendMessage(makeMess);
+};
+
+module.exports.sendMessage = message => {
+  const { io } = require("../services/server/server");
+  let chatRoom = message.chat_id;
+  console.log("Chat Room from SendMessage: ", chatRoom);
+  io.to(chatRoom).emit("MESSAGE_RECIEVED", message);
 };
 
 module.exports.messageType = message => {

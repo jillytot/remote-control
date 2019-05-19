@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import Chat from "../chat/chat";
 import { socketEvents } from "../../../services/sockets/events";
-
+import { colors } from "../../../config/colors";
 const { SEND_ROBOT_SERVER_INFO, GET_CHAT, ACTIVE_USERS_UPDATED } = socketEvents;
 
 export default class Channels extends Component {
@@ -22,15 +22,38 @@ export default class Channels extends Component {
     this.channelListener();
   }
 
+  generateColor = () => {
+    return colors[Math.floor(Math.random() * colors.length)];
+  };
+
+  //Get users from props
+  //See if user is in state, if so do nothing, if not add a color, and save them
+  //V-2 if a user has been removed from props, remove them from state
+  getUserColors = users => {
+    return users.map(user => {
+      if (!user.color) {
+        const generatedColor = this.generateColor();
+        return {
+          ...user,
+          color: generatedColor
+        };
+      }
+      return user;
+    });
+  };
+
   channelListener = () => {
     const { socket } = this.props;
     if (socket && this._isMounted) {
       //Currently doesn't handle channels being dynamically updated
       socket.on(SEND_ROBOT_SERVER_INFO, data => {
-        this.setState({ channels: data.channels, users: data.users });
+        this.setState({
+          channels: data.channels,
+          users: this.getUserColors(data.users)
+        });
       });
       socket.on(ACTIVE_USERS_UPDATED, users => {
-        this.setState({ users: users });
+        this.setState({ users: this.getUserColors(users) });
       });
     }
   };

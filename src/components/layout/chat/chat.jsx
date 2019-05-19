@@ -21,12 +21,12 @@ export default class Chat extends Component {
     users: []
   };
 
-  componentDidUpdate(prevProps) {
-    if (prevProps.users !== this.props.users) {
-      console.log("Test state change");
-      this.colorUsers(this.props.users);
-    }
-  }
+  // componentDidUpdate(prevProps) {
+  //   if (prevProps.users !== this.props.users) {
+  //     console.log("Test state change");
+  //     //this.colorUsers(this.props.users);
+  //   }
+  // }
 
   componentDidMount() {
     this._isMounted = true;
@@ -54,67 +54,38 @@ export default class Chat extends Component {
     }
   };
 
-  generateColor = () => {
-    return colors[Math.floor(Math.random() * colors.length)];
-  };
-
-  //Get users from props
-  //See if user is in state, if so do nothing, if not add a color, and save them
-  //V-2 if a user has been removed from props, remove them from state
-  colorUsers = users => {
-    Object.keys(users).map(mapUser => {
-      console.log("test 2 ", mapUser);
-      if (!mapUser.color) {
-        let getColor = this.generateColor();
-        console.log("test 3");
-        return (users[mapUser].color = getColor);
+  getMessageColors = () => {
+    const { users } = this.props;
+    const { chatroom } = this.state;
+    return chatroom.messages.map(message => {
+      console.log(" Message from getMessageColors: ", message);
+      const user = users.find(user => {
+        return user.username === message.sender;
+      });
+      if (user && user.color) {
+        console.log("Updating message color");
+        return {
+          ...message,
+          color: user.color
+        };
       }
-      return users;
+      return message;
     });
-    console.log("Users from colorUsers: ", users);
-    this.setState({ users: users });
-  };
-
-  setMessageColor = (messages, users) => {
-    messages.map(message => {
-      if (users[message.sender] && users[message.sender].color) {
-        message.color = users[message.sender].color;
-      } else {
-        const { storeUsers } = this.state;
-        let pushUsers = [];
-        if (!storeUsers[message.sender]) {
-          pushUsers = storeUsers;
-          pushUsers.push({
-            username: message.sender,
-            color: this.generateColor()
-          });
-        }
-      }
-      return messages;
-    });
-    return messages;
   };
 
   render() {
-    const { onEvent, user, socket } = this.props;
+    const { onEvent, user, users, socket } = this.props;
     const { chatroom } = this.state;
 
     return (
       <div>
         Chat Loaded
-        {this.state.users ? (
+        {this.props.users ? (
           <div className="chat-container">
             <div className="messages-container">
               <Messages
-                messages={
-                  this.props.chatroom
-                    ? this.setMessageColor(
-                        this.props.chatroom.messages,
-                        this.state.users
-                      )
-                    : []
-                }
-                users={this.state.users}
+                messages={chatroom ? this.getMessageColors() : []}
+                users={users}
               />
               <SendChat
                 onEvent={onEvent}
@@ -123,7 +94,7 @@ export default class Chat extends Component {
                 chatId={chatroom ? chatroom.id : ""}
               />
             </div>
-            <UserList users={this.state.users} colors={colors} />
+            <UserList users={users} colors={colors} />
           </div>
         ) : (
           <div>Wait.. where did the chat go?</div>

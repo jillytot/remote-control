@@ -19,6 +19,9 @@
   background-color: rgb(57, 57, 75);
   width: 100px;
   padding-top: 8px;
+  height: calc(100vh - 55px);
+  float: left;
+
   /* display: grid;
   grid-template-rows: 1fr; */
 }
@@ -30,4 +33,11 @@
 
 .list-channels:hover {
   background-color: rgb(83, 83, 119);
+}
+
+.channels-container {
+  width: 300px;
+  height: calc(100vh-55px);
+  float: left;
+  background-color: rgb(70, 70, 99);
 }

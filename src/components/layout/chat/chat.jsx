@@ -78,7 +78,7 @@ export default class Chat extends Component {
     const { chatroom } = this.state;
 
     return (
-      <div>
+      <div className="chat-container-container">
         Chat Loaded
         {this.props.users ? (
           <div className="chat-container">

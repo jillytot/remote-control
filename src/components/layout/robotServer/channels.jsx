@@ -84,7 +84,7 @@ export default class Channels extends Component {
     const { users } = this.state;
     return (
       <React.Fragment>
-        <div>{this.displayChannels()}</div>
+        <div className="channels-container">{this.displayChannels()}</div>
         {users !== [] ? (
           <Chat user={user} socket={socket} users={users} />
         ) : (

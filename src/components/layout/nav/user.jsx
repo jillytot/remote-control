@@ -18,7 +18,7 @@ const User = ({ user, socket }) => {
   };
 
   return (
-    <div>
+    <div className="header">
       <div className="user">
         {displayName}{" "}
         <button

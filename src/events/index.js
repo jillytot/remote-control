@@ -1,5 +1,6 @@
 const user = require("../models/user");
 const { getChatRooms, getChat, chatEvents } = require("../models/chatRoom");
+const { createMessage } = require("../models/chatMessage");
 const { getActiveServer, addActiveUser } = require("../models/robotServer");
 const {
   GET_CHAT_ROOMS,
@@ -31,6 +32,11 @@ module.exports.socketEvents = (socket, io) => {
         id: getUser.id
       });
     }
+  });
+
+  socket.on("MESSAGE_SENT", message => {
+    console.log("Message Received: ", message);
+    createMessage(message);
   });
 
   //Send list of chatrooms to user, subscribe user to robot server events

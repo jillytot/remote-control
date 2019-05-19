@@ -95,25 +95,7 @@ module.exports.getChat = async chatId => {
 module.exports.chatEvents = (chatRoom, socket) => {
   const { io } = require("../services/server/server");
   io.to(chatRoom).emit("SUBBED TO CHAT EVENTS", "Hi");
-
-  socket.on("MESSAGE_SENT", message => {
-    console.log("Message Received: ", message);
-    createMessage(message);
-  });
 };
-
-//actvieChats.filter(activeChat => activeChat.chat_id == message.chat_id).messages = getChat.messages
-
-// module.exports.saveMessageToActiveChat = message => {
-//   let getChat = this.getActiveChat(message.chat_id);
-//   getChat.messages.push(message);
-//   activeChats.map(activeChat => {
-//     if (activeChat.chat_id === message.chat_id) {
-//       activeChat.messages = getChat.messages;
-//     }
-//   });
-//   console.log("Pushed Message to Active Chat: ", activeChats);
-// };
 
 module.exports.saveMessageToActiveChat = message => {
   const activeChat = activeChats.find(

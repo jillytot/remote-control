@@ -9,11 +9,17 @@
   cursor: pointer;
 }
 
+.chat-container-container {
+  float: right;
+  height: calc(100vh - 55px);
+  width: calc(100vw - 400px);
+}
 .chat-container {
   /* background-color: rgb(51, 51, 65); */
   background-color: rgb(22, 19, 32);
   display: grid;
   grid-template-columns: 1fr 200px;
+  height: calc(100% - 40px);
 }
 
 /* .chat-container > div {
@@ -72,6 +78,7 @@
   background-color: #1c1829;
   padding: 2% 0 2% 0;
   font-size: 21px;
+  height: calc(100% - 175px);
   /* border-radius: 12px; */
 }
 
@@ -109,6 +116,7 @@
   text-align: left;
   padding: 2%;
   font-size: 14px;
+  height: 100%; 
 
   /* outline: solid red; */
 }
@@ -129,4 +137,8 @@
 
 .emote {
   height: 28px;
+}
+
+.chat-input {
+  height: 175px;
 }

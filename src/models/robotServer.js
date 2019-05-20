@@ -6,8 +6,23 @@ Robot server should be able to operate independently on its on physical machine
 
 Global: User: Robot Server
 
-List of Members / Subscribers
-List of online / Active Members
+On Boot: 
+Get Servers From DB
+Build active Servers from DB
+Build Channels within each server, 
+Build chatrooms within each channel
+Load recent chats for each chat room
+Set built server to active server. 
+
+Operate from active server, limit the active server memmory and set rules
+
+Adding a new server: 
+Build the server out
+Build out it's default channels
+Build out it's default chat
+Save it to DB
+Push Server to Active Servers
+
 */
 
 const { makeId, createTimeStamp } = require("../modules/utilities");
@@ -30,7 +45,7 @@ module.exports.createRobotServer = server => {
 
   this.createChannels(buildServer);
   this.saveServer(buildServer);
-  console.log("Server Generated: ", buildServer);
+  console.log("Generating Server: ", buildServer);
   this.pushToActiveServers(buildServer);
   return buildServer;
 };
@@ -155,29 +170,12 @@ module.exports.activeUsersUpdated = async server_id => {
   io.to(server_id).emit(ACTIVE_USERS_UPDATED, pickServer.users);
 };
 
-//This is going to need some serious cleanup
-//Used to add the default chatrooms to a robot server when it's created
-module.exports.createChatRooms = async robotServer => {
-  //Will make a more proper method for adding custom chatrooms later
-  const { createChatRoom } = require("./chatRoom");
-  try {
-    return await robotServer.channels.forEach(channel => {
-      return createChatRoom({
-        name: channel,
-        host_id: robotServer.server_id
-      });
-    });
-  } catch (err) {
-    console.log(err);
-  }
-};
-
 module.exports.createChannels = async robotServer => {
   const { createChannel } = require("./channel");
   const { createChatRoom } = require("./chatRoom");
   try {
     return await robotServer.channels.forEach(channel => {
-      const makeChat = createChatRoom(robotServer);
+      const makeChat = createChatRoom(robotServer, channel);
       const { id } = makeChat;
       console.log("make chat from create channels", makeChat, channel);
       return createChannel({

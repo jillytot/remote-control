@@ -41,11 +41,13 @@ module.exports.socketEvents = (socket, io) => {
 
   //Send list of chatrooms to user, subscribe user to robot server events
   socket.on(GET_CHAT_ROOMS, async data => {
-    addActiveUser(data.user, data.robot_server);
+    console.log("GET CHAT ROOMS: ", data);
+    addActiveUser(data.user, data.server_id);
     socket.join(data.robot_server);
     io.to(userRoom).emit(SEND_ROBOT_SERVER_INFO, {
-      channels: await getChatRooms(data.robot_server),
-      users: getActiveServer(data.robot_server).users
+      channels: await getChatRooms(data.server_id),
+      users: getActiveServer(data.server_id).users
+      //chatRoom: await getChatRooms(data.server_id)
     });
   });
 

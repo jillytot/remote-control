@@ -47,6 +47,7 @@ export default class Channels extends Component {
     if (socket && this._isMounted) {
       //Currently doesn't handle channels being dynamically updated
       socket.on(SEND_ROBOT_SERVER_INFO, data => {
+        console.log("SEND ROBOT SERVER INFO: ", data);
         this.setState({
           channels: data.channels,
           users: this.getUserColors(data.users)

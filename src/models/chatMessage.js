@@ -17,7 +17,7 @@ module.exports.createMessage = message => {
 
   //Turn this back on once you start removing active chats from memmory
   //saveMessageToActiveChat(makeMess);
-
+  console.log("Generating Chat Message: ", makeMess);
   getMessageType(makeMess);
   this.sendMessage(makeMess);
 };

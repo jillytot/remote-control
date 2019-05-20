@@ -7,15 +7,16 @@ const { makeId } = require("../modules/utilities");
 const { getActiveServer } = require("./robotServer");
 const { createMessage } = require("./chatMessage");
 
-module.exports.createChatRoom = chat => {
-  let chatRoom = {};
-  chatRoom.messages = [];
-  chatRoom.name = chat.name;
-  chatRoom.host_id = chat.host_id;
-  chatRoom.id = makeId();
+module.exports.createChatRoom = (chat, channel) => {
+  let makeChat = {};
+  makeChat.messages = [];
+  makeChat.name = channel;
+  makeChat.host_id = chat.server_id;
+  makeChat.id = makeId();
 
-  this.saveChatRoom(chatRoom);
-  return chatRoom;
+  console.log("Generating Chat Room: ", makeChat, chat);
+  this.saveChatRoom(makeChat);
+  return makeChat;
 };
 
 //Chatroom schematic

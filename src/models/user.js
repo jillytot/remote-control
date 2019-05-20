@@ -32,6 +32,8 @@ module.exports.createUser = async user => {
   user.created = createTimeStamp();
   user.type = [];
 
+  console.log("Generating User: ", user);
+
   const { username, id, password, created } = user;
   const dbPut = `INSERT INTO test (username, id, password, email, created) VALUES($1, $2, $3, $4, $5) RETURNING *`;
   try {

@@ -28,12 +28,12 @@ module.exports.createChannel = data => {
   makeChannel.chat = checkChannelElement(data.chat);
   makeChannel.controls = checkChannelElement("");
   makeChannel.display = checkChannelElement("");
-  makeChannel.name = data.channel_name;
+  makeChannel.name = data.name;
   makeChannel.id = makeId();
   makeChannel.created = createTimeStamp();
   makeChannel.access = [];
 
-  console.log("Channel Generated: ", makeChannel);
+  console.log("Generating Channel: ", makeChannel);
   this.saveChannel(makeChannel);
   pushToActiveChannels(makeChannel);
 

@@ -30,6 +30,7 @@ module.exports.createUser = async user => {
   user.id = makeId();
   user.password = await hash(user.password);
   user.created = createTimeStamp();
+  user.type = [];
 
   const { username, id, password, created } = user;
   const dbPut = `INSERT INTO test (username, id, password, email, created) VALUES($1, $2, $3, $4, $5) RETURNING *`;
@@ -125,3 +126,29 @@ module.exports.getPublicUserInfo = async userId => {
   }
   return userInfo;
 };
+
+// module.exports.getUserType = id => {};
+
+// const userTypesToDb = {
+//   staff: "{staff}",
+//   owner: "{owner}",
+//   robot: "{robot}",
+//   global_moderator: "{global_moderator}",
+//   local_moderator: "{local_moderator}"
+// };
+
+// const userTypes = {
+//   staff: "staff",
+//   owner: "owner",
+//   robot: "robot",
+//   global_moderator: "global_moderator",
+//   local_moderator: "local_moderator"
+// };
+
+// module.exports.setUserType = async (userId, type) => {
+//   try {
+//     const insert = `UPDATE test SET type = $1 WHERE id = $2 LIMIT 1`;
+//   } catch (err) {
+//     console.log(err);
+//   }
+// };

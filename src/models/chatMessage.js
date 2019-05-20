@@ -12,6 +12,7 @@ module.exports.createMessage = message => {
   makeMess.id = makeId();
   makeMess.time_stamp = createTimeStamp();
   makeMess.displayMessage = true;
+  makeMess.badges = [];
   makeMess.type = "";
 
   //Turn this back on once you start removing active chats from memmory

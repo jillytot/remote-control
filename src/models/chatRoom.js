@@ -1,4 +1,9 @@
-const { makeId, createTimeStamp } = require("../modules/utilities");
+/*
+A chatroom is an element of a channel, which is owned by a robot server
+GLobal : Robot Server : Channel : Channel Elements > Chat Room
+*/
+
+const { makeId } = require("../modules/utilities");
 const { getActiveServer } = require("./robotServer");
 const { createMessage } = require("./chatMessage");
 

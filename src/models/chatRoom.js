@@ -3,7 +3,7 @@ A chatroom is an element of a channel, which is owned by a robot server
 GLobal : Robot Server : Channel : Channel Elements > Chat Room
 */
 
-const { makeId } = require("../modules/utilities");
+const { makeId, createTimeStamp } = require("../modules/utilities");
 const { getActiveServer } = require("./robotServer");
 const { createMessage } = require("./chatMessage");
 
@@ -13,6 +13,7 @@ module.exports.createChatRoom = (chat, channel) => {
   makeChat.name = channel;
   makeChat.host_id = chat.server_id;
   makeChat.id = makeId();
+  makeChat.created = createTimeStamp();
 
   console.log("Generating Chat Room: ", makeChat, chat);
   this.saveChatRoom(makeChat);
@@ -58,11 +59,11 @@ module.exports.getActiveChat = chatId => {
 module.exports.saveChatRoom = async chatRoom => {
   const db = require("../services/db");
   console.log("Saving Chat Room: ", chatRoom);
-  const { host_id, name, id, messages } = chatRoom;
+  const { host_id, name, id, messages, created } = chatRoom;
 
-  const dbPut = `INSERT INTO chat_rooms (host_id, name, id, messages ) VALUES($1, $2, $3, $4 ) RETURNING *`;
+  const dbPut = `INSERT INTO chat_rooms (host_id, name, id, messages, created ) VALUES($1, $2, $3, $4, $5 ) RETURNING *`;
   try {
-    await db.query(dbPut, [host_id, name, id, messages]);
+    await db.query(dbPut, [host_id, name, id, messages, created]);
   } catch (err) {
     console.log(err.stack);
   }
@@ -99,7 +100,7 @@ module.exports.getChat = async chatId => {
 //Subscribe user to chat room under server ID
 //Send & Recieve Messages to users subbed in chat
 //Remove users that leave chat...
-module.exports.chatEvents = (chatRoom, socket) => {
+module.exports.chatEvents = chatRoom => {
   const { io } = require("../services/server/server");
   io.to(chatRoom).emit("SUBBED TO CHAT EVENTS", "Hi");
 };

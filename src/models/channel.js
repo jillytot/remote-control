@@ -91,6 +91,12 @@ const pushToActiveChannels = channel => {
   console.log("Active Channels Updated: ", channel);
 };
 
+getActiveChannels = () => {
+  //will probably want this query to get more specific
+  //return channels on an active server
+  return activeChannels;
+};
+
 /* 
 Todo: 
 Have server own this instead of chatroom directly

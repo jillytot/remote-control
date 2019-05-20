@@ -38,7 +38,7 @@ module.exports.createRobotServer = server => {
   let buildServer = {};
   buildServer.owner_id = id;
   buildServer.server_name = serverName;
-  buildServer.server_id = makeId();
+  buildServer.server_id = `serv-${makeId()}`;
   buildServer.created = createTimeStamp();
   buildServer.channels = robotServer.channels;
   buildServer.users = [];

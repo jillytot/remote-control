@@ -9,7 +9,7 @@ module.exports.createMessage = message => {
   makeMess.sender = message.username;
   makeMess.sender_id = message.userId;
   makeMess.chat_id = message.chatId;
-  makeMess.id = makeId();
+  makeMess.id = `mesg-${makeId()}`;
   makeMess.time_stamp = createTimeStamp();
   makeMess.displayMessage = true;
   makeMess.badges = [];

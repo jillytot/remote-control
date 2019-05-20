@@ -29,7 +29,7 @@ module.exports.createChannel = data => {
   makeChannel.controls = checkChannelElement("");
   makeChannel.display = checkChannelElement("");
   makeChannel.name = data.name;
-  makeChannel.id = makeId();
+  makeChannel.id = `chan-${makeId()}`;
   makeChannel.created = createTimeStamp();
   makeChannel.access = [];
 

@@ -12,7 +12,7 @@ module.exports.createChatRoom = (chat, channel) => {
   makeChat.messages = [];
   makeChat.name = channel;
   makeChat.host_id = chat.server_id;
-  makeChat.id = makeId();
+  makeChat.id = `chat-${makeId()}`;
   makeChat.created = createTimeStamp();
 
   console.log("Generating Chat Room: ", makeChat, chat);

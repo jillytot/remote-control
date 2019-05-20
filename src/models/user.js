@@ -27,7 +27,7 @@ module.exports.createUser = async user => {
     };
 
   //Generate UUID, PW Hash
-  user.id = makeId();
+  user.id = `user-${makeId()}`;
   user.password = await hash(user.password);
   user.created = createTimeStamp();
   user.type = [];

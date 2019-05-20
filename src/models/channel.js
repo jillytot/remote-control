@@ -20,12 +20,14 @@ channelPrototype = {
 };
 
 let activeChannels = [];
-module.exports.createChannel = (server, data) => {
+module.exports.createChannel = data => {
+  console.log("Channel Data: ", data);
+
   let makeChannel = {};
-  makeChannel.host_id = server.server_id;
-  makeChannel.chat = checkChannelElement(data.chat.id);
-  makeChannel.controls = checkChannelElement(data.controls.id);
-  makeChannel.display = checkChannelElement(data.display.id);
+  makeChannel.host_id = data.host_id;
+  makeChannel.chat = checkChannelElement(data.chat);
+  makeChannel.controls = checkChannelElement("");
+  makeChannel.display = checkChannelElement("");
   makeChannel.name = data.channel_name;
   makeChannel.id = makeId();
   makeChannel.created = createTimeStamp();
@@ -71,8 +73,8 @@ module.exports.saveChannel = async channel => {
     console.log("Saving Channel: ", channel);
     await db.query(dbPut, [
       host_id,
-      id,
       name,
+      id,
       chat,
       controls,
       display,

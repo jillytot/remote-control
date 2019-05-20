@@ -157,26 +157,36 @@ module.exports.activeUsersUpdated = async server_id => {
 
 //This is going to need some serious cleanup
 //Used to add the default chatrooms to a robot server when it's created
-module.exports.createChatRooms = robotServer => {
+module.exports.createChatRooms = async robotServer => {
   //Will make a more proper method for adding custom chatrooms later
   const { createChatRoom } = require("./chatRoom");
-
-  robotServer.channels.forEach(channel => {
-    createChatRoom({
-      name: channel,
-      host_id: robotServer.server_id
+  try {
+    return await robotServer.channels.forEach(channel => {
+      return createChatRoom({
+        name: channel,
+        host_id: robotServer.server_id
+      });
     });
-  });
+  } catch (err) {
+    console.log(err);
+  }
 };
 
-module.exports.createChannels = robotServer => {
+module.exports.createChannels = async robotServer => {
   const { createChannel } = require("./channel");
   const { createChatRoom } = require("./chatRoom");
-  robotServer.channels.forEach(channel => {
-    createChannel({
-      name: channel,
-      host_id: robotServer.server_id,
-      chat: createChatRoom(channel) //get chat reference ID, or if none exists, create one?
+  try {
+    return await robotServer.channels.forEach(channel => {
+      const makeChat = createChatRoom(robotServer);
+      const { id } = makeChat;
+      console.log("make chat from create channels", makeChat, channel);
+      return createChannel({
+        name: channel,
+        host_id: robotServer.server_id,
+        chat: id //get chat reference ID, or if none exists, create one?
+      });
     });
-  });
+  } catch (err) {
+    console.log(err);
+  }
 };

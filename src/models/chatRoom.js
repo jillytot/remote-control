@@ -15,6 +15,7 @@ module.exports.createChatRoom = chat => {
   chatRoom.id = makeId();
 
   this.saveChatRoom(chatRoom);
+  return chatRoom;
 };
 
 //Chatroom schematic

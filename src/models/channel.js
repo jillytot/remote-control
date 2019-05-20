@@ -7,7 +7,7 @@ Right now Chatroom is acting like a channel, but this is here to note
 that needs to be changed before to much more work is done. 
 */
 
-const { makeId } = require("../modules/utilities");
+const { makeId, createTimeStamp } = require("../modules/utilities");
 
 channelPrototype = {
   name: "Channel Name",
@@ -15,31 +15,90 @@ channelPrototype = {
   chat: "ID of chat to reference",
   controls: "ID of robot interface controls to reference",
   display: "ID of display to reference",
-  id: "Unique ID"
+  id: "Unique ID",
+  created: "timestamp - when channel was first created"
 };
 
-let channels = [];
+let activeChannels = [];
 module.exports.createChannel = (server, data) => {
   let makeChannel = {};
   makeChannel.host_id = server.server_id;
-  makeChannel.chat = data.chat.id;
-  makeChannel.controls = "";
-  makeChannel.display = "";
+  makeChannel.chat = checkChannelElement(data.chat.id);
+  makeChannel.controls = checkChannelElement(data.controls.id);
+  makeChannel.display = checkChannelElement(data.display.id);
   makeChannel.name = data.channel_name;
   makeChannel.id = makeId();
+  makeChannel.created = createTimeStamp();
+  makeChannel.access = [];
 
-  this.saveChannel();
-  //Add channel to active server in memmory
+  console.log("Channel Generated: ", makeChannel);
+  this.saveChannel(makeChannel);
+  pushToActiveChannels(makeChannel);
+
+  return makeChannel;
+
+  //Todo: Add channel to active server in memmory
+};
+
+const setChannelChat = channel => {
+  //If channel uses an existing chat, return that id,
+  //If chat doesn't exist for channel already, create one
+};
+
+//Make sure each element has a value assigned
+const checkChannelElement = elementId => {
+  if (elementId !== "" && elementId !== undefined) {
+    return elementId;
+  } else {
+    return "";
+  }
 };
 
 module.exports.saveChannel = async channel => {
   const db = require("../services/db");
-  const { host_id, name, id, chat, controls, display } = channel;
-  const dbPut = `INSERT INTO chat_rooms (host_id, name, id, chat, controls, display ) VALUES($1, $2, $3, $4, $5, $6 ) RETURNING *`;
+  const {
+    host_id,
+    name,
+    id,
+    chat,
+    controls,
+    display,
+    created,
+    access
+  } = channel;
+  const dbPut = `INSERT INTO channels (host_id, name, id, chat, controls, display, created, access ) VALUES($1, $2, $3, $4, $5, $6, $7, $8 ) RETURNING *`;
   try {
     console.log("Saving Channel: ", channel);
-    await db.query(dbPut, [host_id, id, name, chat, controls, display]);
+    await db.query(dbPut, [
+      host_id,
+      id,
+      name,
+      chat,
+      controls,
+      display,
+      created,
+      access
+    ]);
   } catch (err) {
     console.log(err);
   }
 };
+
+const pushToActiveChannels = channel => {
+  activeChannels.push(channel);
+  console.log("Active Channels Updated: ", channel);
+};
+
+/* 
+Todo: 
+Have server own this instead of chatroom directly
+put chatroom under channels
+reflect the new structure on the client side
+
+module exports: 
+channelEvents
+getChannels
+pushToActiveChannels
+deleteChannel
+
+*/

@@ -1,20 +1,22 @@
-const { makeId, createTimeStamp } = require("../modules/utilities");
-const {
-  ACTIVE_USERS_UPDATED
-} = require("../services/sockets/events").socketEvents;
-
 /* 
 Robot server is owned by a user
-Robot server starts with a default chatroom
-multiple rooms can be added
+Robot server starts with a default channel assigned a chatroom
+multiple channels can be added
 Robot server should be able to operate independently on its on physical machine
+
+Global: User: Robot Server
 
 List of Members / Subscribers
 List of online / Active Members
 */
 
+const { makeId, createTimeStamp } = require("../modules/utilities");
+const {
+  ACTIVE_USERS_UPDATED
+} = require("../services/sockets/events").socketEvents;
+
 //Used to generate / create a new robot server
-module.exports.createRobotServer = async server => {
+module.exports.createRobotServer = server => {
   console.log("About to build server: ", server);
   const { id, serverName } = server;
   console.log(id);
@@ -26,10 +28,10 @@ module.exports.createRobotServer = async server => {
   buildServer.channels = robotServer.channels;
   buildServer.users = [];
 
-  await this.createChatRooms(buildServer);
-  await this.saveServer(buildServer);
+  this.createChannels(buildServer);
+  this.saveServer(buildServer);
   console.log("Server Generated: ", buildServer);
-  await this.pushToActiveServers(buildServer);
+  this.pushToActiveServers(buildServer);
   return buildServer;
 };
 
@@ -153,6 +155,7 @@ module.exports.activeUsersUpdated = async server_id => {
   io.to(server_id).emit(ACTIVE_USERS_UPDATED, pickServer.users);
 };
 
+//This is going to need some serious cleanup
 //Used to add the default chatrooms to a robot server when it's created
 module.exports.createChatRooms = robotServer => {
   //Will make a more proper method for adding custom chatrooms later
@@ -162,6 +165,18 @@ module.exports.createChatRooms = robotServer => {
     createChatRoom({
       name: channel,
       host_id: robotServer.server_id
+    });
+  });
+};
+
+module.exports.createChannels = robotServer => {
+  const { createChannel } = require("./channel");
+  const { createChatRoom } = require("./chatRoom");
+  robotServer.channels.forEach(channel => {
+    createChannel({
+      name: channel,
+      host_id: robotServer.server_id,
+      chat: createChatRoom(channel) //get chat reference ID, or if none exists, create one?
     });
   });
 };

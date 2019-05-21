@@ -59,7 +59,20 @@ export default class Channels extends Component {
     }
   };
 
-  handleClick = chatId => {
+  handleClick = channel => {
+    const { channels } = this.state;
+    let storeChannels = channels.map(aChannel => {
+      if (aChannel.id === channel.id) {
+        console.log(aChannel, channel);
+        //HOW DO I PUT THIS GOD DAMN CHANNEL BACK INTO STATE
+        aChannel.active = true;
+      } else {
+        aChannel.active = false;
+      }
+      return aChannel;
+    });
+    this.setState({ channels: storeChannels });
+    const chatId = channel.id;
     console.log("GET CHAT! ", chatId);
     const { socket } = this.props;
     socket.emit(GET_CHAT, chatId);
@@ -70,9 +83,13 @@ export default class Channels extends Component {
     return channels.map(channel => {
       return (
         <div
-          className="list-channels"
+          className={
+            channel.active
+              ? "list-channels list-channels-selected"
+              : "list-channels"
+          }
           key={channel.id}
-          onClick={() => this.handleClick(channel.id)}
+          onClick={() => this.handleClick(channel)}
         >
           {channel.name}
         </div>

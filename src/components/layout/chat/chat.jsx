@@ -79,13 +79,13 @@ export default class Chat extends Component {
 
     return (
       <div>
-        Chat Loaded
-        {this.props.users ? (
+        {chatroom ? (
           <div className="chat-container">
             <div className="messages-container">
               <Messages
                 messages={chatroom ? this.getMessageColors() : []}
                 users={users}
+                name={chatroom ? chatroom.name : "Untitled"}
               />
               <SendChat
                 onEvent={onEvent}
@@ -97,7 +97,7 @@ export default class Chat extends Component {
             <UserList users={users} colors={colors} />
           </div>
         ) : (
-          <div>Wait.. where did the chat go?</div>
+          <div>...</div>
         )}
       </div>
     );

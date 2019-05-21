@@ -85,13 +85,12 @@ export default class EventHandler extends Component {
   };
 
   render() {
-    const { socket, user, chatroom } = this.state;
+    const { socket, user } = this.state;
     return socket !== null ? (
       <UserContext.Provider value={{ socket, user }}>
         <Layout
           socket={socket}
           user={user}
-          chatroom={chatroom ? chatroom : null}
           setUser={this.setUser}
           handleAuth={this.handleAuth}
         />

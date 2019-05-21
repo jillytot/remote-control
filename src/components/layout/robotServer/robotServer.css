@@ -13,6 +13,7 @@
   border-width: 5px; */
   /* border-color: blueviolet; */
   border-left: 6px solid cyan;
+  cursor: pointer;
 }
 
 .robot-server-panel {
@@ -26,8 +27,12 @@
 .list-channels {
   background-color: rgb(70, 70, 99);
   font-size: 14px;
+  cursor: pointer;
 }
 
 .list-channels:hover {
   background-color: rgb(83, 83, 119);
+}
+.list-channels-selected {
+  border-left: 6px solid cyan;
 }

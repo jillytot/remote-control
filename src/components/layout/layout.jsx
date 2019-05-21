@@ -4,7 +4,7 @@ import User from "./nav/user";
 import Signup from "./login/signup";
 import RobotServer from "./robotServer/robotServer";
 
-const Layout = ({ socket, chatroom, user, setUser, handleAuth }) => {
+const Layout = ({ socket, user, setUser, handleAuth }) => {
   return (
     <React.Fragment>
       {socket !== null ? (

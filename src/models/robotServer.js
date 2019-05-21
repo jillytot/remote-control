@@ -134,11 +134,11 @@ module.exports.addActiveUser = async (userId, server_id) => {
     if (!dontUpdate) {
       //Get the rest of the user info from the DB
       activeUsers.push(await getPublicUserInfo(userId));
-      activeServers.filter(server => {
+      return activeServers.filter(server => {
         if (server_id === server.server_id) {
-          server.users = activeUsers;
           console.log("Updated Active Users: ", server);
           this.activeUsersUpdated(server_id);
+          return (server.users = activeUsers);
         }
       });
     }

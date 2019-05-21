@@ -13,3 +13,9 @@
   margin: 2px -2px 2px 6px;
   padding: 2px;
 }
+
+.logo {
+  width: 200px;
+  float: left;
+  padding-top: 3px;
+}

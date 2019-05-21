@@ -2,6 +2,7 @@ import React from "react";
 import "./user.css";
 import "./../../../styles/common.css";
 import { LOGOUT } from "../../../services/sockets/events";
+import defaultImages from "../../../imgs/placeholders";
 
 const User = ({ user, socket }) => {
   const displayName = user["username"];
@@ -20,6 +21,7 @@ const User = ({ user, socket }) => {
   return (
     <div>
       <div className="user">
+        <img className="logo" alt="" src={defaultImages.remoLogo} />
         {displayName}{" "}
         <button
           className="user-logout btn"

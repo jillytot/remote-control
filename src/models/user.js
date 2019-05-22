@@ -134,12 +134,13 @@ module.exports.getPublicUserInfo = async userId => {
 };
 
 module.exports.publicUser = user => {
-  return {
-    username: user.username,
-    id: user.id,
-    created: user.created,
-    type: user.type
-  };
+  if (user)
+    return {
+      username: user.username,
+      id: user.id,
+      created: user.created,
+      type: user.type
+    };
 };
 
 module.exports.sendActiveUsers = async robot_server => {
@@ -154,7 +155,11 @@ module.exports.sendActiveUsers = async robot_server => {
         }
         clients.map(client => {
           let activeUser = this.publicUser(io.sockets.connected[client].user);
-          users.push(activeUser);
+          if (activeUser) {
+            users.push(activeUser);
+          } else {
+            console.log("Could not get active user from socket ID");
+          }
         });
         io.to(robot_server).emit(ACTIVE_USERS_UPDATED, users);
         console.log("Send Active Users:", users);

@@ -11,13 +11,15 @@ const {
   SEND_CHAT
 } = require("../services/sockets/events").socketEvents;
 
+const { sendActiveUsers } = user;
+
 //Main websocket Interface
 module.exports.socketEvents = (socket, io) => {
   let userRoom = "";
   socket.on(AUTHENTICATE, async data => {
     let verify = false;
     const getUser = await user.verifyAuthToken(data.token);
-    if (getUser !== null && getUser !== undefined) {
+    if (getUser) {
       //console.log("verification complete!", getUser);
       verify = true;
 
@@ -42,26 +44,15 @@ module.exports.socketEvents = (socket, io) => {
   //Send list of chatrooms to user, subscribe user to robot server events
   socket.on(GET_CHAT_ROOMS, async data => {
     console.log("GET CHAT ROOMS: ", data);
-    await addActiveUser(data.user, data.server_id);
-    socket.join(data.robot_server);
-    io.to(userRoom).emit(SEND_ROBOT_SERVER_INFO, {
+    socket.join(data.server_id);
+    //await addActiveUser(data.user, data.server_id);
+    const sendInfo = {
       channels: await getChatRooms(data.server_id),
-      users: await getActiveServer(data.server_id).users
+      users: await sendActiveUsers(data.server_id)
       //chatRoom: await getChatRooms(data.server_id)
-    });
+    };
 
-    io.of("/")
-      .in(data.robot_server)
-      .clients((error, clients) => {
-        if (error) throw error;
-
-        // Returns an array of client IDs like ["Anw2LatarvGVVXEIAAAD"]
-        //No clue what to do with this
-        console.log("Active Users from Server: ", clients);
-        clients.map(client => {
-          console.log(client);
-        });
-      });
+    io.to(userRoom).emit(SEND_ROBOT_SERVER_INFO, sendInfo);
   });
 
   //Subscribe user to a specified chatroom, and send them all the specific info about it

@@ -8,6 +8,10 @@ const {
 } = require("../modules/utilities");
 const tempSecret = "temp_secret";
 
+const {
+  ACTIVE_USERS_UPDATED
+} = require("../services/sockets/events").socketEvents;
+
 module.exports.createUser = async user => {
   //ALWAYS SAVE EMAIL AS LOWERCASE!!!!!
   const email = user.email.toLowerCase();
@@ -127,6 +131,36 @@ module.exports.getPublicUserInfo = async userId => {
     console.log(err);
   }
   return userInfo;
+};
+
+module.exports.publicUser = user => {
+  return {
+    username: user.username,
+    id: user.id,
+    created: user.created,
+    type: user.type
+  };
+};
+
+module.exports.sendActiveUsers = async robot_server => {
+  const { io } = require("../services/server/server");
+  let users = [];
+  return await new Promise((resolve, reject) => {
+    io.of("/")
+      .in(robot_server)
+      .clients((error, clients) => {
+        if (error) {
+          return reject(error);
+        }
+        clients.map(client => {
+          let activeUser = this.publicUser(io.sockets.connected[client].user);
+          users.push(activeUser);
+        });
+        io.to(robot_server).emit(ACTIVE_USERS_UPDATED, users);
+        console.log("Send Active Users:", users);
+        return resolve(users);
+      });
+  });
 };
 
 // module.exports.getUserType = id => {};

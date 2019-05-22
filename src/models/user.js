@@ -37,8 +37,8 @@ module.exports.createUser = async user => {
   const { username, id, password, created } = user;
   const dbPut = `INSERT INTO test (username, id, password, email, created) VALUES($1, $2, $3, $4, $5) RETURNING *`;
   try {
-    const res = await db.query(dbPut, [username, id, password, email, created]);
-    const token = this.createAuthToken(user);
+    await db.query(dbPut, [username, id, password, email, created]);
+    const token = await this.createAuthToken(user);
     return { status: "Account successfully created", token: token };
   } catch (err) {
     console.log(err.stack);
@@ -102,8 +102,8 @@ module.exports.verifyAuthToken = async token => {
   const checkToken = await new Promise((resolve, reject) => {
     console.log(token.token);
     jwt.verify(token, tempSecret, "HS256", (err, res) => {
-      if (err) reject(err);
-      resolve(res);
+      if (err) return reject(err);
+      return resolve(res);
     });
   });
 
@@ -112,7 +112,7 @@ module.exports.verifyAuthToken = async token => {
   const query = `SELECT * FROM test WHERE id = $1 LIMIT 1`;
   const result = await db.query(query, [checkToken["id"]]);
   //console.log("Get user from DB: ", result.rows[0]);
-  return result.rows[0];
+  return await result.rows[0];
 };
 
 //Get public info about a user from the DB

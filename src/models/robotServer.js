@@ -129,6 +129,7 @@ module.exports.addActiveUser = async (userId, server_id) => {
         dontUpdate = true;
         console.log("DONT UPDATE ACTIVE USERS!");
         // break addActiveUser;
+        return;
       }
     });
     if (!dontUpdate) {

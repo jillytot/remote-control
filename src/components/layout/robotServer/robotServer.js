@@ -43,16 +43,32 @@ export default class RobotServer extends Component {
           <DisplayRobotServer
             key={server.server_id}
             serverName={server.server_name}
+            displayClasses={this.handleActive(server)}
           />
         </div>
       );
     });
   };
 
+  handleActive = server => {
+    if (server.active) return "display-robot-server-container selected-server";
+    return "display-robot-server-container";
+  };
+
   handleClick = e => {
     console.log("Get Chat: ", e);
     const { socket, user } = this.props;
     socket.emit(GET_CHAT_ROOMS, { user: user.id, server_id: e });
+    let { robotServers } = this.state;
+    robotServers.map(server => {
+      console.log("Mapping Servers: ", server);
+      if (e === server.server_id) {
+        server.active = true;
+      } else {
+        server.active = false;
+      }
+    });
+    this.setState({ robotServers });
   };
 
   render() {

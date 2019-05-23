@@ -1,0 +1,5 @@
+.overlay {
+  display: grid;
+  grid-template: 1fr 1fr 1fr / 1fr 1fr 1fr;
+  border: 3px solid red;
+}

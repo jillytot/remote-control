@@ -7,16 +7,23 @@ import RobotServer from "./robotServer/robotServer";
 const Layout = ({ socket, user, setUser, handleAuth }) => {
   return (
     <React.Fragment>
-      {socket !== null ? (
+      {socket ? (
         <React.Fragment>
-          {!user ? (
-            <Signup socket={socket} setUser={setUser} handleAuth={handleAuth} />
-          ) : (
+          {user ? (
             <React.Fragment>
               <User user={user} socket={socket} />
+              <RobotServer socket={socket} user={user} />
+            </React.Fragment>
+          ) : (
+            <React.Fragment>
+              <Signup
+                socket={socket}
+                setUser={setUser}
+                handleAuth={handleAuth}
+              />
+              ...
             </React.Fragment>
           )}
-          <RobotServer socket={socket} user={user} />
         </React.Fragment>
       ) : (
         <div> Connection Offline </div>

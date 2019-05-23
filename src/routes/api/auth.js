@@ -3,7 +3,7 @@ const { verifyAuthToken } = require("../../models/user");
 
 router.post("/", async (req, res) => {
   const getUser = await verifyAuthToken(req.body.token);
-  if (getUser !== null && getUser !== undefined) {
+  if (getUser) {
     // console.log("verification complete!", getUser);
     let formatUser = {
       username: getUser.username,

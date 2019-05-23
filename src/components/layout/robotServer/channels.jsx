@@ -4,10 +4,13 @@ import { socketEvents } from "../../../services/sockets/events";
 import { colors } from "../../../config/colors";
 const { SEND_ROBOT_SERVER_INFO, GET_CHAT, ACTIVE_USERS_UPDATED } = socketEvents;
 
+//placeholder
+//var chatroom = { messages: [{ sender: "user2" }] }; // (this.state.chatroom)
 export default class Channels extends Component {
   state = {
     channels: [],
-    users: []
+    users: [],
+    userColors: {}
   };
 
   //not sure if needed, but why not
@@ -20,10 +23,46 @@ export default class Channels extends Component {
   componentDidMount() {
     this._isMounted = true;
     this.channelListener();
+
+    this.colorCleanup = setInterval(() => {
+      const newColors = this.state.userColors;
+      let usernamesToKeep = [];
+      this.state.users.map(user => {
+        usernamesToKeep.push(user.username);
+      });
+
+      // chatroom.messages.map(message => {
+      //   if (usernamesToKeep.includes(message.sender) !== true) {
+      //     usernamesToKeep.push(message.sender);
+      //   }
+      // });
+
+      Object.keys(colors).map(username => {
+        if (usernamesToKeep.includes(username) !== true) {
+          delete newColors[username];
+        }
+      });
+      console.log(newColors);
+      this.setState({ userColors: newColors });
+    }, 30000); //garbage cleanup every 30s
   }
 
   generateColor = () => {
     return colors[Math.floor(Math.random() * colors.length)];
+  };
+
+  getColor = username => {
+    const { userColors } = this.state;
+    const newColors = userColors;
+
+    if (userColors.hasOwnProperty(username)) {
+      return userColors[username];
+    } else {
+      const newColor = this.generateColor();
+      newColors[username] = newColor;
+      this.setState({ userColors: newColors });
+      return newColor;
+    }
   };
 
   //Get users from props
@@ -31,14 +70,10 @@ export default class Channels extends Component {
   //V-2 if a user has been removed from props, remove them from state
   getUserColors = users => {
     return users.map(user => {
-      if (!user.color) {
-        const generatedColor = this.generateColor();
-        return {
-          ...user,
-          color: generatedColor
-        };
-      }
-      return user;
+      return {
+        ...user,
+        color: this.getColor(user.username)
+      };
     });
   };
 
@@ -64,7 +99,6 @@ export default class Channels extends Component {
     let storeChannels = channels.map(aChannel => {
       if (aChannel.id === channel.id) {
         console.log(aChannel, channel);
-        //HOW DO I PUT THIS GOD DAMN CHANNEL BACK INTO STATE
         aChannel.active = true;
       } else {
         aChannel.active = false;
@@ -110,5 +144,9 @@ export default class Channels extends Component {
         )}
       </React.Fragment>
     );
+  }
+
+  componentWillUnmount() {
+    clearInterval(this.colorCleanup);
   }
 }

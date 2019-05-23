@@ -119,6 +119,7 @@ module.exports.verifyAuthToken = async token => {
   console.log("Verifying Auth Token");
   const checkToken = await new Promise((resolve, reject) => {
     jwt.verify(token, tempSecret, "HS256", (err, res) => {
+      console.log("JWT Verify: ", token);
       if (err) return reject(err);
       return resolve(res);
     });

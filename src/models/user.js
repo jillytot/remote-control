@@ -91,15 +91,14 @@ module.exports.checkPassword = async user => {
     //DB Call
     const query = `SELECT * FROM test WHERE username = $1 LIMIT 1`;
     const queryResult = await db.query(query, [username]);
-    console.log("Query Result: ", queryResult);
+    console.log("Query Result: ", queryResult.rows[0]["id"]);
     let checkPassword = await checkHash(
       password,
       queryResult.rows[0]["password"]
     );
-    console.log(checkPassword);
     let verify = {
       password: checkPassword,
-      token: await this.createAuthToken(queryResult.rows[0]["id"])
+      token: await this.createAuthToken(queryResult.rows[0])
     };
     return verify;
   } catch (err) {
@@ -117,20 +116,24 @@ module.exports.createAuthToken = user => {
 };
 
 module.exports.verifyAuthToken = async token => {
+  console.log("Verifying Auth Token");
   const checkToken = await new Promise((resolve, reject) => {
-    console.log(token.token);
     jwt.verify(token, tempSecret, "HS256", (err, res) => {
       if (err) return reject(err);
       return resolve(res);
     });
   });
 
-  //console.log("Check Token: ", checkToken);
-
-  const query = `SELECT * FROM test WHERE id = $1 LIMIT 1`;
-  const result = await db.query(query, [checkToken["id"]]);
-  //console.log("Get user from DB: ", result.rows[0]);
-  return await result.rows[0];
+  console.log("Check Token: ", checkToken);
+  if (checkToken.id) {
+    const query = `SELECT * FROM test WHERE id = $1 LIMIT 1`;
+    const result = await db.query(query, [checkToken["id"]]);
+    //console.log("Get user from DB: ", result.rows[0]);
+    return await result.rows[0];
+  } else {
+    console.log("ERROR GETTING USER FROM TOKEN");
+    return null;
+  }
 };
 
 //Get public info about a user from the DB

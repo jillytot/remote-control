@@ -1,16 +1,28 @@
 import React from "react";
-import { VERIFY_USER } from "../../../services/sockets/events";
 import "../../../styles/common.css";
 import Form from "../../common/form";
 import Joi from "joi-browser";
 import "./login.css";
+import axios from "axios";
+import { apiLogin } from "../../../config/clientSettings";
 
 export default class Login extends Form {
   state = {
-    data: { username: "", password: "", confirm: "", email: "" },
+    data: { username: "", password: "" },
     errors: {},
     isUser: null
   };
+
+  async componentDidMount() {
+    await axios
+      .get(apiLogin)
+      .then(res => {
+        console.log(res);
+      })
+      .catch(err => {
+        console.log(err);
+      });
+  }
 
   schema = {
     username: Joi.string()
@@ -23,30 +35,8 @@ export default class Login extends Form {
     password: Joi.string()
       .required()
       .min(5)
-      .label("Password"),
-    confirm: Joi.string()
-      .required()
-      .equal(Joi.ref("password"))
-      .options({
-        language: {
-          any: {
-            allowOnly: "!!Passwords do not match"
-          }
-        }
-      })
-      .label("Confirm Password"),
-    email: Joi.string()
-      .email()
-      .required()
-      .label("Email")
+      .label("Password")
   };
-
-  // componentDidMount() {
-  //   this._isMounted = true;
-  // }
-  // componentWillUnmount() {
-  //   this._isMounted = false;
-  // }
 
   setUser = ({ user, isUser }) => {
     // console.log("Is User?: ", isUser);
@@ -71,25 +61,32 @@ export default class Login extends Form {
     this.setState({ errors: error });
   };
 
-  doSubmit = () => {
+  doSubmit = async () => {
     //Call the server
-    const { socket } = this.props;
     const { data } = this.state;
-    socket.emit(
-      VERIFY_USER,
-      { username: data.username, password: data.password, email: data.email },
-      this.setUser
-    );
+    console.log("Login submitted for user: ", data.username);
+    await axios
+      .post(apiLogin, {
+        username: data.username,
+        password: data.password
+      })
+      .then(res => {
+        const { handleAuth } = this.props;
+        console.log("Login response: ", res);
+        localStorage.setItem("token", res.data.token);
+        handleAuth(localStorage.getItem("token"));
+      })
+      .catch(err => {
+        console.log("Login Error: ", err);
+      });
   };
 
   render() {
     return (
       <div className="register-form">
         <form onSubmit={this.handleSubmit}>
-          {this.renderInput("username", this.handleFeedback())}
+          {this.renderInput("username", "Username", "username")}
           {this.renderInput("password", "Password", "password")}
-          {this.renderInput("confirm", "Confirm Password", "confirm")}
-          {this.renderInput("email", "Email", "email")}
           {this.renderButton("Submit")}
         </form>
       </div>

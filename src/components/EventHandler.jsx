@@ -20,16 +20,6 @@ Some components will emit data back to the server,
 This event handler will listen for the responses in most cases and
 send updated data back down the pipe to trigger subsquent component behavior. 
 
-Data struct prototype: 
-{ 
-  socket:     {},
-  user: {     name: "", 
-              id: "", 
-              login: bool },
-  session: {  sessionId: "",
-              server: {}, 
-              newMessages: [{}] }
-}
 
 */
 export default class EventHandler extends Component {
@@ -56,7 +46,7 @@ export default class EventHandler extends Component {
 
   handleAuth = token => {
     const { socket } = this.state;
-    if (token !== undefined && token !== null) {
+    if (token) {
       socket.emit(AUTHENTICATE, { token: token });
       axios
         .post(`${apiUrl}/auth`, { token: token })

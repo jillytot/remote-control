@@ -83,14 +83,28 @@ module.exports.checkEmail = async user => {
 };
 
 module.exports.checkPassword = async user => {
-  const { password, id } = user;
+  console.log("Password Check: ", user);
 
-  //DB Call
-  const query = `SELECT * FROM test WHERE id = $1 LIMIT 1`;
-  const queryResult = await db.query(query, [id]);
+  try {
+    const { password, username } = user;
 
-  //Check Hash
-  return await checkHash(password, queryResult.rows[0]["password"]);
+    //DB Call
+    const query = `SELECT * FROM test WHERE username = $1 LIMIT 1`;
+    const queryResult = await db.query(query, [username]);
+    console.log("Query Result: ", queryResult);
+    let checkPassword = await checkHash(
+      password,
+      queryResult.rows[0]["password"]
+    );
+    console.log(checkPassword);
+    let verify = {
+      password: checkPassword,
+      token: await this.createAuthToken(queryResult.rows[0]["id"])
+    };
+    return verify;
+  } catch (err) {
+    console.log("Password Error: ", err);
+  }
 };
 
 module.exports.createAuthToken = user => {

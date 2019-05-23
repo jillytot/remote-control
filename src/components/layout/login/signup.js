@@ -97,7 +97,7 @@ export default class Signup extends Form {
     return (
       <div className="register-form">
         <form onSubmit={this.handleSubmit}>
-          {this.renderInput("username", this.handleFeedback())}
+          {this.renderInput("username", "Username", "username")}
           {this.renderInput("password", "Password", "password")}
           {this.renderInput("confirm", "Confirm Password", "confirm")}
           {this.renderInput("email", "Email", "email")}

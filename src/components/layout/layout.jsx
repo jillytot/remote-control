@@ -1,5 +1,5 @@
 import React from "react";
-//import Login from "./login/login";
+import Login from "./login/login";
 import User from "./nav/user";
 import Signup from "./login/signup";
 import RobotServer from "./robotServer/robotServer";
@@ -21,12 +21,17 @@ const Layout = ({ socket, user, setUser, handleAuth }) => {
                 setUser={setUser}
                 handleAuth={handleAuth}
               />
-              ...
+              ... or login ...
+              <Login
+                socket={socket}
+                setUser={setUser}
+                handleAuth={handleAuth}
+              />
             </React.Fragment>
           )}
         </React.Fragment>
       ) : (
-        <div> Connection Offline </div>
+        <div> ...Connection To Server Offline... </div>
       )}
     </React.Fragment>
   );

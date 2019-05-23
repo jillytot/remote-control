@@ -16,6 +16,7 @@ const User = ({ user, socket }) => {
       : console.log("User Logout Error");
     console.log("Clearing token from local storage");
     localStorage.removeItem("token");
+    window.location.href = "/";
   };
 
   return (

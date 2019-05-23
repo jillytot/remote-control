@@ -131,7 +131,11 @@ module.exports.verifyAuthToken = async token => {
     //console.log("Get user from DB: ", result.rows[0]);
     return await result.rows[0];
   } else {
-    console.log("ERROR GETTING USER FROM TOKEN");
+    let reason = {
+      error: "cannot resolve user data from token"
+    };
+    console.log(reason);
+    Promise.reject(reason);
     return null;
   }
 };

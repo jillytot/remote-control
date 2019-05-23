@@ -52,7 +52,11 @@ export default class EventHandler extends Component {
         .post(`${apiUrl}/auth`, { token: token })
         .then(response => {
           console.log("response: ", response.data);
-          this.setState({ user: response.data });
+          if (response.data.user) {
+            this.setState({ user: response.data.user });
+          } else {
+            console.log("Could not authenticate user.");
+          }
         })
         .catch(error => {
           console.log(error);

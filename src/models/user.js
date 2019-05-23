@@ -117,16 +117,24 @@ module.exports.createAuthToken = user => {
 
 module.exports.verifyAuthToken = async token => {
   console.log("Verifying Auth Token");
-  const checkToken = await new Promise((resolve, reject) => {
-    jwt.verify(token, tempSecret, "HS256", (err, res) => {
-      console.log("JWT Verify: ", token);
-      if (err) return reject(err);
-      return resolve(res);
+
+  let checkToken = null;
+  try {
+    checkToken = await new Promise((resolve, reject) => {
+      jwt.verify(token, tempSecret, "HS256", (err, res) => {
+        console.log("JWT Verify: ", token);
+        if (err) return reject(err);
+        return resolve(res);
+      });
     });
-  });
+  } catch (err) {
+    //console.log(err);
+    console.log("Problem resolving token from user");
+    return null;
+  }
 
   console.log("Check Token: ", checkToken);
-  if (checkToken.id) {
+  if (checkToken && checkToken.id) {
     const query = `SELECT * FROM test WHERE id = $1 LIMIT 1`;
     const result = await db.query(query, [checkToken["id"]]);
     //console.log("Get user from DB: ", result.rows[0]);

@@ -8,12 +8,14 @@ router.post("/", async (req, res) => {
     if (getUser) {
       console.log("API/AUTH: Verify User: ", getUser.id);
       let formatUser = {
-        username: getUser.username,
-        id: getUser.id
+        user: {
+          username: getUser.username,
+          id: getUser.id
+        }
       };
       res.send(formatUser);
     } else {
-      res.send({ error: "Authentication Failed" });
+      res.send({ error: "Authentication Failed", user: null });
     }
   } catch (error) {
     console.log(error);

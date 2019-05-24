@@ -1,21 +1,38 @@
 {
-  "bad_words": {
-    "ass": "butt",
-    "arse": "booty",
-    "bastard": "not nice person",
-    "bitch": "not nice person",
-    "cock": "gentleman's member",
-    "cunt": "not nice person",
-    "dick": "gentleman's member",
-    "dyke": "person",
-    "fag": "person",
-    "faggot": "person",
-    "fuck": "heck",
-    "homo": "person",
-    "nigger": "person",
-    "nigga": "person",
-    "pussy": "ladie's member",
-    "shit": "offering to the thundermug",
-    "twat": "not nice person"
-  }
+  "bad_words": [
+    "ass",
+    "arse",
+    "bastard",
+    "bitch",
+    "cock",
+    "cunt",
+    "dick",
+    "dyke",
+    "fag",
+    "faggot",
+    "fuck",
+    "homo",
+    "nigger",
+    "nigga",
+    "pussy",
+    "shit",
+    "twat"
+  ],
+  "phonetic_bad_words": [
+    "AS",
+    "ARS",
+    "BSTRT",
+    "BX",
+    "KK",
+    "KNT",
+    "TK",
+    "FK",
+    "FKT",
+    "HM",
+    "NKR",
+    "NK",
+    "PS",
+    "XT",
+    "TWT"
+  ]
 }

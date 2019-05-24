@@ -1,20 +1,22 @@
-import globalBadWordsList from "./globalBadWords.json";
+import globalBadWordsList from "./globalBadWordsList.json";
 
-const globalBadWords = globalBadWordsList.bad_words;
+var metaphone = require("metaphone");
+
+// const globalBadWords = globalBadWordsList.bad_words;
+
+const phoneticBadWords = globalBadWordsList.phonetic_bad_words;
 
 export const filterMessage = payload => {
-  const badWords = Object.keys(globalBadWords);
-  const replacementWords = Object.values(globalBadWords);
-  let censoredMessage = "";
+  console.log("phonetic bad words: ", phoneticBadWords)
   const messageWords = payload.split(" ");
   messageWords.forEach(word => {
-    if (badWords.indexOf(word) > -1) {
-      censoredMessage += `${replacementWords[badWords.indexOf(word)]} `;
-    } else {
-      censoredMessage += `${word} `;
+    console.log("phonetic word: ", metaphone(word));
+    if (phoneticBadWords.indexOf(metaphone(word)) > -1) {
+      console.log("phonetic filter match!");
+      return "/me said a bad word!";
     }
   });
-  if (censoredMessage !== payload) payload = censoredMessage;
-
   return payload;
-}
+};
+
+export default filterMessage;

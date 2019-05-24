@@ -15,6 +15,8 @@ router.post("/", async (req, res) => {
   verify.password
     ? res.send(verify) //Authenticate / Re-Authenticate User
     : res.send("Login Incorrect, please try again");
+
+  if (verify.password) console.log("User has logged in: ", verify.username);
 });
 
 module.exports = router;

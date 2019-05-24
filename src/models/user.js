@@ -47,6 +47,8 @@ module.exports.createUser = async user => {
   } catch (err) {
     console.log(err.stack);
   }
+
+  console.log("New User Generated: ", this.publicUser(user));
 };
 
 /* note from Gedd: 
@@ -98,7 +100,8 @@ module.exports.checkPassword = async user => {
     );
     let verify = {
       password: checkPassword,
-      token: await this.createAuthToken(queryResult.rows[0])
+      token: await this.createAuthToken(queryResult.rows[0]),
+      username: username
     };
     return verify;
   } catch (err) {

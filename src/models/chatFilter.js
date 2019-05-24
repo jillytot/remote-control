@@ -1,12 +1,9 @@
-import globalBadWordsList from "./globalBadWordsList.json";
-
-var metaphone = require("metaphone");
-
-// const globalBadWords = globalBadWordsList.bad_words;
+const globalBadWordsList = require("./globalBadWordsList.json");
+const metaphone = require("metaphone");
 
 const phoneticBadWords = globalBadWordsList.phonetic_bad_words;
 
-export const filterMessage = payload => {
+module.exports.filterMessage = payload => {
   let returnPayload = payload;
   const messageWords = payload.split(" ");
   messageWords.forEach(word => {

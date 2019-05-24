@@ -5,7 +5,7 @@ const winston = require("winston");
 
 const dbConfig = {
   user: config.db.user,
-  password: "boobs",
+  password: config.db.password,
   database: config.db.database,
   host: config.db.host,
   port: config.db.port,

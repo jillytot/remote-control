@@ -100,6 +100,18 @@ module.exports.getIdFromUsername = async username => {
   return null;
 };
 
+module.exports.getUserInfoFromId = async userId => {
+  if (userId) {
+    console.log("Get username from Id: ", userId);
+    const query = `SELECT * FROM users WHERE id = $1 LIMIT 1;`;
+    const check = await db.query(query, [userId]);
+    const getInfo = this.publicUser(check.rows[0]);
+    //console.log(getInfo);
+    return getInfo;
+  }
+  return null;
+};
+
 /* note from Gedd: 
 CREATE UNIQUE INDEX username_idx ON users (username);
 Gedyy: would prevent i dont know time attacks if thats what you can call them

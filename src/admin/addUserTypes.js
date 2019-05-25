@@ -7,7 +7,7 @@ const {
 
 const validate = async () => {
   //console.log(process.argv);
-  const types = process.argv.slice(4);
+  let types = process.argv.slice(4);
   let user = process.argv[3];
   let identifier = process.argv[2];
   console.log("Set Type(s) for User: ", identifier, user, types);
@@ -37,6 +37,10 @@ const validate = async () => {
       console.log("Invalid Type: ", type), process.exit(1);
     }
   });
+
+  //remove dupes (if any)
+  types = Array.from(new Set(types));
+  console.log("Removing Dupes (if any): ", types);
 
   console.log("Validation Passed");
   //set the type!

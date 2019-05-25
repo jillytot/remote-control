@@ -174,28 +174,37 @@ module.exports.createAuthToken = user => {
   });
 };
 
-module.exports.verifyAuthToken = async token => {
-  console.log("Verifying Auth Token");
+//TOKEN MANAGEMENT
+module.exports.authUser = async token => {
+  let auth = await this.extractToken(token);
+  console.log("Extracted Token: ", auth);
+  auth = await this.verifyAuthToken(auth);
+  return auth;
+};
 
+module.exports.extractToken = async token => {
+  console.log("Verifying Auth Token");
   let checkToken = null;
   try {
-    checkToken = await new Promise((resolve, reject) => {
+    return (checkToken = await new Promise((resolve, reject) => {
       jwt.verify(token, tempSecret, "HS256", (err, res) => {
         console.log("JWT Verify: ", token);
         if (err) return reject(err);
         return resolve(res);
       });
-    });
+    }));
   } catch (err) {
     //console.log(err);
     console.log("Problem resolving token from user");
     return null;
   }
+};
 
-  console.log("Check Token: ", checkToken);
-  if (checkToken && checkToken.id) {
+module.exports.verifyAuthToken = async token => {
+  console.log("Check Token: ", token);
+  if (token && token.id) {
     const query = `SELECT * FROM users WHERE id = $1 LIMIT 1`;
-    const result = await db.query(query, [checkToken["id"]]);
+    const result = await db.query(query, [token["id"]]);
     //console.log("Get user from DB: ", result.rows[0]);
     return await result.rows[0];
   } else {

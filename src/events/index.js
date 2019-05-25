@@ -17,7 +17,7 @@ const { sendActiveUsers } = user;
 module.exports.socketEvents = (socket, io) => {
   let userRoom = "";
   socket.on(AUTHENTICATE, async data => {
-    const getUser = await user.verifyAuthToken(data.token);
+    const getUser = await user.authUser(data.token);
     if (getUser) {
       //setup private user sub for user events
       socket.user = getUser;

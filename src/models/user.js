@@ -35,15 +35,22 @@ module.exports.createUser = async user => {
   user.password = await hash(user.password);
   user.created = createTimeStamp();
   user.type = [];
-  user._username = user.username.toLowerCase(); //save a copy of username all lowercase
-  console.log(`${user.username} also saved as ${user._username}`);
+  user.check_username = user.username.toLowerCase(); //save a copy of username all lowercase
+  console.log(`${user.username} also saved as ${user.check_username}`);
 
   console.log("Generating User: ", user);
 
-  const { username, id, password, created, _username } = user;
-  const dbPut = `INSERT INTO test (username, id, password, email, created, _username) VALUES($1, $2, $3, $4, $5, $6) RETURNING *`;
+  const { username, id, password, created, check_username } = user;
+  const dbPut = `INSERT INTO users (username, id, password, email, created, check_username) VALUES($1, $2, $3, $4, $5, $6) RETURNING *`;
   try {
-    await db.query(dbPut, [username, id, password, email, created, _username]);
+    await db.query(dbPut, [
+      username,
+      id,
+      password,
+      email,
+      created,
+      check_username
+    ]);
     const token = await this.createAuthToken(user);
     return { status: "Account successfully created", token: token };
   } catch (err) {
@@ -69,7 +76,7 @@ module.exports.validateUser = input => {
 
 module.exports.checkUserId = async user => {
   const { id } = user;
-  const query = `SELECT COUNT(*) FROM test WHERE id = $1 LIMIT 1`;
+  const query = `SELECT COUNT(*) FROM users WHERE id = $1 LIMIT 1`;
   const check = await db.query(query, [id]);
   if (check.rows[0].count > 0) {
     return false;
@@ -79,13 +86,13 @@ module.exports.checkUserId = async user => {
 };
 
 module.exports.getIdFromUsername = async username => {
-  const query = `SELECT * FROM test WHERE username = $1 LIMIT 1;`;
+  const query = `SELECT * FROM users WHERE username = $1 LIMIT 1;`;
   const check = await db.query(query, [username]);
   return check.rows[0].id;
 };
 
 /* note from Gedd: 
-CREATE UNIQUE INDEX username_idx ON test (username);
+CREATE UNIQUE INDEX username_idx ON users (username);
 Gedyy: would prevent i dont know time attacks if thats what you can call them
 Gedyy: 2 requests happening at the same time so they both check past the username exists check adding the user twice
 Gedyy: in pgadmin query tool
@@ -93,9 +100,9 @@ Gedyy: in pgadmin query tool
 
 //Check for duplicate usernames
 module.exports.checkUsername = async user => {
-  const { username } = user;
-  const checkName = `SELECT COUNT(*) FROM test WHERE username = $1 LIMIT 1`;
-  const checkRes = await db.query(checkName, [username]);
+  const { username, check_username } = user;
+  const checkName = `SELECT COUNT(*) FROM users WHERE check_username = $1 LIMIT 1`;
+  const checkRes = await db.query(checkName, [check_username]);
   //console.log(checkRes.rows[0].count);
   if (checkRes.rows[0].count > 0) {
     return false;
@@ -107,7 +114,7 @@ module.exports.checkUsername = async user => {
 //Check for duplicate emails
 module.exports.checkEmail = async user => {
   const { email } = user;
-  const checkName = `SELECT COUNT(*) FROM test WHERE email = $1 LIMIT 1`;
+  const checkName = `SELECT COUNT(*) FROM users WHERE email = $1 LIMIT 1`;
   const checkRes = await db.query(checkName, [email]);
   //console.log(checkRes.rows[0].count);
   if (checkRes.rows[0].count > 0) {
@@ -124,7 +131,7 @@ module.exports.checkPassword = async user => {
     const { password, username } = user;
 
     //DB Call
-    const query = `SELECT * FROM test WHERE username = $1 LIMIT 1`;
+    const query = `SELECT * FROM users WHERE username = $1 LIMIT 1`;
     const queryResult = await db.query(query, [username]);
     console.log("Query Result: ", queryResult.rows[0]["id"]);
     let checkPassword = await checkHash(
@@ -171,7 +178,7 @@ module.exports.verifyAuthToken = async token => {
 
   console.log("Check Token: ", checkToken);
   if (checkToken && checkToken.id) {
-    const query = `SELECT * FROM test WHERE id = $1 LIMIT 1`;
+    const query = `SELECT * FROM users WHERE id = $1 LIMIT 1`;
     const result = await db.query(query, [checkToken["id"]]);
     //console.log("Get user from DB: ", result.rows[0]);
     return await result.rows[0];
@@ -189,7 +196,7 @@ module.exports.verifyAuthToken = async token => {
 module.exports.getPublicUserInfo = async userId => {
   let userInfo = {};
   try {
-    const query = `SELECT username, id, created FROM test WHERE id = $1 LIMIT 1`;
+    const query = `SELECT username, id, created FROM users WHERE id = $1 LIMIT 1`;
     const result = await db.query(query, [userId]);
     userInfo = result.rows[0];
     console.log(userInfo);
@@ -245,7 +252,7 @@ module.exports.userTypes = [
 module.exports.addUserTypes = async (userId, types) => {
   console.log(`adding types: ${types} to ${userId}`);
   try {
-    const insert = `UPDATE test SET type = $1 WHERE id = $2 RETURNING *`;
+    const insert = `UPDATE users SET type = $1 WHERE id = $2 RETURNING *`;
     const result = await db.query(insert, [types, userId]);
     return result.rows[0];
   } catch (err) {

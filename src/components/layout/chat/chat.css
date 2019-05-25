@@ -133,8 +133,10 @@
 
 .badge {
   height: 28px;
+  min-height: 28px;
 }
 
 .badge-container {
   background-color: #b251eb;
+  height: 28px;
 }

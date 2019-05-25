@@ -18,14 +18,16 @@ module.exports.createUser = async user => {
   console.log("check email to lowercase ", email);
 
   //Does this username or email exist?
-  let result = await this.checkUsername(user);
+  let checkUser = user.username.toLowerCase();
+  let result = await this.checkUsername(checkUser);
+  console.log("CHECK USER RESULT: ", result);
   let emailResult = await this.checkEmail(user);
-  if (result === false)
+  if (result === true)
     return {
       username_status:
         "This username already exists, please try a different one"
     };
-  if (emailResult === false)
+  if (emailResult === true)
     return {
       email_status: "This email is already in use, unique email is required"
     };
@@ -35,7 +37,7 @@ module.exports.createUser = async user => {
   user.password = await hash(user.password);
   user.created = createTimeStamp();
   user.type = [];
-  user.check_username = user.username.toLowerCase(); //save a copy of username all lowercase
+  user.check_username = checkUser; //save a copy of username all lowercase
   console.log(`${user.username} also saved as ${user.check_username}`);
 
   console.log("Generating User: ", user);
@@ -61,15 +63,19 @@ module.exports.createUser = async user => {
 };
 
 //Is this an actual user that currently exists?
-module.exports.validateUser = input => {
+module.exports.validateUser = async input => {
   console.log("Get User: ", input);
   if (input && input.username) {
     console.log("Get user based on username");
-    return this.checkUsername(input.username);
+    const check = await this.checkUsername(input.username);
+    console.log("VALIDATE ? ", check);
+    return check;
   } //get based on username
   if (input && input.id) {
     console.log("Get user based on userId");
-    return this.checkUserId(input.id);
+    const check = await this.checkUserId(input.id);
+    console.log("VALIDATE ? ", check);
+    return check;
   } //get based on userId
   return false;
 };
@@ -86,9 +92,12 @@ module.exports.checkUserId = async user => {
 };
 
 module.exports.getIdFromUsername = async username => {
-  const query = `SELECT * FROM users WHERE username = $1 LIMIT 1;`;
-  const check = await db.query(query, [username]);
-  return check.rows[0].id;
+  if (username) {
+    const query = `SELECT * FROM users WHERE username = $1 LIMIT 1;`;
+    const check = await db.query(query, [username]);
+    return check.rows[0].id;
+  }
+  return null;
 };
 
 /* note from Gedd: 
@@ -100,14 +109,21 @@ Gedyy: in pgadmin query tool
 
 //Check for duplicate usernames
 module.exports.checkUsername = async user => {
-  const { username, check_username } = user;
+  let check_username = "";
+  if (user && user.username) {
+    check_username = user.username.toLowerCase();
+  } else {
+    check_username = user;
+  }
+  if (check_username === "") return false;
+  console.log("CHECK USERNAME", check_username);
   const checkName = `SELECT COUNT(*) FROM users WHERE check_username = $1 LIMIT 1`;
   const checkRes = await db.query(checkName, [check_username]);
-  //console.log(checkRes.rows[0].count);
+  console.log(checkRes.rows[0]);
   if (checkRes.rows[0].count > 0) {
-    return false;
-  } else {
     return true;
+  } else {
+    return false;
   }
 };
 
@@ -118,9 +134,9 @@ module.exports.checkEmail = async user => {
   const checkRes = await db.query(checkName, [email]);
   //console.log(checkRes.rows[0].count);
   if (checkRes.rows[0].count > 0) {
-    return false;
-  } else {
     return true;
+  } else {
+    return false;
   }
 };
 

@@ -14,14 +14,24 @@ const validate = async () => {
   //Does this user exist?
   if (identifier === "id") {
     //Check based on user id
-    await validateUser({
+    const check = await validateUser({
       [identifier]: user
     });
+
+    if (!check) {
+      console.log("Invalid User ID, Existing Process");
+      process.exit(1);
+    }
   } else if (identifier === "username") {
     //check based on username
-    await validateUser({
-      [identifier]: user
+    const check = await validateUser({
+      [identifier]: user.toLocaleLowerCase()
     });
+    console.log("CHECK VALIDATION: ", check);
+    if (!check) {
+      console.log("Invalid Username, Existing Process");
+      process.exit(1);
+    }
     identifier = "id";
     user = await getIdFromUsername(user);
   } else {

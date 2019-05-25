@@ -38,6 +38,7 @@ module.exports.socketEvents = (socket, io) => {
 
   socket.on("MESSAGE_SENT", message => {
     console.log("Message Received: ", message);
+    if (socket.user.type) message.userType = socket.user.type;
     createMessage(message);
   });
 

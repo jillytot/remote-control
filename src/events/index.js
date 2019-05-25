@@ -1,14 +1,14 @@
 const user = require("../models/user");
 const { getChatRooms, getChat, chatEvents } = require("../models/chatRoom");
 const { createMessage } = require("../models/chatMessage");
-const { getActiveServer, addActiveUser } = require("../models/robotServer");
 const {
   GET_CHAT_ROOMS,
   SEND_ROBOT_SERVER_INFO,
   AUTHENTICATE,
   VALIDATED,
   GET_CHAT,
-  SEND_CHAT
+  SEND_CHAT,
+  MESSAGE_SENT
 } = require("../services/sockets/events").socketEvents;
 
 const { sendActiveUsers } = user;
@@ -17,12 +17,8 @@ const { sendActiveUsers } = user;
 module.exports.socketEvents = (socket, io) => {
   let userRoom = "";
   socket.on(AUTHENTICATE, async data => {
-    let verify = false;
     const getUser = await user.verifyAuthToken(data.token);
     if (getUser) {
-      //console.log("verification complete!", getUser);
-      verify = true;
-
       //setup private user sub for user events
       socket.user = getUser;
       userRoom = `${socket.user.id}`;
@@ -36,9 +32,9 @@ module.exports.socketEvents = (socket, io) => {
     }
   });
 
-  socket.on("MESSAGE_SENT", message => {
+  socket.on(MESSAGE_SENT, message => {
     console.log("Message Received: ", message);
-    if (socket.user.type) message.userType = socket.user.type;
+    if (socket.user && socket.user.type) message.userType = socket.user.type;
     createMessage(message);
   });
 
@@ -46,13 +42,11 @@ module.exports.socketEvents = (socket, io) => {
   socket.on(GET_CHAT_ROOMS, async data => {
     console.log("GET CHAT ROOMS: ", data);
     socket.join(data.server_id);
-    //await addActiveUser(data.user, data.server_id);
     const sendInfo = {
       channels: await getChatRooms(data.server_id),
       users: await sendActiveUsers(data.server_id)
       //chatRoom: await getChatRooms(data.server_id)
     };
-
     io.to(userRoom).emit(SEND_ROBOT_SERVER_INFO, sendInfo);
   });
 

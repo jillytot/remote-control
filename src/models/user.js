@@ -35,13 +35,15 @@ module.exports.createUser = async user => {
   user.password = await hash(user.password);
   user.created = createTimeStamp();
   user.type = [];
+  user._username = user.username.toLowerCase(); //save a copy of username all lowercase
+  console.log(`${user.username} also saved as ${user._username}`);
 
   console.log("Generating User: ", user);
 
-  const { username, id, password, created } = user;
-  const dbPut = `INSERT INTO test (username, id, password, email, created) VALUES($1, $2, $3, $4, $5) RETURNING *`;
+  const { username, id, password, created, _username } = user;
+  const dbPut = `INSERT INTO test (username, id, password, email, created, _username) VALUES($1, $2, $3, $4, $5, $6) RETURNING *`;
   try {
-    await db.query(dbPut, [username, id, password, email, created]);
+    await db.query(dbPut, [username, id, password, email, created, _username]);
     const token = await this.createAuthToken(user);
     return { status: "Account successfully created", token: token };
   } catch (err) {
@@ -62,6 +64,7 @@ module.exports.validateUser = input => {
     console.log("Get user based on userId");
     return this.checkUserId(input.id);
   } //get based on userId
+  return false;
 };
 
 module.exports.checkUserId = async user => {
@@ -115,7 +118,7 @@ module.exports.checkEmail = async user => {
 };
 
 module.exports.checkPassword = async user => {
-  console.log("Password Check: ", user);
+  console.log("Password Check: ", user.username);
 
   try {
     const { password, username } = user;

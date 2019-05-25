@@ -6,22 +6,22 @@ const {
 } = require("../models/user");
 
 const validate = async () => {
-  //console.log(process.argv);
   let types = process.argv.slice(4);
-  let user = process.argv[3];
   let identifier = process.argv[2];
+  let user = process.argv[3];
   console.log("Set Type(s) for User: ", identifier, user, types);
 
+  //Does this user exist?
   if (identifier === "id") {
-    //Check if user exists:
+    //Check based on user id
     await validateUser({
       [identifier]: user
     });
   } else if (identifier === "username") {
+    //check based on username
     await validateUser({
       [identifier]: user
     });
-
     identifier = "id";
     user = await getIdFromUsername(user);
   } else {
@@ -41,10 +41,9 @@ const validate = async () => {
   //remove dupes (if any)
   types = Array.from(new Set(types));
   console.log("Removing Dupes (if any): ", types);
+  console.log("...Validation Complete, adding user types to DB");
 
-  console.log("Validation Passed");
   //set the type!
-
   const res = await addUserTypes(user, types);
   console.log("Successfully Added User Types: ", res);
   process.exit();

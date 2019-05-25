@@ -21,7 +21,7 @@ module.exports.hash = async pw => {
 };
 
 module.exports.checkHash = (pw, hash) => {
-  console.log("Check Hash: ", pw, hash);
+  console.log("...Checking Hash.");
   const bcrypt = require("bcrypt");
   const checkHash = new Promise((resolve, reject) => {
     bcrypt.compare(pw, hash, function(err, res) {

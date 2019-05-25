@@ -1,5 +1,6 @@
 import React from "react";
 import Emotes from "../../../emotes/emotes";
+import defaultImages from "../../../imgs/placeholders";
 
 const Message = ({ message, color }) => {
   const types = {
@@ -28,6 +29,28 @@ const Message = ({ message, color }) => {
     return filter;
   };
 
+  const handleBadges = badges => {
+    console.log(badges);
+    if (badges && badges.length > 0) {
+      return badges.map(badge => {
+        if (badge === "staff") {
+          console.log("ADD BADGE!");
+          return (
+            <span key={badge}>
+              <img
+                src={defaultImages["remoStaffBadge"]}
+                className="badge"
+                alt={badge}
+              />
+            </span>
+          );
+        } else {
+          return <React.Fragment />;
+        }
+      });
+    }
+  };
+
   return (
     <div>
       <div
@@ -35,6 +58,7 @@ const Message = ({ message, color }) => {
           message.type === types.self ? types.self : ""
         }`}
       >
+        {handleBadges(message.badges)}
         <span className="chat-user-name">{`${message.sender}${
           message.type === types.self ? "" : ":"
         }  `}</span>

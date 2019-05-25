@@ -36,10 +36,9 @@ const Message = ({ message, color }) => {
         if (badge === "staff") {
           console.log("ADD BADGE!");
           return (
-            <span key={badge} className="badge-container">
-              Badge
+            <span key={badge}>
               <img
-                className="badge"
+                className="message-badge"
                 src={defaultImages["remoStaffBadge"]}
                 alt={badge}
               />

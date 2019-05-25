@@ -131,12 +131,11 @@
   height: 28px;
 }
 
-.badge {
-  height: 28px;
-  min-height: 28px;
+.message-badge {
+  height: 18px;
+  margin-right: 3px;
 }
 
 .badge-container {
-  background-color: #b251eb;
   height: 28px;
 }

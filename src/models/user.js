@@ -51,6 +51,36 @@ module.exports.createUser = async user => {
   console.log("New User Generated: ", this.publicUser(user));
 };
 
+//Is this an actual user that currently exists?
+module.exports.validateUser = input => {
+  console.log("Get User: ", input);
+  if (input && input.username) {
+    console.log("Get user based on username");
+    return this.checkUsername(input.username);
+  } //get based on username
+  if (input && input.id) {
+    console.log("Get user based on userId");
+    return this.checkUserId(input.id);
+  } //get based on userId
+};
+
+module.exports.checkUserId = async user => {
+  const { id } = user;
+  const query = `SELECT COUNT(*) FROM test WHERE id = $1 LIMIT 1`;
+  const check = await db.query(query, [id]);
+  if (check.rows[0].count > 0) {
+    return false;
+  } else {
+    return true;
+  }
+};
+
+module.exports.getIdFromUsername = async username => {
+  const query = `SELECT * FROM test WHERE username = $1 LIMIT 1;`;
+  const check = await db.query(query, [username]);
+  return check.rows[0].id;
+};
+
 /* note from Gedd: 
 CREATE UNIQUE INDEX username_idx ON test (username);
 Gedyy: would prevent i dont know time attacks if thats what you can call them
@@ -201,28 +231,21 @@ module.exports.sendActiveUsers = async robot_server => {
   });
 };
 
-// module.exports.getUserType = id => {};
+module.exports.userTypes = [
+  "staff",
+  "owner",
+  "robot",
+  "global_moderator",
+  "local_moderator"
+];
 
-// const userTypesToDb = {
-//   staff: "{staff}",
-//   owner: "{owner}",
-//   robot: "{robot}",
-//   global_moderator: "{global_moderator}",
-//   local_moderator: "{local_moderator}"
-// };
-
-// const userTypes = {
-//   staff: "staff",
-//   owner: "owner",
-//   robot: "robot",
-//   global_moderator: "global_moderator",
-//   local_moderator: "local_moderator"
-// };
-
-// module.exports.setUserType = async (userId, type) => {
-//   try {
-//     const insert = `UPDATE test SET type = $1 WHERE id = $2 LIMIT 1`;
-//   } catch (err) {
-//     console.log(err);
-//   }
-// };
+module.exports.addUserTypes = async (userId, types) => {
+  console.log(`adding types: ${types} to ${userId}`);
+  try {
+    const insert = `UPDATE test SET type = $1 WHERE id = $2 RETURNING *`;
+    const result = await db.query(insert, [types, userId]);
+    return result.rows[0];
+  } catch (err) {
+    console.log(err);
+  }
+};

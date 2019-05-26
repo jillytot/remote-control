@@ -3,8 +3,8 @@ module.exports.getMessageType = message => {
 
   //Check entry character & assign message types
   if (message.message.charAt(0) === "/") message.type = "site-command";
-  if (message.message.charAt(0) === ".") message.type = "robot-command";
-  if (message.message.charAt(0) === "#") message.type = "donate";
+  //if (message.message.charAt(0) === ".") message.type = "robot-command";
+  //if (message.message.charAt(0) === "#") message.type = "donate";
 
   //execute based on message types
   if (message.type === "site-command") siteCommands(message);

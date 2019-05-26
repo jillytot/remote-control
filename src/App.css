@@ -1,20 +1,14 @@
 .App {
-  text-align: center;
   background-color: #282c34;
   color: white;
   font-size: calc(10px + 2vmin);
-  height: 1200px;
+  font-family: sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-align: center;
+  height: 100vh;
 }
 
 .App-link {
   color: #61dafb;
-}
-
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
 }

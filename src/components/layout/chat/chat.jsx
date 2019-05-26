@@ -97,7 +97,7 @@ export default class Chat extends Component {
             <UserList users={users} colors={colors} />
           </div>
         ) : (
-          <div>...</div>
+          <div />
         )}
       </div>
     );

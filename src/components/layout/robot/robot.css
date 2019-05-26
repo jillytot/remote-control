@@ -1,0 +1,19 @@
+.robot-container {
+  background-color: rgb(35, 35, 51);
+  width: 768px;
+}
+
+.robot-display-container {
+  background-color: rgb(15, 13, 15);
+  min-height: 432px;
+  margin: 5px;
+}
+
+.robot-controls-container {
+  background-color: rgb(28, 23, 34);
+  margin: 5px;
+  padding: 10px;
+}
+
+.btn {
+}

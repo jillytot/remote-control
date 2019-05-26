@@ -14,7 +14,7 @@
   background-color: rgb(22, 19, 32);
   display: grid;
   grid-template-columns: 1fr 200px;
-  border: solid cyan 2px;
+  /* border: solid cyan 2px; */
 }
 
 /* .chat-container > div {

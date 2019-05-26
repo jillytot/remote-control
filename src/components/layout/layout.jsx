@@ -33,6 +33,7 @@ const Layout = ({ socket, user, setUser, handleAuth }) => {
       ) : (
         <div> ...Connection To Server Offline... </div>
       )}
+      ...
     </React.Fragment>
   );
 };

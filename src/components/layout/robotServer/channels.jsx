@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import Chat from "../chat/chat";
 import { socketEvents } from "../../../services/sockets/events";
 import { colors } from "../../../config/colors";
+import Robot from "../robot/robot";
 const { SEND_ROBOT_SERVER_INFO, GET_CHAT, ACTIVE_USERS_UPDATED } = socketEvents;
 
 //placeholder
@@ -125,6 +126,7 @@ export default class Channels extends Component {
           key={channel.id}
           onClick={() => this.handleClick(channel)}
         >
+          {"# "}
           {channel.name}
         </div>
       );
@@ -148,7 +150,10 @@ export default class Channels extends Component {
           {this.displayChannels()}
         </div>
         {users !== [] ? (
-          <Chat user={user} socket={socket} users={users} />
+          <React.Fragment>
+            <Robot />
+            <Chat user={user} socket={socket} users={users} />
+          </React.Fragment>
         ) : (
           <React.Fragment />
         )}

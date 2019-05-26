@@ -20,18 +20,22 @@ const User = ({ user, socket }) => {
   };
 
   return (
-    <div>
-      <div className="user">
+    <div className="nav-container">
+      <div className="logo-container">
         <img className="logo" alt="" src={defaultImages.remoLogo} />
-        {displayName}{" "}
-        <button
-          className="user-logout btn"
-          onClick={() => {
-            handleClick(user);
-          }}
-        >
-          logout
-        </button>
+      </div>
+      <div className="user-container">
+        <div className="user">
+          {displayName}{" "}
+          <button
+            className="user-logout btn"
+            onClick={() => {
+              handleClick(user);
+            }}
+          >
+            logout
+          </button>
+        </div>
       </div>
     </div>
   );

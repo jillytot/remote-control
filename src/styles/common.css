@@ -4,15 +4,15 @@
   color: white;
   border: 0px;
   /* height: 24px; */
-  font-size: calc(6px + 2vmin);
-  padding: 5px 10px 5px 10px;
-  margin: 8px;
+  font-size: 20px;
+  padding: 7px 14px 7px 14px;
+  /* margin: 8px; */
   background: -webkit-linear-gradient(-45deg, #954ed6 0%, #009bee 100%);
 }
 
 .btn:hover {
   border: 2px solid #f3eb48; /* Green */
-  padding: 5px 11px 5px 11px;
+  margin: -2px;
   /* margin: 6px; */
   cursor: pointer;
 }

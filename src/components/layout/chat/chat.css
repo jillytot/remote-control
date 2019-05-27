@@ -1,6 +1,5 @@
 .user-list {
   font-size: 14px;
-  /* background-color: rgb(41, 41, 55); */
   margin: 1px 0px 0px 0px;
 }
 
@@ -12,13 +11,22 @@
 .chat-container {
   /* background-color: rgb(51, 51, 65); */
   background-color: rgb(22, 19, 32);
-  display: grid;
-  grid-template-columns: 1fr 200px;
+  /* display: grid;
+  grid-template-columns: 1fr 200px; */
   /* border: solid cyan 2px; */
+  display: flex;
+  flex-direction: column;
+  height: 100%;
 }
 
-/* .chat-container > div {
-  margin: 1px;
+/* .chat-header-container {
+  background-color: red;
+}
+.chat-title {
+  background-color: blue;
+}
+.toggle-users {
+  background-color: green;
 } */
 
 .ulist {
@@ -33,8 +41,9 @@
   text-align: left;
   padding: 2%;
   background-color: #221b3a;
-  /* margin: 5% 5% 5% 0;
-  border-radius: 12px; */
+  margin: 5px 5px 5px 0px;
+  /* border-radius: 12px; */
+  /* border: solid green 2px; */
 }
 
 .gray {
@@ -79,7 +88,8 @@
 .chat-scroll {
   overflow-y: auto;
   position: relative;
-  max-height: 100%;
+
+  /* max-height: inherit; */
 }
 
 .chat-scroll::-webkit-scrollbar-track {
@@ -102,14 +112,27 @@
   border-radius: 6px;
 }
 
-.messages-container {
+/* .messages-container {
   display: grid;
   grid-template-columns: 1fr;
-  grid-template-rows: 400px 150px;
+  grid-template-rows: 1fr 3fr;
   justify-content: left;
   text-align: left;
   padding: 2%;
   font-size: 14px;
+  border: solid orange 2px;
+
+ 
+} */
+
+.messages-container {
+  justify-content: left;
+  text-align: left;
+  padding: 2%;
+  font-size: 14px;
+  /* border: solid orange 2px; */
+  display: flex;
+  flex-direction: column;
 
   /* outline: solid red; */
 }

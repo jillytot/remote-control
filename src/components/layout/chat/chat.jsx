@@ -82,10 +82,15 @@ export default class Chat extends Component {
         {chatroom ? (
           <div className="chat-container">
             <div className="messages-container">
+              <div className="chat-header-container">
+                <div className="chat-title">
+                  {chatroom ? chatroom.name : "Untitled"}
+                </div>
+                <div className="toggle-users"> Chat | Users </div>
+              </div>
               <Messages
                 messages={chatroom ? this.getMessageColors() : []}
                 users={users}
-                name={chatroom ? chatroom.name : "Untitled"}
               />
               <SendChat
                 onEvent={onEvent}

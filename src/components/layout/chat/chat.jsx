@@ -18,15 +18,9 @@ export default class Chat extends Component {
 
   state = {
     storeUsers: [],
-    users: []
+    users: [],
+    menu: "Chat"
   };
-
-  // componentDidUpdate(prevProps) {
-  //   if (prevProps.users !== this.props.users) {
-  //     console.log("Test state change");
-  //     //this.colorUsers(this.props.users);
-  //   }
-  // }
 
   componentDidMount() {
     this._isMounted = true;
@@ -73,33 +67,67 @@ export default class Chat extends Component {
     });
   };
 
+  handleMenuSelect = selected => {
+    console.log(selected);
+    this.setState({ menu: selected });
+  };
+
+  handleMenuItem = option => {
+    return (
+      <span
+        className="menu-option"
+        onClick={() => this.handleMenuSelect(option.label)}
+      >
+        {option.label}
+      </span>
+    );
+  };
+
+  handleReturnOptions = () => {
+    if (this.state.menu) {
+      const { onEvent, user, users, socket } = this.props;
+      const { chatroom, menu } = this.state;
+      console.log("Menu", menu);
+      if (menu === "Chat") {
+        return (
+          <div className="messages-container">
+            <Messages
+              messages={chatroom ? this.getMessageColors() : []}
+              users={users}
+            />
+            <SendChat
+              onEvent={onEvent}
+              user={user}
+              socket={socket}
+              chatId={chatroom ? chatroom.id : ""}
+            />
+          </div>
+        );
+      }
+      if (menu === "Users") {
+        return <UserList users={users} colors={colors} />;
+      }
+      return "...";
+    }
+  };
+
   render() {
-    const { onEvent, user, users, socket } = this.props;
     const { chatroom } = this.state;
 
     return (
       <div>
         {chatroom ? (
           <div className="chat-container">
-            <div className="messages-container">
-              <div className="chat-header-container">
-                <div className="chat-title">
-                  {chatroom ? chatroom.name : "Untitled"}
-                </div>
-                <div className="toggle-users"> Chat | Users </div>
+            <div className="chat-header-container">
+              <div className="chat-title">
+                {chatroom ? chatroom.name : "Untitled"}
               </div>
-              <Messages
-                messages={chatroom ? this.getMessageColors() : []}
-                users={users}
-              />
-              <SendChat
-                onEvent={onEvent}
-                user={user}
-                socket={socket}
-                chatId={chatroom ? chatroom.id : ""}
-              />
+              <div className="toggle-users">
+                {this.handleMenuItem({ label: "Chat" })} |
+                {this.handleMenuItem({ label: "Users" })}
+              </div>
             </div>
-            <UserList users={users} colors={colors} />
+            {this.handleReturnOptions()}
           </div>
         ) : (
           <div />

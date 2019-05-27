@@ -17,17 +17,35 @@
   display: flex;
   flex-direction: column;
   height: 100%;
+  width: 350px;
 }
 
-/* .chat-header-container {
-  background-color: red;
+.chat-header-container {
+  /* background-color: red; */
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  padding: 5px;
 }
 .chat-title {
-  background-color: blue;
+  /* background-color: blue; */
+  display: flex;
+  flex-direction: row;
+  font-size: 21px;
+  width: 100%;
 }
 .toggle-users {
-  background-color: green;
-} */
+  /* background-color: green; */
+  display: flex;
+  flex-direction: row;
+  font-size: 14px;
+}
+
+.menu-option {
+  cursor: pointer;
+  color: cyan;
+  margin: 0px 4px 0px 4px;
+}
 
 .ulist {
   list-style-type: none;

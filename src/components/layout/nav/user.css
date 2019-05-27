@@ -1,20 +1,11 @@
 .user {
   color: cyan;
-  /* background-color: rgb(6, 6, 12); */
   font-size: 20px;
   padding: 5px 10px 5px 10px;
   text-align: right;
 }
 
-.user-logout {
-  /* font-size: 12px; */
-  /* color: royalblue; */
-  /* margin: 2px -2px 2px 6px; */
-  /* padding: 2px; */
-}
-
 .user-container {
-  /* border: solid blue 2px; */
   display: flex;
   flex-direction: row;
   width: 100%;
@@ -24,23 +15,15 @@
 .logo {
   width: 200px;
   height: 34px;
-  /* float: left; */
-  /* padding-top: 3px; */
-  /* display: block;
-  max-width: 100%; */
 }
 
 .nav-container {
-  /* border: solid purple 2px; */
-  /* border-top: solid 3px rgb(39, 18, 58); */
-  /* border-top-color: -webkit-linear-gradient(-45deg, #b4b4ff 0%, #162755 100%); */
   display: flex;
   height: 48px;
   background: -webkit-linear-gradient(-45deg, #19191d 0%, #162755 100%);
 }
 
 .logo-container {
-  /* flex: 0 30vh; */
   margin: 4px;
   padding: 2px;
 }

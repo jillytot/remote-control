@@ -9,11 +9,7 @@
 }
 
 .chat-container {
-  /* background-color: rgb(51, 51, 65); */
   background-color: rgb(22, 19, 32);
-  /* display: grid;
-  grid-template-columns: 1fr 200px; */
-  /* border: solid cyan 2px; */
   display: flex;
   flex-direction: column;
   height: 100%;
@@ -21,11 +17,13 @@
 }
 
 .chat-header-container {
-  /* background-color: red; */
+  background-color: rgb(66, 49, 94);
   display: flex;
   flex-direction: row;
   align-items: center;
-  padding: 5px;
+  margin: 5px 5px 0px 5px;
+  padding: 0px 5px 0px 5px;
+  border-radius: 10px 10px 0px 0px;
 }
 .chat-title {
   /* background-color: blue; */
@@ -33,6 +31,7 @@
   flex-direction: row;
   font-size: 21px;
   width: 100%;
+  margin: 5px;
 }
 .toggle-users {
   /* background-color: green; */
@@ -54,14 +53,13 @@
 
 .user-list-container {
   display: grid;
-
   justify-content: left;
   text-align: left;
   padding: 2%;
   background-color: #221b3a;
-  margin: 5px 5px 5px 0px;
-  /* border-radius: 12px; */
-  /* border: solid green 2px; */
+  margin: 0px 5px 5px 5px;
+  height: 100%;
+  border-radius: 0px 0px 10px 10px;
 }
 
 .gray {
@@ -100,17 +98,11 @@
   background-color: #1c1829;
   padding: 2% 0 2% 0;
   font-size: 21px;
-  /* border-radius: 12px; */
 }
 
 .chat-scroll {
   overflow-y: auto;
   position: relative;
-  /* position: relative;
-  left: 0px;
-  top: 0;
-  bottom: 0;
-  right: 0; */
   height: 100%;
 }
 
@@ -130,33 +122,27 @@
   background-color: #221b3a;
   margin: 2px;
   text-align: left;
-  padding: 3px 3px 3px 6px;
+  padding: 6px 3px 3px 6px;
   border-radius: 6px;
+  display: flex;
+  flex-direction: row;
+  /* background-color: blue; */
 }
-
-/* .messages-container {
-  display: grid;
-  grid-template-columns: 1fr;
-  grid-template-rows: 1fr 3fr;
-  justify-content: left;
-  text-align: left;
-  padding: 2%;
-  font-size: 14px;
-  border: solid orange 2px;
-
- 
-} */
 
 .messages-container {
   justify-content: left;
   text-align: left;
-  padding: 2%;
+  padding: 0 5px 0 5px;
   font-size: 14px;
-  /* border: solid orange 2px; */
   display: flex;
   flex-direction: column;
+  height: 100%;
+}
 
-  /* outline: solid red; */
+.chat-background {
+  /* background-color: purple; */
+  height: 100%;
+  background-color: #221b3a;
 }
 
 .chat-user-name {
@@ -175,13 +161,38 @@
 
 .emote {
   height: 28px;
+  transform: translateY(-7px);
+  margin-bottom: -14px;
 }
 
 .message-badge {
   height: 18px;
   margin-right: 3px;
+  /* background-color: red; */
 }
 
 .badge-container {
   height: 28px;
+}
+
+.send-chat-container {
+  background-color: rgb(66, 49, 94);
+
+  border-radius: 0px 0px 10px 10px;
+  margin-bottom: 5px;
+
+  padding: 5px 5px 5px 10px;
+}
+
+.input-field-container {
+  display: inline-block;
+
+  width: 250px;
+}
+
+.send-chat-btn {
+  display: inline-block;
+
+  width: 75px;
+  vertical-align: top;
 }

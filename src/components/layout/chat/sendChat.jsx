@@ -1,6 +1,7 @@
 import Form from "../../common/form";
 import React from "react";
 import Joi from "joi-browser";
+import "./chat.css";
 
 import { MESSAGE_SENT } from "../../../services/sockets/events";
 
@@ -46,10 +47,12 @@ export default class SendChat extends Form {
 
   render() {
     return (
-      <div>
+      <div className="send-chat-container">
         <form onSubmit={this.handleSubmit}>
-          {this.renderInput("sendChat", "The chatbox makes the robot talk!")}
-          {this.renderButton("Chat")}
+          <div className="input-field-container">
+            {this.renderInput("sendChat", "The chatbox makes the robot talk!")}
+          </div>
+          <div className="send-chat-btn"> {this.renderButton("Chat")}</div>
         </form>
       </div>
     );

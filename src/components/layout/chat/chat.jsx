@@ -91,10 +91,12 @@ export default class Chat extends Component {
       if (menu === "Chat") {
         return (
           <div className="messages-container">
-            <Messages
-              messages={chatroom ? this.getMessageColors() : []}
-              users={users}
-            />
+            <div className="chat-background">
+              <Messages
+                messages={chatroom ? this.getMessageColors() : []}
+                users={users}
+              />
+            </div>
             <SendChat
               onEvent={onEvent}
               user={user}

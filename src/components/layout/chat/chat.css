@@ -196,3 +196,8 @@
   width: 75px;
   vertical-align: top;
 }
+
+.message-spacing {
+  margin-left: 3px;
+  /* background-color: blue; */
+}

@@ -62,7 +62,7 @@ const Message = ({ message, color }) => {
         <span className="chat-user-name">{`${message.sender}${
           message.type === types.self ? "" : ":"
         }  `}</span>
-        <span>
+        <span className="message-spacing">
           {handleEmotes(message.message).map(element => {
             return element;
           })}

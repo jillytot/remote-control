@@ -1,3 +1,5 @@
+const { createTimeStamp, getDateAndTime } = require("../modules/utilities");
+
 module.exports.getMessageType = message => {
   const command = RegExp("/");
 
@@ -39,13 +41,37 @@ me = message => {
   return message;
 };
 
-//Moderate
-moderate = (moderate, validate) => {
-  //Does the command ( moderate ) come from a moderator ( validate )?
-  //If so, grab the name of the person to be moderated.
-  //execute moderation commands.
-};
-
 // commandList = {
 //    timeout: timeout,
 // }
+
+//timeout a specific user from the entire site
+const globalTypes = ["staff", "global_moderator"];
+module.exports.globalTimeout = (mod, time, badUser) => {
+  //validate moderator
+  mod.type.map(t => {
+    if (t.includes(globalTypes) === false) {
+      return {
+        status:
+          "You insufficent privelages for this action. You must either be type: staff, or global_mod"
+      };
+    }
+  });
+
+  //Select Target User:
+  //Set Global Status for timeout
+  //Set all messages created by user before timeout to "displayMessage = false"
+};
+
+module.exports.calcTimeout = time => {
+  //return createTimeStamp() + time;
+  //let timeStamp = Math.floor(createTimeStamp() / 1000);
+  const timeStamp = getDateAndTime();
+  const calculate = timeStamp + time;
+  console.log("Calculating Timeout: ", timeStamp, calculate);
+  return calculate;
+};
+
+const globalStatusPt = {
+  timeout: ""
+};

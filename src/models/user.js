@@ -295,3 +295,7 @@ module.exports.addUserTypes = async (userId, types) => {
     console.log(err);
   }
 };
+
+module.exports.updateGlobalStatus = async (user, status) => {
+  console.log(`Updating global status: ${status} for ${user}`);
+};

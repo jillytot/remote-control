@@ -94,11 +94,9 @@ const globalTypes = ["staff", "global_moderator"]; // Types that can access this
 
 //This is basically a global timeout
 module.exports.handleGlobalTimeout = async (username, moderator, time) => {
-  console.log("STARTING GLOBAL TIMEOUT: ", username, time, moderator);
   const validateCommand = await checkTypes(moderator, globalTypes); //Can this user use this command?
-  console.log("VALIDATE COMMAND RESULT: ", validateCommand);
   if (validateCommand) {
-    //continue
+    console.log("COMMAND VALIDATION TRUE");
   } else {
     console.log(moderator, " has insufficent privelages for this action");
     return {
@@ -110,10 +108,28 @@ module.exports.handleGlobalTimeout = async (username, moderator, time) => {
 
   //Execute Timeout
   if (username && time) {
-    console.log("GLOBAL TIMEOUT FROM CHAT", username, time);
+    time = parseInt(time);
+    if (Number.isInteger(time)) {
+      //continue
+    } else {
+      console.log("INTEGER REQUIRED");
+      return {
+        status: "failed",
+        message: "You done messed up. Do better"
+      };
+    }
+    if (time < 0) {
+      return {
+        status: "failed",
+        message:
+          "You cannot timeout people with negative time... IT DOESNT WORK THAT WAY!!!"
+      };
+    }
+
     time *= 1000;
+
+    //Make sure this user exists
     const check = await validateUser({
-      //Make sure this user exists
       username: username
     });
 

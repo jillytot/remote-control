@@ -356,3 +356,37 @@ module.exports.unTimeoutUser = async user => {
   console.log("Timout Error");
   return null;
 };
+
+const timeoutObject = {
+  moderator: null,
+  user: null,
+  duration: null,
+  timestamp: createTimeStamp(),
+  server: null,
+  chatRoom: null,
+  reason: null
+};
+
+module.exports.sendGlobalTimeoutEvent = event => {
+  const { io } = require("../services/server/server");
+};
+/*
+When is timed out, an event needs to be sent to the timed out user, 
+In a global timeout, an event must be sent to chat clients the user is currently subscribed to
+There needs to be a log of who timed them out and for how long 
+Chat and Controls need to be disabled for timedout user for the duration of a global timeout
+*/
+
+//Check if a user has particular, "types", return true or false to validate chat commands
+module.exports.checkTypes = async (user, typesToCheck) => {
+  // return new Promise(async (resolve, reject) => {
+  let checkUser = await this.getUserInfoFromId(user.id);
+  if (checkUser && checkUser.type) {
+    console.log("CHECKING USER TYPES: ", checkUser, typesToCheck);
+    checkUser.type.map(t => {
+      if (t.includes(typesToCheck)) return true;
+    });
+  }
+  return false;
+  // });
+};

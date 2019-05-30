@@ -8,7 +8,8 @@ const {
   VALIDATED,
   GET_CHAT,
   SEND_CHAT,
-  MESSAGE_SENT
+  MESSAGE_SENT,
+  TIMEOUT
 } = require("../services/sockets/events").socketEvents;
 
 const { sendActiveUsers } = user;

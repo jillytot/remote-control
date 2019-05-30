@@ -16,7 +16,7 @@ module.exports.getMessageType = message => {
 };
 
 //commands for managing the site through chat
-siteCommands = message => {
+siteCommands = async message => {
   let updateCommand = message;
   let scrubCommand = message.message
     .substr(1)
@@ -25,16 +25,12 @@ siteCommands = message => {
 
   if (scrubCommand === "me") updateCommand = me(updateCommand);
   if (scrubCommand === "w") message.type = "whisper";
-  if (scrubCommand === "timeout") {
-    message.type = "moderation";
-    this.handleTimeout(
-      message.message.substr(1).split(" ")[1].toLowerCase,
-      message.message.substr(1).split(" ")[2].toLowerCase
-    );
-  }
+  if (scrubCommand === "timeout") await parseTimeout(message);
+
   if (scrubCommand === "mod") message.type = "moderation";
   if (scrubCommand === "unmod") message.type = "moderation";
 
+  //Need to work on this more.
   console.log("Do Command: ", scrubCommand);
   message = updateCommand;
   return message;
@@ -45,28 +41,6 @@ me = message => {
   message.message = message.message.substr(4);
   console.log(message.message);
   return message;
-};
-
-// commandList = {
-//    timeout: timeout,
-// }
-
-//timeout a specific user from the entire site
-const globalTypes = ["staff", "global_moderator"];
-module.exports.globalTimeout = (mod, time, badUser) => {
-  //validate moderator
-  mod.type.map(t => {
-    if (t.includes(globalTypes) === false) {
-      return {
-        status:
-          "You insufficent privelages for this action. You must either be type: staff, or global_mod"
-      };
-    }
-  });
-
-  //Select Target User:
-  //Set Global Status for timeout
-  //Set all messages created by user before timeout to "displayMessage = false"
 };
 
 //May deprecate
@@ -86,25 +60,80 @@ module.exports.calcTimeout = time => {
   return calculate;
 };
 
-const { validateUser, getIdFromUsername, timeoutUser } = require("./user");
-module.exports.handleTimeout = async (username, time) => {
+//TIMEOUT LOGIC
+
+//Preparing information to get fed into timeout handler
+const parseTimeout = async message => {
+  message.type = "moderation";
+  await this.handleGlobalTimeout(
+    message.message
+      .substr(1)
+      .split(" ")[1]
+      .toLowerCase(),
+    {
+      username: message.sender, //Create Object for message sender
+      id: message.sender_id,
+      chat_id: message.chat_id
+    },
+    message.message
+      .substr(1)
+      .split(" ")[2]
+      .toLowerCase()
+  );
+};
+
+const {
+  validateUser,
+  getIdFromUsername,
+  timeoutUser,
+  getUserInfoFromId,
+  checkTypes
+} = require("./user");
+
+const globalTypes = ["staff", "global_moderator"]; // Types that can access this command
+
+//This is basically a global timeout
+module.exports.handleGlobalTimeout = async (username, moderator, time) => {
+  console.log("STARTING GLOBAL TIMEOUT: ", username, time, moderator);
+  const validateCommand = await checkTypes(moderator, globalTypes); //Can this user use this command?
+  console.log(validateCommand);
+  if (validateCommand) {
+    //continue
+  } else {
+    console.log(moderator, " has insufficent privelages for this action");
+    return {
+      status: "failed",
+      message:
+        "You have insufficent privelages for this action. You must either be type: staff, or global_mod"
+    };
+  }
+
+  //Execute Timeout
   if (username && time) {
-    console.log("TIMEOUT FROM CHAT", username, time);
+    console.log("GLOBAL TIMEOUT FROM CHAT", username, time);
     time *= 1000;
     const check = await validateUser({
-      username: username.toLocaleLowerCase()
+      //Make sure this user exists
+      username: username
     });
+
     if (check) {
-      let thisUser = await getIdFromUsername(getUser);
+      let thisUser = await getIdFromUsername(username);
       thisUser = await getUserInfoFromId(thisUser);
       thisUser = await timeoutUser(thisUser, time);
+
       if (thisUser) {
         console.log("Chat Commands : handleTimeout : thisUser: ", thisUser);
-        return { status: `User ${username} has been timed out for ${time}` };
+        return {
+          status: "success",
+          message: `User ${username} has been timed out for ${time}`
+        };
       }
     }
+    console.log("Could not locate user");
     return {
-      status: `cannot find user: ${username}, make sure username is spelled correctly.`
+      status: "failed",
+      message: `cannot find user: ${username}, make sure username is spelled correctly.`
     };
   }
 };

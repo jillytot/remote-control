@@ -64,14 +64,19 @@ module.exports.globalTimeout = (mod, time, badUser) => {
 };
 
 module.exports.calcTimeout = time => {
-  //return createTimeStamp() + time;
-  //let timeStamp = Math.floor(createTimeStamp() / 1000);
-  const timeStamp = getDateAndTime();
-  const calculate = timeStamp + time;
-  console.log("Calculating Timeout: ", timeStamp, calculate);
+  console.log(typeof time);
+
+  let makeTimeStamp = createTimeStamp();
+  let timeStamp = Math.floor(makeTimeStamp / 1000);
+  const calculate = (timeStamp + time) * 1000;
+  console.log(
+    "Calculating Timeout: ",
+    makeTimeStamp,
+    timeStamp,
+    time,
+    calculate
+  );
   return calculate;
 };
 
-const globalStatusPt = {
-  timeout: ""
-};
+module.exports.timeoutCounter = () => {};

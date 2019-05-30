@@ -36,13 +36,3 @@ module.exports.checkHash = (pw, hash) => {
 module.exports.createTimeStamp = () => {
   return Date.now();
 };
-
-module.exports.getDateAndTime = () => {
-  let date = new Date.now();
-  console.log(date);
-  return `${("0" + (date.getMonth() + 1)).slice(-2)}/${(
-    "0" + date.getDate()
-  ).slice(-2)}/${date.getFullYear()}-${date.getHours()}:${(
-    "0" + date.getMinutes()
-  ).slice(-2)}:${("0" + date.getSeconds()).slice(-2)}`;
-};

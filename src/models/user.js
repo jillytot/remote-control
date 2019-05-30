@@ -12,6 +12,14 @@ const {
   ACTIVE_USERS_UPDATED
 } = require("../services/sockets/events").socketEvents;
 
+//User status Prototype:
+const statusPt = {
+  universal: {
+    timeout: false
+  },
+  local: {}
+};
+
 module.exports.createUser = async user => {
   //ALWAYS SAVE EMAIL AS LOWERCASE!!!!!
   const email = user.email.toLowerCase();
@@ -38,12 +46,17 @@ module.exports.createUser = async user => {
   user.created = createTimeStamp();
   user.type = [];
   user.check_username = checkUser; //save a copy of username all lowercase
-  console.log(`${user.username} also saved as ${user.check_username}`);
+  user.status = statusPt;
+  console.log(
+    `${user.username} also saved as ${user.check_username}, status set: ${
+      user.status
+    }`
+  );
 
   console.log("Generating User: ", user);
 
-  const { username, id, password, created, check_username } = user;
-  const dbPut = `INSERT INTO users (username, id, password, email, created, check_username) VALUES($1, $2, $3, $4, $5, $6) RETURNING *`;
+  const { username, id, password, created, check_username, status } = user;
+  const dbPut = `INSERT INTO users (username, id, password, email, created, check_username, status) VALUES($1, $2, $3, $4, $5, $6, $7) RETURNING *`;
   try {
     await db.query(dbPut, [
       username,
@@ -51,7 +64,8 @@ module.exports.createUser = async user => {
       password,
       email,
       created,
-      check_username
+      check_username,
+      status
     ]);
     const token = await this.createAuthToken(user);
     return { status: "Account successfully created", token: token };
@@ -76,7 +90,8 @@ module.exports.validateUser = async input => {
     console.log("VALIDATE ? ", check);
     return check;
   } //get based on userId
-  return false;
+  console.log("VALIDATION ERROR");
+  return null;
 };
 
 module.exports.checkUserId = async user => {
@@ -248,7 +263,8 @@ module.exports.publicUser = user => {
       username: user.username,
       id: user.id,
       created: user.created,
-      type: user.type
+      type: user.type,
+      status: user.status
     };
 };
 
@@ -296,6 +312,30 @@ module.exports.addUserTypes = async (userId, types) => {
   }
 };
 
-module.exports.updateGlobalStatus = async (user, status) => {
+module.exports.updateStatus = async (user, status) => {
   console.log(`Updating global status: ${status} for ${user}`);
+  try {
+    const insert = `UPDATE users SET status = $1 WHERE id = $2 RETURNING *`;
+    const result = await db.query(insert, [status, user.id]);
+    const print = result.rows[0];
+    console.log("User Status Updated: ", print);
+    return print;
+  } catch (err) {
+    console.log(err);
+  }
+};
+
+module.exports.timeoutUser = user => {
+  if (user && user.status) {
+    //Do nothing
+    console.log(status);
+  } else if (user) {
+    user.status = statusPt;
+  } else {
+    console.log("Error getting / setting status for user");
+  }
+  let updateStatus = user.status;
+  updateStatus.global.timeout = true;
+  // this.updateStatus(user, updateStatus);
+  return updateStatus;
 };

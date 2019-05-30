@@ -379,14 +379,14 @@ Chat and Controls need to be disabled for timedout user for the duration of a gl
 
 //Check if a user has particular, "types", return true or false to validate chat commands
 module.exports.checkTypes = async (user, typesToCheck) => {
-  // return new Promise(async (resolve, reject) => {
+  let validate = false;
   let checkUser = await this.getUserInfoFromId(user.id);
   if (checkUser && checkUser.type) {
     console.log("CHECKING USER TYPES: ", checkUser, typesToCheck);
-    checkUser.type.map(t => {
-      if (t.includes(typesToCheck)) return true;
+    const check = checkUser.type.map(type => {
+      return typesToCheck.includes(type);
     });
+    if (check.includes(true) || check === true) validate = true;
   }
-  return false;
-  // });
+  return validate;
 };

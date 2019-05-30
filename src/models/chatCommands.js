@@ -96,7 +96,7 @@ const globalTypes = ["staff", "global_moderator"]; // Types that can access this
 module.exports.handleGlobalTimeout = async (username, moderator, time) => {
   console.log("STARTING GLOBAL TIMEOUT: ", username, time, moderator);
   const validateCommand = await checkTypes(moderator, globalTypes); //Can this user use this command?
-  console.log(validateCommand);
+  console.log("VALIDATE COMMAND RESULT: ", validateCommand);
   if (validateCommand) {
     //continue
   } else {

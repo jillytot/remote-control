@@ -312,8 +312,9 @@ module.exports.addUserTypes = async (userId, types) => {
   }
 };
 
-module.exports.updateStatus = async (user, status) => {
-  console.log(`Updating global status: ${status} for ${user}`);
+module.exports.updateStatus = async user => {
+  const { status } = user;
+  console.log(`Updating global status: ${user.status} for ${user}`);
   try {
     const insert = `UPDATE users SET status = $1 WHERE id = $2 RETURNING *`;
     const result = await db.query(insert, [status, user.id]);
@@ -325,17 +326,14 @@ module.exports.updateStatus = async (user, status) => {
   }
 };
 
-module.exports.timeoutUser = user => {
-  if (user && user.status) {
-    //Do nothing
-    console.log(status);
-  } else if (user) {
-    user.status = statusPt;
-  } else {
-    console.log("Error getting / setting status for user");
+module.exports.timeoutUser = async (user, timeout) => {
+  console.log("TIMEOUT USER: ", user, timeout);
+  if (user && timeout) {
+    let { status } = user;
+    status.universal.timeout = true;
+    user.status = status;
+    return await this.updateStatus(user);
   }
-  let updateStatus = user.status;
-  updateStatus.global.timeout = true;
-  // this.updateStatus(user, updateStatus);
-  return updateStatus;
+  console.log("Timout Error");
+  return null;
 };

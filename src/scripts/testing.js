@@ -1,5 +1,10 @@
 const { calcTimeout } = require("../models/chatCommands");
-const { validateUser, getIdFromUsername } = require("../models/user");
+const {
+  validateUser,
+  getIdFromUsername,
+  getUserInfoFromId,
+  timeoutUser
+} = require("../models/user");
 
 const test = async () => {
   let input = process.argv[2];
@@ -18,17 +23,33 @@ const test = async () => {
   }
 
   if (input && input === "timeout") {
-    const identifier = param;
-    const id = param2;
-    const time = param3;
+    let identifier = null;
+    let getUser = null;
+    let time = null;
+    if (param && param2 && param3) {
+      identifier = param;
+      getUser = param2;
+      time = param3;
+    } else {
+      console.log(
+        "Missing arguments for timeout, please provide an identifier, (i.e. username or id) followed by the username or id, then the amount by which to be timed out (in seconds)"
+      );
+      process.exit(1);
+    }
 
-    if (param === "username") {
-      console.log("Timeout user based on username: ", param2);
-      if (param2) {
+    if (identifier === "username") {
+      console.log("Timeout user based on username: ", getUser);
+      if (getUser) {
         const check = await validateUser({
-          [param]: param2.toLocaleLowerCase()
+          [identifier]: getUser.toLocaleLowerCase()
         });
         console.log("CHECK VALIDATION: ", check);
+        if (check) {
+          let thisUser = await getIdFromUsername(getUser);
+          thisUser = await getUserInfoFromId(thisUser);
+          thisUser = await timeoutUser(thisUser, time);
+          console.log(thisUser);
+        }
       }
     }
   }

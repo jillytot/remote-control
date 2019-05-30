@@ -48,14 +48,15 @@ const test = async () => {
           let thisUser = await getIdFromUsername(getUser);
           thisUser = await getUserInfoFromId(thisUser);
           thisUser = await timeoutUser(thisUser, time);
-          console.log(thisUser);
+          console.log("THIS SHOULD RETURN TRUE AFTER TIMEOUT ENDS: ", thisUser);
+          //process.exit(1);
         }
       }
     }
   }
 
   console.log("Exiting Process!");
-  process.exit(1);
+  //process.exit(1);
 };
 
 test();

@@ -36,3 +36,12 @@ module.exports.checkHash = (pw, hash) => {
 module.exports.createTimeStamp = () => {
   return Date.now();
 };
+
+module.exports.createTimer = (interval, callback, object) => {
+  console.log("DING");
+  const timer = new setInterval(() => {
+    callback(object);
+    clearInterval(timer);
+  }, interval);
+  console.log(interval, callback, object);
+};

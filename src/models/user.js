@@ -4,7 +4,8 @@ const {
   makeId,
   hash,
   checkHash,
-  createTimeStamp
+  createTimeStamp,
+  createTimer
 } = require("../modules/utilities");
 const tempSecret = "temp_secret";
 
@@ -293,6 +294,7 @@ module.exports.sendActiveUsers = async robot_server => {
   });
 };
 
+//USER TYPE MANAGEMENT
 module.exports.userTypes = [
   "staff",
   "owner",
@@ -312,9 +314,10 @@ module.exports.addUserTypes = async (userId, types) => {
   }
 };
 
+//UDPATE USER STATUS
 module.exports.updateStatus = async user => {
   const { status } = user;
-  console.log(`Updating global status: ${user.status} for ${user}`);
+  console.log(`Updating global status for ${user.username}`);
   try {
     const insert = `UPDATE users SET status = $1 WHERE id = $2 RETURNING *`;
     const result = await db.query(insert, [status, user.id]);
@@ -326,13 +329,28 @@ module.exports.updateStatus = async user => {
   }
 };
 
+//MANAGE TIMEOUTS
 module.exports.timeoutUser = async (user, timeout) => {
   console.log("TIMEOUT USER: ", user, timeout);
   if (user && timeout) {
     let { status } = user;
     status.universal.timeout = true;
     user.status = status;
-    return await this.updateStatus(user);
+    await this.updateStatus(user);
+    return await createTimer(timeout, this.unTimeoutUser, user);
+  }
+  console.log("Timout Error");
+  return null;
+};
+
+module.exports.unTimeoutUser = async user => {
+  console.log("END TIMEOUT FOR USER: ", user);
+  if (user) {
+    let { status } = user;
+    status.universal.timeout = false;
+    user.status = status;
+    await this.updateStatus(user);
+    return true;
   }
   console.log("Timout Error");
   return null;

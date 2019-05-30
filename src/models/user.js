@@ -336,8 +336,9 @@ module.exports.timeoutUser = async (user, timeout) => {
     let { status } = user;
     status.universal.timeout = true;
     user.status = status;
-    await this.updateStatus(user);
-    return await createTimer(timeout, this.unTimeoutUser, user);
+    let checkUpdatedStatus = await this.updateStatus(user);
+    createTimer(timeout, this.unTimeoutUser, user);
+    return checkUpdatedStatus;
   }
   console.log("Timout Error");
   return null;

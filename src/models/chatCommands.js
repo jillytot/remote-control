@@ -25,7 +25,13 @@ siteCommands = message => {
 
   if (scrubCommand === "me") updateCommand = me(updateCommand);
   if (scrubCommand === "w") message.type = "whisper";
-  if (scrubCommand === "timeout") message.type = "moderation";
+  if (scrubCommand === "timeout") {
+    message.type = "moderation";
+    this.handleTimeout(
+      message.message.substr(1).split(" ")[1].toLowerCase,
+      message.message.substr(1).split(" ")[2].toLowerCase
+    );
+  }
   if (scrubCommand === "mod") message.type = "moderation";
   if (scrubCommand === "unmod") message.type = "moderation";
 
@@ -63,6 +69,7 @@ module.exports.globalTimeout = (mod, time, badUser) => {
   //Set all messages created by user before timeout to "displayMessage = false"
 };
 
+//May deprecate
 module.exports.calcTimeout = time => {
   console.log(typeof time);
 
@@ -79,4 +86,25 @@ module.exports.calcTimeout = time => {
   return calculate;
 };
 
-module.exports.timeoutCounter = () => {};
+const { validateUser, getIdFromUsername, timeoutUser } = require("./user");
+module.exports.handleTimeout = async (username, time) => {
+  if (username && time) {
+    console.log("TIMEOUT FROM CHAT", username, time);
+    time *= 1000;
+    const check = await validateUser({
+      username: username.toLocaleLowerCase()
+    });
+    if (check) {
+      let thisUser = await getIdFromUsername(getUser);
+      thisUser = await getUserInfoFromId(thisUser);
+      thisUser = await timeoutUser(thisUser, time);
+      if (thisUser) {
+        console.log("Chat Commands : handleTimeout : thisUser: ", thisUser);
+        return { status: `User ${username} has been timed out for ${time}` };
+      }
+    }
+    return {
+      status: `cannot find user: ${username}, make sure username is spelled correctly.`
+    };
+  }
+};

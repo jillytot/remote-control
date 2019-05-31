@@ -24,10 +24,15 @@ export default class Messages extends Component {
     //console.log("messages", messages);
 
     return messages.map(message => {
-      //console.log("Mapping Messages: ", message.sender);
-      return (
-        <Message message={message} key={message["id"]} color={message.color} />
-      );
+      if (message.displayMessage) {
+        return (
+          <Message
+            message={message}
+            key={message["id"]}
+            color={message.color}
+          />
+        );
+      }
     });
   };
 

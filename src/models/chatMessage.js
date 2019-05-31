@@ -4,7 +4,7 @@ const { userTypes } = require("./user");
 
 //What calls create Message?
 
-module.exports.createMessage = message => {
+module.exports.createMessage = async message => {
   const { saveMessageToActiveChat } = require("./chatRoom");
   //build the message:
   let makeMess = {};
@@ -15,13 +15,13 @@ module.exports.createMessage = message => {
   makeMess.id = `mesg-${makeId()}`;
   makeMess.time_stamp = createTimeStamp();
   makeMess.displayMessage = true;
-  makeMess.badges = this.getBadges(message.userType);
+  makeMess.badges = await this.getBadges(message.userType);
   makeMess.type = "";
 
   //Turn this back on once you start removing active chats from memmory
   //saveMessageToActiveChat(makeMess);
   console.log("Generating Chat Message: ", makeMess);
-  getMessageType(makeMess);
+  makeMess = await getMessageType(makeMess);
   this.sendMessage(makeMess);
 };
 

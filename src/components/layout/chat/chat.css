@@ -129,6 +129,11 @@
   /* background-color: blue; */
 }
 
+.system-message {
+  color: white;
+  background: -webkit-linear-gradient(-45deg, #d64e99 0%, #8300ee 100%);
+}
+
 .messages-container {
   justify-content: left;
   text-align: left;

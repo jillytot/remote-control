@@ -1,15 +1,11 @@
-const { createTimeStamp, getDateAndTime } = require("../modules/utilities");
+const { createTimeStamp } = require("../modules/utilities");
 
-module.exports.getMessageType = message => {
-  const command = RegExp("/");
-
+module.exports.getMessageType = async message => {
   //Check entry character & assign message types
   if (message.message.charAt(0) === "/") message.type = "site-command";
-  //if (message.message.charAt(0) === ".") message.type = "robot-command";
-  //if (message.message.charAt(0) === "#") message.type = "donate";
 
   //execute based on message types
-  if (message.type === "site-command") siteCommands(message);
+  if (message.type === "site-command") message = siteCommands(message);
 
   //send final message to chat
   return message;
@@ -25,13 +21,14 @@ siteCommands = async message => {
 
   if (scrubCommand === "me") updateCommand = me(updateCommand);
   if (scrubCommand === "w") message.type = "whisper";
-  if (scrubCommand === "timeout") await parseTimeout(message);
+  if (scrubCommand === "timeout") message = await parseTimeout(message);
 
   if (scrubCommand === "mod") message.type = "moderation";
   if (scrubCommand === "unmod") message.type = "moderation";
 
   //Need to work on this more.
   console.log("Do Command: ", scrubCommand);
+  console.log("FROM SITE COMMANDS: ", message.message);
   message = updateCommand;
   return message;
 };
@@ -65,7 +62,7 @@ module.exports.calcTimeout = time => {
 //Preparing information to get fed into timeout handler
 const parseTimeout = async message => {
   message.type = "moderation";
-  await this.handleGlobalTimeout(
+  const doTimeout = await this.handleGlobalTimeout(
     message.message
       .substr(1)
       .split(" ")[1]
@@ -78,8 +75,11 @@ const parseTimeout = async message => {
     message.message
       .substr(1)
       .split(" ")[2]
-      .toLowerCase()
+      .toLowerCase(),
+    message
   );
+  console.log("MESSAGE FROM PARSETIMEOUT: ", doTimeout);
+  return doTimeout;
 };
 
 const {
@@ -93,12 +93,18 @@ const {
 const globalTypes = ["staff", "global_moderator"]; // Types that can access this command
 
 //This is basically a global timeout
-module.exports.handleGlobalTimeout = async (username, moderator, time) => {
+module.exports.handleGlobalTimeout = async (
+  username,
+  moderator,
+  time,
+  message
+) => {
   const validateCommand = await checkTypes(moderator, globalTypes); //Can this user use this command?
   if (validateCommand) {
     console.log("COMMAND VALIDATION TRUE");
   } else {
     console.log(moderator, " has insufficent privelages for this action");
+    message.displayMessage = false;
     return {
       status: "failed",
       message:
@@ -113,17 +119,12 @@ module.exports.handleGlobalTimeout = async (username, moderator, time) => {
       //continue
     } else {
       console.log("INTEGER REQUIRED");
-      return {
-        status: "failed",
-        message: "You done messed up. Do better"
-      };
+      message.displayMessage = false;
+      return message;
     }
     if (time < 0) {
-      return {
-        status: "failed",
-        message:
-          "You cannot timeout people with negative time... IT DOESNT WORK THAT WAY!!!"
-      };
+      message.displayMessage = false;
+      return message;
     }
 
     time *= 1000;
@@ -140,16 +141,26 @@ module.exports.handleGlobalTimeout = async (username, moderator, time) => {
 
       if (thisUser) {
         console.log("Chat Commands : handleTimeout : thisUser: ", thisUser);
-        return {
-          status: "success",
-          message: `User ${username} has been timed out for ${time}`
-        };
+        message.message = `User ${username} has been globally timed out for ${time /
+          1000} seconds.`;
+        console.log("MESSAGE FROM SET GLOBAL TIMEOUT: ", message.message);
+        return message;
       }
     }
     console.log("Could not locate user");
-    return {
-      status: "failed",
-      message: `cannot find user: ${username}, make sure username is spelled correctly.`
-    };
+    message.displayMessage = false;
+    return message;
   }
+  return message;
 };
+
+/*
+User gets timed out. User's status is set to being timed out. 
+A general message should be shown to people in chat that tells them who has been timed out, and for how long
+Making an incorrect command should give the user direct feedback on the client side
+If timedout user tries to type or do things, they will get a message telling them they are still timedout / banned
+
+All messages by removed user also get removed
+A log is added to the user indicating when and where they got timed out and by who
+YOU SHOULD NOT BE ABLE TO BAN YOURSELF
+*/

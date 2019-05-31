@@ -9,7 +9,7 @@ const emotes = {
   robotHype: robotHype,
   robotYay: robotYay,
   jill: jill,
-  skeeter: skeeter
+  skeet: skeeter
 };
 
 export default emotes;

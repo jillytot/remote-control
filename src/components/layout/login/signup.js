@@ -28,18 +28,6 @@ export default class Signup extends Form {
       .label("Password"),
     confirm: Joi.string()
       .required()
-      // .equal(
-      //   Joi.ref(
-      //     Joi.object({ [this.state.data.password]: this.state.data.password })
-      //   )
-      // )
-      // .options({
-      //   language: {
-      //     any: {
-      //       allowOnly: "!!Passwords do not match"
-      //     }
-      //   }
-      // })
       .label("Confirm Password"),
     email: Joi.string()
       .email()
@@ -115,7 +103,7 @@ export default class Signup extends Form {
       <div className="register-form">
         Please do not use actual passwords or emails for this build.
         {this.handleSubmitError()}
-        <form onSubmit={this.handleSubmit}>
+        <form className="form-block" onSubmit={this.handleSubmit}>
           {this.renderInput("username", "Username", "text")}
           {this.renderInput("password", "Password", "password")}
           {this.renderInput("confirm", "Confirm Password", "password")}

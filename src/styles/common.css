@@ -37,3 +37,40 @@
 .form-group {
   font-size: calc(3px + 2vmin);
 } */
+
+/* .register-form {
+  background-color: yellow;
+  justify-content: center;
+} */
+
+.form-group {
+  font-size: 14px;
+  margin: 5px;
+
+  display: flex;
+  flex-direction: row;
+  width: 500px;
+}
+
+.form-control {
+  /* background-color: blue; */
+  border-radius: 5px;
+  margin: 5px;
+  display: flex;
+  flex-direction: row;
+  width: 50%;
+}
+
+.form-label {
+  /* background-color: purple; */
+  display: flex;
+  flex-direction: row;
+  width: 300px;
+  justify-content: flex-end;
+  align-items: center;
+  width: 50%;
+}
+
+.form-block {
+  padding-top: 1px;
+}

@@ -117,8 +117,8 @@ export default class Signup extends Form {
         {this.handleSubmitError()}
         <form onSubmit={this.handleSubmit}>
           {this.renderInput("username", "Username", "text")}
-          {this.renderInput("password", "Password", "text")}
-          {this.renderInput("confirm", "Confirm Password", "text")}
+          {this.renderInput("password", "Password", "password")}
+          {this.renderInput("confirm", "Confirm Password", "password")}
           {this.renderInput("email", "Email", "email")}
           {this.renderButton("Submit")}
         </form>

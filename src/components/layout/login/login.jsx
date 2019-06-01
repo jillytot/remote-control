@@ -85,7 +85,7 @@ export default class Login extends Form {
     return (
       <div className="register-form">
         <form onSubmit={this.handleSubmit}>
-          {this.renderInput("username", "Username", "username")}
+          {this.renderInput("username", "Username", "text")}
           {this.renderInput("password", "Password", "password")}
           {this.renderButton("Submit")}
         </form>

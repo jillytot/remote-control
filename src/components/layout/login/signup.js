@@ -10,7 +10,8 @@ export default class Signup extends Form {
   state = {
     data: { username: "", password: "", confirm: "", email: "" },
     errors: {},
-    isUser: null
+    isUser: null,
+    error: ""
   };
 
   schema = {
@@ -27,14 +28,18 @@ export default class Signup extends Form {
       .label("Password"),
     confirm: Joi.string()
       .required()
-      .equal(Joi.ref("password"))
-      .options({
-        language: {
-          any: {
-            allowOnly: "!!Passwords do not match"
-          }
-        }
-      })
+      // .equal(
+      //   Joi.ref(
+      //     Joi.object({ [this.state.data.password]: this.state.data.password })
+      //   )
+      // )
+      // .options({
+      //   language: {
+      //     any: {
+      //       allowOnly: "!!Passwords do not match"
+      //     }
+      //   }
+      // })
       .label("Confirm Password"),
     email: Joi.string()
       .email()
@@ -66,13 +71,25 @@ export default class Signup extends Form {
     }
   };
 
-  handleFeedback = () => {};
-
   setError = error => {
-    this.setState({ errors: error });
+    this.setState({ error: error });
+  };
+
+  handleSubmitError = () => {
+    const { error } = this.state;
+    if (error === "") {
+      return <React.Fragment />;
+    }
+    return <div className="alert">{this.state.error}</div>;
   };
 
   doSubmit = async () => {
+    const { password, confirm } = this.state.data;
+    if (password !== confirm) {
+      this.setState({ error: "Passwords do not match!" });
+      return;
+    }
+
     const { data } = this.state;
     await axios
       .post(`${apiUrl}/signup`, {
@@ -96,14 +113,12 @@ export default class Signup extends Form {
   render() {
     return (
       <div className="register-form">
-        <div className="alert">
-          ... Please do not use real emails or passwords on this build ...
-        </div>
-
+        Please do not use actual passwords or emails for this build.
+        {this.handleSubmitError()}
         <form onSubmit={this.handleSubmit}>
-          {this.renderInput("username", "Username", "username")}
-          {this.renderInput("password", "Password", "password")}
-          {this.renderInput("confirm", "Confirm Password", "confirm")}
+          {this.renderInput("username", "Username", "text")}
+          {this.renderInput("password", "Password", "text")}
+          {this.renderInput("confirm", "Confirm Password", "text")}
           {this.renderInput("email", "Email", "email")}
           {this.renderButton("Submit")}
         </form>

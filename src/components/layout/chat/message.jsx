@@ -33,11 +33,10 @@ const Message = ({ message, color }) => {
   const handleBadges = message => {
     const { badges } = message;
     if (message && message.type === types.moderation) return <React.Fragment />;
-    console.log(badges);
     if (badges && badges.length > 0) {
       return badges.map(badge => {
         if (badge === "staff") {
-          console.log("ADD BADGE!");
+          // console.log("ADD BADGE!");
           return (
             <span key={badge}>
               <img
@@ -67,7 +66,7 @@ const Message = ({ message, color }) => {
   };
 
   const handleMessageSender = message => {
-    if (message && message.type == types.moderation) {
+    if (message && message.type === types.moderation) {
       return "System";
     }
     return message.sender;

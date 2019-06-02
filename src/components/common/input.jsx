@@ -2,7 +2,7 @@ import React from "react";
 import "../../styles/common.css";
 
 const Input = ({ name, label, error, type, ...rest }) => {
-  console.log("Input Props: ", type);
+  // console.log("Input Props: ", type);
 
   return (
     <React.Fragment>

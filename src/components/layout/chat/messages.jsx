@@ -33,6 +33,7 @@ export default class Messages extends Component {
           />
         );
       }
+      return <React.Fragment />;
     });
   };
 

@@ -30,6 +30,7 @@ export default class Channels extends Component {
       let usernamesToKeep = [];
       this.state.users.map(user => {
         usernamesToKeep.push(user.username);
+        return null;
       });
 
       // chatroom.messages.map(message => {
@@ -42,6 +43,7 @@ export default class Channels extends Component {
         if (usernamesToKeep.includes(username) !== true) {
           delete newColors[username];
         }
+        return null;
       });
       console.log(newColors);
       this.setState({ userColors: newColors });

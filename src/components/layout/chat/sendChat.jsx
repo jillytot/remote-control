@@ -21,14 +21,15 @@ export default class SendChat extends Form {
   };
 
   doSubmit = () => {
-    const { user, socket, chatId } = this.props;
+    const { user, socket, chatId, server_id } = this.props;
     const { sendChat } = this.state.data;
     if (user !== null && chatId !== "") {
       socket.emit(MESSAGE_SENT, {
         username: user.username,
         userId: user.id,
         message: sendChat,
-        chatId: chatId
+        chatId: chatId,
+        server_id: server_id
       });
       console.log(
         `SEND TO CHAT, user: ${user.username} userId ${

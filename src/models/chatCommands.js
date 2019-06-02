@@ -1,4 +1,5 @@
 const { createTimeStamp } = require("../modules/utilities");
+const { io } = require("../services/server/server");
 
 module.exports.getMessageType = async message => {
   //Check entry character & assign message types
@@ -112,6 +113,7 @@ module.exports.handleGlobalTimeout = async (
     };
   }
 
+  let badUser = {};
   //Execute Timeout
   if (username && time) {
     time = parseInt(time);
@@ -140,15 +142,21 @@ module.exports.handleGlobalTimeout = async (
       thisUser = await timeoutUser(thisUser, time);
 
       if (thisUser) {
+        badUser = thisUser;
         console.log("Chat Commands : handleTimeout : thisUser: ", thisUser);
         message.message = `User ${username} has been globally timed out for ${time /
           1000} seconds.`;
         console.log("MESSAGE FROM SET GLOBAL TIMEOUT: ", message.message);
+        const { sendGlobalTimeout } = require("./robotServer");
+        sendGlobalTimeout(message.server_id, badUser);
         return message;
       }
     }
     console.log("Could not locate user");
     message.displayMessage = false;
+
+    // io.emit
+
     return message;
   }
   return message;

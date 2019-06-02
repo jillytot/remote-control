@@ -189,3 +189,11 @@ module.exports.createChannels = async robotServer => {
     console.log(err);
   }
 };
+
+//MODERATION
+module.exports.sendGlobalTimeout = (server_id, badUser) => {
+  const { io } = require("../services/server/server");
+  const { GLOBAL_TIMEOUT } = require("../services/sockets/events").socketEvents;
+  const { publicUser } = require("./user");
+  io.to(server_id).emit(GLOBAL_TIMEOUT, publicUser(badUser));
+};

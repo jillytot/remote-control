@@ -9,8 +9,8 @@ const {
   GET_CHAT,
   SEND_CHAT,
   MESSAGE_SENT,
-  TIMEOUT,
-  HEARTBEAT
+  HEARTBEAT,
+  TIMEOUT
 } = require("../services/sockets/events").socketEvents;
 
 const { sendActiveUsers } = user;

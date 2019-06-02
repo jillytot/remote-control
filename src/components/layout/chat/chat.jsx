@@ -102,6 +102,7 @@ export default class Chat extends Component {
               user={user}
               socket={socket}
               chatId={chatroom ? chatroom.id : ""}
+              server_id={chatroom ? chatroom.host_id : ""}
             />
           </div>
         );

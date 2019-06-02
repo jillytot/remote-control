@@ -2,7 +2,7 @@ import React from "react";
 import Emotes from "../../../emotes/emotes";
 import defaultImages from "../../../imgs/placeholders";
 
-const Message = ({ message, color }) => {
+const Message = ({ message }) => {
   const types = {
     default: "",
     moderation: "moderation",

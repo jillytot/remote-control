@@ -73,13 +73,14 @@ export default class EventHandler extends Component {
   };
 
   handleResponse = () => {
-    const { socket, user } = this.state;
-    if (socket !== null) {
+    const { socket } = this.state;
+    if (socket) {
       socket.on(HEARTBEAT, () => {
-        console.log("GETTING HEARTBEAT");
-        if (user !== null) {
-          console.log("EMITTING HEARTBEAT (SUPPOSEDLY)");
-          socket.emit(HEARTBEAT, { username: user.username, id: user.id });
+        if (this.state.user) {
+          socket.emit(HEARTBEAT, {
+            username: this.state.user.username,
+            id: this.state.user.id
+          });
         }
       });
     }

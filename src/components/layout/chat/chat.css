@@ -206,3 +206,13 @@
   margin-left: 3px;
   /* background-color: blue; */
 }
+
+.chat-input {
+  border: solid, 0px;
+  border-radius: 5px;
+  width: 100%;
+  height: 24px;
+  display: flex;
+  flex-direction: row;
+  border: solid 0px;
+}

@@ -50,7 +50,7 @@ export default class SendChat extends Form {
       <div className="send-chat-container">
         <form onSubmit={this.handleSubmit}>
           <div className="input-field-container">
-            {this.renderInput("sendChat", ": ")}
+            {this.renderInput("sendChat", "", "chat")}
           </div>
           <div className="send-chat-btn"> {this.renderButton("Chat")}</div>
         </form>

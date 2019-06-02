@@ -1,7 +1,9 @@
 import React from "react";
 import "../../styles/common.css";
 
-const Input = ({ name, label, error, ...rest }) => {
+const Input = ({ name, label, error, type, ...rest }) => {
+  console.log("Input Props: ", type);
+
   return (
     <React.Fragment>
       <div className="form-container">
@@ -9,7 +11,12 @@ const Input = ({ name, label, error, ...rest }) => {
           <label className="form-label" htmlFor={name}>
             {label}
           </label>
-          <input {...rest} id={name} name={name} className="form-control" />
+          <input
+            {...rest}
+            id={name}
+            name={name}
+            className={type === "chat" ? "chat-input" : "form-control"}
+          />
         </div>
         {error && <div className="alert alert-danger">{error}</div>}
       </div>

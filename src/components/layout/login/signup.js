@@ -103,7 +103,7 @@ export default class Signup extends Form {
       <div className="register-form">
         Please do not use actual passwords or emails for this build.
         {this.handleSubmitError()}
-        <form className="form-block" onSubmit={this.handleSubmit}>
+        <form onSubmit={this.handleSubmit}>
           {this.renderInput("username", "Username", "text")}
           {this.renderInput("password", "Password", "password")}
           {this.renderInput("confirm", "Confirm Password", "password")}

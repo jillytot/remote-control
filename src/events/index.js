@@ -9,13 +9,22 @@ const {
   GET_CHAT,
   SEND_CHAT,
   MESSAGE_SENT,
-  TIMEOUT
+  TIMEOUT,
+  HEARTBEAT
 } = require("../services/sockets/events").socketEvents;
 
 const { sendActiveUsers } = user;
 
+const { heartBeat } = require("../config/serverSettings");
+let heartBeatStarted = false;
+
 //Main websocket Interface
 module.exports.socketEvents = (socket, io) => {
+  if (!heartBeatStarted) {
+    beat(io);
+    heartBeatStarted = true;
+  }
+
   let userRoom = "";
   socket.on(AUTHENTICATE, async data => {
     const getUser = await user.authUser(data.token);
@@ -66,4 +75,21 @@ module.exports.socketEvents = (socket, io) => {
   });
 
   //More socket Events
+  connectedUsers(socket);
+};
+
+const beat = io => {
+  let timerId = setTimeout(
+    (tick = () => {
+      io.emit(HEARTBEAT);
+      timerId = setTimeout(tick, heartBeat); // (*)
+    }),
+    heartBeat
+  );
+};
+
+const connectedUsers = socket => {
+  socket.on(HEARTBEAT, user => {
+    console.log("Connected User: ", user);
+  });
 };

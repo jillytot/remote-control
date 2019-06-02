@@ -8,7 +8,7 @@ import { apiUrl } from "../config/clientSettings";
 import { USER_CONNECTED } from "../services/sockets/events";
 
 import { socketEvents } from "../services/sockets/events";
-const { AUTHENTICATE } = socketEvents;
+const { AUTHENTICATE, HEARTBEAT } = socketEvents;
 
 const UserContext = React.createContext();
 
@@ -73,8 +73,15 @@ export default class EventHandler extends Component {
   };
 
   handleResponse = () => {
-    const { socket } = this.state;
+    const { socket, user } = this.state;
     if (socket !== null) {
+      socket.on(HEARTBEAT, () => {
+        console.log("GETTING HEARTBEAT");
+        if (user !== null) {
+          console.log("EMITTING HEARTBEAT (SUPPOSEDLY)");
+          socket.emit(HEARTBEAT, { username: user.username, id: user.id });
+        }
+      });
     }
   };
 

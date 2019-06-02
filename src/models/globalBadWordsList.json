@@ -1,20 +1,17 @@
 {
 
-  "phonetic_bad_words": [
-    "AS",
-    "ARS",
-    "BSTRT",
-    "BX",
-    "KK",
-    "KNT",
-    "TK",
-    "FK",
-    "FKT",
-    "HM",
-    "NKR",
-    "NK",
-    "PS",
-    "XT",
-    "TWT"
-  ]
+  "phonetic_bad_words": {
+    "AS": "butt",
+    "BSTRT": "jerk",
+    "BX": "wench",
+    "KNT": "private parts",
+    "TK": "jerk",
+    "FK": "heck",
+    "FKT": "person",
+    "NKR": "person",
+    "NK": "person",
+    "PS": "cat",
+    "XT": "poop",
+    "TWT": "private parts"
+  }
 }

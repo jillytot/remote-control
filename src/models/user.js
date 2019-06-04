@@ -14,12 +14,20 @@ const {
 } = require("../services/sockets/events").socketEvents;
 
 //User status Prototype:
-const statusPt = {
-  universal: {
-    timeout: false
-  },
-  local: {}
-};
+const statusPt = [
+  {
+    remo: {
+      //remo is the gobal user status object
+      timeout: false //Global Timeout
+    }
+  }
+  //server_id: Status, individual server status per user will mirror the global status as much as possible
+];
+
+const settingsPt = [
+  { remo: {} } //Global Settings
+  //server_id: {} ...Settings for individual servers will be listed here, scheme will mirror global as much as possible
+];
 
 module.exports.createUser = async user => {
   //ALWAYS SAVE EMAIL AS LOWERCASE!!!!!
@@ -48,16 +56,25 @@ module.exports.createUser = async user => {
   user.type = [];
   user.check_username = checkUser; //save a copy of username all lowercase
   user.status = statusPt;
+  user.settings = settingsPt;
   console.log(
     `${user.username} also saved as ${user.check_username}, status set: ${
       user.status
-    }`
+    } intialized settings: ${user.settings}`
   );
 
   console.log("Generating User: ", user);
 
-  const { username, id, password, created, check_username, status } = user;
-  const dbPut = `INSERT INTO users (username, id, password, email, created, check_username, status) VALUES($1, $2, $3, $4, $5, $6, $7) RETURNING *`;
+  const {
+    username,
+    id,
+    password,
+    created,
+    check_username,
+    status,
+    settings
+  } = user;
+  const dbPut = `INSERT INTO users (username, id, password, email, created, check_username, status, settings) VALUES($1, $2, $3, $4, $5, $6, $7, $8) RETURNING *`;
   try {
     await db.query(dbPut, [
       username,
@@ -66,7 +83,8 @@ module.exports.createUser = async user => {
       email,
       created,
       check_username,
-      status
+      status,
+      settings
     ]);
     const token = await this.createAuthToken(user);
     return { status: "Account successfully created", token: token };
@@ -193,6 +211,7 @@ module.exports.checkPassword = async user => {
 };
 
 module.exports.createAuthToken = user => {
+  console.log("Create Auth Token: ", user);
   const { id } = user;
   return jwt.sign({ id: id }, tempSecret, {
     subject: "",
@@ -221,8 +240,11 @@ module.exports.extractToken = async token => {
       });
     }));
   } catch (err) {
-    //console.log(err);
-    console.log("Problem resolving token from user");
+    let reason = {
+      error: "problem creating token from user"
+    };
+    Promise.reject(reason);
+    console.log(reason);
     return null;
   }
 };
@@ -265,7 +287,8 @@ module.exports.publicUser = user => {
       id: user.id,
       created: user.created,
       type: user.type,
-      status: user.status
+      status: user.status,
+      settings: user.settings
     };
 };
 
@@ -330,14 +353,14 @@ module.exports.updateStatus = async user => {
 };
 
 //MANAGE TIMEOUTS
-module.exports.timeoutUser = async (user, timeout) => {
-  console.log("TIMEOUT USER: ", user, timeout);
-  if (user && timeout) {
+module.exports.timeoutUser = async (user, time, server_id) => {
+  console.log("TIMEOUT USER: ", user, time);
+  if (user && time) {
     let { status } = user;
-    status.universal.timeout = true;
+    status[0].timeout = true;
     user.status = status;
     let checkUpdatedStatus = await this.updateStatus(user);
-    createTimer(timeout, this.unTimeoutUser, user);
+    createTimer(time, this.unTimeoutUser, user);
     return checkUpdatedStatus;
   }
   console.log("Timout Error");
@@ -348,7 +371,7 @@ module.exports.unTimeoutUser = async user => {
   console.log("END TIMEOUT FOR USER: ", user);
   if (user) {
     let { status } = user;
-    status.universal.timeout = false;
+    status[0].timeout = false;
     user.status = status;
     await this.updateStatus(user);
     return true;

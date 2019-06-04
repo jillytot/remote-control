@@ -5,6 +5,7 @@ import Joi from "joi-browser";
 import "./login.css";
 import axios from "axios";
 import { apiUrl } from "../../../config/clientSettings";
+import ReCAPTCHA from "react-google-recaptcha";
 
 export default class Signup extends Form {
   state = {
@@ -41,6 +42,8 @@ export default class Signup extends Form {
       .required()
       .label("Email")
   };
+
+  recaptchaRef = React.createRef();
 
   async componentDidMount() {
     //Just a test to see my API stuff is working
@@ -93,6 +96,12 @@ export default class Signup extends Form {
     //Call the server
   };
 
+  handleCaptcha = () => {
+    // https://www.npmjs.com/package/react-google-recaptcha
+    const recaptchaValue = this.recaptchaRef.current.getValue();
+    console.log(recaptchaValue);
+  };
+
   render() {
     return (
       <div className="register-form">
@@ -105,6 +114,12 @@ export default class Signup extends Form {
           {this.renderInput("password", "Password", "password")}
           {this.renderInput("confirm", "Confirm Password", "confirm")}
           {this.renderInput("email", "Email", "email")}
+          <ReCAPTCHA
+            sitekey="6Lfg_KYUAAAAAH1hvQdp-qDOUToVn6FQWFOvbySo" // site key will need to change, probably kept private and off stream.
+            ref={this.recaptchaRef}
+            onChange={this.handleCaptcha} // this parameter is required.
+            // theme="dark"   // Did you know captcha has a dark theme?
+          />
           {this.renderButton("Submit")}
         </form>
       </div>

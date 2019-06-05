@@ -8,7 +8,7 @@ import { apiUrl } from "../config/clientSettings";
 import { USER_CONNECTED } from "../services/sockets/events";
 
 import { socketEvents } from "../services/sockets/events";
-const { AUTHENTICATE, HEARTBEAT } = socketEvents;
+const { AUTHENTICATE, HEARTBEAT, USER_STATUS_UPDATED } = socketEvents;
 
 const UserContext = React.createContext();
 
@@ -73,7 +73,7 @@ export default class EventHandler extends Component {
   };
 
   handleResponse = () => {
-    const { socket } = this.state;
+    const { socket, user, status } = this.state;
     if (socket) {
       socket.on(HEARTBEAT, () => {
         if (this.state.user) {
@@ -83,6 +83,15 @@ export default class EventHandler extends Component {
           });
         }
       });
+
+      if (user && user.status) {
+        socket.on(USER_STATUS_UPDATED, updateStatus => {
+          console.log("Updating User Status from Server: ", updateStatus);
+          let updateUser = user;
+          updateUser.status = updateStatus;
+          this.setState({ user: updateUser });
+        });
+      }
     }
   };
 

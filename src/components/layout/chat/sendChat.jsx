@@ -8,7 +8,8 @@ import { MESSAGE_SENT } from "../../../services/sockets/events";
 export default class SendChat extends Form {
   state = {
     data: { sendChat: "" },
-    errors: {}
+    errors: {},
+    user: {}
   };
 
   schema = {
@@ -22,6 +23,11 @@ export default class SendChat extends Form {
 
   doSubmit = () => {
     const { user, socket, chatId, server_id } = this.props;
+
+    if (user.status[0].timeout === true) {
+      console.log("Unable to chat while timed out");
+    }
+
     const { sendChat } = this.state.data;
     if (user !== null && chatId !== "") {
       socket.emit(MESSAGE_SENT, {

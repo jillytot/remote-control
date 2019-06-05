@@ -16,16 +16,14 @@ const {
 //User status Prototype:
 const statusPt = [
   {
-    remo: {
-      //remo is the gobal user status object
-      timeout: false //Global Timeout
-    }
+    server_id: "global", //server_id: global refers to global status
+    timeout: false
   }
   //server_id: Status, individual server status per user will mirror the global status as much as possible
 ];
 
 const settingsPt = [
-  { remo: {} } //Global Settings
+  { server_id: "global" } //Global Settings
   //server_id: {} ...Settings for individual servers will be listed here, scheme will mirror global as much as possible
 ];
 
@@ -346,6 +344,7 @@ module.exports.updateStatus = async user => {
     const result = await db.query(insert, [status, user.id]);
     const print = result.rows[0];
     console.log("User Status Updated: ", print);
+    this.sendUpdateStatus(this.publicUser(print));
     return print;
   } catch (err) {
     console.log(err);
@@ -390,9 +389,15 @@ const timeoutObject = {
   reason: null
 };
 
-module.exports.sendGlobalTimeoutEvent = event => {
+//Update client when their status has changed
+module.exports.sendUpdateStatus = user => {
   const { io } = require("../services/server/server");
+  const {
+    USER_STATUS_UPDATED
+  } = require("../services/sockets/events").socketEvents;
+  io.to(user.id).emit(USER_STATUS_UPDATED, user.status);
 };
+
 /*
 When is timed out, an event needs to be sent to the timed out user, 
 In a global timeout, an event must be sent to chat clients the user is currently subscribed to

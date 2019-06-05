@@ -38,7 +38,7 @@ module.exports.createRobotServer = server => {
   let buildServer = {};
   buildServer.owner_id = id;
   buildServer.server_name = serverName;
-  buildServer.server_id = `serv-${makeId()}`;
+  buildServer.server_id = `serv-${makeId()}`; //Note: if server_id === 'remo', then it is refering to the global server
   buildServer.created = createTimeStamp();
   buildServer.channels = robotServer.channels;
   buildServer.users = [];

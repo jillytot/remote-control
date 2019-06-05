@@ -49,17 +49,17 @@ export default class Chat extends Component {
   };
 
   handleChatFeedback = fromSendChat => {
-    console.log("HANDLE CHAT FEEDBACK", fromSendChat);
-    let { chatroom } = this.state;
     let push = true;
-    chatroom.messages.map(message => {
-      if (fromSendChat.id === message.id) push = false;
-      return null;
-    });
+    if (previousFeedback === fromSendChat.id) {
+      push = false;
+    }
+    console.log("HANDLE CHAT FEEDBACK", fromSendChat.id);
+    let { chatroom } = this.state;
 
     if (push) {
       chatroom.messages.push(fromSendChat);
       this.setState({ chatroom });
+      previousFeedback = fromSendChat.id;
     }
   };
 
@@ -155,3 +155,5 @@ export default class Chat extends Component {
     );
   }
 }
+
+let previousFeedback = "";

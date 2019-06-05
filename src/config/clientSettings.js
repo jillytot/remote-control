@@ -14,6 +14,8 @@ const api = {
 };
 
 module.exports = {
+  defaultRate: 20000, //Message rate limit for most people
+  minRate: 250, //Message rate limit for admins / server owners etc..
   socketUrl: `${host.local}:${serverPort}`,
   apiUrl: `${host.local}:${serverPort}${api.api}`,
   apiAuth: `${host.local}:${serverPort}${api.api}${api.auth}`,

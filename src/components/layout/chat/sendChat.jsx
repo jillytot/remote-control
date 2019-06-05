@@ -2,15 +2,33 @@ import Form from "../../common/form";
 import React from "react";
 import Joi from "joi-browser";
 import "./chat.css";
-
 import { MESSAGE_SENT } from "../../../services/sockets/events";
+import { defaultRate } from "../../../config/clientSettings";
+import uuidv4 from "uuid/v4";
 
 export default class SendChat extends Form {
   state = {
     data: { sendChat: "" },
     errors: {},
     user: {},
-    uuid: 0 //used to generate keys for locally generated messages
+    //uuid: 0, //used to generate keys for locally generated messages
+    coolDown: false
+  };
+
+  componentDidMount() {
+    //set the rate limit from global vars
+  }
+
+  startTimer = () => {
+    if (!this.state.coolDown) {
+      this.setState({ coolDown: true });
+      this.timer = setTimeout(() => this.stopTimer(), defaultRate);
+    }
+  };
+
+  stopTimer = () => {
+    clearTimeout(this.timer);
+    this.setState({ coolDown: false });
   };
 
   schema = {
@@ -36,11 +54,25 @@ export default class SendChat extends Form {
       feedback.userId = user.id;
       feedback.chat_id = chatId;
       feedback.server_id = server_id;
-      feedback.id = this.state.uuid + 1;
-      this.setState({ uuid: feedback.id });
+      feedback.id = uuidv4();
 
       onChatFeedback(feedback);
       console.log(toUser);
+    }
+
+    if (this.state.coolDown) {
+      keepGoing = false;
+      let toUser = `You are sending messages too fast, you must wait at least 2 seconds before you can send a new message`;
+      let feedback = messageBlank;
+      feedback.message = toUser;
+      feedback.userId = user.id;
+      feedback.chat_id = chatId;
+      feedback.server_id = server_id;
+      feedback.id = uuidv4();
+
+      onChatFeedback(feedback);
+      console.log(toUser);
+      console.log(feedback.id);
     }
 
     const { sendChat } = this.state.data;
@@ -57,10 +89,18 @@ export default class SendChat extends Form {
           user.id
         } message ${sendChat} chatId ${chatId}`
       );
+
+      this.startTimer();
     } else {
       console.log("CANNOT SEND CHAT");
     }
+
+    if (this.state.coolDown) {
+      return;
+    }
     this.setState({ data: { sendChat: "" } });
+    //Set Rate Limit Timer
+    //Don't clear the chat unless the message can be sent
   };
 
   setError = error => {

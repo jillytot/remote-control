@@ -11,10 +11,23 @@ export default class Robot extends Component {
 
   componentDidMount() {
     this.setState({ controls: testButtons });
+    this.commandListener();
   }
 
+  commandListener = () => {
+    const { socket } = this.props;
+    socket.on("BUTTON_COMMAND", command => {
+      this.handleLoggingClicks(command);
+    });
+  };
+
   handleClick = click => {
-    this.handleLoggingClicks(click);
+    const { socket } = this.props;
+    socket.emit("BUTTON_COMMAND", {
+      user: click.user,
+      button: click.button,
+      channel: click.channel
+    });
   };
 
   handleLoggingClicks = click => {

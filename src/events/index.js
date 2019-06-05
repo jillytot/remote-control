@@ -48,6 +48,11 @@ module.exports.socketEvents = (socket, io) => {
     createMessage(message);
   });
 
+  socket.on("BUTTON_COMMAND", command => {
+    io.to(command.channel).emit("BUTTON_COMMAND", command);
+    //No voting yet,
+  });
+
   //Send list of chatrooms to user, subscribe user to robot server events
   socket.on(GET_CHAT_ROOMS, async data => {
     console.log("GET CHAT ROOMS: ", data);

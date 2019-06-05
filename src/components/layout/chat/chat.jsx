@@ -51,8 +51,16 @@ export default class Chat extends Component {
   handleChatFeedback = fromSendChat => {
     console.log("HANDLE CHAT FEEDBACK", fromSendChat);
     let { chatroom } = this.state;
-    chatroom.messages.push(fromSendChat);
-    this.setState({ chatroom });
+    let push = true;
+    chatroom.messages.map(message => {
+      if (fromSendChat.id === message.id) push = false;
+      return null;
+    });
+
+    if (push) {
+      chatroom.messages.push(fromSendChat);
+      this.setState({ chatroom });
+    }
   };
 
   getMessageColors = () => {

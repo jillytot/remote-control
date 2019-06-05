@@ -40,7 +40,7 @@ export default class SendChat extends Form {
       this.setState({ uuid: feedback.id });
 
       onChatFeedback(feedback);
-      console.log("Unable to chat while timed out");
+      console.log(toUser);
     }
 
     const { sendChat } = this.state.data;

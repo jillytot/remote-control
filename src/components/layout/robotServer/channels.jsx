@@ -11,7 +11,8 @@ export default class Channels extends Component {
   state = {
     channels: [],
     users: [],
-    userColors: {}
+    userColors: {},
+    currentChannel: null
   };
 
   //not sure if needed, but why not
@@ -110,6 +111,7 @@ export default class Channels extends Component {
     });
     this.setState({ channels: storeChannels });
     const chatId = channel.id;
+    this.setState({ currentChannel: channel.id });
     // console.log("GET CHAT! ", chatId);
     const { socket } = this.props;
     socket.emit(GET_CHAT, chatId);
@@ -153,7 +155,11 @@ export default class Channels extends Component {
         </div>
         {users !== [] ? (
           <React.Fragment>
-            <Robot />
+            <Robot
+              user={user}
+              socket={socket}
+              channel={this.state.currentChannel}
+            />
             <Chat user={user} socket={socket} users={users} />
           </React.Fragment>
         ) : (

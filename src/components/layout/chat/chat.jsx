@@ -48,6 +48,13 @@ export default class Chat extends Component {
     }
   };
 
+  handleChatFeedback = fromSendChat => {
+    console.log("HANDLE CHAT FEEDBACK", fromSendChat);
+    let { chatroom } = this.state;
+    chatroom.messages.push(fromSendChat);
+    this.setState({ chatroom });
+  };
+
   getMessageColors = () => {
     const { users } = this.props;
     const { chatroom } = this.state;
@@ -103,6 +110,7 @@ export default class Chat extends Component {
               socket={socket}
               chatId={chatroom ? chatroom.id : ""}
               server_id={chatroom ? chatroom.host_id : ""}
+              onChatFeedback={this.handleChatFeedback}
             />
           </div>
         );

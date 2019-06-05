@@ -9,7 +9,8 @@ export default class SendChat extends Form {
   state = {
     data: { sendChat: "" },
     errors: {},
-    user: {}
+    user: {},
+    uuid: 0 //used to generate keys for locally generated messages
   };
 
   schema = {
@@ -22,18 +23,28 @@ export default class SendChat extends Form {
   };
 
   doSubmit = () => {
-    const { user, socket, chatId, server_id } = this.props;
+    let keepGoing = true;
+    const { user, socket, chatId, server_id, onChatFeedback } = this.props;
     console.log("CHECK USER STATUS TIMEOUT: ", user.status[0].timeout);
     console.log("CHECK USER STATUS: ", user.status[0]);
 
     if (user.status[0].timeout) {
+      keepGoing = false;
+      let toUser = "Unable to send chat messages while timed out";
+      let feedback = messageBlank;
+      feedback.message = toUser;
+      feedback.userId = user.id;
+      feedback.chat_id = chatId;
+      feedback.server_id = server_id;
+      feedback.id = this.state.uuid + 1;
+      this.setState({ uuid: feedback.id });
+
+      onChatFeedback(feedback);
       console.log("Unable to chat while timed out");
-      //SEND A LOCAL MESSAGE
-      return;
     }
 
     const { sendChat } = this.state.data;
-    if (user !== null && chatId !== "") {
+    if (user !== null && chatId !== "" && keepGoing) {
       socket.emit(MESSAGE_SENT, {
         username: user.username,
         userId: user.id,
@@ -46,10 +57,10 @@ export default class SendChat extends Form {
           user.id
         } message ${sendChat} chatId ${chatId}`
       );
-      this.setState({ data: { sendChat: "" } });
     } else {
-      console.log("Userlogout Error");
+      console.log("CANNOT SEND CHAT");
     }
+    this.setState({ data: { sendChat: "" } });
   };
 
   setError = error => {
@@ -69,3 +80,15 @@ export default class SendChat extends Form {
     );
   }
 }
+
+const messageBlank = {
+  message: "",
+  username: "",
+  sender_id: "",
+  chat_id: "",
+  server_id: "",
+  id: "",
+  time_stamp: Date.now(),
+  displayMessage: true,
+  type: "moderation"
+};

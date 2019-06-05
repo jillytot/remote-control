@@ -56,7 +56,7 @@ const Message = ({ message }) => {
   const handleMessageType = message => {
     const { color } = message;
     if (message.type === types.moderation) {
-      console.log("Moderation Type Message");
+      // console.log("Moderation Type Message");
       return `chat-message system-message`;
     } else {
       return `chat-message ${color} ${

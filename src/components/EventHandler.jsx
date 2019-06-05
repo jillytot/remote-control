@@ -73,7 +73,7 @@ export default class EventHandler extends Component {
   };
 
   handleResponse = () => {
-    const { socket, user, status } = this.state;
+    const { socket } = this.state;
     if (socket) {
       socket.on(HEARTBEAT, () => {
         if (this.state.user) {
@@ -84,14 +84,14 @@ export default class EventHandler extends Component {
         }
       });
 
-      if (user && user.status) {
-        socket.on(USER_STATUS_UPDATED, updateStatus => {
-          console.log("Updating User Status from Server: ", updateStatus);
-          let updateUser = user;
-          updateUser.status = updateStatus;
-          this.setState({ user: updateUser });
-        });
-      }
+      // if (user && user.status) {
+      socket.on(USER_STATUS_UPDATED, updateStatus => {
+        console.log("Updating User Status from Server: ", updateStatus);
+        let updateUser = this.state.user;
+        updateUser.status = updateStatus;
+        this.setState({ user: updateUser });
+      });
+      // }
     }
   };
 

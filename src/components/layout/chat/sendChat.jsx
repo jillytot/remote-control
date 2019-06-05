@@ -23,9 +23,13 @@ export default class SendChat extends Form {
 
   doSubmit = () => {
     const { user, socket, chatId, server_id } = this.props;
+    console.log("CHECK USER STATUS TIMEOUT: ", user.status[0].timeout);
+    console.log("CHECK USER STATUS: ", user.status[0]);
 
-    if (user.status[0].timeout === true) {
+    if (user.status[0].timeout) {
       console.log("Unable to chat while timed out");
+      //SEND A LOCAL MESSAGE
+      return;
     }
 
     const { sendChat } = this.state.data;

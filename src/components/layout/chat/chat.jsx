@@ -52,12 +52,12 @@ export default class Chat extends Component {
     const { users } = this.props;
     const { chatroom } = this.state;
     return chatroom.messages.map(message => {
-      console.log(" Message from getMessageColors: ", message);
+      // console.log(" Message from getMessageColors: ", message);
       const user = users.find(user => {
         return user.username === message.sender;
       });
       if (user && user.color) {
-        console.log("Updating message color");
+        // console.log("Updating message color");
         return {
           ...message,
           color: user.color

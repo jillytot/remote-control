@@ -65,22 +65,26 @@ export default class Robot extends Component {
   render() {
     return (
       <React.Fragment>
-        <div className="robot-container">
-          <div className="robot-display-container">
-            <div className="display-info-container">
-              {this.state.displayLog ? (
-                this.renderClickLog()
-              ) : (
-                <React.Fragment />
-              )}
+        {this.props.channel ? (
+          <div className="robot-container">
+            <div className="robot-display-container">
+              <div className="display-info-container">
+                {this.state.displayLog ? (
+                  this.renderClickLog()
+                ) : (
+                  <React.Fragment />
+                )}
+              </div>
+            </div>
+            <div className="robot-controls-container">
+              {this.renderButtons()}
+              <br />
+              ...
             </div>
           </div>
-          <div className="robot-controls-container">
-            {this.renderButtons()}
-            <br />
-            ...
-          </div>
-        </div>
+        ) : (
+          <React.Fragment />
+        )}
       </React.Fragment>
     );
   }

@@ -119,19 +119,21 @@
 }
 .chat-message {
   font-size: 14px;
-  background-color: #221b3a;
-  margin: 2px;
+  /* background-color: #221b3a; */
+  margin-bottom: 1px;
   text-align: left;
   padding: 6px 3px 3px 6px;
-  border-radius: 6px;
+  /* border-radius: 6px; */
   display: flex;
   flex-direction: row;
   /* background-color: blue; */
 }
 
 .system-message {
-  color: white;
+  color: rgb(214, 214, 214);
   background: -webkit-linear-gradient(-45deg, #bd6294 0%, #8140b6 100%);
+  /* background-color: #291d52; */
+  /* border-left: 6px solid purple; */
 }
 
 .messages-container {

@@ -48,6 +48,11 @@ export default class SendChat extends Form {
 
     if (user.status[0].timeout) {
       keepGoing = false;
+      const messageBlank = {
+        time_stamp: Date.now(),
+        displayMessage: true,
+        type: "moderation"
+      };
       let toUser = "Unable to send chat messages while timed out";
       let feedback = messageBlank;
       feedback.message = toUser;
@@ -62,7 +67,14 @@ export default class SendChat extends Form {
 
     if (this.state.coolDown) {
       keepGoing = false;
-      let toUser = `You are sending messages too fast, you must wait at least 2 seconds before you can send a new message`;
+      let toUser = `You are sending messages too fast, you must wait at least ${defaultRate /
+        1000} seconds before you can send a new message`;
+      const messageBlank = {
+        time_stamp: Date.now(),
+        displayMessage: true,
+        type: "moderation"
+      };
+
       let feedback = messageBlank;
       feedback.message = toUser;
       feedback.userId = user.id;
@@ -120,15 +132,3 @@ export default class SendChat extends Form {
     );
   }
 }
-
-const messageBlank = {
-  message: "",
-  username: "",
-  sender_id: "",
-  chat_id: "",
-  server_id: "",
-  id: "",
-  time_stamp: Date.now(),
-  displayMessage: true,
-  type: "moderation"
-};

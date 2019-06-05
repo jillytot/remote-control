@@ -49,6 +49,7 @@ module.exports.socketEvents = (socket, io) => {
   });
 
   socket.on("BUTTON_COMMAND", command => {
+    command.user = socket.user;
     io.to(command.channel).emit("BUTTON_COMMAND", command);
     //No voting yet,
   });

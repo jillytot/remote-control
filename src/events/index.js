@@ -10,7 +10,7 @@ const {
   SEND_CHAT,
   MESSAGE_SENT,
   HEARTBEAT,
-  TIMEOUT
+  BUTTON_COMMAND
 } = require("../services/sockets/events").socketEvents;
 
 const { sendActiveUsers } = user;
@@ -48,8 +48,9 @@ module.exports.socketEvents = (socket, io) => {
     createMessage(message);
   });
 
-  socket.on("BUTTON_COMMAND", command => {
-    command.user = socket.user;
+  socket.on(BUTTON_COMMAND, command => {
+    const { publicUser } = user;
+    command.user = publicUser(socket.user);
     io.to(command.channel).emit("BUTTON_COMMAND", command);
     //No voting yet,
   });

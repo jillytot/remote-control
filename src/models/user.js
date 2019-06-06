@@ -27,6 +27,9 @@ const settingsPt = [
   //server_id: {} ...Settings for individual servers will be listed here, scheme will mirror global as much as possible
 ];
 
+//roles will be a more robust way to manage user types
+const rolesPt = [{ server_id: "global", roles: [] }];
+
 module.exports.createUser = async user => {
   //ALWAYS SAVE EMAIL AS LOWERCASE!!!!!
   const email = user.email.toLowerCase();
@@ -46,12 +49,11 @@ module.exports.createUser = async user => {
     return {
       email_status: "This email is already in use, unique email is required"
     };
-
   //Generate UUID, PW Hash
   user.id = `user-${makeId()}`;
   user.password = await hash(user.password);
   user.created = createTimeStamp();
-  user.type = [];
+  user.type = []; //Change to "Roles" at some point.
   user.check_username = checkUser; //save a copy of username all lowercase
   user.status = statusPt;
   user.settings = settingsPt;
@@ -285,8 +287,8 @@ module.exports.publicUser = user => {
       id: user.id,
       created: user.created,
       type: user.type,
-      status: user.status,
-      settings: user.settings
+      status: user.status
+      // settings: user.settings
     };
 };
 

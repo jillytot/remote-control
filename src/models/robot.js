@@ -9,19 +9,67 @@ const jwt = require("jsonwebtoken");
 const db = require("../services/db");
 const { makeId, createTimeStamp } = require("../modules/utilities");
 
-robotPt = {
+const robotPt = {
   name: "",
   id: "",
-  owner: "",
+  owner_id: "",
   host_server: "",
   interfaces: [],
-  auth: "",
   created: "",
-  keys: []
+  session: ""
 };
-module.exports.createRobot = async robot => {
-  robot.id = `rbot-${makeId()}`;
-  robot.created = createTimeStamp();
 
-  console.log("CREATE ROBOT: ", robot);
+module.exports.createRobot = async robot => {
+  const { validateUser, getIdFromUsername } = require("./user");
+
+  //Validate Owner
+  const validate = await validateUser(robot);
+  if (!validate) {
+    return { status: "Error, this user does not exist" };
+  }
+
+  let makeRobot = {};
+  makeRobot.id = `rbot-${makeId()}`;
+  makeRobot.created = createTimeStamp();
+  makeRobot.name = robot.robot_name;
+  makeRobot.owner_id = await getIdFromUsername(robot.username);
+  makeRobot.interfaces = [];
+  makeRobot.session = "";
+  makeRobot.settings = {};
+  makeRobot.status = {};
+
+  const storeRobot = await saveRobot(makeRobot);
+  if (!storeRobot) return { status: "Error saving robot to server" };
+  console.log("GENERATING NEW ROBOT: ", robot);
+  return makeRobot;
+};
+
+saveRobot = async robot => {
+  const {
+    id,
+    created,
+    name,
+    owner_id,
+    interfaces,
+    session,
+    settings,
+    status
+  } = robot;
+  const dbPut = `INSERT INTO robots (id, created, name, owner_id, interfaces, session, settings, status) VALUES($1, $2, $3, $4, $5, $6, $7, $8) RETURNING *`;
+  try {
+    await db.query(dbPut, [
+      id,
+      created,
+      name,
+      owner_id,
+      interfaces,
+      session,
+      settings,
+      status
+    ]);
+    return true;
+  } catch (err) {
+    console.log(err);
+    return false;
+  }
 };

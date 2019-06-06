@@ -104,8 +104,8 @@ export default class Robot extends Component {
 }
 
 const testButtons = [
-  { label: "forward", hot_key: "f", id: "1" },
-  { label: "back", hot_key: "b", id: "2" },
-  { label: "right", hot_key: "r", id: "3" },
-  { label: "left", hot_key: "l", id: "4" }
+  { label: "forward", hot_key: "w", id: "1" },
+  { label: "back", hot_key: "s", id: "2" },
+  { label: "left", hot_key: "a", id: "4" },
+  { label: "right", hot_key: "d", id: "3" }
 ];

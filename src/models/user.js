@@ -40,15 +40,22 @@ module.exports.createUser = async user => {
   let result = await this.checkUsername(checkUser);
   console.log("CHECK USER RESULT: ", result);
   let emailResult = await this.checkEmail(user);
-  if (result === true)
+  console.log("CHECK EMAIL RESULT: ", emailResult);
+  if (result === true) {
+    console.log("ERROR, USERNAME ALREADY EXISTS, please try a different one");
     return {
       username_status:
         "This username already exists, please try a different one"
     };
-  if (emailResult === true)
+  }
+
+  if (emailResult === true) {
+    console.log("ERROR, EMAIL IS ALREADY IN USE, please try a different one");
     return {
       email_status: "This email is already in use, unique email is required"
     };
+  }
+
   //Generate UUID, PW Hash
   user.id = `user-${makeId()}`;
   user.password = await hash(user.password);

@@ -48,7 +48,7 @@ module.exports.socketEvents = (socket, io) => {
     createMessage(message);
   });
 
-  //ROBOT COMMAND INPUT
+  //ROBOT COMMAND HANDLING
   socket.on(BUTTON_COMMAND, command => {
     console.log("NEW COMMAND: ", command);
     const { publicUser } = user;

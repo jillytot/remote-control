@@ -16,7 +16,8 @@ robotPt = {
   host_server: "",
   interfaces: [],
   auth: "",
-  created: ""
+  created: "",
+  keys: []
 };
 module.exports.createRobot = async robot => {
   robot.id = `rbot-${makeId()}`;

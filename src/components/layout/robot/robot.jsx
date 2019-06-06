@@ -81,13 +81,14 @@ export default class Robot extends Component {
         {this.props.channel ? (
           <div className="robot-container">
             <div className="robot-display-container">
+              <canvas className="video-canvas" ref="video-canvas" />
               <div className="display-info-container">
                 {this.state.displayLog ? (
                   this.renderClickLog()
                 ) : (
                   <React.Fragment />
                 )}
-              </div>
+              </div>{" "}
             </div>
             <div className="robot-controls-container">
               {this.renderButtons()}

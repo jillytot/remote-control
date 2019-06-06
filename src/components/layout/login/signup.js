@@ -107,20 +107,6 @@ export default class Signup extends Form {
   };
 
   handleCaptcha = async () => {
-    // // https://www.npmjs.com/package/react-google-recaptcha
-    // const recaptchaValue = this.recaptchaRef.current.getValue();
-    // // console.log(recaptchaValue);
-    // await axios
-    //   .post("https://www.google.com/recaptcha/api/siteverify", {
-    //     secret: reCaptchaSecretKey,
-    //     response: recaptchaValue
-    //   })
-    //   .then(res => {
-    //     console.log(res.data);
-    //   })
-    //   .catch(err => {
-    //     console.error(err);
-    //   });
     this.setState({
       captcha: this.recaptchaRef.current.getValue()
     })

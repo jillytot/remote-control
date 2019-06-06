@@ -5,18 +5,22 @@ const serverSettings = require("../../config/serverSettings");
 
 router.post("/", async (req, res) => {
   // post request
-  axios
-    .post(
-      `https://www.google.com/recaptcha/api/siteverify?secret=${serverSettings.reCaptchaSecretKey}&response=${req.body.response}`,
-      {}
-    )
-    .then(async resp => {
+  try {
+    const captcha = await axios.post(
+      `https://www.google.com/recaptcha/api/siteverify?secret=${
+        serverSettings.reCaptchaSecretKey
+      }&response=${req.body.response}`
+    );
+    delete req.body.response;
+    if (captcha.data.success) {
       const createUser = await user.createUser(req.body);
       createUser !== null ? res.send(createUser) : res.send("ok");
-    })
-    .catch(err => {
-      console.error(`${err.response.status} at ${err.response.config.url}`);
-    });
+    } else {
+      console.error("Captcha failed!")
+    }
+  } catch (err) {
+    console.error(`${err.response.status} at ${err.response.config.url}`);
+  }
 });
 
 module.exports = router;

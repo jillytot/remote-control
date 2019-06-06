@@ -2,7 +2,7 @@ import React from "react";
 import Emotes from "../../../emotes/emotes";
 import defaultImages from "../../../imgs/placeholders";
 
-const Message = ({ message, color }) => {
+const Message = ({ message }) => {
   const types = {
     default: "",
     moderation: "moderation",
@@ -33,11 +33,10 @@ const Message = ({ message, color }) => {
   const handleBadges = message => {
     const { badges } = message;
     if (message && message.type === types.moderation) return <React.Fragment />;
-    console.log(badges);
     if (badges && badges.length > 0) {
       return badges.map(badge => {
         if (badge === "staff") {
-          console.log("ADD BADGE!");
+          // console.log("ADD BADGE!");
           return (
             <span key={badge}>
               <img
@@ -57,7 +56,7 @@ const Message = ({ message, color }) => {
   const handleMessageType = message => {
     const { color } = message;
     if (message.type === types.moderation) {
-      console.log("Moderation Type Message");
+      // console.log("Moderation Type Message");
       return `chat-message system-message`;
     } else {
       return `chat-message ${color} ${
@@ -67,7 +66,7 @@ const Message = ({ message, color }) => {
   };
 
   const handleMessageSender = message => {
-    if (message && message.type == types.moderation) {
+    if (message && message.type === types.moderation) {
       return "System";
     }
     return message.sender;

@@ -21,6 +21,7 @@
   display: flex;
   height: 48px;
   background: -webkit-linear-gradient(-45deg, #19191d 0%, #162755 100%);
+  width: 100%;
 }
 
 .logo-container {

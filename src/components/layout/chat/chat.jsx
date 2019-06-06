@@ -48,16 +48,31 @@ export default class Chat extends Component {
     }
   };
 
+  handleChatFeedback = fromSendChat => {
+    let push = true;
+    if (previousFeedback === fromSendChat.id) {
+      push = false;
+    }
+    console.log("HANDLE CHAT FEEDBACK", fromSendChat.id);
+    let { chatroom } = this.state;
+
+    if (push) {
+      chatroom.messages.push(fromSendChat);
+      this.setState({ chatroom });
+      previousFeedback = fromSendChat.id;
+    }
+  };
+
   getMessageColors = () => {
     const { users } = this.props;
     const { chatroom } = this.state;
     return chatroom.messages.map(message => {
-      console.log(" Message from getMessageColors: ", message);
+      // console.log(" Message from getMessageColors: ", message);
       const user = users.find(user => {
         return user.username === message.sender;
       });
       if (user && user.color) {
-        console.log("Updating message color");
+        // console.log("Updating message color");
         return {
           ...message,
           color: user.color
@@ -102,6 +117,8 @@ export default class Chat extends Component {
               user={user}
               socket={socket}
               chatId={chatroom ? chatroom.id : ""}
+              server_id={chatroom ? chatroom.host_id : ""}
+              onChatFeedback={this.handleChatFeedback}
             />
           </div>
         );
@@ -138,3 +155,5 @@ export default class Chat extends Component {
     );
   }
 }
+
+let previousFeedback = "";

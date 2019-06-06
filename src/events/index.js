@@ -9,13 +9,22 @@ const {
   GET_CHAT,
   SEND_CHAT,
   MESSAGE_SENT,
-  TIMEOUT
+  HEARTBEAT,
+  BUTTON_COMMAND
 } = require("../services/sockets/events").socketEvents;
 
 const { sendActiveUsers } = user;
 
+const { heartBeat } = require("../config/serverSettings");
+let heartBeatStarted = false;
+
 //Main websocket Interface
 module.exports.socketEvents = (socket, io) => {
+  if (!heartBeatStarted) {
+    beat(io);
+    heartBeatStarted = true;
+  }
+
   let userRoom = "";
   socket.on(AUTHENTICATE, async data => {
     const getUser = await user.authUser(data.token);
@@ -37,6 +46,19 @@ module.exports.socketEvents = (socket, io) => {
     console.log("Message Received: ", message);
     if (socket.user && socket.user.type) message.userType = socket.user.type;
     createMessage(message);
+  });
+
+  //ROBOT COMMAND HANDLING
+  socket.on(BUTTON_COMMAND, command => {
+    console.log("NEW COMMAND: ", command);
+    const { publicUser } = user;
+    const { tempCommandValidation } = require("../models/controls");
+    command.user = publicUser(socket.user);
+    if (tempCommandValidation(command.button)) {
+      io.to(command.channel).emit(BUTTON_COMMAND, command);
+    }
+
+    //No voting yet,
   });
 
   //Send list of chatrooms to user, subscribe user to robot server events
@@ -66,4 +88,21 @@ module.exports.socketEvents = (socket, io) => {
   });
 
   //More socket Events
+  connectedUsers(socket);
+};
+
+const beat = io => {
+  let timerId = setTimeout(
+    (tick = () => {
+      io.emit(HEARTBEAT);
+      timerId = setTimeout(tick, heartBeat); // (*)
+    }),
+    heartBeat
+  );
+};
+
+const connectedUsers = socket => {
+  socket.on(HEARTBEAT, user => {
+    console.log("Connected User: ", user);
+  });
 };

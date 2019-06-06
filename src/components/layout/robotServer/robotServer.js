@@ -67,6 +67,7 @@ export default class RobotServer extends Component {
       } else {
         server.active = false;
       }
+      return null;
     });
     this.setState({ robotServers });
   };

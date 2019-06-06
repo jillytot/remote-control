@@ -12,6 +12,7 @@ module.exports.createMessage = async message => {
   makeMess.sender = message.username;
   makeMess.sender_id = message.userId;
   makeMess.chat_id = message.chatId;
+  makeMess.server_id = message.server_id;
   makeMess.id = `mesg-${makeId()}`;
   makeMess.time_stamp = createTimeStamp();
   makeMess.displayMessage = true;

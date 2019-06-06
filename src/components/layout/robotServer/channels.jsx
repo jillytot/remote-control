@@ -11,7 +11,8 @@ export default class Channels extends Component {
   state = {
     channels: [],
     users: [],
-    userColors: {}
+    userColors: {},
+    currentChannel: null
   };
 
   //not sure if needed, but why not
@@ -30,6 +31,7 @@ export default class Channels extends Component {
       let usernamesToKeep = [];
       this.state.users.map(user => {
         usernamesToKeep.push(user.username);
+        return null;
       });
 
       // chatroom.messages.map(message => {
@@ -42,8 +44,9 @@ export default class Channels extends Component {
         if (usernamesToKeep.includes(username) !== true) {
           delete newColors[username];
         }
+        return null;
       });
-      console.log(newColors);
+      // console.log(newColors);
       this.setState({ userColors: newColors });
     }, 30000); //garbage cleanup every 30s
   }
@@ -83,7 +86,7 @@ export default class Channels extends Component {
     if (socket && this._isMounted) {
       //Currently doesn't handle channels being dynamically updated
       socket.on(SEND_ROBOT_SERVER_INFO, data => {
-        console.log("SEND ROBOT SERVER INFO: ", data);
+        // console.log("SEND ROBOT SERVER INFO: ", data);
         this.setState({
           channels: data.channels,
           users: this.getUserColors(data.users)
@@ -108,7 +111,8 @@ export default class Channels extends Component {
     });
     this.setState({ channels: storeChannels });
     const chatId = channel.id;
-    console.log("GET CHAT! ", chatId);
+    this.setState({ currentChannel: channel.id });
+    // console.log("GET CHAT! ", chatId);
     const { socket } = this.props;
     socket.emit(GET_CHAT, chatId);
   };
@@ -151,7 +155,11 @@ export default class Channels extends Component {
         </div>
         {users !== [] ? (
           <React.Fragment>
-            <Robot />
+            <Robot
+              user={user}
+              socket={socket}
+              channel={this.state.currentChannel}
+            />
             <Chat user={user} socket={socket} users={users} />
           </React.Fragment>
         ) : (

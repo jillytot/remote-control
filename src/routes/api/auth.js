@@ -10,7 +10,8 @@ router.post("/", async (req, res) => {
       let formatUser = {
         user: {
           username: getUser.username,
-          id: getUser.id
+          id: getUser.id,
+          status: getUser.status
         }
       };
       res.send(formatUser);

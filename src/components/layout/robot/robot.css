@@ -14,3 +14,49 @@
   margin: 5px;
   padding: 10px;
 }
+
+.robtn {
+  background-color: rgb(66, 36, 71);
+  border-radius: 7px;
+  color: white;
+  border: 0px;
+  font-size: 16px;
+  padding: 7px 14px 7px 4px;
+  margin: 2px;
+}
+
+.robtn:hover {
+  box-shadow: inset 0 0 0 2px yellow;
+  cursor: pointer;
+}
+
+.robtn:active {
+  transform: translateY(4px);
+}
+
+.hotkey {
+  background-color: rgb(128, 70, 138);
+  padding: 4px;
+  border-radius: 7px;
+  width: 200px;
+}
+
+.display-info-container {
+  display: flex;
+  flex-direction: column;
+  font-size: 12px;
+  width: 50%;
+  /* background-color: red; */
+  align-items: flex-start;
+  padding: 5px;
+  /* align-self: bottom; */
+
+  /* text-align: left; */
+}
+
+.display-info {
+  background-color: rgba(255, 255, 255, 0.05);
+  padding: 2px;
+  margin-bottom: 1px;
+  display: flex;
+}

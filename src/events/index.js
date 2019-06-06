@@ -48,10 +48,16 @@ module.exports.socketEvents = (socket, io) => {
     createMessage(message);
   });
 
+  //ROBOT COMMAND INPUT
   socket.on(BUTTON_COMMAND, command => {
+    console.log("NEW COMMAND: ", command);
     const { publicUser } = user;
+    const { tempCommandValidation } = require("../models/controls");
     command.user = publicUser(socket.user);
-    io.to(command.channel).emit("BUTTON_COMMAND", command);
+    if (tempCommandValidation(command.button)) {
+      io.to(command.channel).emit(BUTTON_COMMAND, command);
+    }
+
     //No voting yet,
   });
 

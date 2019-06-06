@@ -6,7 +6,7 @@ This is all bundled into an interface that is setup on a robotServer channel
 const { makeId, createTimeStamp } = require("../modules/utilities");
 
 //TEMPORARY VALUES JUST TO ENSURE VALIDATION:
-const testControls = [
+testControls = [
   { label: "forward", hot_key: "w", id: "1" },
   { label: "back", hot_key: "s", id: "2" },
   { label: "left", hot_key: "a", id: "4" },
@@ -35,4 +35,14 @@ module.exports.getControls = channel => {
     overlay: {}, //Specifically reserved for input relative to video feeds
     created: 0
   };
+};
+
+module.exports.tempCommandValidation = button => {
+  console.log("VALIDATE COMMAND: ", button);
+  let validate = false;
+  testControls.map(control => {
+    if (button.label === control.label) validate = true;
+  });
+  console.log("BUTTON VALIDATION PASSED");
+  return validate;
 };

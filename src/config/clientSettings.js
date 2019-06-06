@@ -24,5 +24,6 @@ module.exports = {
   apiLogin: `${host.local}:${serverPort}${api.api}${api.login}`,
   listRobotServers: `${host.local}:${serverPort}${api.api}${api.robotServers}${
     api.listRobotServers
-  }`
+  }`,
+  reCaptchaSiteKey: "6Lfg_KYUAAAAAH1hvQdp-qDOUToVn6FQWFOvbySo"
 };

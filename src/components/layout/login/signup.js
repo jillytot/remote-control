@@ -4,14 +4,18 @@ import Form from "../../common/form";
 import Joi from "joi-browser";
 import "./login.css";
 import axios from "axios";
-import { apiUrl } from "../../../config/clientSettings";
+import {
+  apiUrl,
+  reCaptchaSiteKey
+} from "../../../config/clientSettings";
 import ReCAPTCHA from "react-google-recaptcha";
 
 export default class Signup extends Form {
   state = {
     data: { username: "", password: "", confirm: "", email: "" },
     errors: {},
-    isUser: null
+    isUser: null,
+    captcha: ""
   };
 
   schema = {
@@ -76,12 +80,13 @@ export default class Signup extends Form {
   };
 
   doSubmit = async () => {
-    const { data } = this.state;
+    const { data, captcha } = this.state;
     await axios
       .post(`${apiUrl}/signup`, {
         username: data.username,
         password: data.password,
-        email: data.email
+        email: data.email,
+        response: captcha
       })
       .then(response => {
         const { handleAuth } = this.props;
@@ -96,10 +101,24 @@ export default class Signup extends Form {
     //Call the server
   };
 
-  handleCaptcha = () => {
-    // https://www.npmjs.com/package/react-google-recaptcha
-    const recaptchaValue = this.recaptchaRef.current.getValue();
-    console.log(recaptchaValue);
+  handleCaptcha = async () => {
+    // // https://www.npmjs.com/package/react-google-recaptcha
+    // const recaptchaValue = this.recaptchaRef.current.getValue();
+    // // console.log(recaptchaValue);
+    // await axios
+    //   .post("https://www.google.com/recaptcha/api/siteverify", {
+    //     secret: reCaptchaSecretKey,
+    //     response: recaptchaValue
+    //   })
+    //   .then(res => {
+    //     console.log(res.data);
+    //   })
+    //   .catch(err => {
+    //     console.error(err);
+    //   });
+    this.setState({
+      captcha: this.recaptchaRef.current.getValue()
+    })
   };
 
   render() {
@@ -115,7 +134,7 @@ export default class Signup extends Form {
           {this.renderInput("confirm", "Confirm Password", "confirm")}
           {this.renderInput("email", "Email", "email")}
           <ReCAPTCHA
-            sitekey="6Lfg_KYUAAAAAH1hvQdp-qDOUToVn6FQWFOvbySo" // site key will need to change, probably kept private and off stream.
+            sitekey={reCaptchaSiteKey}
             ref={this.recaptchaRef}
             onChange={this.handleCaptcha} // this parameter is required.
             // theme="dark"   // Did you know captcha has a dark theme?

@@ -12,13 +12,9 @@ router.post("/", async (req, res) => {
       }&response=${req.body.response}`
     );
     delete req.body.response;
-    console.log(captcha.data);
     if (captcha.data.success) {
-      console.log("got here");
       const createUser = await user.createUser(req.body);
-      console.log("and here");
       createUser !== null ? res.send(createUser) : res.send("ok");
-      console.log("here too");
     } else {
       console.error("Captcha failed!")
     }

@@ -65,6 +65,7 @@ module.exports.createUser = async user => {
   user.check_username = checkUser; //save a copy of username all lowercase
   user.status = statusPt;
   user.settings = settingsPt;
+  user.session = "";
   console.log(
     `${user.username} also saved as ${user.check_username}, status set: ${
       user.status
@@ -80,9 +81,10 @@ module.exports.createUser = async user => {
     created,
     check_username,
     status,
-    settings
+    settings,
+    session
   } = user;
-  const dbPut = `INSERT INTO users (username, id, password, email, created, check_username, status, settings) VALUES($1, $2, $3, $4, $5, $6, $7, $8) RETURNING *`;
+  const dbPut = `INSERT INTO users (username, id, password, email, created, check_username, status, settings, session) VALUES($1, $2, $3, $4, $5, $6, $7, $8, $9) RETURNING *`;
   try {
     await db.query(dbPut, [
       username,
@@ -92,9 +94,12 @@ module.exports.createUser = async user => {
       created,
       check_username,
       status,
-      settings
+      settings,
+      session
     ]);
+
     const token = await this.createAuthToken(user);
+
     return { status: "Account successfully created", token: token };
   } catch (err) {
     console.log(err.stack);

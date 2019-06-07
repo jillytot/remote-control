@@ -1,5 +1,6 @@
 const router = require("express").Router();
 const request = require("../../modules/requests");
+const auth = require("../auth");
 
 //example route: router.use(/route, require('./path-to-route'));
 router.use("/users", require("./users"));

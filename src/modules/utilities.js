@@ -21,7 +21,7 @@ module.exports.hash = async pw => {
 };
 
 module.exports.checkHash = (pw, hash) => {
-  console.log("Check Hash: ", pw, hash);
+  console.log("...Checking Hash.");
   const bcrypt = require("bcrypt");
   const checkHash = new Promise((resolve, reject) => {
     bcrypt.compare(pw, hash, function(err, res) {
@@ -35,4 +35,13 @@ module.exports.checkHash = (pw, hash) => {
 
 module.exports.createTimeStamp = () => {
   return Date.now();
+};
+
+module.exports.createTimer = (interval, callback, object) => {
+  console.log("DING");
+  const timer = new setInterval(() => {
+    callback(object);
+    clearInterval(timer);
+  }, interval);
+  console.log(interval, callback, object);
 };

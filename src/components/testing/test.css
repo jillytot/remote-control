@@ -89,40 +89,77 @@ video {
 
 .nav-bar {
   grid-area: grid-header;
-  background-color: red;
+  background-color: rgb(54, 54, 54);
   color: white;
+  font-size: 14px;
 }
 .left {
   grid-area: grid-left;
-  background-color: green;
+  background-color: rgb(80, 80, 80);
   color: white;
+  font-size: 14px;
 }
 
 .center {
   grid-area: grid-center;
-  background-color: blue;
+  background-color: rgb(61, 61, 61);
   color: white;
+  font-size: 14px;
 }
 .right {
   grid-area: grid-right;
-  background-color: purple;
+  background-color: rgb(44, 44, 44);
   color: white;
+  font-size: 14px;
 }
 
 .footer {
   grid-area: grid-footer;
-  background-color: orangered;
+  background-color: rgb(94, 94, 94);
   color: white;
+  font-size: 14px;
+}
+
+.left-container {
+  display: grid;
+  grid-template-columns: 1fr 2fr;
+  grid-template-rows: 80vh;
+
+  grid-gap: 3px;
+  margin: 3px;
+  /* border: 3px solid rgb(167, 167, 167); */
+  /* background-color: red; */
+  grid-template-areas: "server-container channel-container";
+}
+
+.server-container {
+  grid-area: server-container;
+  /* border-bottom: 2px blue solid; */
+  background-color: black;
+  padding: 5px;
+}
+
+.channel-container {
+  grid-area: channel-container;
+  background-color: rgb(102, 102, 102);
+}
+
+.server-option {
+  border-radius: 32px;
+  height: 10vh;
+  width: 100%;
+  background-color: red;
+  margin-bottom: 6px;
 }
 
 .container {
   display: grid;
   grid-template-columns: 1fr 1fr 1fr 1fr;
-  grid-template-rows: 10vh 80vh 10vh;
+  grid-template-rows: 48px 80vh;
   grid-template-areas:
     "grid-header grid-header grid-header grid-header"
-    "grid-left grid-center grid-center grid-right"
-    "grid-footer grid-footer grid-footer grid-footer";
+    "grid-left grid-center grid-center grid-right";
+  /* "grid-footer grid-footer grid-footer grid-footer"; */
 
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen",
     "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue",

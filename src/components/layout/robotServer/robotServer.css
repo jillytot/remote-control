@@ -9,9 +9,6 @@
 }
 
 .display-robot-server-container:hover {
-  /* border-style: solid;
-  border-width: 5px; */
-  /* border-color: blueviolet; */
   background-color: rgb(74, 74, 95);
   cursor: pointer;
 }
@@ -20,18 +17,23 @@
   border-left: 6px solid cyan;
 }
 
-.robot-server-panel {
+.robot-server-container {
   background-color: rgb(57, 57, 75);
   width: 100px;
   padding-top: 8px;
-  /* display: grid;
-  grid-template-rows: 1fr; */
+}
+
+.list-channels-container {
+  background-color: rgb(70, 70, 99);
+  width: 200px;
 }
 
 .list-channels {
-  background-color: rgb(70, 70, 99);
   font-size: 14px;
   cursor: pointer;
+  margin: 5px 5px 5px 6px;
+  text-align: left;
+  padding-left: 3px;
 }
 
 .list-channels:hover {
@@ -39,4 +41,12 @@
 }
 .list-channels-selected {
   border-left: 6px solid cyan;
+  margin: 5px 5px 5px 0px;
+}
+
+.server-channel-container {
+  /* border: solid red 2px; */
+  display: flex;
+  /* position: relative; */
+  height: calc(100vh - 72px);
 }

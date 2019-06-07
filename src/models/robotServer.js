@@ -38,7 +38,7 @@ module.exports.createRobotServer = server => {
   let buildServer = {};
   buildServer.owner_id = id;
   buildServer.server_name = serverName;
-  buildServer.server_id = `serv-${makeId()}`;
+  buildServer.server_id = `serv-${makeId()}`; //Note: if server_id === 'remo', then it is refering to the global server
   buildServer.created = createTimeStamp();
   buildServer.channels = robotServer.channels;
   buildServer.users = [];
@@ -188,4 +188,12 @@ module.exports.createChannels = async robotServer => {
   } catch (err) {
     console.log(err);
   }
+};
+
+//MODERATION
+module.exports.sendGlobalTimeout = (server_id, badUser) => {
+  const { io } = require("../services/server/server");
+  const { GLOBAL_TIMEOUT } = require("../services/sockets/events").socketEvents;
+  const { publicUser } = require("./user");
+  io.to(server_id).emit(GLOBAL_TIMEOUT, publicUser(badUser));
 };

@@ -8,7 +8,7 @@ import { apiUrl } from "../config/clientSettings";
 import { USER_CONNECTED } from "../services/sockets/events";
 
 import { socketEvents } from "../services/sockets/events";
-const { AUTHENTICATE } = socketEvents;
+const { AUTHENTICATE, HEARTBEAT, USER_STATUS_UPDATED } = socketEvents;
 
 const UserContext = React.createContext();
 
@@ -74,7 +74,24 @@ export default class EventHandler extends Component {
 
   handleResponse = () => {
     const { socket } = this.state;
-    if (socket !== null) {
+    if (socket) {
+      socket.on(HEARTBEAT, () => {
+        if (this.state.user) {
+          socket.emit(HEARTBEAT, {
+            username: this.state.user.username,
+            id: this.state.user.id
+          });
+        }
+      });
+
+      // if (user && user.status) {
+      socket.on(USER_STATUS_UPDATED, updateStatus => {
+        console.log("Updating User Status from Server: ", updateStatus);
+        let updateUser = this.state.user;
+        updateUser.status = updateStatus;
+        this.setState({ user: updateUser });
+      });
+      // }
     }
   };
 

@@ -1,21 +1,30 @@
 .user {
   color: cyan;
-  background-color: rgb(6, 6, 12);
-  font-size: calc(4px + 2vmin);
+  font-size: 20px;
   padding: 5px 10px 5px 10px;
-  /* background: -webkit-linear-gradient(-45deg, #d64eb8 0%, #003fee 100%); */
   text-align: right;
 }
 
-.user-logout {
-  font-size: 12px;
-  color: royalblue;
-  margin: 2px -2px 2px 6px;
-  padding: 2px;
+.user-container {
+  display: flex;
+  flex-direction: row;
+  width: 100%;
+  justify-content: flex-end;
 }
 
 .logo {
   width: 200px;
-  float: left;
-  padding-top: 3px;
+  height: 34px;
+}
+
+.nav-container {
+  display: flex;
+  height: 48px;
+  background: -webkit-linear-gradient(-45deg, #19191d 0%, #162755 100%);
+  width: 100%;
+}
+
+.logo-container {
+  margin: 4px;
+  padding: 2px;
 }

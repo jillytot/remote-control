@@ -7,6 +7,7 @@ import default06 from "./img/placeholder/default_user05.png";
 import defaultGuest from "./img/placeholder/default_guest.png";
 import defaultRobot from "./img/placeholder/default_robot.png";
 import remoLogo from "./img/remo-logo.png";
+import remoStaffBadge from "./img/remo-staff.png";
 
 const defaultImages = {
   default01: default01,
@@ -17,7 +18,8 @@ const defaultImages = {
   default06: default06,
   defaultGuest: defaultGuest,
   defaultRobot: defaultRobot,
-  remoLogo: remoLogo
+  remoLogo: remoLogo,
+  remoStaffBadge: remoStaffBadge
 };
 
 export default defaultImages;

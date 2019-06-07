@@ -2,4 +2,8 @@
   padding: 5%;
   background: -webkit-linear-gradient(-45deg, #d64eb8 0%, #003fee 100%);
   /* border-radius: 24px; */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
 }

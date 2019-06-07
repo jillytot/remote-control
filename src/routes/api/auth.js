@@ -1,16 +1,17 @@
 const router = require("express").Router();
-const { verifyAuthToken } = require("../../models/user");
+const { authUser } = require("../../models/user");
 
 router.post("/", async (req, res) => {
   try {
-    const getUser = await verifyAuthToken(req.body.token);
+    let getUser = await authUser(req.body.token);
 
     if (getUser) {
       console.log("API/AUTH: Verify User: ", getUser.id);
       let formatUser = {
         user: {
           username: getUser.username,
-          id: getUser.id
+          id: getUser.id,
+          status: getUser.status
         }
       };
       res.send(formatUser);

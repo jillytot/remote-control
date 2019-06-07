@@ -67,6 +67,7 @@ export default class RobotServer extends Component {
       } else {
         server.active = false;
       }
+      return null;
     });
     this.setState({ robotServers });
   };
@@ -75,13 +76,14 @@ export default class RobotServer extends Component {
     const { socket, user } = this.props;
     return (
       <React.Fragment>
-        <div className="robot-server-panel">
-          {this.state.robotServers !== []
-            ? this.displayServers(this.state.robotServers)
-            : "Fetching Servers"}
+        <div className="server-channel-container">
+          <div className="robot-server-container">
+            {this.state.robotServers !== []
+              ? this.displayServers(this.state.robotServers)
+              : "Fetching Servers"}
+          </div>
+          <Channels socket={socket} user={user} />
         </div>
-
-        <Channels socket={socket} user={user} />
       </React.Fragment>
     );
   }

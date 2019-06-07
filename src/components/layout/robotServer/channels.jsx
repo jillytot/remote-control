@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import Chat from "../chat/chat";
 import { socketEvents } from "../../../services/sockets/events";
 import { colors } from "../../../config/colors";
+import Robot from "../robot/robot";
 const { SEND_ROBOT_SERVER_INFO, GET_CHAT, ACTIVE_USERS_UPDATED } = socketEvents;
 
 //placeholder
@@ -10,7 +11,8 @@ export default class Channels extends Component {
   state = {
     channels: [],
     users: [],
-    userColors: {}
+    userColors: {},
+    currentChannel: null
   };
 
   //not sure if needed, but why not
@@ -29,6 +31,7 @@ export default class Channels extends Component {
       let usernamesToKeep = [];
       this.state.users.map(user => {
         usernamesToKeep.push(user.username);
+        return null;
       });
 
       // chatroom.messages.map(message => {
@@ -41,8 +44,9 @@ export default class Channels extends Component {
         if (usernamesToKeep.includes(username) !== true) {
           delete newColors[username];
         }
+        return null;
       });
-      console.log(newColors);
+      // console.log(newColors);
       this.setState({ userColors: newColors });
     }, 30000); //garbage cleanup every 30s
   }
@@ -82,7 +86,7 @@ export default class Channels extends Component {
     if (socket && this._isMounted) {
       //Currently doesn't handle channels being dynamically updated
       socket.on(SEND_ROBOT_SERVER_INFO, data => {
-        console.log("SEND ROBOT SERVER INFO: ", data);
+        // console.log("SEND ROBOT SERVER INFO: ", data);
         this.setState({
           channels: data.channels,
           users: this.getUserColors(data.users)
@@ -107,7 +111,8 @@ export default class Channels extends Component {
     });
     this.setState({ channels: storeChannels });
     const chatId = channel.id;
-    console.log("GET CHAT! ", chatId);
+    this.setState({ currentChannel: channel.id });
+    // console.log("GET CHAT! ", chatId);
     const { socket } = this.props;
     socket.emit(GET_CHAT, chatId);
   };
@@ -125,10 +130,19 @@ export default class Channels extends Component {
           key={channel.id}
           onClick={() => this.handleClick(channel)}
         >
+          {"# "}
           {channel.name}
         </div>
       );
     });
+  };
+
+  handleDisplayChannels = () => {
+    if (this.state.channels && this.state.channels.length > 0) {
+      return "list-channels-container";
+    } else {
+      return "";
+    }
   };
 
   render() {
@@ -136,9 +150,18 @@ export default class Channels extends Component {
     const { users } = this.state;
     return (
       <React.Fragment>
-        <div>{this.displayChannels()}</div>
+        <div className={this.handleDisplayChannels()}>
+          {this.displayChannels()}
+        </div>
         {users !== [] ? (
-          <Chat user={user} socket={socket} users={users} />
+          <React.Fragment>
+            <Robot
+              user={user}
+              socket={socket}
+              channel={this.state.currentChannel}
+            />
+            <Chat user={user} socket={socket} users={users} />
+          </React.Fragment>
         ) : (
           <React.Fragment />
         )}

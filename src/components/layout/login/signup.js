@@ -4,13 +4,19 @@ import Form from "../../common/form";
 import Joi from "joi-browser";
 import "./login.css";
 import axios from "axios";
-import { apiUrl } from "../../../config/clientSettings";
+import {
+  apiUrl,
+  reCaptchaSiteKey
+} from "../../../config/clientSettings";
+import ReCAPTCHA from "react-google-recaptcha";
 
 export default class Signup extends Form {
   state = {
     data: { username: "", password: "", confirm: "", email: "" },
     errors: {},
-    isUser: null
+    isUser: null,
+    error: "",
+    captcha: ""
   };
 
   schema = {
@@ -27,20 +33,14 @@ export default class Signup extends Form {
       .label("Password"),
     confirm: Joi.string()
       .required()
-      .equal(Joi.ref("password"))
-      .options({
-        language: {
-          any: {
-            allowOnly: "!!Passwords do not match"
-          }
-        }
-      })
       .label("Confirm Password"),
     email: Joi.string()
       .email()
       .required()
       .label("Email")
   };
+
+  recaptchaRef = React.createRef();
 
   async componentDidMount() {
     //Just a test to see my API stuff is working
@@ -66,19 +66,32 @@ export default class Signup extends Form {
     }
   };
 
-  handleFeedback = () => {};
-
   setError = error => {
-    this.setState({ errors: error });
+    this.setState({ error: error });
+  };
+
+  handleSubmitError = () => {
+    const { error } = this.state;
+    if (error === "") {
+      return <React.Fragment />;
+    }
+    return <div className="alert">{this.state.error}</div>;
   };
 
   doSubmit = async () => {
-    const { data } = this.state;
+    const { password, confirm } = this.state.data;
+    if (password !== confirm) {
+      this.setState({ error: "Passwords do not match!" });
+      return;
+    }
+
+    const { data, captcha } = this.state;
     await axios
       .post(`${apiUrl}/signup`, {
         username: data.username,
         password: data.password,
-        email: data.email
+        email: data.email,
+        response: captcha
       })
       .then(response => {
         const { handleAuth } = this.props;
@@ -93,14 +106,28 @@ export default class Signup extends Form {
     //Call the server
   };
 
+  handleCaptcha = async () => {
+    this.setState({
+      captcha: this.recaptchaRef.current.getValue()
+    })
+  };
+
   render() {
     return (
       <div className="register-form">
+        Please do not use actual passwords or emails for this build.
+        {this.handleSubmitError()}
         <form onSubmit={this.handleSubmit}>
-          {this.renderInput("username", "Username", "username")}
+          {this.renderInput("username", "Username", "text")}
           {this.renderInput("password", "Password", "password")}
-          {this.renderInput("confirm", "Confirm Password", "confirm")}
+          {this.renderInput("confirm", "Confirm Password", "password")}
           {this.renderInput("email", "Email", "email")}
+          <ReCAPTCHA
+            sitekey={reCaptchaSiteKey}
+            ref={this.recaptchaRef}
+            onChange={this.handleCaptcha} // this parameter is required.
+            // theme="dark"   // Did you know captcha has a dark theme?
+          />
           {this.renderButton("Submit")}
         </form>
       </div>

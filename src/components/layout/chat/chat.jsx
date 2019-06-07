@@ -18,15 +18,9 @@ export default class Chat extends Component {
 
   state = {
     storeUsers: [],
-    users: []
+    users: [],
+    menu: "Chat"
   };
-
-  // componentDidUpdate(prevProps) {
-  //   if (prevProps.users !== this.props.users) {
-  //     console.log("Test state change");
-  //     //this.colorUsers(this.props.users);
-  //   }
-  // }
 
   componentDidMount() {
     this._isMounted = true;
@@ -54,16 +48,31 @@ export default class Chat extends Component {
     }
   };
 
+  handleChatFeedback = fromSendChat => {
+    let push = true;
+    if (previousFeedback === fromSendChat.id) {
+      push = false;
+    }
+    console.log("HANDLE CHAT FEEDBACK", fromSendChat.id);
+    let { chatroom } = this.state;
+
+    if (push) {
+      chatroom.messages.push(fromSendChat);
+      this.setState({ chatroom });
+      previousFeedback = fromSendChat.id;
+    }
+  };
+
   getMessageColors = () => {
     const { users } = this.props;
     const { chatroom } = this.state;
     return chatroom.messages.map(message => {
-      console.log(" Message from getMessageColors: ", message);
+      // console.log(" Message from getMessageColors: ", message);
       const user = users.find(user => {
         return user.username === message.sender;
       });
       if (user && user.color) {
-        console.log("Updating message color");
+        // console.log("Updating message color");
         return {
           ...message,
           color: user.color
@@ -73,33 +82,78 @@ export default class Chat extends Component {
     });
   };
 
+  handleMenuSelect = selected => {
+    console.log(selected);
+    this.setState({ menu: selected });
+  };
+
+  handleMenuItem = option => {
+    return (
+      <span
+        className="menu-option"
+        onClick={() => this.handleMenuSelect(option.label)}
+      >
+        {option.label}
+      </span>
+    );
+  };
+
+  handleReturnOptions = () => {
+    if (this.state.menu) {
+      const { onEvent, user, users, socket } = this.props;
+      const { chatroom, menu } = this.state;
+      console.log("Menu", menu);
+      if (menu === "Chat") {
+        return (
+          <div className="messages-container">
+            <div className="chat-background">
+              <Messages
+                messages={chatroom ? this.getMessageColors() : []}
+                users={users}
+              />
+            </div>
+            <SendChat
+              onEvent={onEvent}
+              user={user}
+              socket={socket}
+              chatId={chatroom ? chatroom.id : ""}
+              server_id={chatroom ? chatroom.host_id : ""}
+              onChatFeedback={this.handleChatFeedback}
+            />
+          </div>
+        );
+      }
+      if (menu === "Users") {
+        return <UserList users={users} colors={colors} />;
+      }
+      return "...";
+    }
+  };
+
   render() {
-    const { onEvent, user, users, socket } = this.props;
     const { chatroom } = this.state;
 
     return (
       <div>
         {chatroom ? (
           <div className="chat-container">
-            <div className="messages-container">
-              <Messages
-                messages={chatroom ? this.getMessageColors() : []}
-                users={users}
-                name={chatroom ? chatroom.name : "Untitled"}
-              />
-              <SendChat
-                onEvent={onEvent}
-                user={user}
-                socket={socket}
-                chatId={chatroom ? chatroom.id : ""}
-              />
+            <div className="chat-header-container">
+              <div className="chat-title">
+                {chatroom ? chatroom.name : "Untitled"}
+              </div>
+              <div className="toggle-users">
+                {this.handleMenuItem({ label: "Chat" })} |
+                {this.handleMenuItem({ label: "Users" })}
+              </div>
             </div>
-            <UserList users={users} colors={colors} />
+            {this.handleReturnOptions()}
           </div>
         ) : (
-          <div>...</div>
+          <div />
         )}
       </div>
     );
   }
 }
+
+let previousFeedback = "";

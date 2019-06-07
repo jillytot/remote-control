@@ -10,13 +10,20 @@ export default class TestLayout extends Component {
         <div className="container">
           <div className="nav-bar"> It's a Nav! </div>
           <div className="left">
-            <ul className="item">
-              <li className="sub-item">Your Face!</li>
-              <li className="sub-item">another thing</li>
-              <li className="sub-item">that one thing</li>
-              <li className="sub-item">something else</li>
-              <li className="sub-item">yea....</li>
-            </ul>
+            <div className="left-container">
+              <div className="server-container">
+                <div className="server-option">Server</div>
+                <div className="server-option">Server</div>
+                <div className="server-option">Server</div>
+                <div className="server-option">Server</div>
+                <div className="server-option">Server</div>
+                <div className="server-option">Server</div>
+                <div className="server-option">Server</div>
+                <div className="server-option">Server</div>
+              </div>
+
+              <div className="channel-container" />
+            </div>
           </div>
           <div className="center">
             <p>Here is stuff i want to write. This is stuff. It is great.</p>

@@ -1,0 +1,79 @@
+.robot-container {
+  background-color: rgb(35, 35, 51);
+}
+
+.robot-display-container {
+  background-color: rgb(15, 13, 15);
+  min-height: 432px;
+  min-width: 768px;
+  margin: 5px;
+  position: relative;
+}
+
+.robot-controls-container {
+  background-color: rgb(28, 23, 34);
+  margin: 5px;
+  padding: 10px;
+}
+
+.robtn {
+  background-color: rgb(50, 60, 104);
+  border-radius: 24px;
+  color: white;
+  border: 0px;
+  font-size: 16px;
+  padding: 13px 20px 13px 10px;
+  /* padding: 10px; */
+  margin: 4px;
+}
+
+.robtn:hover {
+  box-shadow: inset 0 0 0 2px yellow;
+  cursor: pointer;
+}
+
+.robtn:active {
+  transform: translateY(4px);
+}
+
+.hotkey {
+  background-color: rgb(73, 83, 131);
+  padding: 6px;
+  margin-right: 2px;
+  margin-left: 6px;
+  border-radius: 7px;
+  width: 200px;
+}
+
+.display-info-container {
+  display: flex;
+  flex-direction: column;
+  font-size: 12px;
+  width: 50%;
+  /* background-color: red; */
+  align-items: flex-start;
+  padding: 5px;
+  /* align-self: bottom; */
+
+  /* text-align: left; */
+}
+
+.display-info {
+  background-color: rgba(255, 255, 255, 0.05);
+  /* position: absolute; */
+  padding: 2px;
+  margin-bottom: 1px;
+  display: flex;
+  z-index: 10;
+}
+
+.video-canvas {
+  background-color: rgb(15, 15, 15);
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+}

@@ -48,8 +48,10 @@
 .display-info-container {
   display: flex;
   flex-direction: column;
+  justify-content: flex-end;
   font-size: 12px;
   width: 50%;
+  min-height: 432px;
   /* background-color: red; */
   align-items: flex-start;
   padding: 5px;

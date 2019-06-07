@@ -35,10 +35,12 @@ const { extractToken } = require("./user");
 //Used to generate / create a new robot server
 module.exports.createRobotServer = async (server, token) => {
   console.log("About to build server: ", server, token);
-  const { id, server_name } = server;
-  console.log(id);
+  const { server_name } = server;
+  const getUserId = await extractToken(token);
+  console.log("GET USER ID FROM TOKEN: ", getUserId, getUserId.id);
+
   let buildServer = {};
-  buildServer.owner_id = await extractToken(token);
+  buildServer.owner_id = getUserId.id;
   buildServer.server_name = server_name;
   buildServer.server_id = `serv-${makeId()}`; //Note: if server_id === 'remo', then it is refering to the global server
   buildServer.created = createTimeStamp();

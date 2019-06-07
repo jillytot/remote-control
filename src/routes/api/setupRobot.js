@@ -4,7 +4,7 @@ const { createRobot } = require("../../models/robot");
 const auth = require("../auth");
 
 //Use authorization head over body
-schema = Joi.object().keys({
+const schema = Joi.object().keys({
   robot_name: Joi.string()
     .regex(/[\w\s]+/)
     .min(3)

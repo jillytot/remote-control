@@ -38,7 +38,7 @@ router.get("/list", async (req, res) => {
 
 module.exports = router;
 
-schema = Joi.object().keys({
+const schema = Joi.object().keys({
   server_name: Joi.string()
     .regex(/[\w\s]+/)
     .min(3)

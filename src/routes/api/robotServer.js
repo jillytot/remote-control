@@ -3,21 +3,29 @@ const {
   createRobotServer,
   getRobotServers
 } = require("../../models/robotServer");
-
-const { getChatRooms } = require("../../models/chatRoom");
-
+const auth = require("../auth");
 const Joi = require("joi");
 
-router.post("/create", async (req, res) => {
+router.get("/create", (req, res) => {
+  const response = {
+    server_name: "required",
+    authorization: "Bearer token must be included in authorization headers"
+  };
+  res.send(response);
+  return;
+});
+
+router.post("/create", auth, async (req, res) => {
   // post request
-  console.log("Generating Robot Server ", req.body);
-  const result = Joi.validate({ serverName: req.body.serverName }, schema);
+  console.log("Generating Robot Server ", req.body, req.token);
+  const result = Joi.validate({ server_name: req.body.server_name }, schema);
+
   console.log("Joi validation result: ", result);
   if (result.error !== null) {
     res.send("stop messing with the API Ged, i know it's you!");
     return;
   }
-  const buildRobotServer = await createRobotServer(req.body);
+  const buildRobotServer = await createRobotServer(req.body, req.token);
   buildRobotServer !== null
     ? res.send(buildRobotServer)
     : res.send("Error generating server");
@@ -31,13 +39,9 @@ router.get("/list", async (req, res) => {
 module.exports = router;
 
 schema = Joi.object().keys({
-  // owner_id: "0",
-  serverName: Joi.string()
+  server_name: Joi.string()
     .regex(/[\w\s]+/)
     .min(3)
     .max(30)
     .required()
-  // server_id: "serv-c73dbdb9-c7d6-4d7c-a139-229d229bd2b5",
-  // created: 1558406095210,
-  // channels: ["Welcome", "General"]
 });

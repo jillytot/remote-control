@@ -21,6 +21,7 @@ router.get("/setup", async (req, res) => {
 });
 
 router.post("/setup", auth, async (req, res) => {
+  console.log(req.token);
   console.log("Make Robot API start", req.body);
   const result = Joi.validate({ robot_name: req.body.robot_name }, schema);
   if (result.error) {

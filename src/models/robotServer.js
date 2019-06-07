@@ -30,21 +30,23 @@ const {
   ACTIVE_USERS_UPDATED
 } = require("../services/sockets/events").socketEvents;
 
+const { extractToken } = require("./user");
+
 //Used to generate / create a new robot server
-module.exports.createRobotServer = server => {
-  console.log("About to build server: ", server);
-  const { id, serverName } = server;
+module.exports.createRobotServer = async (server, token) => {
+  console.log("About to build server: ", server, token);
+  const { id, server_name } = server;
   console.log(id);
   let buildServer = {};
-  buildServer.owner_id = id;
-  buildServer.server_name = serverName;
+  buildServer.owner_id = await extractToken(token);
+  buildServer.server_name = server_name;
   buildServer.server_id = `serv-${makeId()}`; //Note: if server_id === 'remo', then it is refering to the global server
   buildServer.created = createTimeStamp();
   buildServer.channels = robotServer.channels;
   buildServer.users = [];
 
-  this.createChannels(buildServer);
-  this.saveServer(buildServer);
+  await this.createChannels(buildServer);
+  await this.saveServer(buildServer);
   console.log("Generating Server: ", buildServer);
   this.pushToActiveServers(buildServer);
   return buildServer;

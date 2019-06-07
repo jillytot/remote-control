@@ -17,6 +17,7 @@ module.exports = {
   defaultRate: 1000, //Message rate limit for most people
   minRate: 250, //Message rate limit for admins / server owners etc..
   slowMo: 30000, //Message rate limit for when we need to slow things down!
+  reCaptchaSiteKey: "6Lfg_KYUAAAAAH1hvQdp-qDOUToVn6FQWFOvbySo",
   socketUrl: `${host.local}:${serverPort}`,
   apiUrl: `${host.local}:${serverPort}${api.api}`,
   apiAuth: `${host.local}:${serverPort}${api.api}${api.auth}`,
@@ -24,6 +25,5 @@ module.exports = {
   apiLogin: `${host.local}:${serverPort}${api.api}${api.login}`,
   listRobotServers: `${host.local}:${serverPort}${api.api}${api.robotServers}${
     api.listRobotServers
-  }`,
-  reCaptchaSiteKey: "6Lfg_KYUAAAAAH1hvQdp-qDOUToVn6FQWFOvbySo"
+  }`
 };

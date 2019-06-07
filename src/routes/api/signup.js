@@ -16,9 +16,17 @@ router.post("/", async (req, res) => {
       const createUser = await user.createUser(req.body);
       createUser !== null ? res.send(createUser) : res.send("ok");
     } else {
-      console.error("Captcha failed!")
+      console.error("Captcha failed!");
+      res.send({
+        status: "failed",
+        error: "Unable to validate Captcha, please reload and try again"
+      });
     }
   } catch (err) {
+    res.send({
+      status: "error",
+      error: `${err.response.status} at ${err.response.config.url}`
+    });
     console.error(`${err.response.status} at ${err.response.config.url}`);
   }
 });

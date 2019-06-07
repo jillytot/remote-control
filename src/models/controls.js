@@ -43,6 +43,10 @@ module.exports.tempCommandValidation = button => {
   testControls.map(control => {
     if (button.label === control.label) validate = true;
   });
-  console.log("BUTTON VALIDATION PASSED");
+  if (validate) {
+    console.log("BUTTON VALIDATION PASSED");
+  } else {
+    console.log("BUTTON VALIDATION FAILED");
+  }
   return validate;
 };

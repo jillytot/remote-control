@@ -36,7 +36,8 @@ CREATE TABLE public.users
     type character varying[] COLLATE pg_catalog."default",
     check_username character varying COLLATE pg_catalog."default",
     status jsonb[],
-    settings jsonb[]
+    settings jsonb[],
+    session character varying COLLATE pg_catalog."default"
 )
 WITH (
     OIDS = FALSE
@@ -99,4 +100,24 @@ WITH (
 TABLESPACE pg_default;
 
 ALTER TABLE public.channels
+    OWNER to postgres;
+
+    CREATE TABLE public.robots
+(
+    name character varying COLLATE pg_catalog."default",
+    id character varying COLLATE pg_catalog."default" NOT NULL,
+    owner_id character varying COLLATE pg_catalog."default",
+    interfaces character varying[] COLLATE pg_catalog."default",
+    session character varying COLLATE pg_catalog."default",
+    created bigint,
+    status jsonb,
+    settings jsonb,
+    CONSTRAINT robots_pkey PRIMARY KEY (id)
+)
+WITH (
+    OIDS = FALSE
+)
+TABLESPACE pg_default;
+
+ALTER TABLE public.robots
     OWNER to postgres;

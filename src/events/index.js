@@ -70,13 +70,15 @@ module.exports.socketEvents = (socket, io) => {
       users: await sendActiveUsers(data.server_id)
       //chatRoom: await getChatRooms(data.server_id)
     };
-    io.to(userRoom).emit(SEND_ROBOT_SERVER_INFO, sendInfo);
+    //io.to(userRoom).emit(SEND_ROBOT_SERVER_INFO, sendInfo);
+    socket.emit(SEND_ROBOT_SERVER_INFO, sendInfo);
   });
 
   //Subscribe user to a specified chatroom, and send them all the specific info about it
   socket.on(GET_CHAT, async chatId => {
     console.log("GET CHAT Chat Id: ", chatId);
-    io.to(userRoom).emit(SEND_CHAT, await getChat(chatId));
+    //io.to(userRoom).emit(SEND_CHAT, await getChat(chatId));
+    socket.emit(SEND_CHAT, await getChat(chatId));
 
     //Subscribe user to chat
     const chatRoom = `${chatId}`;

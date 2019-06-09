@@ -49,7 +49,34 @@ export default class Channels extends Component {
       // console.log(newColors);
       this.setState({ userColors: newColors });
     }, 30000); //garbage cleanup every 30s
+
+    //set default channel
+    this.setDefaultChannel();
   }
+
+  setDefaultChannel = () => {
+    const { channels, settings } = this.props;
+    if (settings) {
+      console.log("Get Default from Settings");
+    } else {
+      console.log("No settings, set default channel to #General");
+    }
+  };
+
+  handleActiveChannel = activeChannel => {
+    const { channels } = this.state;
+    let storeChannels = channels.map(channel => {
+      if (channel.id === activeChannel.id) {
+        console.log(activeChannel, channel);
+        channel.active = true;
+      } else {
+        channel.active = false;
+      }
+      return channel;
+    });
+    this.setState({ channels: storeChannels });
+    this.setState({ currentChannel: activeChannel.id });
+  };
 
   generateColor = () => {
     return colors[Math.floor(Math.random() * colors.length)];
@@ -99,21 +126,9 @@ export default class Channels extends Component {
   };
 
   handleClick = channel => {
-    const { channels } = this.state;
-    let storeChannels = channels.map(aChannel => {
-      if (aChannel.id === channel.id) {
-        console.log(aChannel, channel);
-        aChannel.active = true;
-      } else {
-        aChannel.active = false;
-      }
-      return aChannel;
-    });
-    this.setState({ channels: storeChannels });
-    const chatId = channel.id;
-    this.setState({ currentChannel: channel.id });
-    // console.log("GET CHAT! ", chatId);
+    this.handleActiveChannel(channel);
     const { socket } = this.props;
+    const chatId = channel.id;
     socket.emit(GET_CHAT, chatId);
   };
 

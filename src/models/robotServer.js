@@ -45,6 +45,13 @@ module.exports.createRobotServer = async (server, token) => {
   buildServer.server_id = `serv-${makeId()}`; //Note: if server_id === 'remo', then it is refering to the global server
   buildServer.created = createTimeStamp();
   buildServer.channels = robotServer.channels;
+  buildServer.settings = {
+    default_channel: "General",
+    roles: [{ default: ["@everyone"] }]
+  };
+  buildServer.status = {
+    public: true
+  };
   buildServer.users = [];
 
   await this.createChannels(buildServer);
@@ -61,16 +68,27 @@ const robotServer = {
   ownerId: "",
   channels: ["Welcome", "General"],
   users: [],
-  created: ""
+  created: "",
+  settings: {},
+  status: {}
 };
 
 //Saves robot server to the Database
 module.exports.saveServer = async server => {
   const db = require("../services/db");
   console.log("Saving Server: ", server);
-  const { server_id, server_name, owner_id, channels, users, created } = server;
+  const {
+    server_id,
+    server_name,
+    owner_id,
+    channels,
+    users,
+    created,
+    settings,
+    status
+  } = server;
 
-  const dbPut = `INSERT INTO robot_servers (server_id, server_name, owner_id, channels, users, created ) VALUES($1, $2, $3, $4, $5, $6) RETURNING *`;
+  const dbPut = `INSERT INTO robot_servers (server_id, server_name, owner_id, channels, users, created, settings, status ) VALUES($1, $2, $3, $4, $5, $6, $7, $8) RETURNING *`;
   try {
     await db.query(dbPut, [
       server_id,
@@ -78,7 +96,9 @@ module.exports.saveServer = async server => {
       owner_id,
       channels,
       users,
-      created
+      created,
+      settings,
+      status
     ]);
   } catch (err) {
     console.log(err.stack);
@@ -88,7 +108,7 @@ module.exports.saveServer = async server => {
 };
 
 //Keep list of active users in memmory for now
-let activeServers = []; //Make this a global
+let activeServers = []; //I NEED TO RETHINK THIS SYSTEM (like how socket event / rooms are working)
 //This function is called once in 'src/services/server/server.js'
 //It initializes the active server sessions in memmory for all the servers currently stored in the database
 module.exports.initActiveServers = async () => {

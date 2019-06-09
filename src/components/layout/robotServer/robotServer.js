@@ -5,7 +5,7 @@ import DisplayRobotServer from "./displayRobotServer";
 import Channels from "./channels";
 import "./robotServer.css";
 import { socketEvents } from "../../../services/sockets/events";
-const { ROBOT_SERVER_UPDATED, GET_CHAT_ROOMS } = socketEvents;
+const { ROBOT_SERVER_UPDATED, GET_CHANNELS } = socketEvents;
 
 export default class RobotServer extends Component {
   state = {
@@ -56,9 +56,9 @@ export default class RobotServer extends Component {
   };
 
   handleClick = e => {
-    console.log("Get Chat: ", e);
+    console.log("Get Channel: ", e);
     const { socket, user } = this.props;
-    socket.emit(GET_CHAT_ROOMS, { user: user.id, server_id: e });
+    socket.emit(GET_CHANNELS, { user: user.id, server_id: e });
     let { robotServers } = this.state;
     robotServers.map(server => {
       console.log("Mapping Servers: ", server);

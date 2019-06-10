@@ -138,6 +138,7 @@ export default class Channels extends Component {
           channels: data.channels,
           users: this.getUserColors(data.users)
         });
+        if (this.state.currentChannel) this.handleClick(data.channels[0]);
       });
       socket.on(ACTIVE_USERS_UPDATED, users => {
         this.setState({ users: this.getUserColors(users) });

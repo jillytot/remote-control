@@ -7,7 +7,10 @@ import default06 from "./img/placeholder/default_user05.png";
 import defaultGuest from "./img/placeholder/default_guest.png";
 import defaultRobot from "./img/placeholder/default_robot.png";
 import remoLogo from "./img/remo-logo.png";
-import remoStaffBadge from "./img/remo-staff.png";
+import remoStaffBadge from "./img/staff.png";
+import globalModerator from "./img/global_moderator.png";
+import moderator from "./img/moderator.png";
+import owner from "./img/owner.png";
 
 const defaultImages = {
   default01: default01,
@@ -19,7 +22,10 @@ const defaultImages = {
   defaultGuest: defaultGuest,
   defaultRobot: defaultRobot,
   remoLogo: remoLogo,
-  remoStaffBadge: remoStaffBadge
+  remoStaffBadge: remoStaffBadge,
+  globalModerator: globalModerator,
+  moderator: moderator,
+  owner: owner
 };
 
 export default defaultImages;

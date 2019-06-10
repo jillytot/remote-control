@@ -31,7 +31,8 @@ module.exports.createChannel = data => {
   makeChannel.name = data.name;
   makeChannel.id = `chan-${makeId()}`;
   makeChannel.created = createTimeStamp();
-  makeChannel.access = [];
+  makeChannel.settings = {};
+  makeChannel.status = {};
 
   console.log("Generating Channel: ", makeChannel);
   this.saveChannel(makeChannel);
@@ -66,9 +67,10 @@ module.exports.saveChannel = async channel => {
     controls,
     display,
     created,
-    access
+    settings,
+    status
   } = channel;
-  const dbPut = `INSERT INTO channels (host_id, name, id, chat, controls, display, created, access ) VALUES($1, $2, $3, $4, $5, $6, $7, $8 ) RETURNING *`;
+  const dbPut = `INSERT INTO channels (host_id, name, id, chat, controls, display, created, settings, status) VALUES($1, $2, $3, $4, $5, $6, $7, $8, $9 ) RETURNING *`;
   try {
     console.log("Saving Channel: ", channel);
     await db.query(dbPut, [
@@ -79,7 +81,8 @@ module.exports.saveChannel = async channel => {
       controls,
       display,
       created,
-      access
+      settings,
+      status
     ]);
   } catch (err) {
     console.log(err);

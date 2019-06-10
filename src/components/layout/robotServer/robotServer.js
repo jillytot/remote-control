@@ -9,7 +9,8 @@ const { ROBOT_SERVER_UPDATED, GET_CHANNELS } = socketEvents;
 
 export default class RobotServer extends Component {
   state = {
-    robotServers: []
+    robotServers: [],
+    defaultChannel: ""
   };
 
   async componentDidMount() {
@@ -64,6 +65,10 @@ export default class RobotServer extends Component {
       console.log("Mapping Servers: ", server);
       if (e === server.server_id) {
         server.active = true;
+        console.log("Default Channel is: ", server.channels[0]);
+        this.setState({
+          defaultChannel: server.channels[0]
+        });
       } else {
         server.active = false;
       }
@@ -82,7 +87,11 @@ export default class RobotServer extends Component {
               ? this.displayServers(this.state.robotServers)
               : "Fetching Servers"}
           </div>
-          <Channels socket={socket} user={user} />
+          <Channels
+            socket={socket}
+            user={user}
+            defaultChannel={this.state.defaultChannel}
+          />
         </div>
       </React.Fragment>
     );

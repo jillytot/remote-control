@@ -44,7 +44,7 @@ module.exports.createRobotServer = async (server, token) => {
   buildServer.server_name = server_name;
   buildServer.server_id = `serv-${makeId()}`; //Note: if server_id === 'remo', then it is refering to the global server
   buildServer.created = createTimeStamp();
-  buildServer.channels = robotServer.channels;
+  buildServer.channels = [];
   buildServer.settings = {
     default_channel: "General",
     roles: [{ default: ["@everyone"] }]
@@ -54,7 +54,7 @@ module.exports.createRobotServer = async (server, token) => {
   };
   buildServer.users = [];
 
-  await this.createChannels(buildServer);
+  buildServer.channels.push(await this.initChannels(buildServer));
   await this.saveServer(buildServer);
   console.log("Generating Server: ", buildServer);
   this.pushToActiveServers(buildServer);
@@ -195,23 +195,18 @@ module.exports.activeUsersUpdated = async server_id => {
   io.to(server_id).emit(ACTIVE_USERS_UPDATED, pickServer.users);
 };
 
-module.exports.createChannels = async robotServer => {
+const defaultChannel = "General";
+module.exports.initChannels = async server => {
   const { createChannel } = require("./channel");
   const { createChatRoom } = require("./chatRoom");
-  try {
-    return await robotServer.channels.forEach(channel => {
-      const makeChat = createChatRoom(robotServer, channel);
-      const { id } = makeChat;
-      console.log("make chat from create channels", makeChat, channel);
-      return createChannel({
-        name: channel,
-        host_id: robotServer.server_id,
-        chat: id //get chat reference ID, or if none exists, create one?
-      });
-    });
-  } catch (err) {
-    console.log(err);
-  }
+  const makeChat = await createChatRoom(server, defaultChannel);
+  const { id } = makeChat;
+  const makeChannel = await createChannel({
+    name: defaultChannel,
+    host_id: server.server_id,
+    chat: id
+  });
+  return { id: makeChannel.id, name: makeChannel.name };
 };
 
 //MODERATION

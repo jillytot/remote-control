@@ -12,7 +12,8 @@ export default class Channels extends Component {
     channels: [],
     users: [],
     userColors: {},
-    currentChannel: null
+    currentChannel: null,
+    defaultLoaded: false
   };
 
   //not sure if needed, but why not
@@ -49,21 +50,19 @@ export default class Channels extends Component {
       // console.log(newColors);
       this.setState({ userColors: newColors });
     }, 30000); //garbage cleanup every 30s
-
-    //set default channel
-    this.setDefaultChannel();
   }
 
-  setDefaultChannel = () => {
-    const { channels, settings } = this.props;
-    if (settings) {
-      console.log("Get Default from Settings");
-    } else {
-      console.log("No settings, set default channel to #General");
+  loadDefaultChannel = () => {
+    const { channels, defaultChannel, settings } = this.props;
+    const { currentChannel, defaultLoaded } = this.state;
+    if (currentChannel || defaultLoaded) return;
+    if (channels && channels.length > 0) {
+      this.handleActiveChannel(defaultChannel);
     }
   };
 
   handleActiveChannel = activeChannel => {
+    console.log("LOAD CHANNEL", activeChannel);
     const { channels } = this.state;
     let storeChannels = channels.map(channel => {
       if (channel.id === activeChannel.id) {
@@ -134,6 +133,7 @@ export default class Channels extends Component {
 
   displayChannels = () => {
     const { channels } = this.state;
+    this.loadDefaultChannel();
     return channels.map(channel => {
       return (
         <div

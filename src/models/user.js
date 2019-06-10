@@ -329,6 +329,14 @@ module.exports.sendActiveUsers = async robot_server => {
 };
 
 //USER TYPE MANAGEMENT
+/*
+  Badges: There are 4 slots for badges, even though a user can be multiple overlapping types
+  Slot 1: Global (example: Staff, Global MOderator), 
+  Slot 2: Local (example: owner, moderator), 
+  Slot 3: Global Support (AKA Patreon), 
+  Slot 4: Local Support (AKA Server Sub) 
+  */
+
 module.exports.userTypes = [
   "staff",
   "owner",

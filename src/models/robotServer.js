@@ -47,7 +47,13 @@ module.exports.createRobotServer = async (server, token) => {
   buildServer.channels = [];
   buildServer.settings = {
     default_channel: "General",
-    roles: [{ default: ["@everyone"] }]
+    roles: [
+      {
+        role: "default",
+        members: ["@everyone"]
+      },
+      { role: "owner", members: [getUserId.id] }
+    ]
   };
   buildServer.status = {
     public: true
@@ -216,3 +222,43 @@ module.exports.sendGlobalTimeout = (server_id, badUser) => {
   const { publicUser } = require("./user");
   io.to(server_id).emit(GLOBAL_TIMEOUT, publicUser(badUser));
 };
+
+module.exports.getLocalTypes = async (server_id, user_id) => {
+  let localTypes = [];
+  const getServer = await this.getRobotServer(server_id);
+  const { settings } = getServer;
+  console.log("GET ROBOT SERVER STATUS: ", settings);
+  settings.roles.map(role => {
+    role.members.forEach(member => {
+      if (user_id === member) localTypes.push(role.role);
+    });
+  });
+  localTypes = Array.from(new Set(localTypes));
+  console.log("SENDING LOCAL TYPES: ", localTypes);
+  return localTypes;
+};
+
+module.exports.getRobotServer = async server_id => {
+  const db = require("../services/db");
+  try {
+    const query = "SELECT * FROM robot_servers WHERE server_id = $1 LIMIT 1";
+    const result = await db.query(query, [server_id]);
+    return result.rows[0];
+  } catch (err) {
+    console.log(err);
+    return null;
+  }
+};
+
+const tester = async () => {
+  //console.log(await this.getRobotServer("serv-ee73da73-f6a8-442a-b207-02fe28dde8b0"));
+  console.log(
+    "Types: ",
+    await this.getLocalTypes(
+      "serv-ee73da73-f6a8-442a-b207-02fe28dde8b0",
+      "user-810c7f96-47ad-4408-a8a2-3c9274fa2898"
+    )
+  );
+  // process.exit(0);
+};
+tester();

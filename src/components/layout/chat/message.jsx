@@ -30,6 +30,14 @@ const Message = ({ message }) => {
     return filter;
   };
 
+  /*
+  Badges: 
+  Slot 1: Global (example: Staff, Global MOderator), 
+  Slot 2: Local (example: owner, moderator), 
+  Slot 3: Global Support (AKA Patreon), 
+  Slot 4: Local Support (AKA Server Sub) 
+  */
+
   const handleBadges = message => {
     const { badges } = message;
     if (message && message.type === types.moderation) return <React.Fragment />;

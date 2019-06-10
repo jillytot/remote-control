@@ -57,7 +57,7 @@ export default class Channels extends Component {
     const { currentChannel, defaultLoaded } = this.state;
     if (currentChannel || defaultLoaded) return;
     if (channels && channels.length > 0) {
-      this.handleActiveChannel(defaultChannel);
+      this.handleActiveChannel(channels[0]);
     }
   };
 

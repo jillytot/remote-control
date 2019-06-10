@@ -10,7 +10,7 @@ const { ROBOT_SERVER_UPDATED, GET_CHANNELS } = socketEvents;
 export default class RobotServer extends Component {
   state = {
     robotServers: [],
-    defaultChannel: ""
+    selectedServer: null //Has the user clicked on a server
   };
 
   async componentDidMount() {
@@ -37,10 +37,7 @@ export default class RobotServer extends Component {
     return servers.map(server => {
       //console.log("Server Name: ", server.server_name);
       return (
-        <div
-          key={server.server_id}
-          onClick={() => this.handleClick(server.server_id)}
-        >
+        <div key={server.server_id} onClick={() => this.handleClick(server)}>
           <DisplayRobotServer
             key={server.server_id}
             serverName={server.server_name}
@@ -57,18 +54,15 @@ export default class RobotServer extends Component {
   };
 
   handleClick = e => {
-    console.log("Get Channel: ", e);
+    const { server_id } = e;
+    this.setState({ selectedServer: e });
+    console.log("Server Selected ", e.server_name);
     const { socket, user } = this.props;
-    socket.emit(GET_CHANNELS, { user: user.id, server_id: e });
+    socket.emit(GET_CHANNELS, { user: user.id, server_id: server_id });
     let { robotServers } = this.state;
     robotServers.map(server => {
-      console.log("Mapping Servers: ", server);
-      if (e === server.server_id) {
+      if (server_id === server.server_id) {
         server.active = true;
-        console.log("Default Channel is: ", server.channels[0]);
-        this.setState({
-          defaultChannel: server.channels[0]
-        });
       } else {
         server.active = false;
       }
@@ -87,11 +81,15 @@ export default class RobotServer extends Component {
               ? this.displayServers(this.state.robotServers)
               : "Fetching Servers"}
           </div>
-          <Channels
-            socket={socket}
-            user={user}
-            defaultChannel={this.state.defaultChannel}
-          />
+          {this.state.activeServer ? (
+            <Channels
+              socket={socket}
+              user={user}
+              selectedServer={this.state.selectedServer}
+            />
+          ) : (
+            <React.Fragment />
+          )}
         </div>
       </React.Fragment>
     );

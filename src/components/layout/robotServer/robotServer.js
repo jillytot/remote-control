@@ -13,6 +13,12 @@ export default class RobotServer extends Component {
     selectedServer: null //Has the user clicked on a server
   };
 
+  componentDidUpdate(prevState) {
+    if (prevState !== this.state) {
+      this.loadServerChannels();
+    }
+  }
+
   async componentDidMount() {
     await this.getServers();
     this.handleUpdateServers();
@@ -71,8 +77,18 @@ export default class RobotServer extends Component {
     this.setState({ robotServers });
   };
 
-  render() {
+  loadServerChannels = () => {
     const { socket, user } = this.props;
+    return (
+      <Channels
+        socket={socket}
+        user={user}
+        selectedServer={this.state.selectedServer}
+      />
+    );
+  };
+
+  render() {
     return (
       <React.Fragment>
         <div className="server-channel-container">
@@ -81,15 +97,7 @@ export default class RobotServer extends Component {
               ? this.displayServers(this.state.robotServers)
               : "Fetching Servers"}
           </div>
-          {this.state.activeServer ? (
-            <Channels
-              socket={socket}
-              user={user}
-              selectedServer={this.state.selectedServer}
-            />
-          ) : (
-            <React.Fragment />
-          )}
+          {this.loadServerChannels()}
         </div>
       </React.Fragment>
     );

@@ -13,10 +13,11 @@ export default class Channels extends Component {
     users: [],
     userColors: {},
     currentChannel: null,
+    storeSelectedServer: null,
     defaultLoaded: false
   };
 
-  //not sure if needed, but why not
+  // not sure if needed, but why not
   componentDidUpdate(prevState) {
     if (prevState !== this.state) {
       this.displayChannels();
@@ -50,15 +51,35 @@ export default class Channels extends Component {
       // console.log(newColors);
       this.setState({ userColors: newColors });
     }, 30000); //garbage cleanup every 30s
+    this.loadDefaultChannel();
   }
 
   loadDefaultChannel = () => {
-    const { channels, defaultChannel, settings } = this.props;
-    const { currentChannel, defaultLoaded } = this.state;
+    //const { channels, selectedServer } = this.props;
+    const {
+      currentChannel,
+      defaultLoaded,
+      channels,
+      storeSelectedServer
+    } = this.state;
+    if (
+      this.props.selectedServer &&
+      this.props.selectedServer.server_id &&
+      this.props.selectedServer.server_id !== storeSelectedServer
+    ) {
+      this.setState({
+        storeSelectedServer: this.props.selectedServer.server_id,
+        defaultLoaded: false,
+        currentChannel: null
+      });
+    }
     if (currentChannel || defaultLoaded) return;
+
     if (channels && channels.length > 0) {
+      console.log("LOADING DEFAULT CHANNEL");
       this.handleActiveChannel(channels[0]);
     }
+    return;
   };
 
   handleActiveChannel = activeChannel => {

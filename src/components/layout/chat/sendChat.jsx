@@ -43,10 +43,10 @@ export default class SendChat extends Form {
   doSubmit = () => {
     let keepGoing = true;
     const { user, socket, chatId, server_id, onChatFeedback } = this.props;
-    console.log("CHECK USER STATUS TIMEOUT: ", user.status[0].timeout);
-    console.log("CHECK USER STATUS: ", user.status[0]);
+    // console.log("CHECK USER STATUS TIMEOUT: ", user.status.timeout);
+    // console.log("CHECK USER STATUS: ", user.status);
 
-    if (user.status[0].timeout) {
+    if (user.status && user.status.timeout) {
       keepGoing = false;
       const messageBlank = {
         time_stamp: Date.now(),

@@ -15,19 +15,17 @@ const {
 } = require("../services/sockets/events").socketEvents;
 
 //User status Prototype:
-const statusPt = [
-  {
-    server_id: "global", //server_id: global refers to global status
-    timeout: false
-  }
-  //server_id: Status, individual server status per user will mirror the global status as much as possible
-];
+const statusPt = {
+  //server_id: global refers to global status
+  timeout: false
+  //types: [] //Global Only
+};
+//server_id: Status, individual server status per user will mirror the global status as much as possible
 
-const settingsPt = [
-  { server_id: "global" } //Global Settings
-  //server_id: {} ...Settings for individual servers will be listed here, scheme will mirror global as much as possible
-];
-
+const settingsPt = {
+  test_value: null
+}; //Global Settings
+//server_id: {} ...Settings for individual servers will be listed here, scheme will mirror global as much as possible
 //roles will be a more robust way to manage user types
 const rolesPt = [{ server_id: "global", roles: [] }];
 
@@ -371,7 +369,7 @@ module.exports.timeoutUser = async (user, time, server_id) => {
   console.log("TIMEOUT USER: ", user, time);
   if (user && time) {
     let { status } = user;
-    status[0].timeout = true;
+    status.timeout = true;
     user.status = status;
     let checkUpdatedStatus = await this.updateStatus(user);
     createTimer(time, this.unTimeoutUser, user);
@@ -385,7 +383,7 @@ module.exports.unTimeoutUser = async user => {
   console.log("END TIMEOUT FOR USER: ", user);
   if (user) {
     let { status } = user;
-    status[0].timeout = false;
+    status.timeout = false;
     user.status = status;
     await this.updateStatus(user);
     return true;

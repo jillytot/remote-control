@@ -20,6 +20,15 @@ channelPrototype = {
 };
 
 let activeChannels = [];
+
+const settingsPt = {
+  public: true
+};
+
+const statusPt = {
+  test_value: true
+};
+
 module.exports.createChannel = data => {
   console.log("Channel Data: ", data);
 
@@ -31,8 +40,8 @@ module.exports.createChannel = data => {
   makeChannel.name = data.name;
   makeChannel.id = `chan-${makeId()}`;
   makeChannel.created = createTimeStamp();
-  makeChannel.settings = {};
-  makeChannel.status = {};
+  makeChannel.settings = settingsPt;
+  makeChannel.status = statusPt;
 
   console.log("Generating Channel: ", makeChannel);
   this.saveChannel(makeChannel);
@@ -73,7 +82,7 @@ module.exports.saveChannel = async channel => {
   const dbPut = `INSERT INTO channels (host_id, name, id, chat, controls, display, created, settings, status) VALUES($1, $2, $3, $4, $5, $6, $7, $8, $9 ) RETURNING *`;
   try {
     console.log("Saving Channel: ", channel);
-    await db.query(dbPut, [
+    return await db.query(dbPut, [
       host_id,
       name,
       id,

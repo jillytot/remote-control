@@ -227,10 +227,12 @@ module.exports.getLocalTypes = async (server_id, user_id) => {
   let localTypes = [];
   const getServer = await this.getRobotServer(server_id);
   const { settings } = getServer;
-  console.log("GET ROBOT SERVER STATUS: ", settings);
-  settings.roles.map(role => {
+  settings.roles.forEach(role => {
     role.members.forEach(member => {
-      if (user_id === member) localTypes.push(role.role);
+      if (user_id === member) {
+        localTypes.push(role.role);
+        console.log(`Pushing ${role.role} to ${localTypes}`);
+      }
     });
   });
   localTypes = Array.from(new Set(localTypes));

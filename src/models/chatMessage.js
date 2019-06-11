@@ -19,7 +19,7 @@ module.exports.createMessage = async message => {
   makeMess.badges = await this.getBadges(
     message.userType,
     message.server_id,
-    message.sender_id
+    message.userId
   );
   makeMess.type = "";
 

@@ -53,6 +53,7 @@ const Message = ({ message }) => {
                 className="message-badge"
                 src={defaultImages["remoStaffBadge"]}
                 alt={badge}
+                title={"Remo Developer"}
               />
             </span>
           );
@@ -65,6 +66,7 @@ const Message = ({ message }) => {
                 className="message-badge"
                 src={defaultImages["owner"]}
                 alt={badge}
+                title={"Robot Server Owner"}
               />
             </span>
           );
@@ -77,6 +79,7 @@ const Message = ({ message }) => {
                 className="message-badge"
                 src={defaultImages["globalModerator"]}
                 alt={badge}
+                title={"Global Moderator"}
               />
             </span>
           );

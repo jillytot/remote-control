@@ -5,6 +5,7 @@ import DisplayRobotServer from "./displayRobotServer";
 import Channels from "./channels";
 import "./robotServer.css";
 import { socketEvents } from "../../../services/sockets/events";
+import AddServer from "./addServer";
 const { ROBOT_SERVER_UPDATED, GET_CHANNELS } = socketEvents;
 
 export default class RobotServer extends Component {
@@ -96,6 +97,8 @@ export default class RobotServer extends Component {
             {this.state.robotServers !== []
               ? this.displayServers(this.state.robotServers)
               : "Fetching Servers"}
+            <AddServer input="derp" />
+            ...
           </div>
           {this.loadServerChannels()}
         </div>

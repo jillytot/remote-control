@@ -249,16 +249,3 @@ module.exports.getRobotServer = async server_id => {
     return null;
   }
 };
-
-const tester = async () => {
-  //console.log(await this.getRobotServer("serv-ee73da73-f6a8-442a-b207-02fe28dde8b0"));
-  console.log(
-    "Types: ",
-    await this.getLocalTypes(
-      "serv-ee73da73-f6a8-442a-b207-02fe28dde8b0",
-      "user-810c7f96-47ad-4408-a8a2-3c9274fa2898"
-    )
-  );
-  // process.exit(0);
-};
-tester();

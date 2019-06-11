@@ -84,6 +84,18 @@ const Message = ({ message }) => {
             </span>
           );
         }
+        if (badge === "local_moderator") {
+          return (
+            <span key={message.id + badge}>
+              <img
+                className="message-badge"
+                src={defaultImages["moderator"]}
+                alt={badge}
+                title={"Moderator"}
+              />
+            </span>
+          );
+        }
         return <React.Fragment key={badge} />;
       });
     }

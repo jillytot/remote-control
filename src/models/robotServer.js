@@ -235,7 +235,7 @@ module.exports.getLocalTypes = async (server_id, user_id) => {
       }
     });
   });
-  localTypes = Array.from(new Set(localTypes));
+
   console.log("SENDING LOCAL TYPES: ", localTypes);
   return localTypes;
 };

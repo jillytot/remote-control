@@ -59,6 +59,7 @@ module.exports.getBadges = async (checkTypes, server_id, userId) => {
 
   if (Array.isArray(checkTypes)) {
     console.log("CHECK TYPES: ", checkTypes);
+    checkTypes = Array.from(new Set(checkTypes));
     return checkTypes;
     // return checkTypes.map(checkType => {
     //   if (checkType === "staff") checkTypes.push("staff");

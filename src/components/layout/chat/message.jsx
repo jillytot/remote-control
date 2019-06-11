@@ -42,11 +42,13 @@ const Message = ({ message }) => {
     const { badges } = message;
     if (message && message.type === types.moderation) return <React.Fragment />;
     if (badges && badges.length > 0) {
+      console.log("BADGES GET: ", badges);
       return badges.map(badge => {
+        console.log("BADGE GET: ", badge);
         if (badge === "staff") {
           // console.log("ADD BADGE!");
           return (
-            <span key={badge}>
+            <span key={message.id + badge}>
               <img
                 className="message-badge"
                 src={defaultImages["remoStaffBadge"]}
@@ -54,9 +56,32 @@ const Message = ({ message }) => {
               />
             </span>
           );
-        } else {
-          return <React.Fragment />;
         }
+
+        if (badge === "owner") {
+          return (
+            <span key={message.id + badge}>
+              <img
+                className="message-badge"
+                src={defaultImages["owner"]}
+                alt={badge}
+              />
+            </span>
+          );
+        }
+
+        if (badge === "global_moderator") {
+          return (
+            <span key={message.id + badge}>
+              <img
+                className="message-badge"
+                src={defaultImages["globalModerator"]}
+                alt={badge}
+              />
+            </span>
+          );
+        }
+        return <React.Fragment key={badge} />;
       });
     }
   };

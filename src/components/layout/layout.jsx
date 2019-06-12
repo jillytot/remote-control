@@ -21,10 +21,13 @@ export default class Layout extends Component {
 
   getModal = input => {
     console.log("Modal Input: ", input);
-    const { content } = input;
+    let updateContent = this.state.modalContent;
+    input.map(getInput => {
+      updateContent.push(getInput);
+    });
     this.setState({
       isShowing: true,
-      modalContent: [content]
+      modalContent: updateContent
     });
   };
 
@@ -46,7 +49,7 @@ export default class Layout extends Component {
                 className="modal"
                 show={isShowing}
                 close={this.closeModalHandler}
-                content={modalContent}
+                contents={modalContent}
               />
             ) : (
               <React.Fragment />

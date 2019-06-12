@@ -102,6 +102,7 @@
 
 .chat-scroll {
   overflow-y: auto;
+  /* overflow-y: overlay; */
   position: relative;
   height: 100%;
 }
@@ -143,8 +144,8 @@
   font-size: 14px;
   display: flex;
   flex-direction: column;
-  height: 100%;
-  margin-bottom: 51px;
+  height: inherit;
+  /* margin-bottom: 51px; */
 }
 
 .chat-background {

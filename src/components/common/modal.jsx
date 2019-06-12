@@ -24,7 +24,7 @@ const modal = ({ show, close, content }) => {
           {/* <button className="btn-cancel" onClick={close}>
             CLOSE
           </button> */}
-          <button className="btn">ok.</button>
+          <button className="btn-continue btn">ok.</button>
         </div>
       </div>
     </div>

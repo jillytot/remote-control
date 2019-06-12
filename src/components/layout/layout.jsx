@@ -36,15 +36,21 @@ export default class Layout extends Component {
       <React.Fragment>
         {socket ? (
           <React.Fragment>
-            {this.state.isShowing ? (
+            {isShowing ? (
               <div onClick={this.closeModalHandler} className="back-drop" />
-            ) : null}
-            <Modal
-              className="modal"
-              show={isShowing}
-              close={this.closeModalHandler}
-              content={modalContent}
-            />
+            ) : (
+              <React.Fragment />
+            )}
+            {isShowing ? (
+              <Modal
+                className="modal"
+                show={isShowing}
+                close={this.closeModalHandler}
+                content={modalContent}
+              />
+            ) : (
+              <React.Fragment />
+            )}
 
             {user ? (
               <React.Fragment>

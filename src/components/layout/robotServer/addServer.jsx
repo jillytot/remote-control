@@ -15,19 +15,22 @@ export default class AddServer extends Component {
   };
 
   onCloseModal = () => {
+    console.log("Closing Modal");
     this.setState({ open: false });
-  };
-
-  handleClick = () => {
-    console.log("click");
-    return <Overlay />;
   };
 
   handleModal = () => {
     const { open } = this.state;
     return (
-      <Modal open={open} onClose={this.onCloseModal} closeOnOverlayClick={true}>
-        <div className="modal"> Add Server: </div>
+      <Modal
+        classNames={{
+          overlay: "",
+          modal: "modal"
+        }}
+        open={open}
+        onClose={this.onCloseModal}
+      >
+        <div> Add Server: </div>
       </Modal>
     );
   };

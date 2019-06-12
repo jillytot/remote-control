@@ -4,8 +4,8 @@
 }
 
 .add-server {
-  /* background-color: rgb(33, 33, 37); */
-  border: dashed 1px rgb(170, 170, 170);
+  background-color: rgb(33, 33, 37);
+  /* border: dashed 1px rgb(170, 170, 170); */
   width: 64px;
   height: 38px;
   padding-top: 8px;

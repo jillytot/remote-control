@@ -1,20 +1,21 @@
 import React from "react";
 import Icon from "../../common/icon";
 import { ICONS } from "../../../icons/icons";
-import "../../../styles/common.css";
 import "../../common/overlay.css";
+import "../../../styles/common.css";
+
 import Form from "../../common/form";
 import Joi from "joi-browser";
-//import axios from "axios";
-
+import axios from "axios";
+import { apiUrl } from "../../../config/clientSettings";
 export default class AddServer extends Form {
   state = {
-    data: { serverName: "" },
+    data: { server: "" },
     errors: {}
   };
 
   schema = {
-    serverName: Joi.string()
+    server: Joi.string()
       .required()
       .min(4)
       .max(25)
@@ -22,6 +23,18 @@ export default class AddServer extends Form {
       .trim()
       .label("Robot Server Name")
   };
+
+  async componentDidMount() {
+    //Just a test to see my API stuff is working
+    await axios
+      .get(apiUrl)
+      .then(function(response) {
+        console.log(response);
+      })
+      .catch(function(error) {
+        console.log(error);
+      });
+  }
 
   doSubmit = async () => {
     console.log("SUBMITTED");
@@ -35,7 +48,7 @@ export default class AddServer extends Form {
           <div className="register-form">
             Setup a robot Server:
             <form onSubmit={this.handleSumbit}>
-              {this.renderInput("serverName", "Server Name: ", "text")}
+              {this.renderInput("server", "Server Name: ", "text")}
               {this.renderButton("Submit")}
             </form>
           </div>

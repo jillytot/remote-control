@@ -3,15 +3,16 @@
   z-index: 100;
 }
 .modal-wrapper {
-  /* background: red; */
   width: 540px;
   border-radius: 24px;
   position: fixed;
-  top: 0;
+  top: 0%;
   bottom: 0;
   left: 0;
   right: 0;
   margin: 5px auto 5px auto;
+  /* margin: 5px; */
+  /* transform: translateY(calc(25% - 5px)); */
 }
 
 .modal-header {
@@ -34,7 +35,7 @@
   padding: 10px 15px;
   text-align: center;
   background: #1d262b;
-  height: calc(100% - 135px);
+  max-height: calc(100% - 135px);
 }
 
 .modal-footer {

@@ -6,7 +6,12 @@ import "../../common/overlay.css";
 
 export default class AddServer extends Component {
   handleModal = () => {
-    return [{ body: "BOOP" }, { header: "Modal Header" }];
+    return [
+      {
+        body: <button className="btn">Say Hi to Ged</button>
+      },
+      { header: "Modal Header" }
+    ];
   };
 
   render() {

@@ -8,17 +8,12 @@ import "./overlay.css";
   */
 
 const modal = ({ show, close, contents }) => {
-  const getContent = getContent => {
-    return contents.forEach(content => {
-      console.log("GET CONTENT: ", getContent, content);
-      if (getContent == Object.keys(content)) {
-        console.log(content[getContent]);
-        return content[getContent];
-      }
+  const displayContent = getContent => {
+    return contents.map((content, key) => {
+      return <div key={key}>{content[getContent]}</div>;
     });
   };
 
-  console.log(contents);
   return (
     <div className="modal-outer">
       <div
@@ -28,18 +23,13 @@ const modal = ({ show, close, contents }) => {
         }}
       >
         <div className="modal-header">
-          <h3>{getContent("header")}</h3>
+          <h3>{displayContent("header")}</h3>
           <span className="close-modal-btn" onClick={close}>
             ×
           </span>
         </div>
-        <div className="modal-body">
-          <p>{getContent("body")}</p>
-        </div>
+        <div className="modal-body">{displayContent("body")}</div>
         <div className="modal-footer">
-          {/* <button className="btn-cancel" onClick={close}>
-            CLOSE
-          </button> */}
           <button className="btn-continue btn">ok.</button>
         </div>
       </div>

@@ -50,12 +50,14 @@ ALTER TABLE public.users
 
 CREATE TABLE public.robot_servers
 (
-    channels character varying[] COLLATE pg_catalog."default",
     owner_id character varying COLLATE pg_catalog."default",
     server_id character varying COLLATE pg_catalog."default" NOT NULL,
     server_name character varying COLLATE pg_catalog."default",
     users character varying[] COLLATE pg_catalog."default",
     created character varying COLLATE pg_catalog."default",
+    settings jsonb,
+    status jsonb,
+    channels jsonb[],
     CONSTRAINT "robotServers_pkey" PRIMARY KEY (server_id)
 )
 WITH (
@@ -91,7 +93,8 @@ ALTER TABLE public.chat_rooms
     controls character varying COLLATE pg_catalog."default",
     display character varying COLLATE pg_catalog."default",
     created character varying COLLATE pg_catalog."default",
-    access character varying[] COLLATE pg_catalog."default",
+    status jsonb,
+    settings jsonb,
     CONSTRAINT channels_pkey PRIMARY KEY (id)
 )
 WITH (

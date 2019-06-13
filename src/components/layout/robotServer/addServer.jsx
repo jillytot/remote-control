@@ -1,16 +1,48 @@
-import React, { Component } from "react";
+import React from "react";
 import Icon from "../../common/icon";
 import { ICONS } from "../../../icons/icons";
 import "../../../styles/common.css";
 import "../../common/overlay.css";
+import Form from "../../common/form";
+import Joi from "joi-browser";
+//import axios from "axios";
 
-export default class AddServer extends Component {
+export default class AddServer extends Form {
+  state = {
+    data: { serverName: "" },
+    errors: {}
+  };
+
+  schema = {
+    serverName: Joi.string()
+      .required()
+      .min(4)
+      .max(25)
+      .alphanum()
+      .trim()
+      .label("Robot Server Name")
+  };
+
+  doSubmit = async () => {
+    console.log("SUBMITTED");
+    //Call the server
+  };
+
   handleModal = () => {
     return [
       {
-        body: <button className="btn">Say Hi to Ged</button>
+        body: (
+          <div className="register-form">
+            Setup a robot Server:
+            <form onSubmit={this.handleSumbit}>
+              {this.renderInput("serverName", "Server Name: ", "text")}
+              {this.renderButton("Submit")}
+            </form>
+          </div>
+        )
       },
-      { header: "Modal Header" }
+      { header: "" },
+      { footer: <button className="btn-continue btn">ok.</button> }
     ];
   };
 

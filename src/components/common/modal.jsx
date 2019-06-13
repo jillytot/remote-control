@@ -29,9 +29,7 @@ const modal = ({ show, close, contents }) => {
           </span>
         </div>
         <div className="modal-body">{displayContent("body")}</div>
-        <div className="modal-footer">
-          <button className="btn-continue btn">ok.</button>
-        </div>
+        <div className="modal-footer">{displayContent("footer")}</div>
       </div>
     </div>
   );

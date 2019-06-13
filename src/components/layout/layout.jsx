@@ -22,13 +22,12 @@ export default class Layout extends Component {
   getModal = input => {
     console.log("Modal Input: ", input);
     let updateContent = this.state.modalContent;
-    input.map(getInput => {
-      updateContent.push(getInput);
-    });
+    input.map(getInput => updateContent.push(getInput));
     this.setState({
       isShowing: true,
       modalContent: updateContent
     });
+    return null;
   };
 
   render() {

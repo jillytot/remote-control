@@ -6,7 +6,7 @@ const {
   deleteRobotServer,
   updateRobotServer
 } = require("../../models/robotServer");
-const { publicUser, validateUser } = require("../../models/user");
+// const { publicUser, validateUser } = require("../../models/user");
 const auth = require("../auth");
 const Joi = require("joi");
 
@@ -26,7 +26,6 @@ router.get("/create", (req, res) => {
 });
 
 router.post("/create", auth, async (req, res) => {
-  // post request
   console.log("Generating Robot Server ", req.body, req.token);
   const result = Joi.validate({ server_name: req.body.server_name }, schema);
 
@@ -53,8 +52,6 @@ router.post("/delete", auth, async (req, res) => {
   console.log("API / Robot Server / Delete: ", req.body);
   let response = {};
 
-  //Verify User
-  //if (await validateUser(req.user)) { // doesent this check if the user exists which is useful for signup but not here
   if (req.user) {
     response.validated = true;
     const robotServerToDelete = await getRobotServer(req.body.server_id);

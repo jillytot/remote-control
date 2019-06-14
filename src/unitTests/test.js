@@ -4,15 +4,15 @@ const user = require("../models/user");
 const { getUserInfoFromId } = user;
 
 const testUserId = "user-810c7f96-47ad-4408-a8a2-3c9274fa2898"; //derp
-const testServerId = "serv-ee73da73-f6a8-442a-b207-02fe28dde8b0"; //herp
+const testServerId = "serv-92d096c8-b3da-4292-b9d3-ccaacb5639c5"; //herp
 const deleteServerId = "serv-e04a0850-50f5-4ca8-889b-b25ab7f63f52";
 
 const test = async () => {
   try {
-    // await test_getLocalTypes();
-    // await test_getUserInfoFromId();
-    // await test_getRobotServer();
-    await test_deleteRobotServer();
+    await test_getLocalTypes();
+    await test_getUserInfoFromId();
+    await test_getRobotServer();
+    // await test_deleteRobotServer();
   } catch (err) {
     console.log(err);
   }

@@ -1,6 +1,6 @@
 const { makeId, createTimeStamp } = require("../modules/utilities");
 const { getMessageType } = require("./chatCommands");
-const { userTypes } = require("./user");
+const { getGlobalTypes } = require("./user");
 
 //What calls create Message?
 
@@ -16,8 +16,9 @@ module.exports.createMessage = async message => {
   makeMess.id = `mesg-${makeId()}`;
   makeMess.time_stamp = createTimeStamp();
   makeMess.displayMessage = true;
+  const globalTypes = await getGlobalTypes(message.userId);
   makeMess.badges = await this.getBadges(
-    message.userType,
+    globalTypes,
     message.server_id,
     message.userId
   );
@@ -46,6 +47,7 @@ needs more design : D
 module.exports.getBadges = async (checkTypes, server_id, userId) => {
   if (checkTypes) {
     // do nothing
+    console.log("CHECK TYPES :", checkTypes);
   } else {
     checkTypes = [];
   }
@@ -61,9 +63,6 @@ module.exports.getBadges = async (checkTypes, server_id, userId) => {
     console.log("CHECK TYPES: ", checkTypes);
     checkTypes = Array.from(new Set(checkTypes));
     return checkTypes;
-    // return checkTypes.map(checkType => {
-    //   if (checkType === "staff") checkTypes.push("staff");
-    // });
   }
   return [];
 };

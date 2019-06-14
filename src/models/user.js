@@ -439,3 +439,9 @@ module.exports.checkTypes = async (user, typesToCheck) => {
   }
   return validate;
 };
+
+module.exports.getGlobalTypes = async user_id => {
+  const sendTypes = await this.getUserInfoFromId(user_id);
+  console.log(sendTypes);
+  return sendTypes.type;
+};

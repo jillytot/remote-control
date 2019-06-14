@@ -61,6 +61,7 @@ export default class Layout extends Component {
                   socket={socket}
                   user={user}
                   modal={this.getModal}
+                  onCloseModal={this.closeModalHandler}
                 />
               </React.Fragment>
             ) : (

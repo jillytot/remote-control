@@ -6,7 +6,7 @@ import "../../../styles/common.css";
 import Form from "../../common/form";
 import Joi from "joi-browser";
 import axios from "axios";
-import { apiUrl } from "../../../config/clientSettings";
+import { apiUrl, addServer } from "../../../config/clientSettings";
 
 export default class AddServer extends React.Component {
   state = {};
@@ -68,6 +68,22 @@ class AddServerForm extends Form {
 
   doSubmit = async () => {
     console.log("SUBMITTED");
+    const { server } = this.state.data;
+    const token = localStorage.getItem("token");
+    //axios call
+    await axios
+      .post(
+        addServer,
+        {
+          server_name: server
+        },
+        {
+          headers: { authorization: `Bearer ${token}` }
+        }
+      )
+      .catch(err => {
+        console.log("Add Server Error: ", err);
+      });
     this.props.onCloseModal();
 
     //Call the server

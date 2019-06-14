@@ -188,6 +188,13 @@ module.exports.getRobotServers = async () => {
   return result.rows;
 };
 
+module.exports.getRobotServer = async server_id => {
+  const db = require("../services/db");
+  const query = `SELECT * FROM robot_servers WHERE server_id = $1 LIMIT 1`;
+  result = await db.query(query, [server_id]);
+  return result.rows[0];
+};
+
 module.exports.updateRobotServer = () => {
   const { io } = require("../services/server/server");
   io.emit("ROBOT_SERVER_UPDATED");
@@ -226,6 +233,9 @@ module.exports.sendGlobalTimeout = (server_id, badUser) => {
 module.exports.getLocalTypes = async (server_id, user_id) => {
   let localTypes = [];
   const getServer = await this.getRobotServer(server_id);
+  if (!getServer) {
+    return localTypes;
+  }
   const { settings } = getServer;
   settings.roles.forEach(role => {
     role.members.forEach(member => {
@@ -250,4 +260,37 @@ module.exports.getRobotServer = async server_id => {
     console.log(err);
     return null;
   }
+};
+
+module.exports.deleteRobotServer = async server_id => {
+  console.log(server_id);
+  const db = require("../services/db");
+  try {
+    const query = "DELETE FROM robot_servers WHERE server_id =$1";
+    const result = await db.query(query, [server_id]);
+    console.log("Deleted row count: ", result.rowCount);
+    await this.removeActiveServer(server_id);
+    await this.updateRobotServer();
+    if (result.rowCount > 0) {
+      console.log("SUCCESSFULLY DELETED SERVER");
+    } else {
+      console.log("Error Deleting Server");
+    }
+    return true;
+  } catch (err) {
+    console.log(err);
+    return null;
+  }
+};
+
+module.exports.removeActiveServer = server_id => {
+  console.log("REMOVING ACTIVE SERVER FROM LIST: ", activeServers);
+  activeServers.map(server => {
+    if (server_id === server.server_id) {
+      console.log(server, server_id);
+      activeServers.splice(activeServers.indexOf(server));
+      return activeServers;
+    }
+  });
+  return;
 };

@@ -97,7 +97,7 @@ export default class RobotServer extends Component {
             {this.state.robotServers !== []
               ? this.displayServers(this.state.robotServers)
               : "Fetching Servers"}
-            <AddServer input="derp" modal={this.props.modal} />
+            <AddServer modal={this.props.modal} />
             ...
           </div>
           {this.loadServerChannels()}

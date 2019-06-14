@@ -47,15 +47,15 @@ export default class AddServer extends Form {
         body: (
           <div className="register-form">
             Setup a robot Server:
-            <form onSubmit={this.handleSumbit}>
+            <form onSubmit={this.handleSubmit}>
               {this.renderInput("server", "Server Name: ", "text")}
-              {this.renderButton("Submit")}
+              {this.renderButton("Submit", "Submit")}
             </form>
           </div>
         )
       },
       { header: "" },
-      { footer: <button className="btn-continue btn">ok.</button> }
+      { footer: "" }
     ];
   };
 

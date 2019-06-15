@@ -22,7 +22,8 @@ channelPrototype = {
 let activeChannels = [];
 
 const settingsPt = {
-  public: true
+  public: true, //Deprecate
+  access: "@everyone"
 };
 
 const statusPt = {
@@ -45,7 +46,7 @@ module.exports.createChannel = data => {
 
   console.log("Generating Channel: ", makeChannel);
   this.saveChannel(makeChannel);
-  pushToActiveChannels(makeChannel);
+  // pushToActiveChannels(makeChannel);
 
   return makeChannel;
 
@@ -82,7 +83,7 @@ module.exports.saveChannel = async channel => {
   const dbPut = `INSERT INTO channels (host_id, name, id, chat, controls, display, created, settings, status) VALUES($1, $2, $3, $4, $5, $6, $7, $8, $9 ) RETURNING *`;
   try {
     console.log("Saving Channel: ", channel);
-    return await db.query(dbPut, [
+    const result = await db.query(dbPut, [
       host_id,
       name,
       id,
@@ -93,21 +94,33 @@ module.exports.saveChannel = async channel => {
       settings,
       status
     ]);
+    return result.rows;
   } catch (err) {
     console.log(err);
   }
 };
 
-const pushToActiveChannels = channel => {
-  activeChannels.push(channel);
-  console.log("Active Channels Updated: ", channel);
+module.exports.getChannels = async server_id => {
+  const db = require("../services/db");
+  try {
+    const query = `SELECT * FROM channels WHERE host_id = $1`;
+    const result = await db.query(query, [server_id]);
+    return result.rows;
+  } catch (err) {
+    const error = {
+      error: "Unable to get channels from DB",
+      error_message: err
+    };
+    console.log(error);
+    return error;
+  }
+
+  //return channels belonging to a server
 };
 
-getActiveChannels = () => {
-  //will probably want this query to get more specific
-  //return channels on an active server
-  return activeChannels;
-};
+//Adds channel to a server based on server_id
+
+module.exports.deleteChannel = channel_id => {};
 
 /* 
 Todo: 

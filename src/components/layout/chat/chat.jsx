@@ -131,7 +131,7 @@ export default class Chat extends Component {
     const { chatroom } = this.state;
 
     return (
-      <div>
+      <React.Fragment>
         {chatroom ? (
           <div className="chat-container">
             <div className="chat-header-container">
@@ -148,7 +148,7 @@ export default class Chat extends Component {
         ) : (
           <div />
         )}
-      </div>
+      </React.Fragment>
     );
   }
 }

@@ -9,14 +9,18 @@
 }
 
 .chat-container {
-  background-color: rgb(22, 19, 32);
-  display: flex;
-  flex-direction: column;
-  height: 100%;
+  background-color:rgb(35, 35, 51);
+  display: grid;
+  grid-template-rows: 36px 1fr;
+  grid-template-areas:
+    "chat-grid-header"
+    "chat-grid-content";
+  height: calc(100vh - 48px);
   width: 350px;
 }
 
 .chat-header-container {
+  grid-area: chat-grid-header;
   background-color: rgb(66, 49, 94);
   display: flex;
   flex-direction: row;
@@ -144,7 +148,7 @@
   font-size: 14px;
   display: flex;
   flex-direction: column;
-  height: inherit;
+  height: calc(100vh - 138px);
   /* margin-bottom: 51px; */
 }
 
@@ -212,7 +216,7 @@
 }
 
 .chat-input {
-  border: solid, 0px;
+  border: solid 0px;
   border-radius: 5px;
   width: 100%;
   height: 24px;

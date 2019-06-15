@@ -62,5 +62,5 @@
   /* border: solid red 2px; */
   display: flex;
   /* position: relative; */
-  height: calc(100vh - 72px);
+  height: calc(100vh - 48px);
 }

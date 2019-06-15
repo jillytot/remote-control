@@ -83,7 +83,7 @@ export default class Layout extends Component {
         ) : (
           <div> ...Connection To Server Offline... </div>
         )}
-        ...
+        
       </React.Fragment>
     );
   }

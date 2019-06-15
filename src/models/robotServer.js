@@ -142,40 +142,6 @@ module.exports.getActiveServer = server_id => {
   return pickServer[0];
 };
 
-//Add an active user to a live robot server
-module.exports.addActiveUser = async (userId, server_id) => {
-  const { getPublicUserInfo } = require("./user");
-  let dontUpdate = false;
-  console.log("Add User to Robot Server: ", userId, server_id);
-  try {
-    let getRobotServer = await this.getActiveServer(server_id);
-    let activeUsers = getRobotServer.users;
-
-    activeUsers.forEach(activeUser => {
-      console.log("Check Active User: ", activeUsers);
-      if (activeUser.id === userId) {
-        dontUpdate = true;
-        console.log("DONT UPDATE ACTIVE USERS!");
-        // break addActiveUser;
-        return;
-      }
-    });
-    if (!dontUpdate) {
-      //Get the rest of the user info from the DB
-      activeUsers.push(await getPublicUserInfo(userId));
-      return activeServers.filter(server => {
-        if (server_id === server.server_id) {
-          console.log("Updated Active Users: ", server);
-          this.activeUsersUpdated(server_id);
-          return (server.users = activeUsers);
-        }
-      });
-    }
-  } catch (err) {
-    console.log(err);
-  }
-};
-
 //Get all the robot servers currently saved in the database
 module.exports.getRobotServers = async () => {
   //TODO: Some kind of sorting / capping list #
@@ -184,13 +150,6 @@ module.exports.getRobotServers = async () => {
   result = await db.query(query);
   console.log(result.rows);
   return result.rows;
-};
-
-module.exports.getRobotServer = async server_id => {
-  const db = require("../services/db");
-  const query = `SELECT * FROM robot_servers WHERE server_id = $1 LIMIT 1`;
-  result = await db.query(query, [server_id]);
-  return result.rows[0];
 };
 
 module.exports.updateRobotServer = () => {
@@ -206,6 +165,7 @@ module.exports.activeUsersUpdated = async server_id => {
   io.to(server_id).emit(ACTIVE_USERS_UPDATED, pickServer.users);
 };
 
+//Create a default chat when a server is first generated
 const defaultChannel = "General";
 module.exports.initChannels = async server => {
   const { createChannel } = require("./channel");
@@ -220,7 +180,8 @@ module.exports.initChannels = async server => {
   return { id: makeChannel.id, name: makeChannel.name };
 };
 
-//MODERATION
+//sends globaltimeout message ot user on chatroom in which the ban was initiated
+//This could probably be better
 module.exports.sendGlobalTimeout = (server_id, badUser) => {
   const { io } = require("../services/server/server");
   const { GLOBAL_TIMEOUT } = require("../events/events").socketEvents;
@@ -228,6 +189,7 @@ module.exports.sendGlobalTimeout = (server_id, badUser) => {
   io.to(server_id).emit(GLOBAL_TIMEOUT, publicUser(badUser));
 };
 
+//Get user roles / types for a specific server
 module.exports.getLocalTypes = async (server_id, user_id) => {
   let localTypes = [];
   const getServer = await this.getRobotServer(server_id);
@@ -248,6 +210,7 @@ module.exports.getLocalTypes = async (server_id, user_id) => {
   return localTypes;
 };
 
+//Get all server information from server_id
 module.exports.getRobotServer = async server_id => {
   const db = require("../services/db");
   try {
@@ -260,6 +223,7 @@ module.exports.getRobotServer = async server_id => {
   }
 };
 
+//This will permanently remove a robot server from the DB
 module.exports.deleteRobotServer = async server_id => {
   console.log(server_id);
   const db = require("../services/db");
@@ -267,7 +231,7 @@ module.exports.deleteRobotServer = async server_id => {
     const query = "DELETE FROM robot_servers WHERE server_id =$1";
     const result = await db.query(query, [server_id]);
     console.log("Deleted row count: ", result.rowCount);
-    await this.removeActiveServer(server_id);
+    //await this.removeActiveServer(server_id);
     await this.updateRobotServer();
     if (result.rowCount > 0) {
       console.log("SUCCESSFULLY DELETED SERVER");
@@ -279,16 +243,4 @@ module.exports.deleteRobotServer = async server_id => {
     console.log(err);
     return null;
   }
-};
-
-module.exports.removeActiveServer = server_id => {
-  console.log("REMOVING ACTIVE SERVER FROM LIST: ", activeServers);
-  activeServers.map(server => {
-    if (server_id === server.server_id) {
-      console.log(server, server_id);
-      activeServers.splice(activeServers.indexOf(server));
-      return activeServers;
-    }
-  });
-  return;
 };

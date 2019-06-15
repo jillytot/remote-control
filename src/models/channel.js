@@ -8,6 +8,13 @@ that needs to be changed before to much more work is done.
 */
 
 const { makeId, createTimeStamp } = require("../modules/utilities");
+// const socketEvents = require("../events/events");
+
+const {
+  CHANNELS_UPDATED,
+  GET_CHAT_ROOMS
+} = require("../events/events").socketEvents;
+console.log(CHANNELS_UPDATED, GET_CHAT_ROOMS);
 
 channelPrototype = {
   name: "Channel Name",
@@ -94,6 +101,7 @@ module.exports.saveChannel = async channel => {
       settings,
       status
     ]);
+    this.updateServerChannels(host_id);
     return result.rows;
   } catch (err) {
     console.log(err);
@@ -114,8 +122,12 @@ module.exports.getChannels = async server_id => {
     console.log(error);
     return error;
   }
+};
 
-  //return channels belonging to a server
+module.exports.updateServerChannels = async server_id => {
+  const { io } = require("../services/server/server");
+  const sendUpdate = await this.getChannels(server_id);
+  io.to(server_id).emit(CHANNELS_UPDATED, sendUpdate);
 };
 
 //Adds channel to a server based on server_id

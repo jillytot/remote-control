@@ -2,7 +2,7 @@ const router = require("express").Router();
 const auth = require("../auth");
 const Joi = require("joi");
 const { createChannel, getChannels } = require("../../models/channel");
-const { getRobotServer, validateOwner } = require("../../models/robotServer");
+const { validateOwner } = require("../../models/robotServer");
 
 const schema = Joi.object().keys({
   channel_name: Joi.string()

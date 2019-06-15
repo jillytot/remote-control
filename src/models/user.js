@@ -10,9 +10,7 @@ const {
 const config = require("../config/serverSettings");
 const tempSecret = config.secret;
 
-const {
-  ACTIVE_USERS_UPDATED
-} = require("../services/sockets/events").socketEvents;
+const { ACTIVE_USERS_UPDATED } = require("../events/events").socketEvents;
 
 //User status Prototype:
 const statusPt = {
@@ -413,9 +411,7 @@ const timeoutObject = {
 //Update client when their status has changed
 module.exports.sendUpdateStatus = user => {
   const { io } = require("../services/server/server");
-  const {
-    USER_STATUS_UPDATED
-  } = require("../services/sockets/events").socketEvents;
+  const { USER_STATUS_UPDATED } = require("../events/events").socketEvents;
   io.to(user.id).emit(USER_STATUS_UPDATED, user.status);
 };
 

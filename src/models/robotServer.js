@@ -26,9 +26,7 @@ Push Server to Active Servers
 */
 
 const { makeId, createTimeStamp } = require("../modules/utilities");
-const {
-  ACTIVE_USERS_UPDATED
-} = require("../services/sockets/events").socketEvents;
+const { ACTIVE_USERS_UPDATED } = require("../events/events").socketEvents;
 
 const { extractToken } = require("./user");
 
@@ -225,7 +223,7 @@ module.exports.initChannels = async server => {
 //MODERATION
 module.exports.sendGlobalTimeout = (server_id, badUser) => {
   const { io } = require("../services/server/server");
-  const { GLOBAL_TIMEOUT } = require("../services/sockets/events").socketEvents;
+  const { GLOBAL_TIMEOUT } = require("../events/events").socketEvents;
   const { publicUser } = require("./user");
   io.to(server_id).emit(GLOBAL_TIMEOUT, publicUser(badUser));
 };

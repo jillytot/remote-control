@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import Chat from "../chat/chat";
-import { socketEvents } from "../../../services/sockets/events";
+import { socketEvents } from "../../../events/events";
 import { colors } from "../../../config/colors";
 import Robot from "../robot/robot";
 const { SEND_ROBOT_SERVER_INFO, GET_CHAT, ACTIVE_USERS_UPDATED } = socketEvents;

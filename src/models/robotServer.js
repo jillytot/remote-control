@@ -30,21 +30,38 @@ const {
   ACTIVE_USERS_UPDATED
 } = require("../services/sockets/events").socketEvents;
 
+const { extractToken } = require("./user");
+
 //Used to generate / create a new robot server
-module.exports.createRobotServer = server => {
-  console.log("About to build server: ", server);
-  const { id, serverName } = server;
-  console.log(id);
+module.exports.createRobotServer = async (server, token) => {
+  console.log("About to build server: ", server, token);
+  const { server_name } = server;
+  const getUserId = await extractToken(token);
+  console.log("GET USER ID FROM TOKEN: ", getUserId, getUserId.id);
+
   let buildServer = {};
-  buildServer.owner_id = id;
-  buildServer.server_name = serverName;
+  buildServer.owner_id = getUserId.id;
+  buildServer.server_name = server_name;
   buildServer.server_id = `serv-${makeId()}`; //Note: if server_id === 'remo', then it is refering to the global server
   buildServer.created = createTimeStamp();
-  buildServer.channels = robotServer.channels;
+  buildServer.channels = [];
+  buildServer.settings = {
+    default_channel: "General",
+    roles: [
+      {
+        role: "default",
+        members: ["@everyone"]
+      },
+      { role: "owner", members: [getUserId.id] }
+    ]
+  };
+  buildServer.status = {
+    public: true
+  };
   buildServer.users = [];
 
-  this.createChannels(buildServer);
-  this.saveServer(buildServer);
+  buildServer.channels.push(await this.initChannels(buildServer));
+  await this.saveServer(buildServer);
   console.log("Generating Server: ", buildServer);
   this.pushToActiveServers(buildServer);
   return buildServer;
@@ -57,16 +74,27 @@ const robotServer = {
   ownerId: "",
   channels: ["Welcome", "General"],
   users: [],
-  created: ""
+  created: "",
+  settings: {},
+  status: {}
 };
 
 //Saves robot server to the Database
 module.exports.saveServer = async server => {
   const db = require("../services/db");
   console.log("Saving Server: ", server);
-  const { server_id, server_name, owner_id, channels, users, created } = server;
+  const {
+    server_id,
+    server_name,
+    owner_id,
+    channels,
+    users,
+    created,
+    settings,
+    status
+  } = server;
 
-  const dbPut = `INSERT INTO robot_servers (server_id, server_name, owner_id, channels, users, created ) VALUES($1, $2, $3, $4, $5, $6) RETURNING *`;
+  const dbPut = `INSERT INTO robot_servers (server_id, server_name, owner_id, channels, users, created, settings, status ) VALUES($1, $2, $3, $4, $5, $6, $7, $8) RETURNING *`;
   try {
     await db.query(dbPut, [
       server_id,
@@ -74,7 +102,9 @@ module.exports.saveServer = async server => {
       owner_id,
       channels,
       users,
-      created
+      created,
+      settings,
+      status
     ]);
   } catch (err) {
     console.log(err.stack);
@@ -84,7 +114,7 @@ module.exports.saveServer = async server => {
 };
 
 //Keep list of active users in memmory for now
-let activeServers = []; //Make this a global
+let activeServers = []; //I NEED TO RETHINK THIS SYSTEM (like how socket event / rooms are working)
 //This function is called once in 'src/services/server/server.js'
 //It initializes the active server sessions in memmory for all the servers currently stored in the database
 module.exports.initActiveServers = async () => {
@@ -158,6 +188,13 @@ module.exports.getRobotServers = async () => {
   return result.rows;
 };
 
+module.exports.getRobotServer = async server_id => {
+  const db = require("../services/db");
+  const query = `SELECT * FROM robot_servers WHERE server_id = $1 LIMIT 1`;
+  result = await db.query(query, [server_id]);
+  return result.rows[0];
+};
+
 module.exports.updateRobotServer = () => {
   const { io } = require("../services/server/server");
   io.emit("ROBOT_SERVER_UPDATED");
@@ -171,23 +208,18 @@ module.exports.activeUsersUpdated = async server_id => {
   io.to(server_id).emit(ACTIVE_USERS_UPDATED, pickServer.users);
 };
 
-module.exports.createChannels = async robotServer => {
+const defaultChannel = "General";
+module.exports.initChannels = async server => {
   const { createChannel } = require("./channel");
   const { createChatRoom } = require("./chatRoom");
-  try {
-    return await robotServer.channels.forEach(channel => {
-      const makeChat = createChatRoom(robotServer, channel);
-      const { id } = makeChat;
-      console.log("make chat from create channels", makeChat, channel);
-      return createChannel({
-        name: channel,
-        host_id: robotServer.server_id,
-        chat: id //get chat reference ID, or if none exists, create one?
-      });
-    });
-  } catch (err) {
-    console.log(err);
-  }
+  const makeChat = await createChatRoom(server, defaultChannel);
+  const { id } = makeChat;
+  const makeChannel = await createChannel({
+    name: defaultChannel,
+    host_id: server.server_id,
+    chat: id
+  });
+  return { id: makeChannel.id, name: makeChannel.name };
 };
 
 //MODERATION
@@ -196,4 +228,69 @@ module.exports.sendGlobalTimeout = (server_id, badUser) => {
   const { GLOBAL_TIMEOUT } = require("../services/sockets/events").socketEvents;
   const { publicUser } = require("./user");
   io.to(server_id).emit(GLOBAL_TIMEOUT, publicUser(badUser));
+};
+
+module.exports.getLocalTypes = async (server_id, user_id) => {
+  let localTypes = [];
+  const getServer = await this.getRobotServer(server_id);
+  if (!getServer) {
+    return localTypes;
+  }
+  const { settings } = getServer;
+  settings.roles.forEach(role => {
+    role.members.forEach(member => {
+      if (user_id === member) {
+        localTypes.push(role.role);
+        console.log(`Pushing ${role.role} to ${localTypes}`);
+      }
+    });
+  });
+
+  console.log("SENDING LOCAL TYPES: ", localTypes);
+  return localTypes;
+};
+
+module.exports.getRobotServer = async server_id => {
+  const db = require("../services/db");
+  try {
+    const query = "SELECT * FROM robot_servers WHERE server_id = $1 LIMIT 1";
+    const result = await db.query(query, [server_id]);
+    return result.rows[0];
+  } catch (err) {
+    console.log(err);
+    return null;
+  }
+};
+
+module.exports.deleteRobotServer = async server_id => {
+  console.log(server_id);
+  const db = require("../services/db");
+  try {
+    const query = "DELETE FROM robot_servers WHERE server_id =$1";
+    const result = await db.query(query, [server_id]);
+    console.log("Deleted row count: ", result.rowCount);
+    await this.removeActiveServer(server_id);
+    await this.updateRobotServer();
+    if (result.rowCount > 0) {
+      console.log("SUCCESSFULLY DELETED SERVER");
+    } else {
+      console.log("Error Deleting Server");
+    }
+    return true;
+  } catch (err) {
+    console.log(err);
+    return null;
+  }
+};
+
+module.exports.removeActiveServer = server_id => {
+  console.log("REMOVING ACTIVE SERVER FROM LIST: ", activeServers);
+  activeServers.map(server => {
+    if (server_id === server.server_id) {
+      console.log(server, server_id);
+      activeServers.splice(activeServers.indexOf(server));
+      return activeServers;
+    }
+  });
+  return;
 };

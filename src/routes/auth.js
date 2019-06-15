@@ -1,29 +1,23 @@
-const jwt = require("express-jwt");
-const { secret } = require("../config/serverSettings");
+const { authUser } = require("../models/user");
 
-const getTokenFromHeaders = req => {
-  const {
-    headers: { authorization }
-  } = req;
+const auth = async (req, res, next) => {
+  const header = req.headers["authorization"];
 
-  if (authorization && authorization.split(" ")[0] === "Token") {
-    return authorization.split(" ")[1];
+  if (typeof header !== "undefined") {
+    const bearer = header.split(" ");
+    const token = bearer[1];
+    req.token = token;
+
+    req.user = await authUser(token);
+    if (!req.user) {
+      return res.json({ error: "Invalid Authorization" });
+    } else {
+      next();
+    }
+  } else {
+    //If header is undefined return Forbidden (403)
+    res.sendStatus(403);
   }
-  return null;
-};
-
-const auth = {
-  required: jwt({
-    secret: secret,
-    userProperty: "payload",
-    getToken: getTokenFromHeaders
-  }),
-  optional: jwt({
-    secret: secret,
-    userProperty: "payload",
-    getToken: getTokenFromHeaders,
-    credentialsRequired: false
-  })
 };
 
 module.exports = auth;

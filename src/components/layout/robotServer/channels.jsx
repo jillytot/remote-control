@@ -12,10 +12,12 @@ export default class Channels extends Component {
     channels: [],
     users: [],
     userColors: {},
-    currentChannel: null
+    currentChannel: null,
+    storeSelectedServer: null,
+    defaultLoaded: false
   };
 
-  //not sure if needed, but why not
+  // not sure if needed, but why not
   componentDidUpdate(prevState) {
     if (prevState !== this.state) {
       this.displayChannels();
@@ -49,7 +51,52 @@ export default class Channels extends Component {
       // console.log(newColors);
       this.setState({ userColors: newColors });
     }, 30000); //garbage cleanup every 30s
+    this.loadDefaultChannel();
   }
+
+  loadDefaultChannel = () => {
+    //const { channels, selectedServer } = this.props;
+    const {
+      currentChannel,
+      defaultLoaded,
+      channels,
+      storeSelectedServer
+    } = this.state;
+    if (
+      this.props.selectedServer &&
+      this.props.selectedServer.server_id &&
+      this.props.selectedServer.server_id !== storeSelectedServer
+    ) {
+      this.setState({
+        storeSelectedServer: this.props.selectedServer.server_id,
+        defaultLoaded: false,
+        currentChannel: null
+      });
+    }
+    if (currentChannel || defaultLoaded) return;
+
+    if (channels && channels.length > 0) {
+      console.log("LOADING DEFAULT CHANNEL");
+      this.handleActiveChannel(channels[0]);
+    }
+    return;
+  };
+
+  handleActiveChannel = activeChannel => {
+    console.log("LOAD CHANNEL", activeChannel);
+    const { channels } = this.state;
+    let storeChannels = channels.map(channel => {
+      if (channel.id === activeChannel.id) {
+        console.log(activeChannel, channel);
+        channel.active = true;
+      } else {
+        channel.active = false;
+      }
+      return channel;
+    });
+    this.setState({ channels: storeChannels });
+    this.setState({ currentChannel: activeChannel.id });
+  };
 
   generateColor = () => {
     return colors[Math.floor(Math.random() * colors.length)];
@@ -91,6 +138,7 @@ export default class Channels extends Component {
           channels: data.channels,
           users: this.getUserColors(data.users)
         });
+        if (this.state.currentChannel) this.handleClick(data.channels[0]);
       });
       socket.on(ACTIVE_USERS_UPDATED, users => {
         this.setState({ users: this.getUserColors(users) });
@@ -99,26 +147,15 @@ export default class Channels extends Component {
   };
 
   handleClick = channel => {
-    const { channels } = this.state;
-    let storeChannels = channels.map(aChannel => {
-      if (aChannel.id === channel.id) {
-        console.log(aChannel, channel);
-        aChannel.active = true;
-      } else {
-        aChannel.active = false;
-      }
-      return aChannel;
-    });
-    this.setState({ channels: storeChannels });
-    const chatId = channel.id;
-    this.setState({ currentChannel: channel.id });
-    // console.log("GET CHAT! ", chatId);
+    this.handleActiveChannel(channel);
     const { socket } = this.props;
+    const chatId = channel.id;
     socket.emit(GET_CHAT, chatId);
   };
 
   displayChannels = () => {
     const { channels } = this.state;
+    this.loadDefaultChannel();
     return channels.map(channel => {
       return (
         <div

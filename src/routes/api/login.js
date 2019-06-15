@@ -2,7 +2,11 @@ const router = require("express").Router();
 const user = require("../../models/user");
 
 router.get("/", async (req, res) => {
-  return res.send("Login");
+  response = {
+    username: "required",
+    password: "required"
+  };
+  return res.send(response);
 });
 
 router.post("/", async (req, res) => {

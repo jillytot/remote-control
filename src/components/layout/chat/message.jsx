@@ -30,25 +30,73 @@ const Message = ({ message }) => {
     return filter;
   };
 
+  /*
+  Badges: 
+  Slot 1: Global (example: Staff, Global MOderator), 
+  Slot 2: Local (example: owner, moderator), 
+  Slot 3: Global Support (AKA Patreon), 
+  Slot 4: Local Support (AKA Server Sub) 
+  */
+
   const handleBadges = message => {
     const { badges } = message;
     if (message && message.type === types.moderation) return <React.Fragment />;
     if (badges && badges.length > 0) {
+      console.log("BADGES GET: ", badges);
       return badges.map(badge => {
+        console.log("BADGE GET: ", badge);
         if (badge === "staff") {
           // console.log("ADD BADGE!");
           return (
-            <span key={badge}>
+            <span key={message.id + badge}>
               <img
                 className="message-badge"
                 src={defaultImages["remoStaffBadge"]}
                 alt={badge}
+                title={"Remo Developer"}
               />
             </span>
           );
-        } else {
-          return <React.Fragment />;
         }
+
+        if (badge === "owner") {
+          return (
+            <span key={message.id + badge}>
+              <img
+                className="message-badge"
+                src={defaultImages["owner"]}
+                alt={badge}
+                title={"Robot Server Owner"}
+              />
+            </span>
+          );
+        }
+
+        if (badge === "global_moderator") {
+          return (
+            <span key={message.id + badge}>
+              <img
+                className="message-badge"
+                src={defaultImages["globalModerator"]}
+                alt={badge}
+                title={"Global Moderator"}
+              />
+            </span>
+          );
+        }
+        if (badge === "local_moderator") {
+          return (
+            <span key={message.id + badge}>
+              <img
+                className="message-badge"
+                src={defaultImages["moderator"]}
+                alt={badge}
+                title={"Moderator"}
+              />
+            </span>
+          );
+        }
+        return <React.Fragment key={badge} />;
       });
     }
   };

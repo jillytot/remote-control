@@ -1,6 +1,6 @@
 const { makeId, createTimeStamp } = require("../modules/utilities");
 const { getMessageType } = require("./chatCommands");
-const { userTypes } = require("./user");
+const { getGlobalTypes } = require("./user");
 
 //What calls create Message?
 
@@ -16,7 +16,12 @@ module.exports.createMessage = async message => {
   makeMess.id = `mesg-${makeId()}`;
   makeMess.time_stamp = createTimeStamp();
   makeMess.displayMessage = true;
-  makeMess.badges = await this.getBadges(message.userType);
+  const globalTypes = await getGlobalTypes(message.userId);
+  makeMess.badges = await this.getBadges(
+    globalTypes,
+    message.server_id,
+    message.userId
+  );
   makeMess.type = "";
 
   //Turn this back on once you start removing active chats from memmory
@@ -39,11 +44,25 @@ module.exports.sendMessage = message => {
 badge 1 - global type, badge 2 - local type, badge 3 - sub / patreon, badge 4 - hmmmm
 needs more design : D
 */
-module.exports.getBadges = checkTypes => {
+module.exports.getBadges = async (checkTypes, server_id, userId) => {
+  if (checkTypes) {
+    // do nothing
+    console.log("CHECK TYPES :", checkTypes);
+  } else {
+    checkTypes = [];
+  }
+  console.log("GET BADGES PRE-CHECK: ", checkTypes, server_id, userId);
+  const { getLocalTypes } = require("./robotServer");
+  const addTypes = await getLocalTypes(server_id, userId);
+  addTypes.forEach(type => {
+    checkTypes.push(type);
+  });
+  console.log("GET BADGES: ", checkTypes, server_id, userId);
+
   if (Array.isArray(checkTypes)) {
-    return checkTypes.map(checkType => {
-      if (checkType === "staff") return "staff";
-    });
+    console.log("CHECK TYPES: ", checkTypes);
+    checkTypes = Array.from(new Set(checkTypes));
+    return checkTypes;
   }
   return [];
 };

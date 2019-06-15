@@ -15,19 +15,17 @@ const {
 } = require("../services/sockets/events").socketEvents;
 
 //User status Prototype:
-const statusPt = [
-  {
-    server_id: "global", //server_id: global refers to global status
-    timeout: false
-  }
-  //server_id: Status, individual server status per user will mirror the global status as much as possible
-];
+const statusPt = {
+  //server_id: global refers to global status
+  timeout: false
+  //types: [] //Global Only
+};
+//server_id: Status, individual server status per user will mirror the global status as much as possible
 
-const settingsPt = [
-  { server_id: "global" } //Global Settings
-  //server_id: {} ...Settings for individual servers will be listed here, scheme will mirror global as much as possible
-];
-
+const settingsPt = {
+  test_value: null
+}; //Global Settings
+//server_id: {} ...Settings for individual servers will be listed here, scheme will mirror global as much as possible
 //roles will be a more robust way to manage user types
 const rolesPt = [{ server_id: "global", roles: [] }];
 
@@ -65,6 +63,7 @@ module.exports.createUser = async user => {
   user.check_username = checkUser; //save a copy of username all lowercase
   user.status = statusPt;
   user.settings = settingsPt;
+  user.session = "";
   console.log(
     `${user.username} also saved as ${user.check_username}, status set: ${
       user.status
@@ -80,9 +79,10 @@ module.exports.createUser = async user => {
     created,
     check_username,
     status,
-    settings
+    settings,
+    session
   } = user;
-  const dbPut = `INSERT INTO users (username, id, password, email, created, check_username, status, settings) VALUES($1, $2, $3, $4, $5, $6, $7, $8) RETURNING *`;
+  const dbPut = `INSERT INTO users (username, id, password, email, created, check_username, status, settings, session) VALUES($1, $2, $3, $4, $5, $6, $7, $8, $9) RETURNING *`;
   try {
     await db.query(dbPut, [
       username,
@@ -92,9 +92,12 @@ module.exports.createUser = async user => {
       created,
       check_username,
       status,
-      settings
+      settings,
+      session
     ]);
+
     const token = await this.createAuthToken(user);
+
     return { status: "Account successfully created", token: token };
   } catch (err) {
     console.log(err.stack);
@@ -262,7 +265,7 @@ module.exports.verifyAuthToken = async token => {
   if (token && token.id) {
     const query = `SELECT * FROM users WHERE id = $1 LIMIT 1`;
     const result = await db.query(query, [token["id"]]);
-    //console.log("Get user from DB: ", result.rows[0]);
+    console.log("Get user from DB: ", result.rows[0]);
     return await result.rows[0];
   } else {
     let reason = {
@@ -326,6 +329,14 @@ module.exports.sendActiveUsers = async robot_server => {
 };
 
 //USER TYPE MANAGEMENT
+/*
+  Badges: There are 4 slots for badges, even though a user can be multiple overlapping types
+  Slot 1: Global (example: Staff, Global MOderator), 
+  Slot 2: Local (example: owner, moderator), 
+  Slot 3: Global Support (AKA Patreon), 
+  Slot 4: Local Support (AKA Server Sub) 
+  */
+
 module.exports.userTypes = [
   "staff",
   "owner",
@@ -366,7 +377,7 @@ module.exports.timeoutUser = async (user, time, server_id) => {
   console.log("TIMEOUT USER: ", user, time);
   if (user && time) {
     let { status } = user;
-    status[0].timeout = true;
+    status.timeout = true;
     user.status = status;
     let checkUpdatedStatus = await this.updateStatus(user);
     createTimer(time, this.unTimeoutUser, user);
@@ -380,7 +391,7 @@ module.exports.unTimeoutUser = async user => {
   console.log("END TIMEOUT FOR USER: ", user);
   if (user) {
     let { status } = user;
-    status[0].timeout = false;
+    status.timeout = false;
     user.status = status;
     await this.updateStatus(user);
     return true;
@@ -427,4 +438,10 @@ module.exports.checkTypes = async (user, typesToCheck) => {
     if (check.includes(true) || check === true) validate = true;
   }
   return validate;
+};
+
+module.exports.getGlobalTypes = async user_id => {
+  const sendTypes = await this.getUserInfoFromId(user_id);
+  console.log(sendTypes);
+  return sendTypes.type;
 };

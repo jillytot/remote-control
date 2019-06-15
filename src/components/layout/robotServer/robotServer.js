@@ -5,12 +5,20 @@ import DisplayRobotServer from "./displayRobotServer";
 import Channels from "./channels";
 import "./robotServer.css";
 import { socketEvents } from "../../../services/sockets/events";
-const { ROBOT_SERVER_UPDATED, GET_CHAT_ROOMS } = socketEvents;
+import AddServer from "./addServer";
+const { ROBOT_SERVER_UPDATED, GET_CHANNELS } = socketEvents;
 
 export default class RobotServer extends Component {
   state = {
-    robotServers: []
+    robotServers: [],
+    selectedServer: null //Has the user clicked on a server
   };
+
+  componentDidUpdate(prevState) {
+    if (prevState !== this.state) {
+      this.loadServerChannels();
+    }
+  }
 
   async componentDidMount() {
     await this.getServers();
@@ -36,10 +44,7 @@ export default class RobotServer extends Component {
     return servers.map(server => {
       //console.log("Server Name: ", server.server_name);
       return (
-        <div
-          key={server.server_id}
-          onClick={() => this.handleClick(server.server_id)}
-        >
+        <div key={server.server_id} onClick={() => this.handleClick(server)}>
           <DisplayRobotServer
             key={server.server_id}
             serverName={server.server_name}
@@ -56,13 +61,14 @@ export default class RobotServer extends Component {
   };
 
   handleClick = e => {
-    console.log("Get Chat: ", e);
+    const { server_id } = e;
+    this.setState({ selectedServer: e });
+    console.log("Server Selected ", e.server_name);
     const { socket, user } = this.props;
-    socket.emit(GET_CHAT_ROOMS, { user: user.id, server_id: e });
+    socket.emit(GET_CHANNELS, { user: user.id, server_id: server_id });
     let { robotServers } = this.state;
     robotServers.map(server => {
-      console.log("Mapping Servers: ", server);
-      if (e === server.server_id) {
+      if (server_id === server.server_id) {
         server.active = true;
       } else {
         server.active = false;
@@ -72,8 +78,18 @@ export default class RobotServer extends Component {
     this.setState({ robotServers });
   };
 
-  render() {
+  loadServerChannels = () => {
     const { socket, user } = this.props;
+    return (
+      <Channels
+        socket={socket}
+        user={user}
+        selectedServer={this.state.selectedServer}
+      />
+    );
+  };
+
+  render() {
     return (
       <React.Fragment>
         <div className="server-channel-container">
@@ -81,8 +97,13 @@ export default class RobotServer extends Component {
             {this.state.robotServers !== []
               ? this.displayServers(this.state.robotServers)
               : "Fetching Servers"}
+            <AddServer
+              modal={this.props.modal}
+              onCloseModal={this.props.onCloseModal}
+            />
+            ...
           </div>
-          <Channels socket={socket} user={user} />
+          {this.loadServerChannels()}
         </div>
       </React.Fragment>
     );

@@ -102,6 +102,7 @@
 
 .chat-scroll {
   overflow-y: auto;
+  /* overflow-y: overlay; */
   position: relative;
   height: 100%;
 }
@@ -112,7 +113,7 @@
 }
 .chat-scroll::-webkit-scrollbar {
   width: 5px;
-  background-color: green;
+  /* background-color: green; */
 }
 .chat-scroll::-webkit-scrollbar-thumb {
   background-color: #484d79;
@@ -132,7 +133,7 @@
 .system-message {
   color: rgb(214, 214, 214);
   background: -webkit-linear-gradient(-45deg, #bd6294 0%, #8140b6 100%);
-  /* background-color: #291d52; */
+  background-color: #291d52;
   /* border-left: 6px solid purple; */
 }
 
@@ -143,7 +144,8 @@
   font-size: 14px;
   display: flex;
   flex-direction: column;
-  height: 100%;
+  height: inherit;
+  /* margin-bottom: 51px; */
 }
 
 .chat-background {

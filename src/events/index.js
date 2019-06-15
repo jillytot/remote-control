@@ -2,7 +2,6 @@ const user = require("../models/user");
 const { getChatRooms, getChat, chatEvents } = require("../models/chatRoom");
 const { createMessage } = require("../models/chatMessage");
 const {
-  GET_CHAT_ROOMS,
   SEND_ROBOT_SERVER_INFO,
   AUTHENTICATE,
   VALIDATED,
@@ -10,7 +9,8 @@ const {
   SEND_CHAT,
   MESSAGE_SENT,
   HEARTBEAT,
-  BUTTON_COMMAND
+  BUTTON_COMMAND,
+  GET_CHANNELS
 } = require("../services/sockets/events").socketEvents;
 
 const { sendActiveUsers } = user;
@@ -62,7 +62,7 @@ module.exports.socketEvents = (socket, io) => {
   });
 
   //Send list of chatrooms to user, subscribe user to robot server events
-  socket.on(GET_CHAT_ROOMS, async data => {
+  socket.on(GET_CHANNELS, async data => {
     console.log("GET CHAT ROOMS: ", data);
     socket.join(data.server_id);
     const sendInfo = {
@@ -70,13 +70,15 @@ module.exports.socketEvents = (socket, io) => {
       users: await sendActiveUsers(data.server_id)
       //chatRoom: await getChatRooms(data.server_id)
     };
-    io.to(userRoom).emit(SEND_ROBOT_SERVER_INFO, sendInfo);
+    //io.to(userRoom).emit(SEND_ROBOT_SERVER_INFO, sendInfo);
+    socket.emit(SEND_ROBOT_SERVER_INFO, sendInfo);
   });
 
   //Subscribe user to a specified chatroom, and send them all the specific info about it
   socket.on(GET_CHAT, async chatId => {
     console.log("GET CHAT Chat Id: ", chatId);
-    io.to(userRoom).emit(SEND_CHAT, await getChat(chatId));
+    //io.to(userRoom).emit(SEND_CHAT, await getChat(chatId));
+    socket.emit(SEND_CHAT, await getChat(chatId));
 
     //Subscribe user to chat
     const chatRoom = `${chatId}`;

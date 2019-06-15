@@ -11,7 +11,7 @@ const {
   HEARTBEAT,
   BUTTON_COMMAND,
   GET_CHANNELS
-} = require("../services/sockets/events").socketEvents;
+} = require("./events").socketEvents;
 
 const { sendActiveUsers } = user;
 

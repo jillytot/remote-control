@@ -4,7 +4,7 @@ import axios from "axios";
 import DisplayRobotServer from "./displayRobotServer";
 import Channels from "./channels";
 import "./robotServer.css";
-import { socketEvents } from "../../../services/sockets/events";
+import { socketEvents } from "../../../events/events";
 import AddServer from "./addServer";
 const { ROBOT_SERVER_UPDATED, GET_CHANNELS } = socketEvents;
 

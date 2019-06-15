@@ -1,8 +1,5 @@
 import React, { Component } from "react";
-import {
-  MESSAGE_RECIEVED,
-  socketEvents
-} from "../../../services/sockets/events";
+import { MESSAGE_RECIEVED, socketEvents } from "../../../events/events";
 import UserList from "./userList.jsx";
 import Messages from "./messages";
 import SendChat from "./sendChat";

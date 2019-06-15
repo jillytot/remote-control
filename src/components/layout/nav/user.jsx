@@ -1,7 +1,7 @@
 import React from "react";
 import "./user.css";
 import "./../../../styles/common.css";
-import { LOGOUT } from "../../../services/sockets/events";
+import { LOGOUT } from "../../../events/events";
 import defaultImages from "../../../imgs/placeholders";
 
 const User = ({ user, socket }) => {

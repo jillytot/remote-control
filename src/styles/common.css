@@ -63,7 +63,7 @@
 }
 
 .form-control {
-  /* background-color: blue; */
+  /* background-color: rgb(33, 33, 53); */
   border-radius: 5px;
   margin-left: 5px;
   display: flex;
@@ -94,5 +94,6 @@
 .modal {
   padding: 24px;
   border-radius: 24px;
+
   background: -webkit-linear-gradient(-45deg, #954ed6 0%, #009bee 100%);
 }

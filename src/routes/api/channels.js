@@ -1,7 +1,11 @@
 const router = require("express").Router();
 const auth = require("../auth");
 const Joi = require("joi");
-const { createChannel, getChannels } = require("../../models/channel");
+const {
+  createChannel,
+  getChannels,
+  getServerIdFromChannelId
+} = require("../../models/channel");
 const { validateOwner } = require("../../models/robotServer");
 
 const schema = Joi.object().keys({
@@ -82,6 +86,25 @@ router.post("/create", auth, async (req, res) => {
 
   res.send(response);
   console.log(response);
+});
+
+router.get("/delete", async (req, res) => {
+  response = {};
+  response.channel_id = "<Channel ID Required>";
+  response.authorization = "<Authorization Required>";
+
+  res.send(response);
+  console.log(response);
+});
+
+router.post("/delete", auth, async (req, res) => {
+  const response = {
+    user: req.user,
+    channel_id: req.body.channel_id,
+    server_id: await getServerIdFromChannelId(req.body.channel_id)
+  };
+
+  res.send(response);
 });
 
 module.exports = router;

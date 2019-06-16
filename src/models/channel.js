@@ -141,6 +141,7 @@ module.exports.deleteChannel = async channel_id => {
     if (result.rows > 0) {
       response.status = "success!";
       response.result = result;
+      //update channels
     } else {
       response.status = "error!";
       response.error = "Channel does not exist";
@@ -150,6 +151,33 @@ module.exports.deleteChannel = async channel_id => {
     response.error = err;
     response.status = "error!";
     console.log(response);
+    return response;
+  }
+};
+
+module.exports.getServerIdFromChannelId = async channel_id => {
+  const db = require("../services/db");
+  response = {};
+  try {
+    const query = "SELECT * FROM channels WHERE id = $1 LIMIT 1";
+    const result = await db.query(query, [channel_id]);
+    console.log(
+      "Get Server ID from channel ID: ",
+      channel_id,
+      result.rows.length,
+      result.rows
+    );
+    if (result.rows.length > 0) {
+      response.status = "success!";
+      response.result = result.rows[0].host_id;
+      return response;
+    } else {
+      response.status = "error!";
+      response.error = "Unable to find channel in database";
+      return response;
+    }
+  } catch (err) {
+    (response.status = "error!"), (response.error = err);
     return response;
   }
 };

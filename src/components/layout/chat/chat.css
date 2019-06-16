@@ -11,10 +11,11 @@
 .chat-container {
   background-color:rgb(35, 35, 51);
   display: grid;
-  grid-template-rows: 36px 1fr;
+  grid-template-rows: 36px 1fr 48px;
   grid-template-areas:
     "chat-grid-header"
-    "chat-grid-content";
+    "chat-grid-content"
+    "chat-grid-footer";
   height: calc(100vh - 48px);
   width: 350px;
 }
@@ -148,7 +149,7 @@
   font-size: 14px;
   display: flex;
   flex-direction: column;
-  height: calc(100vh - 138px);
+  height: calc(100vh - 132px);
   /* margin-bottom: 51px; */
 }
 
@@ -192,7 +193,7 @@
   background-color: rgb(66, 49, 94);
 
   border-radius: 0px 0px 10px 10px;
-  margin-bottom: 5px;
+  margin: 0 5px 5px 5px;
 
   padding: 5px 5px 5px 10px;
 }

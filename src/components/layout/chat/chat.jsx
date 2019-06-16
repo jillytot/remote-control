@@ -102,22 +102,24 @@ export default class Chat extends Component {
       console.log("Menu", menu);
       if (menu === "Chat") {
         return (
-          <div className="messages-container">
-            <div className="chat-background">
-              <Messages
-                messages={chatroom ? this.getMessageColors() : []}
-                users={users}
-              />
+          <React.Fragment>
+            <div className="messages-container">
+              <div className="chat-background">
+                <Messages
+                  messages={chatroom ? this.getMessageColors() : []}
+                  users={users}
+                />
+              </div>
             </div>
-            <SendChat
-              onEvent={onEvent}
-              user={user}
-              socket={socket}
-              chatId={chatroom ? chatroom.id : ""}
-              server_id={chatroom ? chatroom.host_id : ""}
-              onChatFeedback={this.handleChatFeedback}
-            />
-          </div>
+              <SendChat
+                onEvent={onEvent}
+                user={user}
+                socket={socket}
+                chatId={chatroom ? chatroom.id : ""}
+                server_id={chatroom ? chatroom.host_id : ""}
+                onChatFeedback={this.handleChatFeedback}
+              />
+          </React.Fragment>
         );
       }
       if (menu === "Users") {

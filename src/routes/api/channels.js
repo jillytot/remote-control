@@ -4,7 +4,8 @@ const Joi = require("joi");
 const {
   createChannel,
   getChannels,
-  getServerIdFromChannelId
+  getServerIdFromChannelId,
+  deleteChannel
 } = require("../../models/channel");
 const { validateOwner } = require("../../models/robotServer");
 
@@ -103,6 +104,13 @@ router.post("/delete", auth, async (req, res) => {
     channel_id: req.body.channel_id,
     server_id: await getServerIdFromChannelId(req.body.channel_id)
   };
+  validate = validateOwner(req.user.id, response.server_id);
+  if (validate) {
+    response.validate = true;
+    const result = await deleteChannel(req.body.channel_id);
+    response.result = result;
+  }
+  //make sure this user owns this server
 
   res.send(response);
 });

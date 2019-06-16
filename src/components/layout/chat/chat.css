@@ -191,16 +191,24 @@
 
 .send-chat-container {
   background-color: rgb(66, 49, 94);
-
+  
   border-radius: 0px 0px 10px 10px;
   margin: 0 5px 5px 5px;
 
   padding: 5px 5px 5px 10px;
 }
 
+/* forms that are children of .send-chat-container */
+.send-chat-container > form {
+  display: flex;
+  flex-wrap: nowrap;
+  flex-direction: row;
+  /* width: calc(100%-15px); */
+  justify-content: space-between;
+}
+
 .input-field-container {
   display: inline-block;
-
   width: 250px;
 }
 

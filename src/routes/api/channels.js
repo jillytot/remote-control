@@ -8,6 +8,7 @@ const {
   deleteChannel
 } = require("../../models/channel");
 const { validateOwner } = require("../../models/robotServer");
+const { publicUser } = require("../../models/user");
 
 const schema = Joi.object().keys({
   channel_name: Joi.string()
@@ -31,8 +32,6 @@ router.get("/list", async (req, res) => {
 
 router.get("/create", async (req, res) => {
   let response = {};
-  let user_id = "";
-  let server_id = "";
   response.server_id = "<Please provide a server_id to add channel too >";
   response.channel_name = "<Please provide a name for your new channel>";
   response.authorization = "required";
@@ -41,25 +40,12 @@ router.get("/create", async (req, res) => {
 
 router.post("/create", auth, async (req, res) => {
   let response = {};
-  response.req = req.body;
 
-  if (!req.body.server_id) {
-    response.error = "Please provide a server_id to add a channel to";
-    res.send(response);
-    return;
-  }
-
-  server_id = req.body.server_id;
-
-  if (!req.body.channel_name) {
-    response.error = "please provide a valid channel name";
-    res.send(response);
-    return;
-  }
-
-  if (req.user) {
-    user_id = req.user.id;
-    const getServer = await validateOwner(user_id, server_id);
+  if (req.body.server_id && req.body.channel_name && req.user) {
+    response.user = { username: req.user.username, id: req.user.id };
+    response.server_id = req.body.server_id;
+    response.channel_name = req.body.channel_name;
+    const getServer = await validateOwner(response.user.id, response.server_id);
     if (getServer) {
       response.validated = true;
     } else {
@@ -72,8 +58,8 @@ router.post("/create", auth, async (req, res) => {
   try {
     //TODO: Add default chatroom if none is provided
     const makeChannel = await createChannel({
-      host_id: server_id,
-      name: req.body.channel_name
+      host_id: response.server_id,
+      name: response.channel_name
     });
 
     if (makeChannel) {
@@ -98,20 +84,22 @@ router.get("/delete", async (req, res) => {
   console.log(response);
 });
 
-router.post("/delete", auth, async (req, res) => {
-  const response = {
-    user: req.user,
-    channel_id: req.body.channel_id,
-    server_id: await getServerIdFromChannelId(req.body.channel_id)
-  };
+//Delete Channel
+router.delete("/delete", auth, async (req, res) => {
+  let response = {};
+  if (req.body.channel_id && req.user)
+    response.channel_id = req.body.channel_id;
+  const getServerId = await await getServerIdFromChannelId(req.body.channel_id);
+
+  response.server_id = getServerId.result;
+  response.user = { username: req.user.username, id: req.user.id };
+
   validate = validateOwner(req.user.id, response.server_id);
   if (validate) {
-    response.validate = true;
+    // response.validate = true;
     const result = await deleteChannel(req.body.channel_id);
-    response.result = result;
+    response.status = result.status;
   }
-  //make sure this user owns this server
-
   res.send(response);
 });
 

@@ -138,14 +138,10 @@ module.exports.deleteChannel = async channel_id => {
   let response = {};
   try {
     const result = await db.query(remove, [channel_id]);
-    if (result.rows > 0) {
-      response.status = "success!";
-      response.result = result;
-      //update channels
-    } else {
-      response.status = "error!";
-      response.error = "Channel does not exist";
-    }
+    // if (result.rows > 0) {
+    response.status = "success!";
+    response.result = result.rows[0];
+
     return response;
   } catch (err) {
     response.error = err;

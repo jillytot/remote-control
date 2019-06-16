@@ -132,7 +132,27 @@ module.exports.updateServerChannels = async server_id => {
 
 //Adds channel to a server based on server_id
 
-module.exports.deleteChannel = channel_id => {};
+module.exports.deleteChannel = async channel_id => {
+  const db = require("../services/db");
+  const remove = `DELETE FROM channels WHERE id =$1`;
+  let response = {};
+  try {
+    const result = await db.query(remove, [channel_id]);
+    if (result.rows > 0) {
+      response.status = "success!";
+      response.result = result;
+    } else {
+      response.status = "error!";
+      response.error = "Channel does not exist";
+    }
+    return response;
+  } catch (err) {
+    response.error = err;
+    response.status = "error!";
+    console.log(response);
+    return response;
+  }
+};
 
 /* 
 Todo: 

@@ -192,6 +192,7 @@ export default class Channels extends Component {
             server={selectedServer}
             channels={this.state.channels}
             user={user}
+            users={users}
           />
           {this.displayChannels()}
         </div>
@@ -216,7 +217,7 @@ export default class Channels extends Component {
   }
 }
 
-const DisplayServerDetails = ({ server, channels, user }) => {
+const DisplayServerDetails = ({ server, channels, user, users }) => {
   if (channels && channels.length > 0) {
     return (
       <div className="server-info-container">
@@ -229,9 +230,16 @@ const DisplayServerDetails = ({ server, channels, user }) => {
           )}
         </div>
 
-        <div className="display-server-info">Server Info</div>
+        <div className="display-server-info">
+          Users Online:
+          <ActiveUserCount users={users} />
+        </div>
       </div>
     );
   }
   return <React.Fragment />;
+};
+
+const ActiveUserCount = ({ users }) => {
+  return <span> {users.length}</span>;
 };

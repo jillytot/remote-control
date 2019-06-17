@@ -4,7 +4,12 @@ import { socketEvents } from "../../../events/events";
 import { colors } from "../../../config/colors";
 import Robot from "../robot/robot";
 import AddChannelForm from "./modals/addChannelForm";
-const { SEND_ROBOT_SERVER_INFO, GET_CHAT, ACTIVE_USERS_UPDATED } = socketEvents;
+const {
+  SEND_ROBOT_SERVER_INFO,
+  GET_CHAT,
+  ACTIVE_USERS_UPDATED,
+  CHANNELS_UPDATED
+} = socketEvents;
 
 //placeholder
 //var chatroom = { messages: [{ sender: "user2" }] }; // (this.state.chatroom)
@@ -134,7 +139,7 @@ export default class Channels extends Component {
     if (socket && this._isMounted) {
       //Currently doesn't handle channels being dynamically updated
       socket.on(SEND_ROBOT_SERVER_INFO, data => {
-        // console.log("SEND ROBOT SERVER INFO: ", data);
+        console.log("SEND ROBOT SERVER INFO: ", data);
         this.setState({
           channels: data.channels,
           users: this.getUserColors(data.users)
@@ -144,13 +149,19 @@ export default class Channels extends Component {
       socket.on(ACTIVE_USERS_UPDATED, users => {
         this.setState({ users: this.getUserColors(users) });
       });
+      socket.on(CHANNELS_UPDATED, data => {
+        console.log("CHANNELS UPDATED: ", data);
+        this.setState({
+          channels: data
+        });
+      });
     }
   };
 
   handleClick = channel => {
     this.handleActiveChannel(channel);
     const { socket } = this.props;
-    const chatId = channel.id;
+    const chatId = channel.chat;
     socket.emit(GET_CHAT, chatId);
   };
 

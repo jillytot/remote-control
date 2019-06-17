@@ -35,11 +35,15 @@
   background-color: rgb(57, 57, 75);
   width: 100px;
   padding-top: 8px;
+  height: calc(100vh - 48px);
+  overflow-y: auto;
 }
 
 .list-channels-container {
   background-color: rgb(70, 70, 99);
   width: 200px;
+  height: calc(100vh - 48px);
+  overflow-y: auto;
 }
 
 .list-channels {

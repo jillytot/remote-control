@@ -183,11 +183,16 @@ export default class Channels extends Component {
   };
 
   render() {
-    const { socket, user } = this.props;
+    const { socket, user, selectedServer } = this.props;
     const { users } = this.state;
     return (
       <React.Fragment>
         <div className={this.handleDisplayChannels()}>
+          <DisplayServerDetails
+            server={selectedServer}
+            channels={this.state.channels}
+            user={user}
+          />
           {this.displayChannels()}
         </div>
         {users !== [] ? (
@@ -210,3 +215,23 @@ export default class Channels extends Component {
     clearInterval(this.colorCleanup);
   }
 }
+
+const DisplayServerDetails = ({ server, channels, user }) => {
+  if (channels && channels.length > 0) {
+    return (
+      <div className="server-info-container">
+        <div className="display-server-name">
+          {server.server_name}
+          {user.id === server.owner_id ? (
+            <div className="server-settings"> {`(edit)`}</div>
+          ) : (
+            <div className="server-settings" />
+          )}
+        </div>
+
+        <div className="display-server-info">Server Info</div>
+      </div>
+    );
+  }
+  return <React.Fragment />;
+};

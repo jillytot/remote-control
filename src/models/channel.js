@@ -9,7 +9,7 @@ that needs to be changed before to much more work is done.
 
 const { makeId, createTimeStamp } = require("../modules/utilities");
 // const socketEvents = require("../events/events");
-
+const { getChatRooms } = require("./chatRoom");
 const {
   CHANNELS_UPDATED,
   GET_CHAT_ROOMS
@@ -37,8 +37,20 @@ const statusPt = {
   test_value: true
 };
 
-module.exports.createChannel = data => {
+module.exports.createChannel = async data => {
   console.log("Channel Data: ", data);
+
+  if (!data.chat) {
+    //TODO: Create "default chatroom" setting, and use that here instead.
+    const getDefaultChat = await getChatRooms(data.host_id);
+    data.chat = getDefaultChat[0].id;
+
+    console.log(
+      "No Chatroom found, adding default chat: ",
+      getDefaultChat,
+      data.chat
+    );
+  }
 
   let makeChannel = {};
   makeChannel.host_id = data.host_id;

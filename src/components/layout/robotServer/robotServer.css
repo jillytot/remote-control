@@ -33,15 +33,16 @@
 
 .robot-server-container {
   background-color: rgb(57, 57, 75);
-  width: 100px;
+  min-width: 90px;
   padding-top: 8px;
   height: calc(100vh - 48px);
   overflow-y: auto;
+  /* background-color: red; */
 }
 
 .list-channels-container {
   background-color: rgb(70, 70, 99);
-  width: 200px;
+  min-width: 200px;
   height: calc(100vh - 48px);
   overflow-y: auto;
 }
@@ -67,4 +68,63 @@
   display: flex;
   /* position: relative; */
   height: calc(100vh - 72px);
+}
+
+.server-info-container {
+  background-color: rgb(86, 86, 119);
+  text-align: left;
+  padding: 5px;
+  /* display: flex;
+  flex-direction: column; */
+}
+
+.display-server-name {
+  font-size: 21px;
+  font-weight: bold;
+  /* background-color: red; */
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-end;
+}
+
+.server-settings {
+  font-size: 14px;
+  /* background-color: green; */
+  font-style: italic;
+  display: flex;
+  flex-direction: row;
+  font-weight: normal;
+  justify-content: flex-end;
+  width: 100%;
+  color: rgb(172, 172, 172);
+  cursor: pointer;
+  margin-left: 10px;
+}
+
+.server-settings:hover {
+  color: cyan;
+}
+
+.display-server-info {
+  font-size: 14px;
+  /* background-color: blue; */
+  font-style: italic;
+  color: rgb(172, 172, 172);
+  /* display: flex;
+  flex-direction: column; */
+}
+
+.add-channel {
+  font-size: 12px;
+  cursor: pointer;
+  margin: 5px 5px 5px 6px;
+  font-style: italic;
+  text-align: left;
+  padding: 5px;
+  border-radius: 24px;
+  background-color: rgb(57, 57, 75);
+}
+
+.add-channel:hover {
+  border: solid 1px rgb(123, 127, 173);
 }

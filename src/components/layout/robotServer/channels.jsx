@@ -3,6 +3,7 @@ import Chat from "../chat/chat";
 import { socketEvents } from "../../../events/events";
 import { colors } from "../../../config/colors";
 import Robot from "../robot/robot";
+import AddChannelForm from "./modals/addChannelForm";
 const { SEND_ROBOT_SERVER_INFO, GET_CHAT, ACTIVE_USERS_UPDATED } = socketEvents;
 
 //placeholder
@@ -199,6 +200,8 @@ export default class Channels extends Component {
             channels={this.state.channels}
             server={selectedServer}
             user={user}
+            modal={this.props.modal}
+            onCloseModal={this.props.onCloseModal}
           />
         </div>
         {users !== [] ? (
@@ -249,9 +252,37 @@ const ActiveUserCount = ({ users }) => {
   return <span> {users.length}</span>;
 };
 
-const AddChannel = ({ server, user, channels }) => {
-  if (channels && channels.length > 0 && user.id === server.owner_id) {
-    return <div className="add-channel"> + Add Channel ...</div>;
+//Add Channel
+class AddChannel extends Component {
+  handleModal = () => {
+    return [
+      {
+        body: <AddChannelForm onCloseModal={this.props.onCloseModal} />
+      },
+      { header: "" },
+      { footer: "" }
+    ];
+  };
+
+  handleDisplayAddChannel() {
+    const { server, user, channels } = this.props;
+    if (channels && channels.length > 0 && user.id === server.owner_id) {
+      return (
+        <div
+          className="add-channel"
+          onClick={() => {
+            this.props.modal(this.handleModal());
+          }}
+        >
+          {" "}
+          + Add Channel ...
+        </div>
+      );
+    }
+    return <React.Fragment />;
   }
-  return <React.Fragment />;
-};
+
+  render() {
+    return <React.Fragment>{this.handleDisplayAddChannel()}</React.Fragment>;
+  }
+}

@@ -1,12 +1,12 @@
 import React from "react";
-import Icon from "../../common/icon";
-import { ICONS } from "../../../icons/icons";
-import "../../common/overlay.css";
-import "../../../styles/common.css";
-import Form from "../../common/form";
+import Icon from "../../../common/icon";
+import { ICONS } from "../../../../icons/icons";
+import "../../../common/overlay.css";
+import "../../../../styles/common.css";
+import Form from "../../../common/form";
 import Joi from "joi-browser";
 import axios from "axios";
-import { apiUrl, addServer } from "../../../config/clientSettings";
+import { apiUrl, addServer } from "../../../../config/clientSettings";
 
 export default class AddServer extends React.Component {
   state = {};

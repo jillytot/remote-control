@@ -3,7 +3,7 @@ import Emotes from "../../../emotes/emotes";
 import defaultImages from "../../../imgs/placeholders";
 
 const Message = ({ message }) => {
-  const roles = {
+  const types = {
     default: "",
     moderation: "moderation",
     admin: "admin",
@@ -40,7 +40,7 @@ const Message = ({ message }) => {
 
   const handleBadges = message => {
     const { badges } = message;
-    if (message && message.type === roles.moderation) return <React.Fragment />;
+    if (message && message.type === types.moderation) return <React.Fragment />;
     if (badges && badges.length > 0) {
       console.log("BADGES GET: ", badges);
       return badges.map(badge => {
@@ -103,18 +103,18 @@ const Message = ({ message }) => {
 
   const handleMessageType = message => {
     const { color } = message;
-    if (message.type === roles.moderation) {
+    if (message.type === types.moderation) {
       // console.log("Moderation Type Message");
       return `chat-message system-message`;
     } else {
       return `chat-message ${color} ${
-        message.type === roles.self ? roles.self : ""
+        message.type === types.self ? types.self : ""
       }`;
     }
   };
 
   const handleMessageSender = message => {
-    if (message && message.type === roles.moderation) {
+    if (message && message.type === types.moderation) {
       return "System";
     }
     return message.sender;
@@ -125,7 +125,7 @@ const Message = ({ message }) => {
       <div className={handleMessageType(message)}>
         {handleBadges(message)}
         <span className="chat-user-name">{`${handleMessageSender(message)}${
-          message.type === roles.self ? "" : ":"
+          message.type === types.self ? "" : ":"
         }  `}</span>
         <span className="message-spacing">
           {handleEmotes(message.message).map(element => {

@@ -6,7 +6,7 @@ import { apiUrl } from "../../../../config/clientSettings";
 
 export default class AddChannelForm extends Form {
   state = {
-    data: { channe_name: "" },
+    data: { channel_name: "" },
     errors: {}
   };
 

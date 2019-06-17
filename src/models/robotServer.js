@@ -244,3 +244,12 @@ module.exports.deleteRobotServer = async server_id => {
     return null;
   }
 };
+
+//Does this user own this server?
+module.exports.validateOwner = async (user_id, server_id) => {
+  const checkServer = await this.getRobotServer(server_id);
+  if (checkServer) {
+    if (user_id === checkServer.owner_id) return true;
+  }
+  return false;
+};

@@ -28,6 +28,7 @@ const settingsPt = {
 const rolesPt = [{ server_id: "global", roles: [] }];
 
 module.exports.createUser = async user => {
+  let response = {};
   //ALWAYS SAVE EMAIL AS LOWERCASE!!!!!
   const email = user.email.toLowerCase();
   console.log("check email to lowercase ", email);
@@ -39,18 +40,15 @@ module.exports.createUser = async user => {
   let emailResult = await this.checkEmail(user);
   console.log("CHECK EMAIL RESULT: ", emailResult);
   if (result === true) {
-    console.log("ERROR, USERNAME ALREADY EXISTS, please try a different one");
-    return {
-      username_status:
-        "This username already exists, please try a different one"
-    };
+    response.error = `This username is already in use, you must provide a unique username.`;
+    console.log(response.error);
+    return response;
   }
 
   if (emailResult === true) {
-    console.log("ERROR, EMAIL IS ALREADY IN USE, please try a different one");
-    return {
-      email_status: "This email is already in use, unique email is required"
-    };
+    response.error = `This email already belongs to a different acccount. You must provide an email that hasn't already been used. `;
+    console.log(response.error);
+    return response;
   }
 
   //Generate UUID, PW Hash
@@ -275,20 +273,6 @@ module.exports.verifyAuthToken = async token => {
   }
 };
 
-//Get public info about a user from the DB
-module.exports.getPublicUserInfo = async userId => {
-  let userInfo = {};
-  try {
-    const query = `SELECT username, id, created FROM users WHERE id = $1 LIMIT 1`;
-    const result = await db.query(query, [userId]);
-    userInfo = result.rows[0];
-    console.log(userInfo);
-  } catch (err) {
-    console.log(err);
-  }
-  return userInfo;
-};
-
 module.exports.publicUser = user => {
   if (user)
     return {
@@ -398,16 +382,6 @@ module.exports.unTimeoutUser = async user => {
   return null;
 };
 
-const timeoutObject = {
-  moderator: null,
-  user: null,
-  duration: null,
-  timestamp: createTimeStamp(),
-  server: null,
-  chatRoom: null,
-  reason: null
-};
-
 //Update client when their status has changed
 module.exports.sendUpdateStatus = user => {
   const { io } = require("../services/server/server");
@@ -424,6 +398,8 @@ Chat and Controls need to be disabled for timedout user for the duration of a gl
 
 //Check if a user has particular, "roles", return true or false to validate chat commands
 module.exports.checkRoles = async (user, rolesToCheck) => {
+  //TODO: Does not include local type checking
+
   let validate = false;
   let checkUser = await this.getUserInfoFromId(user.id);
   if (checkUser && checkUser.type) {

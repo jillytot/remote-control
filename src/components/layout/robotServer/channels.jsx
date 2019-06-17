@@ -195,6 +195,11 @@ export default class Channels extends Component {
             users={users}
           />
           {this.displayChannels()}
+          <AddChannel
+            channels={this.state.channels}
+            server={selectedServer}
+            user={user}
+          />
         </div>
         {users !== [] ? (
           <React.Fragment>
@@ -242,4 +247,11 @@ const DisplayServerDetails = ({ server, channels, user, users }) => {
 
 const ActiveUserCount = ({ users }) => {
   return <span> {users.length}</span>;
+};
+
+const AddChannel = ({ server, user, channels }) => {
+  if (channels && channels.length > 0 && user.id === server.owner_id) {
+    return <div className="add-channel"> + Add Channel ...</div>;
+  }
+  return <React.Fragment />;
 };

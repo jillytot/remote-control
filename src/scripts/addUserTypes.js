@@ -1,15 +1,15 @@
 const {
-  addUserTypes,
-  userTypes,
+  addUserRoles,
+  userRoles,
   validateUser,
   getIdFromUsername
 } = require("../models/user");
 
 const validate = async () => {
-  let types = process.argv.slice(4);
+  let roles = process.argv.slice(4);
   let identifier = process.argv[2];
   let user = process.argv[3];
-  console.log("Set Type(s) for User: ", identifier, user, types);
+  console.log("Set Type(s) for User: ", identifier, user, roles);
 
   //Does this user exist?
   if (identifier === "id") {
@@ -42,20 +42,20 @@ const validate = async () => {
   }
 
   //Check if valid type
-  types.map(type => {
-    if (userTypes.includes(type) === false) {
+  roles.map(type => {
+    if (userRoles.includes(type) === false) {
       console.log("Invalid Type: ", type), process.exit(1);
     }
   });
 
   //remove dupes (if any)
-  types = Array.from(new Set(types));
-  console.log("Removing Dupes (if any): ", types);
-  console.log("...Validation Complete, adding user types to DB");
+  roles = Array.from(new Set(roles));
+  console.log("Removing Dupes (if any): ", roles);
+  console.log("...Validation Complete, adding user roles to DB");
 
   //set the type!
-  const res = await addUserTypes(user, types);
-  console.log("Successfully Added User Types: ", res);
+  const res = await addUserRoles(user, roles);
+  console.log("Successfully Added User Roles: ", res);
   process.exit();
 };
 

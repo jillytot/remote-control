@@ -1,6 +1,6 @@
 const { makeId, createTimeStamp } = require("../modules/utilities");
 const { getMessageType } = require("./chatCommands");
-const { getGlobalTypes } = require("./user");
+const { getGlobalRoles } = require("./user");
 
 //Create Message is called from events/index as an incoming socket.io event from the client
 module.exports.createMessage = async message => {
@@ -18,11 +18,11 @@ module.exports.createMessage = async message => {
   //Flag for displaying a default message type in chat
   makeMess.displayMessage = true;
 
-  //Get global types from the server
-  const globalTypes = await getGlobalTypes(message.userId);
+  //Get global roles from the server
+  const globalRoles = await getGlobalRoles(message.userId);
 
   makeMess.badges = await this.getBadges(
-    globalTypes,
+    globalRoles,
     message.server_id,
     message.userId
   );
@@ -56,25 +56,25 @@ needs more design : D
 */
 
 //returns chat badges for a user both globally and for the specified server
-module.exports.getBadges = async (checkTypes, server_id, userId) => {
-  if (checkTypes) {
+module.exports.getBadges = async (checkRoles, server_id, userId) => {
+  if (checkRoles) {
     // do nothing
-    console.log("CHECK TYPES :", checkTypes);
+    console.log("CHECK ROLES :", checkRoles);
   } else {
-    checkTypes = [];
+    checkRoles = [];
   }
-  console.log("GET BADGES PRE-CHECK: ", checkTypes, server_id, userId);
-  const { getLocalTypes } = require("./robotServer");
-  const addTypes = await getLocalTypes(server_id, userId);
-  addTypes.forEach(type => {
-    checkTypes.push(type);
+  console.log("GET BADGES PRE-CHECK: ", checkRoles, server_id, userId);
+  const { getLocalRoles } = require("./robotServer");
+  const addRoles = await getLocalRoles(server_id, userId);
+  addRoles.forEach(type => {
+    checkRoles.push(type);
   });
-  console.log("GET BADGES: ", checkTypes, server_id, userId);
+  console.log("GET BADGES: ", checkRoles, server_id, userId);
 
-  if (Array.isArray(checkTypes)) {
-    console.log("CHECK TYPES: ", checkTypes);
-    checkTypes = Array.from(new Set(checkTypes));
-    return checkTypes;
+  if (Array.isArray(checkRoles)) {
+    console.log("CHECK ROLES: ", checkRoles);
+    checkRoles = Array.from(new Set(checkRoles));
+    return checkRoles;
   }
   return [];
 };

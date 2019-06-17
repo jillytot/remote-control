@@ -1,5 +1,5 @@
 const robotServer = require("../models/robotServer");
-const { getLocalTypes, getRobotServer, deleteRobotServer } = robotServer;
+const { getLocalRoles, getRobotServer, deleteRobotServer } = robotServer;
 const user = require("../models/user");
 const { getUserInfoFromId } = user;
 
@@ -9,7 +9,7 @@ const deleteServerId = "serv-e04a0850-50f5-4ca8-889b-b25ab7f63f52";
 
 const test = async () => {
   try {
-    await test_getLocalTypes();
+    await test_getLocalRoles();
     await test_getUserInfoFromId();
     await test_getRobotServer();
     // await test_deleteRobotServer();
@@ -34,10 +34,10 @@ const test_getRobotServer = async () => {
   );
 };
 
-const test_getLocalTypes = async () => {
+const test_getLocalRoles = async () => {
   console.log(
     `Should return ['owner']: `,
-    await getLocalTypes(testServerId, testUserId)
+    await getLocalRoles(testServerId, testUserId)
   );
 };
 

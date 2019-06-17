@@ -16,7 +16,7 @@ const { ACTIVE_USERS_UPDATED } = require("../events/events").socketEvents;
 const statusPt = {
   //server_id: global refers to global status
   timeout: false
-  //types: [] //Global Only
+  //roles: [] //Global Only
 };
 //server_id: Status, individual server status per user will mirror the global status as much as possible
 
@@ -24,7 +24,7 @@ const settingsPt = {
   test_value: null
 }; //Global Settings
 //server_id: {} ...Settings for individual servers will be listed here, scheme will mirror global as much as possible
-//roles will be a more robust way to manage user types
+//roles will be a more robust way to manage user roles
 const rolesPt = [{ server_id: "global", roles: [] }];
 
 module.exports.createUser = async user => {
@@ -328,14 +328,14 @@ module.exports.sendActiveUsers = async robot_server => {
 
 //USER TYPE MANAGEMENT
 /*
-  Badges: There are 4 slots for badges, even though a user can be multiple overlapping types
+  Badges: There are 4 slots for badges, even though a user can be multiple overlapping roles
   Slot 1: Global (example: Staff, Global MOderator), 
   Slot 2: Local (example: owner, moderator), 
   Slot 3: Global Support (AKA Patreon), 
   Slot 4: Local Support (AKA Server Sub) 
   */
 
-module.exports.userTypes = [
+module.exports.userRoles = [
   "staff",
   "owner",
   "robot",
@@ -343,11 +343,11 @@ module.exports.userTypes = [
   "local_moderator"
 ];
 
-module.exports.addUserTypes = async (userId, types) => {
-  console.log(`adding types: ${types} to ${userId}`);
+module.exports.addUserRoles = async (userId, roles) => {
+  console.log(`adding roles: ${roles} to ${userId}`);
   try {
     const insert = `UPDATE users SET type = $1 WHERE id = $2 RETURNING *`;
-    const result = await db.query(insert, [types, userId]);
+    const result = await db.query(insert, [roles, userId]);
     return result.rows[0];
   } catch (err) {
     console.log(err);
@@ -422,22 +422,22 @@ There needs to be a log of who timed them out and for how long
 Chat and Controls need to be disabled for timedout user for the duration of a global timeout
 */
 
-//Check if a user has particular, "types", return true or false to validate chat commands
-module.exports.checkTypes = async (user, typesToCheck) => {
+//Check if a user has particular, "roles", return true or false to validate chat commands
+module.exports.checkRoles = async (user, rolesToCheck) => {
   let validate = false;
   let checkUser = await this.getUserInfoFromId(user.id);
   if (checkUser && checkUser.type) {
-    console.log("CHECKING USER TYPES: ", checkUser, typesToCheck);
+    console.log("CHECKING USER ROLES: ", checkUser, rolesToCheck);
     const check = checkUser.type.map(type => {
-      return typesToCheck.includes(type);
+      return rolesToCheck.includes(type);
     });
     if (check.includes(true) || check === true) validate = true;
   }
   return validate;
 };
 
-module.exports.getGlobalTypes = async user_id => {
-  const sendTypes = await this.getUserInfoFromId(user_id);
-  console.log(sendTypes);
-  return sendTypes.type;
+module.exports.getGlobalRoles = async user_id => {
+  const sendRoles = await this.getUserInfoFromId(user_id);
+  console.log(sendRoles);
+  return sendRoles.type;
 };

@@ -13,7 +13,7 @@ module.exports.getMessageType = async message => {
 };
 
 //commands for managing the site through chat
-siteCommands = async message => {
+const siteCommands = async message => {
   let updateCommand = message;
   let scrubCommand = message.message
     .substr(1)
@@ -34,7 +34,7 @@ siteCommands = async message => {
   return message;
 };
 
-me = message => {
+const me = message => {
   message.type = "self";
   message.message = message.message.substr(4);
   console.log(message.message);
@@ -88,10 +88,10 @@ const {
   getIdFromUsername,
   timeoutUser,
   getUserInfoFromId,
-  checkTypes
+  checkRoles
 } = require("./user");
 
-const globalTypes = ["staff", "global_moderator"]; // Types that can access this command
+const globalRoles = ["staff", "global_moderator"]; // Roles that can access this command
 
 //This is basically a global timeout
 module.exports.handleGlobalTimeout = async (
@@ -100,7 +100,7 @@ module.exports.handleGlobalTimeout = async (
   time,
   message
 ) => {
-  const validateCommand = await checkTypes(moderator, globalTypes); //Can this user use this command?
+  const validateCommand = await checkRoles(moderator, globalRoles); //Can this user use this command?
   if (validateCommand) {
     console.log("COMMAND VALIDATION TRUE");
   } else {

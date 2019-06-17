@@ -189,25 +189,25 @@ module.exports.sendGlobalTimeout = (server_id, badUser) => {
   io.to(server_id).emit(GLOBAL_TIMEOUT, publicUser(badUser));
 };
 
-//Get user roles / types for a specific server
-module.exports.getLocalTypes = async (server_id, user_id) => {
-  let localTypes = [];
+//Get user roles for a specific server
+module.exports.getLocalRoles = async (server_id, user_id) => {
+  let localRoles = [];
   const getServer = await this.getRobotServer(server_id);
   if (!getServer) {
-    return localTypes;
+    return localRoles;
   }
   const { settings } = getServer;
   settings.roles.forEach(role => {
     role.members.forEach(member => {
       if (user_id === member) {
-        localTypes.push(role.role);
-        console.log(`Pushing ${role.role} to ${localTypes}`);
+        localRoles.push(role.role);
+        console.log(`Pushing ${role.role} to ${localRoles}`);
       }
     });
   });
 
-  console.log("SENDING LOCAL TYPES: ", localTypes);
-  return localTypes;
+  console.log("SENDING LOCAL ROLES: ", localRoles);
+  return localRoles;
 };
 
 //Get all server information from server_id

@@ -5,9 +5,9 @@ const request = require("../../modules/requests");
 router.use("/signup", require("./signup"));
 router.use("/login", require("./login"));
 router.use("/auth", require("./auth"));
-
 router.use("/robot-server", require("./robotServer"));
 router.use("/robot", require("./setupRobot"));
+router.use("/channels", require("./channels"));
 
 //test API
 router.get("/", (req, res) => {

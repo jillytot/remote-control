@@ -120,3 +120,7 @@
   border-radius: 24px;
   background-color: rgb(57, 57, 75);
 }
+
+.add-channel:hover {
+  border: solid 1px rgb(123, 127, 173);
+}

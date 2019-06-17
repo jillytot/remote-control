@@ -35,24 +35,22 @@
   background-color: rgb(57, 57, 75);
   min-width: 90px;
   padding-top: 8px;
-  height: calc(100vh - 72px);
+  height: calc(100vh - 80px);
   overflow-y: auto;
   /* background-color: red; */
 }
-
 
 .robot-server-container::-webkit-scrollbar-track {
   box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
   background-color: #372e50;
 }
 .robot-server-container::-webkit-scrollbar {
-  width: 5px;
+  width: 0px;
   /* background-color: green; */
 }
 .robot-server-container::-webkit-scrollbar-thumb {
   background-color: #484d79;
 }
-
 
 .list-channels-container {
   background-color: rgb(70, 70, 99);
@@ -73,7 +71,6 @@
 .list-channels-container::-webkit-scrollbar-thumb {
   background-color: #484d79;
 }
-
 
 .list-channels {
   font-size: 14px;

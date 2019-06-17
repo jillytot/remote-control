@@ -40,12 +40,15 @@ router.get("/create", async (req, res) => {
 
 router.post("/create", auth, async (req, res) => {
   let response = {};
+  let makeChannel = {};
 
   if (req.body.server_id && req.body.channel_name && req.user) {
     response.user = { username: req.user.username, id: req.user.id };
     response.server_id = req.body.server_id;
     response.channel_name = req.body.channel_name;
+
     const getServer = await validateOwner(response.user.id, response.server_id);
+
     if (getServer) {
       response.validated = true;
     } else {
@@ -57,9 +60,9 @@ router.post("/create", auth, async (req, res) => {
 
   try {
     //TODO: Add default chatroom if none is provided
-    const makeChannel = await createChannel({
-      host_id: response.server_id,
-      name: response.channel_name
+    makeChannel = await createChannel({
+      host_id: req.body.server_id,
+      name: req.body.channel_name
     });
 
     if (makeChannel) {
@@ -68,7 +71,7 @@ router.post("/create", auth, async (req, res) => {
     }
   } catch (err) {
     response.error = "There was a problem creating this channel";
-    response._error = err;
+    response.error_details = makeChannel;
   }
 
   res.send(response);

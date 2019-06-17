@@ -2,7 +2,7 @@ import React from "react";
 import Form from "../../../common/form";
 import Joi from "joi-browser";
 import axios from "axios";
-import { apiUrl } from "../../../../config/clientSettings";
+import { apiUrl, addChannel } from "../../../../config/clientSettings";
 
 export default class AddChannelForm extends Form {
   state = {
@@ -22,6 +22,7 @@ export default class AddChannelForm extends Form {
 
   async componentDidMount() {
     //Just a test to see my API stuff is working
+    console.log(this.props);
     await axios
       .get(apiUrl)
       .then(function(response) {
@@ -34,7 +35,25 @@ export default class AddChannelForm extends Form {
 
   doSubmit = async () => {
     const { channel_name } = this.state.data;
-    console.log("SUBMITTED: ", channel_name);
+    const { server } = this.props;
+    const token = localStorage.getItem("token");
+    console.log("SUBMITTED: ", channel_name, addChannel);
+
+    await axios
+      .post(
+        addChannel,
+        {
+          server_id: server.server_id,
+          channel_name: channel_name
+        },
+        {
+          headers: { authorization: `Bearer ${token}` }
+        }
+      )
+      .catch(err => {
+        console.log("Add Server Error: ", err);
+      });
+
     this.props.onCloseModal();
   };
 

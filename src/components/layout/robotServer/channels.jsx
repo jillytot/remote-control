@@ -257,7 +257,12 @@ class AddChannel extends Component {
   handleModal = () => {
     return [
       {
-        body: <AddChannelForm onCloseModal={this.props.onCloseModal} />
+        body: (
+          <AddChannelForm
+            onCloseModal={this.props.onCloseModal}
+            server={this.props.server}
+          />
+        )
       },
       { header: "" },
       { footer: "" }

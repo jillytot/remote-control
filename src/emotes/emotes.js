@@ -3,7 +3,7 @@ import robotHype from "./imgs/robotHype.png";
 import robotYay from "./imgs/robotYay.png";
 import jill from "./imgs/jill.png";
 import skeeter from "./imgs/skeeter.png";
-import remo from "./imgs/remo.png";
+// import remo from "./imgs/remo.png";
 
 //Currently, all emotes need to be 56x56 pixels, always 1:1 aspect ratio
 const emotes = {

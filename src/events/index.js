@@ -11,7 +11,8 @@ const {
   MESSAGE_SENT,
   HEARTBEAT,
   BUTTON_COMMAND,
-  GET_CHANNELS
+  GET_CHANNELS,
+  JOIN_CHANNEL
 } = require("./events").socketEvents;
 
 const { sendActiveUsers } = user;
@@ -75,6 +76,10 @@ module.exports.socketEvents = (socket, io) => {
     socket.emit(SEND_ROBOT_SERVER_INFO, sendInfo);
   });
 
+  socket.on(JOIN_CHANNEL, async channel_id => {
+    console.log("JOIN CHANNEL: ", channel_id);
+    socket.join(channel_id);
+  });
   //Subscribe user to a specified chatroom, and send them all the specific info about it
   socket.on(GET_CHAT, async chatId => {
     console.log("GET CHAT Chat Id: ", chatId);

@@ -23,6 +23,7 @@ export default class Robot extends Component {
 
   handleClick = click => {
     const { socket } = this.props;
+    console.log("CLICK CHECK: ", click);
     socket.emit("BUTTON_COMMAND", {
       user: click.user,
       button: click.button,

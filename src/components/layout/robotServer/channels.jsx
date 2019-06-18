@@ -9,7 +9,8 @@ const {
   SEND_ROBOT_SERVER_INFO,
   GET_CHAT,
   ACTIVE_USERS_UPDATED,
-  CHANNELS_UPDATED
+  CHANNELS_UPDATED,
+  JOIN_CHANNEL
 } = socketEvents;
 
 //placeholder
@@ -92,6 +93,7 @@ export default class Channels extends Component {
   handleActiveChannel = activeChannel => {
     console.log("LOAD CHANNEL", activeChannel);
     const { channels } = this.state;
+    const { socket } = this.props;
     let storeChannels = channels.map(channel => {
       if (channel.id === activeChannel.id) {
         console.log(activeChannel, channel);
@@ -101,6 +103,7 @@ export default class Channels extends Component {
       }
       return channel;
     });
+    if (socket) socket.emit(JOIN_CHANNEL, activeChannel.id);
     this.setState({ channels: storeChannels });
     this.setState({ currentChannel: activeChannel.id });
   };

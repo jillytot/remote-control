@@ -4,6 +4,7 @@ import { socketEvents } from "../../../events/events";
 import { colors } from "../../../config/colors";
 import Robot from "../robot/robot";
 import AddChannelForm from "./modals/addChannelForm";
+import EditChannel from "./modals/editChannel";
 const {
   SEND_ROBOT_SERVER_INFO,
   GET_CHAT,
@@ -177,19 +178,28 @@ export default class Channels extends Component {
   displayChannels = () => {
     const { channels } = this.state;
     this.loadDefaultChannel();
-    return channels.map(channel => {
+    return channels.map((channel, index) => {
       return (
-        <div
-          className={
-            channel.active
-              ? "list-channels list-channels-selected"
-              : "list-channels"
-          }
-          key={channel.id}
-          onClick={() => this.handleClick(channel)}
-        >
-          {"# "}
-          {channel.name}
+        <div className="channel-container" key={index}>
+          <div
+            className={
+              channel.active
+                ? "list-channels list-channels-selected"
+                : "list-channels"
+            }
+            key={channel.id}
+            onClick={() => this.handleClick(channel)}
+          >
+            {"# "}
+            {channel.name}
+          </div>
+          <EditChannel
+            channel={channel}
+            server={this.props.selectedServer}
+            user={this.props.user}
+            modal={this.props.modal}
+            onCloseModal={this.props.onCloseModal}
+          />
         </div>
       );
     });

@@ -4,8 +4,8 @@ import axios from "axios";
 import DisplayRobotServer from "./displayRobotServer";
 import Channels from "./channels";
 import "./robotServer.css";
-import { socketEvents } from "../../../services/sockets/events";
-import AddServer from "./addServer";
+import { socketEvents } from "../../../events/events";
+import AddServer from "./modals/addServer";
 const { ROBOT_SERVER_UPDATED, GET_CHANNELS } = socketEvents;
 
 export default class RobotServer extends Component {
@@ -85,6 +85,8 @@ export default class RobotServer extends Component {
         socket={socket}
         user={user}
         selectedServer={this.state.selectedServer}
+        modal={this.props.modal}
+        onCloseModal={this.props.onCloseModal}
       />
     );
   };

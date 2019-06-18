@@ -5,9 +5,9 @@ import { socketUrl } from "../config/clientSettings";
 import axios from "axios";
 import { apiUrl } from "../config/clientSettings";
 
-import { USER_CONNECTED } from "../services/sockets/events";
+import { USER_CONNECTED } from "../events/events";
 
-import { socketEvents } from "../services/sockets/events";
+import { socketEvents } from "../events/events";
 const { AUTHENTICATE, HEARTBEAT, USER_STATUS_UPDATED } = socketEvents;
 
 const UserContext = React.createContext();

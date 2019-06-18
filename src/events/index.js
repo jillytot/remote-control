@@ -1,6 +1,7 @@
 const user = require("../models/user");
 const { getChatRooms, getChat, chatEvents } = require("../models/chatRoom");
 const { createMessage } = require("../models/chatMessage");
+const { getChannels } = require("../models/channel");
 const {
   SEND_ROBOT_SERVER_INFO,
   AUTHENTICATE,
@@ -11,7 +12,7 @@ const {
   HEARTBEAT,
   BUTTON_COMMAND,
   GET_CHANNELS
-} = require("../services/sockets/events").socketEvents;
+} = require("./events").socketEvents;
 
 const { sendActiveUsers } = user;
 
@@ -66,7 +67,7 @@ module.exports.socketEvents = (socket, io) => {
     console.log("GET CHAT ROOMS: ", data);
     socket.join(data.server_id);
     const sendInfo = {
-      channels: await getChatRooms(data.server_id),
+      channels: await getChannels(data.server_id),
       users: await sendActiveUsers(data.server_id)
       //chatRoom: await getChatRooms(data.server_id)
     };

@@ -31,7 +31,8 @@
 }
 
 .modal-body {
-  padding: 10px 15px;
+  /* padding: 10px 15px; */
+  /* padding: 5px; */
   text-align: center;
   background: #1d262b;
   max-height: calc(100% - 135px);

@@ -171,3 +171,40 @@
 .add-channel:hover {
   border: solid 1px rgb(123, 127, 173);
 }
+
+.display-robot-container {
+  /* background-color: blue; */
+  /* display: flex;
+  align-items: center; */
+}
+
+.display-robot-header {
+  background-color: green;
+  font-size: 14px;
+  cursor: pointer;
+
+  margin: 10px 1px 0px 1px;
+  font-style: italic;
+  text-align: left;
+  padding: 5px;
+  /* border-radius: 24px; */
+  background-color: rgb(86, 86, 119);
+}
+
+.display-robot-item {
+  /* background-color: purple; */
+  font-size: 14px;
+  cursor: pointer;
+  margin: 5px 5px 5px 6px;
+  text-align: left;
+  padding-left: 3px;
+  /* background-color: purple; */
+  display: flex;
+  flex-direction: row;
+  justify-self: flex-start;
+  width: 100%;
+}
+
+.display-robot-item:hover {
+  background-color: rgb(86, 86, 119);
+}

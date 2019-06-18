@@ -5,6 +5,7 @@ import { colors } from "../../../config/colors";
 import Robot from "../robot/robot";
 import AddChannelForm from "./modals/addChannelForm";
 import EditChannel from "./modals/editChannel";
+import DisplayRobot from "./displayRobot";
 const {
   SEND_ROBOT_SERVER_INFO,
   GET_CHAT,
@@ -233,6 +234,13 @@ export default class Channels extends Component {
           />
           {this.displayChannels()}
           <AddChannel
+            channels={this.state.channels}
+            server={selectedServer}
+            user={user}
+            modal={this.props.modal}
+            onCloseModal={this.props.onCloseModal}
+          />
+          <DisplayRobot
             channels={this.state.channels}
             server={selectedServer}
             user={user}

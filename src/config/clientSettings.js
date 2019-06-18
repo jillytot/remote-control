@@ -27,5 +27,7 @@ module.exports = {
   listRobotServers: `${host.local}:${serverPort}${api.api}${api.robotServers}${
     api.listRobotServers
   }`,
-  addServer: `${host.local}:${serverPort}${api.api}/robot-server/create`
+  addServer: `${host.local}:${serverPort}${api.api}/robot-server/create`,
+  addChannel: `${host.local}:${serverPort}${api.api}/channels/create`,
+  deleteChannel: `${host.local}:${serverPort}${api.api}/channels/delete`
 };

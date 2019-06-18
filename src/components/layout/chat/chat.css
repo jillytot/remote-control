@@ -150,7 +150,7 @@
 
 .chat-background {
   /* background-color: purple; */
-  height: 100%;
+  height: calc(100vh - 162px);
   background-color: #221b3a;
 }
 
@@ -219,4 +219,5 @@
   display: flex;
   flex-direction: row;
   border: solid 0px;
+  /* background-color: red; */
 }

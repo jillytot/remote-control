@@ -138,8 +138,11 @@ module.exports.getChannels = async server_id => {
 
 module.exports.updateServerChannels = async server_id => {
   const { io } = require("../services/server/server");
-  const sendUpdate = await this.getChannels(server_id);
-  io.to(server_id).emit(CHANNELS_UPDATED, sendUpdate);
+  let sendData = {};
+  sendData.channels = await this.getChannels(server_id);
+  sendData.server_id = server_id;
+
+  io.to(server_id).emit(CHANNELS_UPDATED, sendData);
 };
 
 //Adds channel to a server based on server_id

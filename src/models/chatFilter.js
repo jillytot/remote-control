@@ -31,22 +31,33 @@ module.exports.filterPhoneticMessage = payload => {
   return returnPayload.trim();
 };
 
+/**
+ * Scan the payload for offending strict matches and replace them with a 
+ * substitute. 
+ * @param {String} payload the message/username/chat message to scan
+ * @example
+ *  // filter a username
+ *  username = filterTextMessage(username);
+ * 
+ * @returns {String} the censored payload.
+ */
 module.exports.filterTextMessage = payload => {
   let returnPayload = "";
   /** @TODO split on any non-word character */
   const messageSplit = payload.split(" ");
   const badWords = Object.values(globalBadWordsList.normal_bad_words);
   const replacements = Object.keys(globalBadWordsList.normal_bad_words);
-  messageSplit.forEach((word) => {
+
+  messageSplit.forEach(word => {
     let index = -1;
-    let triggered = false;
+
     badWords.forEach((words, idx) => {
       if (words.indexOf(word) >= 0) {
-        triggered = true;
         index = idx;
       }
-    })
-    if (triggered) {
+    });
+    
+    if (index >= 0) {
       returnPayload += replacements[index] + " ";
     } else {
       returnPayload += word + " ";

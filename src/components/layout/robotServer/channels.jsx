@@ -59,6 +59,7 @@ export default class Channels extends Component {
       // console.log(newColors);
       this.setState({ userColors: newColors });
     }, 30000); //garbage cleanup every 30s
+
     this.loadDefaultChannel();
   }
 
@@ -180,7 +181,9 @@ export default class Channels extends Component {
 
   displayChannels = () => {
     const { channels } = this.state;
-    // this.loadDefaultChannel();
+
+    this.loadDefaultChannel();
+
     return channels.map((channel, index) => {
       return (
         <div className="channel-container" key={index}>

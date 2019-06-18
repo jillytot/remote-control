@@ -45,6 +45,10 @@
   display: flex;
 }
 
+.register-form-emphasis {
+  font-weight: bold;
+}
+
 .form-group {
   font-size: 14px;
   /* margin: 5px; */

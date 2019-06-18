@@ -2,6 +2,7 @@ const { authUser } = require("../models/user");
 
 const auth = async (req, res, next) => {
   const header = req.headers["authorization"];
+  console.log("API AUTH: ", header);
 
   if (typeof header !== "undefined") {
     const bearer = header.split(" ");

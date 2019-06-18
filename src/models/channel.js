@@ -147,7 +147,7 @@ module.exports.updateServerChannels = async server_id => {
 
 //Adds channel to a server based on server_id
 
-module.exports.deleteChannel = async channel_id => {
+module.exports.deleteChannel = async (channel_id, server_id) => {
   const db = require("../services/db");
   const remove = `DELETE FROM channels WHERE id =$1`;
   let response = {};
@@ -156,6 +156,7 @@ module.exports.deleteChannel = async channel_id => {
     // if (result.rows > 0) {
     response.status = "success!";
     response.result = result.rows[0];
+    this.updateServerChannels(server_id);
 
     return response;
   } catch (err) {

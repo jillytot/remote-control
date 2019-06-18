@@ -88,19 +88,19 @@ router.get("/delete", async (req, res) => {
 });
 
 //Delete Channel
-router.delete("/delete", auth, async (req, res) => {
+router.post("/delete", auth, async (req, res) => {
+  console.log("DELETING CHANNEL: ", req.body.channel_id);
   let response = {};
-  if (req.body.channel_id && req.user)
+  if (req.body.channel_id && req.body.server_id && req.user)
     response.channel_id = req.body.channel_id;
-  const getServerId = await await getServerIdFromChannelId(req.body.channel_id);
-
-  response.server_id = getServerId.result;
+  response.server_id = req.body.server_id;
   response.user = { username: req.user.username, id: req.user.id };
 
-  validate = validateOwner(req.user.id, response.server_id);
+  validate = await validateOwner(req.user.id, response.server_id);
   if (validate) {
+    response.validated = true;
     // response.validate = true;
-    const result = await deleteChannel(req.body.channel_id);
+    const result = await deleteChannel(req.body.channel_id, req.body.server_id);
     response.status = result.status;
   }
   res.send(response);

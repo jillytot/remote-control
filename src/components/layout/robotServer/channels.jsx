@@ -180,7 +180,7 @@ export default class Channels extends Component {
 
   displayChannels = () => {
     const { channels } = this.state;
-    this.loadDefaultChannel();
+    // this.loadDefaultChannel();
     return channels.map((channel, index) => {
       return (
         <div className="channel-container" key={index}>

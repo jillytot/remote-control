@@ -135,7 +135,8 @@ export default class Channels extends Component {
   };
 
   channelListener = () => {
-    const { socket } = this.props;
+    const { socket, selectedServer } = this.props;
+
     if (socket && this._isMounted) {
       //Currently doesn't handle channels being dynamically updated
       socket.on(SEND_ROBOT_SERVER_INFO, data => {
@@ -146,14 +147,22 @@ export default class Channels extends Component {
         });
         if (this.state.currentChannel) this.handleClick(data.channels[0]);
       });
+
       socket.on(ACTIVE_USERS_UPDATED, users => {
         this.setState({ users: this.getUserColors(users) });
       });
+
       socket.on(CHANNELS_UPDATED, data => {
-        console.log("CHANNELS UPDATED: ", data);
-        this.setState({
-          channels: data
-        });
+        console.log("CHANNELS UPDATED: ", data, selectedServer);
+        if (
+          this.props.selectedServer &&
+          data.server_id === this.props.selectedServer.server_id
+        ) {
+          console.log("UPDATING CHANNELS");
+          this.setState({
+            channels: data.channels
+          });
+        }
       });
     }
   };

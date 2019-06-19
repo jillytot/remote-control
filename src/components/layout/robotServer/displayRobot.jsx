@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import "./robotServer.css";
 import axios from "axios";
 import { socketEvents } from "../../../events/events";
+import list_robot from "../../../icons/singleIcons/list_robot.svg";
 
 const { GET_ROBOTS } = socketEvents;
 
@@ -30,8 +31,11 @@ export default class DisplayRobot extends Component {
     return robots.map((robot, index) => {
       console.log(robot.name);
       return (
-        <div className="display-robot-item" key={index}>
-          {robot.name}
+        <div className="robot-item-container">
+          <img className="list-icon" src={list_robot} />
+          <div className="display-robot-item" key={index}>
+            {robot.name}
+          </div>
         </div>
       );
     });

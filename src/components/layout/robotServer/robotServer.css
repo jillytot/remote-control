@@ -183,7 +183,7 @@
   font-size: 14px;
   cursor: pointer;
 
-  margin: 10px 1px 0px 1px;
+  margin: 10px 1px 5px 1px;
   font-style: italic;
   text-align: left;
   padding: 5px;
@@ -191,19 +191,32 @@
   background-color: rgb(86, 86, 119);
 }
 
-.display-robot-item {
-  /* background-color: purple; */
-  font-size: 14px;
-  cursor: pointer;
-  margin: 5px 5px 5px 6px;
-  text-align: left;
-  padding-left: 3px;
+.robot-item-container {
   display: flex;
-  flex-direction: row;
-  justify-self: flex-start;
-  /* width: 100%; */
+  cursor: pointer;
 }
 
-.display-robot-item:hover {
+.display-robot-item {
+  font-size: 14px;
+
+  margin: 5px 5px 5px 2px;
+  text-align: left;
+  padding-left: 3px;
+
+  display: flex;
+  flex-direction: row;
+  /* justify-self: flex-start; */
+  /* background-color: red; */
+}
+
+.list-icon {
+  /* background-color: blue; */
+  display: flex;
+  flex-direction: row;
+  height: 18px;
+  margin: 1px 0px 5px 6px;
+}
+
+.robot-item-container:hover {
   background-color: rgb(86, 86, 119);
 }

@@ -32,37 +32,81 @@ module.exports.filterPhoneticMessage = payload => {
 };
 
 /**
- * Scan the payload for offending strict matches and replace them with a 
- * substitute. 
+ * Scan the payload for offending strict matches and replace them with a
+ * substitute.
  * @param {String} payload the message/username/chat message to scan
  * @example
  *  // filter a username
  *  username = filterTextMessage(username);
- * 
+ *
  * @returns {String} the censored payload.
  */
 module.exports.filterTextMessage = payload => {
   let returnPayload = "";
   /** @TODO split on any non-word character */
   const messageSplit = payload.split(" ");
-  const badWords = Object.values(globalBadWordsList.normal_bad_words);
+  const listOfBadWords = Object.values(globalBadWordsList.normal_bad_words);
   const replacements = Object.keys(globalBadWordsList.normal_bad_words);
 
   messageSplit.forEach(word => {
     let index = -1;
 
-    badWords.forEach((words, idx) => {
-      if (words.indexOf(word) >= 0) {
+    listOfBadWords.forEach((badWords, idx) => {
+      if (badWords.indexOf(word) >= 0) {
         index = idx;
       }
     });
 
     if (index >= 0) {
-      returnPayload = returnPayload.concat(' ', replacements[index]);
+      // if a bad word has been found
+      returnPayload = returnPayload.concat(" ", replacements[index]);
     } else {
-      returnPayload = returnPayload.concat(' ', word);
+      returnPayload = returnPayload.concat(" ", word);
     }
   });
 
   return returnPayload.trim();
+};
+
+/**
+ * Peforms a substring-level search to look for bad words that are hidden inside
+ * a "word" in the technical sense.
+ *
+ * @param {String} payload the message to filter
+ * @example
+ *  // filters a server name
+ *  serverName = deepFilterMessage(serverName);
+ *
+ * @returns {String} the censored payload
+ */
+module.exports.deepFilterMessage = payload => {
+  const listOfBadWords = Object.values(globalBadWordsList.normal_bad_words);
+  const replacements = Object.keys(globalBadWordsList.normal_bad_words);
+  payload += " ";
+  let returnPayload = "";
+  for (let i = 0; i < payload.length - 1; i++) {
+    const letterOne = payload.substring(i, i + 1).toLowerCase();
+    const letterTwo = payload.substring(i + 1, i + 2).toLowerCase();
+    if (letterOne !== letterTwo) {
+      returnPayload += payload.substring(i, i + 1);
+    }
+  }
+  listOfBadWords.forEach((badWords, listOfidx) => {
+    badWords.forEach(badWord => {
+      for (let i = 0; i < returnPayload.length - badWord.length; i++) {
+        const substr = returnPayload
+          .substring(i, i + badWord.length)
+          .toLowerCase();
+        if (substr === badWord) {
+          let splitPayload = returnPayload.split(
+            returnPayload.substring(i, i + badWord.length)
+          );
+          returnPayload = `${splitPayload[0]}${replacements[listOfidx]}${
+            splitPayload[1]
+          }`;
+        }
+      }
+    });
+  });
+  return returnPayload;
 };

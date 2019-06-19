@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import "./robot.css";
 
-export default class Robot extends Component {
+export default class RobotInterface extends Component {
   state = {
     controls: [],
     logClicks: [],

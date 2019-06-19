@@ -6,7 +6,7 @@ Input is managed through a robotInterface
 */
 
 const jwt = require("jsonwebtoken");
-const db = require("../services/db");
+
 const { makeId, createTimeStamp } = require("../modules/utilities");
 
 const robotPt = {
@@ -20,10 +20,10 @@ const robotPt = {
 };
 
 module.exports.createRobot = async robot => {
-  const { validateUser, getIdFromUsername } = require("./user");
+  const { validateUser } = require("./user");
 
   //Validate Owner
-  const validate = await validateUser(robot);
+  const validate = await validateUser(robot.owner);
   if (!validate) {
     return { status: "Error, this user does not exist" };
   }
@@ -32,11 +32,12 @@ module.exports.createRobot = async robot => {
   makeRobot.id = `rbot-${makeId()}`;
   makeRobot.created = createTimeStamp();
   makeRobot.name = robot.robot_name;
-  makeRobot.owner_id = await getIdFromUsername(robot.username);
+  makeRobot.owner_id = await robot.owner.id;
   makeRobot.interfaces = [];
   makeRobot.session = "";
   makeRobot.settings = {};
   makeRobot.status = {};
+  makeRobot.host_id = robot.host_id;
 
   const storeRobot = await saveRobot(makeRobot);
   if (!storeRobot) return { status: "Error saving robot to server" };
@@ -45,6 +46,7 @@ module.exports.createRobot = async robot => {
 };
 
 saveRobot = async robot => {
+  const db = require("../services/db");
   const {
     id,
     created,
@@ -53,9 +55,10 @@ saveRobot = async robot => {
     interfaces,
     session,
     settings,
-    status
+    status,
+    host_id
   } = robot;
-  const dbPut = `INSERT INTO robots (id, created, name, owner_id, interfaces, session, settings, status) VALUES($1, $2, $3, $4, $5, $6, $7, $8) RETURNING *`;
+  const dbPut = `INSERT INTO robots (id, created, name, owner_id, interfaces, session, settings, status, host_id) VALUES($1, $2, $3, $4, $5, $6, $7, $8, $9) RETURNING *`;
   try {
     await db.query(dbPut, [
       id,
@@ -65,7 +68,8 @@ saveRobot = async robot => {
       interfaces,
       session,
       settings,
-      status
+      status,
+      host_id
     ]);
     return true;
   } catch (err) {
@@ -73,3 +77,21 @@ saveRobot = async robot => {
     return false;
   }
 };
+
+module.exports.getRobotFromId = async robot_id => {
+  const db = require("../services/db");
+  console.log("ROBOT ID CHECK: ", robot_id);
+  if (robot_id) {
+    try {
+      const query = `SELECT * FROM robots WHERE id = $1 LIMIT 1`;
+      const check = await db.query[(query, [robot_id])];
+      console.log(check);
+      if (check.rows[0]) return check.rows[0];
+      return { status: "error", error: "invalid robot ID" };
+    } catch (err) {
+      console.log(err);
+    }
+  }
+};
+
+this.getRobotFromId("rbot-9ae3d965-c0ed-4300-b16f-f184f8b7af61");

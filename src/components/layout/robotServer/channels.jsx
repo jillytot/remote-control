@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import Chat from "../chat/chat";
 import { socketEvents } from "../../../events/events";
 import { colors } from "../../../config/colors";
-import Robot from "../robot/robot";
+import RobotInterface from "../robot/robotInteface";
 import AddChannelForm from "./modals/addChannelForm";
 import EditChannel from "./modals/editChannel";
 import DisplayRobot from "./displayRobot";
@@ -250,7 +250,7 @@ export default class Channels extends Component {
         </div>
         {users !== [] ? (
           <React.Fragment>
-            <Robot
+            <RobotInterface
               user={user}
               socket={socket}
               channel={this.state.currentChannel}

@@ -172,11 +172,11 @@
   border: solid 1px rgb(123, 127, 173);
 }
 
-.display-robot-container {
-  /* background-color: blue; */
-  /* display: flex;
+/* .display-robot-container { */
+/* background-color: blue; */
+/* display: flex;
   align-items: center; */
-}
+/* } */
 
 .display-robot-header {
   background-color: green;
@@ -198,11 +198,10 @@
   margin: 5px 5px 5px 6px;
   text-align: left;
   padding-left: 3px;
-  /* background-color: purple; */
   display: flex;
   flex-direction: row;
   justify-self: flex-start;
-  width: 100%;
+  /* width: 100%; */
 }
 
 .display-robot-item:hover {

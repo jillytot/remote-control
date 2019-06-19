@@ -86,6 +86,12 @@
   margin: 5px 5px 5px 0px;
   font-size: 14px;
   cursor: pointer;
+  border-radius: 24px;
+}
+
+.edit-channel:hover {
+  color: cyan;
+  background-color: rgb(83, 83, 119);
 }
 
 .list-channels {
@@ -164,4 +170,53 @@
 
 .add-channel:hover {
   border: solid 1px rgb(123, 127, 173);
+}
+
+/* .display-robot-container { */
+/* background-color: blue; */
+/* display: flex;
+  align-items: center; */
+/* } */
+
+.display-robot-header {
+  background-color: green;
+  font-size: 14px;
+  cursor: pointer;
+
+  margin: 10px 1px 5px 1px;
+  font-style: italic;
+  text-align: left;
+  padding: 5px;
+  /* border-radius: 24px; */
+  background-color: rgb(86, 86, 119);
+}
+
+.robot-item-container {
+  display: flex;
+  cursor: pointer;
+}
+
+.display-robot-item {
+  font-size: 14px;
+
+  margin: 5px 5px 5px 2px;
+  text-align: left;
+  padding-left: 3px;
+
+  display: flex;
+  flex-direction: row;
+  /* justify-self: flex-start; */
+  /* background-color: red; */
+}
+
+.list-icon {
+  /* background-color: blue; */
+  display: flex;
+  flex-direction: row;
+  height: 18px;
+  margin: 1px 0px 5px 6px;
+}
+
+.robot-item-container:hover {
+  background-color: rgb(86, 86, 119);
 }

@@ -147,15 +147,26 @@ module.exports.updateServerChannels = async server_id => {
 
 //Adds channel to a server based on server_id
 
-module.exports.deleteChannel = async channel_id => {
+module.exports.deleteChannel = async (channel_id, server_id) => {
   const db = require("../services/db");
   const remove = `DELETE FROM channels WHERE id =$1`;
   let response = {};
   try {
+    const checkChannelCount = await this.getChannels(server_id);
+    if (checkChannelCount && checkChannelCount.length <= 1) {
+      console.log("YOU CANNOT DELETE A CHANNEL IF YOU ONLY HAVE ONE LEFT");
+      console.log(checkChannelCount);
+      response.status = "Error!";
+      response.error =
+        "You cannot delete your last remaining channel, please create another if you wish to delete this one";
+      return response;
+    }
+
     const result = await db.query(remove, [channel_id]);
     // if (result.rows > 0) {
     response.status = "success!";
     response.result = result.rows[0];
+    this.updateServerChannels(server_id);
 
     return response;
   } catch (err) {

@@ -2,14 +2,16 @@ import React, { Component } from "react";
 import Chat from "../chat/chat";
 import { socketEvents } from "../../../events/events";
 import { colors } from "../../../config/colors";
-import Robot from "../robot/robot";
+import RobotInterface from "../robot/robotInteface";
 import AddChannelForm from "./modals/addChannelForm";
 import EditChannel from "./modals/editChannel";
+import DisplayRobot from "./displayRobot";
 const {
   SEND_ROBOT_SERVER_INFO,
   GET_CHAT,
   ACTIVE_USERS_UPDATED,
-  CHANNELS_UPDATED
+  CHANNELS_UPDATED,
+  JOIN_CHANNEL
 } = socketEvents;
 
 //placeholder
@@ -58,6 +60,7 @@ export default class Channels extends Component {
       // console.log(newColors);
       this.setState({ userColors: newColors });
     }, 30000); //garbage cleanup every 30s
+
     this.loadDefaultChannel();
   }
 
@@ -92,6 +95,7 @@ export default class Channels extends Component {
   handleActiveChannel = activeChannel => {
     console.log("LOAD CHANNEL", activeChannel);
     const { channels } = this.state;
+    const { socket } = this.props;
     let storeChannels = channels.map(channel => {
       if (channel.id === activeChannel.id) {
         console.log(activeChannel, channel);
@@ -101,6 +105,7 @@ export default class Channels extends Component {
       }
       return channel;
     });
+    if (socket) socket.emit(JOIN_CHANNEL, activeChannel.id);
     this.setState({ channels: storeChannels });
     this.setState({ currentChannel: activeChannel.id });
   };
@@ -177,7 +182,9 @@ export default class Channels extends Component {
 
   displayChannels = () => {
     const { channels } = this.state;
+
     this.loadDefaultChannel();
+
     return channels.map((channel, index) => {
       return (
         <div className="channel-container" key={index}>
@@ -233,10 +240,18 @@ export default class Channels extends Component {
             modal={this.props.modal}
             onCloseModal={this.props.onCloseModal}
           />
+          <DisplayRobot
+            channels={this.state.channels}
+            server={selectedServer}
+            user={user}
+            modal={this.props.modal}
+            onCloseModal={this.props.onCloseModal}
+            socket={socket}
+          />
         </div>
         {users !== [] ? (
           <React.Fragment>
-            <Robot
+            <RobotInterface
               user={user}
               socket={socket}
               channel={this.state.currentChannel}

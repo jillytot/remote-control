@@ -14,7 +14,6 @@ const Input = ({ name, label, error, type, ...rest }) => {
           <input
             {...rest}
             type={type}
-            id={name}
             name={name}
             className={type === "chat" ? "chat-input" : "form-control"}
           />

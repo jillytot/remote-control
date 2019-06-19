@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import "./robot.css";
 
-export default class Robot extends Component {
+export default class RobotInterface extends Component {
   state = {
     controls: [],
     logClicks: [],
@@ -23,6 +23,7 @@ export default class Robot extends Component {
 
   handleClick = click => {
     const { socket } = this.props;
+    console.log("CLICK CHECK: ", click);
     socket.emit("BUTTON_COMMAND", {
       user: click.user,
       button: click.button,

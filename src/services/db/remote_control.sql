@@ -115,8 +115,10 @@ ALTER TABLE public.channels
     created bigint,
     status jsonb,
     settings jsonb,
+    host_id character varying COLLATE pg_catalog."default",
     CONSTRAINT robots_pkey PRIMARY KEY (id)
 )
+
 WITH (
     OIDS = FALSE
 )

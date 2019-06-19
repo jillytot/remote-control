@@ -15,25 +15,39 @@ const schema = Joi.object().keys({
 router.get("/setup", async (req, res) => {
   res.send({
     username: "<Your User Name>", //This probably won't be needed
-    robot_name: "<Name of Your Robot>"
+    robot_name: "<Name of Your Robot>",
+    host_id: "<ID Of Server to host this robot>"
   });
   console.log("Send Robot Object");
 });
 
 router.post("/setup", auth, async (req, res) => {
-  console.log(req.token);
-  console.log("Make Robot API start", req.body);
-  const result = Joi.validate({ robot_name: req.body.robot_name }, schema);
-  if (result.error) {
-    res.send({
-      status: result.error.name,
-      error: result.error.details[0].message
-    });
-    return;
+  console.log(req.body);
+  let response = {};
+  if (req.body.robot_name && req.body.host_id) {
+    response.validate = await Joi.validate(
+      { robot_name: req.body.robot_name },
+      schema
+    );
+
+    if (!response.validate) {
+      response.status = "error";
+      res.send(response);
+      return;
+    }
+  } else {
+    response.status = "error";
+    response.error = "insuffecient information to make this request";
   }
 
-  const getRobot = await createRobot(req.body);
-  res.send(getRobot);
+  //Make sure this user is a real user, this user owns the server
+
+  response.result = await createRobot({
+    robot_name: req.body.robot_name,
+    host_id: req.body.host_id,
+    owner: req.user
+  });
+  res.send(response);
   return;
 });
 

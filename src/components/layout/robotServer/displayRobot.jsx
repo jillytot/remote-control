@@ -6,17 +6,35 @@ import { socketEvents } from "../../../events/events";
 const { GET_ROBOTS } = socketEvents;
 
 export default class DisplayRobot extends Component {
-  state = {};
+  state = {
+    robots: []
+  };
 
-  componentDidMount() {}
+  componentDidMount() {
+    this.socketListener();
+  }
 
   socketListener = () => {
     const { socket } = this.props;
     if (socket) {
       socket.on(GET_ROBOTS, robots => {
-        //List Robots
+        console.log("GET ROBOTS CHECK: ", robots);
+        this.setState({ robots: robots });
       });
+      console.log(this.state.robots);
     }
+  };
+
+  handleListRobots = () => {
+    const { robots } = this.state;
+    return robots.map((robot, index) => {
+      console.log(robot.name);
+      return (
+        <div className="display-robot-item" key={index}>
+          {robot.name}
+        </div>
+      );
+    });
   };
 
   handleDisplay = () => {
@@ -26,9 +44,7 @@ export default class DisplayRobot extends Component {
       return (
         <div className="display-robot-container">
           <div className="display-robot-header">Manage Robots: </div>
-          <div className="display-robot-item"> Robot 1</div>
-          <div className="display-robot-item"> Robot 2</div>
-          <div className="display-robot-item"> Robot 3</div>
+          {this.handleListRobots()}
           <AddRobot
             server={server}
             user={user}

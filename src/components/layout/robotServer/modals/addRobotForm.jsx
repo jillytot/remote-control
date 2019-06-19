@@ -30,7 +30,7 @@ export default class AddRobotForm extends Form {
       .post(
         addRobot,
         {
-          server_id: server.server_id,
+          host_id: server.server_id,
           robot_name: robot_name
         },
         {

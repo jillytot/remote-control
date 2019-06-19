@@ -27,17 +27,19 @@ export default class DisplayRobot extends Component {
 
   handleListRobots = () => {
     const { robots } = this.state;
-    return robots.map((robot, index) => {
-      console.log(robot.name);
-      return (
-        <div className="robot-item-container">
-          <img className="list-icon" src={list_robot} />
-          <div className="display-robot-item" key={index}>
-            {robot.name}
+    if (robots && robots.length > 0) {
+      return robots.map((robot, index) => {
+        console.log(robot.name);
+        return (
+          <div className="robot-item-container">
+            <img className="list-icon" src={list_robot} />
+            <div className="display-robot-item" key={index}>
+              {robot.name}
+            </div>
           </div>
-        </div>
-      );
-    });
+        );
+      });
+    }
   };
 
   handleDisplay = () => {

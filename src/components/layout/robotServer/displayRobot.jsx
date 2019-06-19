@@ -1,9 +1,8 @@
 import React, { Component } from "react";
 import "./robotServer.css";
-import axios from "axios";
 import { socketEvents } from "../../../events/events";
 import list_robot from "../../../icons/singleIcons/list_robot.svg";
-
+import AddRobotForm from "./modals/addRobotForm";
 const { GET_ROBOTS } = socketEvents;
 
 export default class DisplayRobot extends Component {
@@ -68,9 +67,10 @@ export default class DisplayRobot extends Component {
 
 class AddRobot extends Component {
   handleModal = () => {
+    const { server, onCloseModal } = this.props;
     return [
       {
-        body: "Add Robot"
+        body: <AddRobotForm server={server} onCloseModal={onCloseModal} />
       },
       { header: "" },
       { footer: "" }

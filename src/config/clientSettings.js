@@ -22,5 +22,6 @@ module.exports = {
   listRobotServers: `${apiUrl}/robot-server/list`,
   addServer: `${apiUrl}/robot-server/create`,
   addChannel: `${apiUrl}/channels/create`,
-  deleteChannel: `${apiUrl}/channels/delete`
+  deleteChannel: `${apiUrl}/channels/delete`,
+  addRobot: `${apiUrl}/robot/setup`
 };

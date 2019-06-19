@@ -1,8 +1,23 @@
 import React, { Component } from "react";
 import "./robotServer.css";
+import axios from "axios";
+import { socketEvents } from "../../../events/events";
+
+const { GET_ROBOTS } = socketEvents;
 
 export default class DisplayRobot extends Component {
   state = {};
+
+  componentDidMount() {}
+
+  socketListener = () => {
+    const { socket } = this.props;
+    if (socket) {
+      socket.on(GET_ROBOTS, robots => {
+        //List Robots
+      });
+    }
+  };
 
   handleDisplay = () => {
     const { server, user, channels } = this.props;

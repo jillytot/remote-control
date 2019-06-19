@@ -246,6 +246,7 @@ export default class Channels extends Component {
             user={user}
             modal={this.props.modal}
             onCloseModal={this.props.onCloseModal}
+            socket={socket}
           />
         </div>
         {users !== [] ? (

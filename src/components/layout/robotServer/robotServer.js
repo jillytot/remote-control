@@ -6,7 +6,7 @@ import Channels from "./channels";
 import "./robotServer.css";
 import { socketEvents } from "../../../events/events";
 import AddServer from "./modals/addServer";
-const { ROBOT_SERVER_UPDATED, GET_CHANNELS } = socketEvents;
+const { ROBOT_SERVER_UPDATED, GET_CHANNELS, GET_ROBOTS } = socketEvents;
 
 export default class RobotServer extends Component {
   state = {
@@ -66,6 +66,7 @@ export default class RobotServer extends Component {
     console.log("Server Selected ", e.server_name);
     const { socket, user } = this.props;
     socket.emit(GET_CHANNELS, { user: user.id, server_id: server_id });
+    socket.emit(GET_ROBOTS, { server_id: server_id });
     let { robotServers } = this.state;
     robotServers.map(server => {
       if (server_id === server.server_id) {

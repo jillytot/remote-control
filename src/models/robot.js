@@ -84,8 +84,8 @@ module.exports.getRobotFromId = async robot_id => {
   if (robot_id) {
     try {
       const query = `SELECT * FROM robots WHERE id = $1 LIMIT 1`;
-      const check = await db.query[(query, [robot_id])];
-      console.log(check);
+      const check = await db.query(query, [robot_id]);
+      console.log(check.rows[0]);
       if (check.rows[0]) return check.rows[0];
       return { status: "error", error: "invalid robot ID" };
     } catch (err) {
@@ -93,5 +93,3 @@ module.exports.getRobotFromId = async robot_id => {
     }
   }
 };
-
-this.getRobotFromId("rbot-9ae3d965-c0ed-4300-b16f-f184f8b7af61");

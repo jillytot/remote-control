@@ -56,11 +56,11 @@ module.exports.filterTextMessage = payload => {
         index = idx;
       }
     });
-    
+
     if (index >= 0) {
-      returnPayload += replacements[index] + " ";
+      returnPayload = returnPayload.concat(' ', replacements[index]);
     } else {
-      returnPayload += word + " ";
+      returnPayload = returnPayload.concat(' ', word);
     }
   });
 

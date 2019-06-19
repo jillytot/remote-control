@@ -2,13 +2,12 @@ const { serverPort } = require("./serverSettings");
 
 const reCaptchaKey = "6Lfg_KYUAAAAAH1hvQdp-qDOUToVn6FQWFOvbySo";
 
-const host = {
-  local: "http://localhost"
-};
+const localHost = "http://localhost";
+const host = localHost;
 
 const api = "/api";
-const apiUrl = `${host.local}:${serverPort}${api}`;
-const socketUrl = `${host.local}:${serverPort}`;
+const apiUrl = `${host}:${serverPort}${api}`;
+const socketUrl = `${host}:${serverPort}`;
 
 module.exports = {
   defaultRate: 1000, //Message rate limit for most people

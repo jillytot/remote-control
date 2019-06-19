@@ -113,4 +113,14 @@ module.exports.getRobotsFromServerId = async server_id => {
   }
 };
 
+module.exports.sendRobotsForServer = async server_id => {
+  console.log("SEND ROBOTS TO SERVER CHECK: ", server_id);
+  const { io } = require("../services/server/server");
+  const { GET_ROBOTS } = require("../events/events").socketEvents;
+  io.to(server_id).emit(
+    GET_ROBOTS,
+    await this.getRobotsFromServerId(server_id)
+  );
+};
+
 this.getRobotsFromServerId("serv-7e2c6372-b985-401f-8f51-991ea6cd7456");

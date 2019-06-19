@@ -51,4 +51,10 @@ router.post("/setup", auth, async (req, res) => {
   return;
 });
 
+router.get("/", async (req, res) => {
+  if (req.body && req.body.server_id) {
+    //Get Robots on selected Channel
+  }
+});
+
 module.exports = router;

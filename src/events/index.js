@@ -12,7 +12,8 @@ const {
   HEARTBEAT,
   BUTTON_COMMAND,
   GET_CHANNELS,
-  JOIN_CHANNEL
+  JOIN_CHANNEL,
+  GET_ROBOTS
 } = require("./events").socketEvents;
 
 const { sendActiveUsers } = user;
@@ -74,6 +75,12 @@ module.exports.socketEvents = (socket, io) => {
     };
     //io.to(userRoom).emit(SEND_ROBOT_SERVER_INFO, sendInfo);
     socket.emit(SEND_ROBOT_SERVER_INFO, sendInfo);
+  });
+
+  socket.on(GET_ROBOTS, ({ server_id }) => {
+    console.log("GET ROBOTS CHECK: ", server_id);
+    const { sendRobotsForServer } = require("../models/robot");
+    sendRobotsForServer(server_id);
   });
 
   socket.on(JOIN_CHANNEL, async channel_id => {

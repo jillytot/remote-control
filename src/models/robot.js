@@ -93,3 +93,24 @@ module.exports.getRobotFromId = async robot_id => {
     }
   }
 };
+
+module.exports.getRobotsFromServerId = async server_id => {
+  const db = require("../services/db");
+  console.log("SERVER ID CHECK: ", server_id);
+  if (server_id) {
+    try {
+      const query = `SELECT * FROM robots WHERE host_id = $1`;
+      const check = await db.query(query, [server_id]);
+      console.log(check.rows);
+      if (check.rows[0]) return check.rows;
+      return {
+        status: "error",
+        error: "invalid unable to find robots listed for this server"
+      };
+    } catch (err) {
+      console.log(err);
+    }
+  }
+};
+
+this.getRobotsFromServerId("serv-7e2c6372-b985-401f-8f51-991ea6cd7456");

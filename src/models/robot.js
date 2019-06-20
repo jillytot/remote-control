@@ -71,6 +71,7 @@ saveRobot = async robot => {
       status,
       host_id
     ]);
+    this.sendRobotsForServer(host_id);
     return true;
   } catch (err) {
     console.log(err);

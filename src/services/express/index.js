@@ -18,6 +18,6 @@ app.use(bodyParser.json());
 app.use(express.static(path.join(__dirname, "public")));
 
 //models and routes:
-//app.use(require("../../routes")); UNDO
+app.use(require("../../routes"));
 
 module.exports = app;

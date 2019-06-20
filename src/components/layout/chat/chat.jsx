@@ -1,11 +1,10 @@
 import React, { Component } from "react";
-import { MESSAGE_RECIEVED, socketEvents } from "../../../events/events";
+import { MESSAGE_RECIEVED, SEND_CHAT } from "../../../events/definitions";
 import UserList from "./userList.jsx";
 import Messages from "./messages";
 import SendChat from "./sendChat";
 import "./chat.css";
 import { colors } from "../../../config/colors";
-const { SEND_CHAT } = socketEvents;
 
 export default class Chat extends Component {
   _isMounted = false;

@@ -1,3 +1,3 @@
 module.exports = (ws, channel_id) => {
-  //TODO
+  ws.channel_id = channel_id;
 };

@@ -30,3 +30,4 @@ function registerEvent(event, func) {
 }
 
 registerEvent("TEST_EVENT", require("./testEvent"));
+//have to register them all with there definitions here

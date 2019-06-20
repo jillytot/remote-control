@@ -7,9 +7,13 @@ const { makeId, createTimeStamp } = require("../modules/utilities");
 const { getActiveServer } = require("./robotServer");
 const { createMessage } = require("./chatMessage");
 
-module.exports.sendEvent = chat_id => {
+module.exports.emitEvent = (chat_id, event, data) => {
   const wss = require("../services/wss");
-  wss.clients.forEach(ws => {w});
+  wss.clients.forEach(ws => {
+    if (ws.chat_id === chat_id) {
+      ws.emitEvent(event, data);
+    }
+  });
 };
 
 module.exports.createChatRoom = (chat, channel) => {

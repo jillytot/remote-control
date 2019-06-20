@@ -41,11 +41,12 @@ module.exports.createMessage = async message => {
 };
 
 module.exports.sendMessage = message => {
+  const chatRoomModel = require("../models/chatRoom");
   //TODO: ensure that chatRoom is provided by /src/events/index and not the message directly from the client
-  const { io } = require("../services/server/server");
+
   let chatRoom = message.chat_id;
   console.log("Chat Room from SendMessage: ", chatRoom);
-  io.to(chatRoom).emit("MESSAGE_RECIEVED", message);
+  chatRoomModel.emitEvent(chatRoom, "MESSAGE_RECIEVED", message);
 };
 
 //Definitely needs more work

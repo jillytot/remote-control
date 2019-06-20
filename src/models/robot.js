@@ -115,10 +115,11 @@ module.exports.getRobotsFromServerId = async server_id => {
 };
 
 module.exports.sendRobotsForServer = async server_id => {
+  const robotServer = require("../models/robotServer");
   console.log("SEND ROBOTS TO SERVER CHECK: ", server_id);
-  const { io } = require("../services/server/server");
-  const { GET_ROBOTS } = require("../events/events").socketEvents;
-  io.to(server_id).emit(
+  const { GET_ROBOTS } = require("../events/definitions");
+  robotServer.emitEvent(
+    server_id,
     GET_ROBOTS,
     await this.getRobotsFromServerId(server_id)
   );

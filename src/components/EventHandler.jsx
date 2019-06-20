@@ -4,11 +4,12 @@ import Layout from "./layout/layout";
 import { socketUrl } from "../config/clientSettings";
 import axios from "axios";
 import { apiUrl } from "../config/clientSettings";
-
-import { USER_CONNECTED } from "../events/events";
-
-import { socketEvents } from "../events/events";
-const { AUTHENTICATE, HEARTBEAT, USER_STATUS_UPDATED } = socketEvents;
+import {
+  AUTHENTICATE,
+  HEARTBEAT,
+  USER_STATUS_UPDATED,
+  USER_CONNECTED
+} from "../events/definitions";
 
 const UserContext = React.createContext();
 

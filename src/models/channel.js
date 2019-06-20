@@ -10,10 +10,7 @@ that needs to be changed before to much more work is done.
 const { makeId, createTimeStamp } = require("../modules/utilities");
 // const socketEvents = require("../events/events");
 const { getChatRooms } = require("./chatRoom");
-const {
-  CHANNELS_UPDATED,
-  GET_CHAT_ROOMS
-} = require("../events/events").socketEvents;
+const { CHANNELS_UPDATED, GET_CHAT_ROOMS } = require("../events/definitions");
 console.log(CHANNELS_UPDATED, GET_CHAT_ROOMS);
 
 channelPrototype = {
@@ -35,6 +32,15 @@ const settingsPt = {
 
 const statusPt = {
   test_value: true
+};
+
+module.exports.emitEvent = (channel_id, event, data) => {
+  const wss = require("../services/wss");
+  wss.clients.forEach(ws => {
+    if (ws.channel_id === channel_id) {
+      ws.emitEvent(event, data);
+    }
+  });
 };
 
 module.exports.createChannel = async data => {
@@ -137,12 +143,12 @@ module.exports.getChannels = async server_id => {
 };
 
 module.exports.updateServerChannels = async server_id => {
-  const { io } = require("../services/server/server");
+  const robotServer = require("./robotServer");
   let sendData = {};
   sendData.channels = await this.getChannels(server_id);
   sendData.server_id = server_id;
 
-  io.to(server_id).emit(CHANNELS_UPDATED, sendData);
+  robotServer.emitEvent(server_id, CHANNELS_UPDATED, sendData);
 };
 
 //Adds channel to a server based on server_id

@@ -6,13 +6,13 @@ const { serverPort } = require("../../config/serverSettings");
 const app = require("../express");
 const port = serverPort;
 
-//const { initActiveServers } = require("../../models/robotServer"); UNDO
-//const { initActiveChats } = require("../../models/chatRoom"); UNDO
+const { initActiveServers } = require("../../models/robotServer");
+const { initActiveChats } = require("../../models/chatRoom");
 
 //Initalize Active Servers:
 //This is used for storing active users on a server
-//initActiveServers(); UNDO
-//initActiveChats(); UNDOs
+initActiveServers();
+initActiveChats();
 
 //run server
 const server = http.listen(port, () => {

@@ -1,4 +1,5 @@
 module.exports = async (ws, server_id) => {
+  const { GET_ROBOTS } = require("./definitions");
   console.log("GET ROBOTS CHECK: ", server_id);
   const requestedRobotServer = await getRobotServer(server_id);
 

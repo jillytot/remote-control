@@ -5,8 +5,6 @@ module.exports = async (ws, chatId) => {
   ws.emitEvent(SEND_CHAT, await getChat(chatId));
 
   //Subscribe user to chat
-  //const chatRoom = `${chatId}`;
-  //socket.join(chatRoom); (TODO)
-  console.log(`Subbing user: ${ws.user.username} to chatroom: ${chatRoom}`);
-  chatEvents(chatRoom, socket);
+  ws.chat_id = chatId;
+  console.log(`Subbing user: ${ws.user.username} to chatroom: ${chatId}`);
 };

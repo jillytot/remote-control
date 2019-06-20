@@ -2,7 +2,7 @@ import Form from "../../common/form";
 import React from "react";
 import Joi from "joi-browser";
 import "./chat.css";
-import { MESSAGE_SENT } from "../../../events/events";
+import { MESSAGE_SENT } from "../../../events/definitions";
 import { defaultRate } from "../../../config/clientSettings";
 import uuidv4 from "uuid/v4";
 

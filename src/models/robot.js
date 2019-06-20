@@ -125,4 +125,36 @@ module.exports.sendRobotsForServer = async server_id => {
   );
 };
 
-this.getRobotsFromServerId("serv-7e2c6372-b985-401f-8f51-991ea6cd7456");
+module.exports.deleteRobot = async robot => {
+  const { id, host_id } = robot;
+  const db = require("../services/db");
+  const remove = `DELETE FROM robots WHERE id =$1`;
+  let response = {};
+  try {
+    const checkRobotCount = await this.getRobotsFromServerId(host_id);
+    if (checkRobotCount && checkRobotCount.length <= 1) {
+      response.status = "Error!";
+      response.error =
+        "You cannot delete your last remaining channel, please create another if you wish to delete this one";
+      console.log(response);
+      return response;
+    }
+    const result = await db.query(remove, [id]);
+    response.status = "success!";
+    response.result = "Robot successfullly deleted";
+    console.log(response);
+
+    await this.sendRobotsForServer(host_id);
+    return response;
+  } catch (err) {
+    response.error = err;
+    response.status = "error!";
+    console.log(response);
+    return response;
+  }
+};
+
+this.deleteRobot({
+  id: "rbot-1d4a0319-151b-4265-b331-1b00a09b3023",
+  host_id: "serv-7e2c6372-b985-401f-8f51-991ea6cd7456"
+});

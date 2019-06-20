@@ -4,9 +4,12 @@ import axios from "axios";
 import DisplayRobotServer from "./displayRobotServer";
 import Channels from "./channels";
 import "./robotServer.css";
-import { socketEvents } from "../../../events/events";
+import {
+  ROBOT_SERVER_UPDATED,
+  GET_CHANNELS,
+  GET_ROBOTS
+} from "../../../events/definitions";
 import AddServer from "./modals/addServer";
-const { ROBOT_SERVER_UPDATED, GET_CHANNELS, GET_ROBOTS } = socketEvents;
 
 export default class RobotServer extends Component {
   state = {

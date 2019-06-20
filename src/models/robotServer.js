@@ -26,7 +26,7 @@ Push Server to Active Servers
 */
 
 const { makeId, createTimeStamp } = require("../modules/utilities");
-const { ACTIVE_USERS_UPDATED } = require("../events/events").socketEvents;
+const { ACTIVE_USERS_UPDATED } = require("../events/definitions");
 
 const { extractToken } = require("./user");
 
@@ -75,6 +75,15 @@ const robotServer = {
   created: "",
   settings: {},
   status: {}
+};
+
+module.exports.emitEvent = (server_id, event, data) => {
+  const wss = require("../services/wss");
+  wss.clients.forEach(ws => {
+    if (ws.server_id === server_id) {
+      ws.emitEvent(event, data);
+    }
+  });
 };
 
 //Saves robot server to the Database
@@ -153,16 +162,15 @@ module.exports.getRobotServers = async () => {
 };
 
 module.exports.updateRobotServer = () => {
-  const { io } = require("../services/server/server");
-  io.emit("ROBOT_SERVER_UPDATED");
+  const wss = require("../services/wss");
+  wss.emitEvent("ROBOT_SERVER_UPDATED");
 };
 
 //Sends updated active user list to all users on a robot server
 module.exports.activeUsersUpdated = async server_id => {
   let pickServer = await this.getActiveServer(server_id);
-  const { io } = require("../services/server/server");
   console.log("Send Active Users: ", server_id);
-  io.to(server_id).emit(ACTIVE_USERS_UPDATED, pickServer.users);
+  this.emitEvent(server_id, ACTIVE_USERS_UPDATED, pickServer.users);
 };
 
 //Create a default chat when a server is first generated
@@ -183,10 +191,9 @@ module.exports.initChannels = async server => {
 //sends globaltimeout message ot user on chatroom in which the ban was initiated
 //This could probably be better
 module.exports.sendGlobalTimeout = (server_id, badUser) => {
-  const { io } = require("../services/server/server");
-  const { GLOBAL_TIMEOUT } = require("../events/events").socketEvents;
+  const { GLOBAL_TIMEOUT } = require("../events/definitions");
   const { publicUser } = require("./user");
-  io.to(server_id).emit(GLOBAL_TIMEOUT, publicUser(badUser));
+  this.emitEvent(server_id, GLOBAL_TIMEOUT, publicUser(badUser));
 };
 
 //Get user roles / types for a specific server

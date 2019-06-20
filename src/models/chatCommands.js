@@ -1,5 +1,4 @@
 const { createTimeStamp } = require("../modules/utilities");
-const { io } = require("../services/server/server");
 
 module.exports.getMessageType = async message => {
   //Check entry character & assign message types

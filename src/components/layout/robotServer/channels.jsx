@@ -1,18 +1,17 @@
 import React, { Component } from "react";
 import Chat from "../chat/chat";
-import { socketEvents } from "../../../events/events";
-import { colors } from "../../../config/colors";
-import RobotInterface from "../robot/robotInteface";
-import AddChannelForm from "./modals/addChannelForm";
-import EditChannel from "./modals/editChannel";
-import DisplayRobot from "./displayRobot";
-const {
+import {
   SEND_ROBOT_SERVER_INFO,
   GET_CHAT,
   ACTIVE_USERS_UPDATED,
   CHANNELS_UPDATED,
   JOIN_CHANNEL
-} = socketEvents;
+} from "../../../events/definitions";
+import { colors } from "../../../config/colors";
+import RobotInterface from "../robot/robotInteface";
+import AddChannelForm from "./modals/addChannelForm";
+import EditChannel from "./modals/editChannel";
+import DisplayRobot from "./displayRobot";
 
 //placeholder
 //var chatroom = { messages: [{ sender: "user2" }] }; // (this.state.chatroom)

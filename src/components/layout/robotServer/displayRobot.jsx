@@ -1,9 +1,8 @@
 import React, { Component } from "react";
 import "./robotServer.css";
-import { socketEvents } from "../../../events/events";
+import { GET_ROBOTS } from "../../../events/definitions";
 import list_robot from "../../../icons/singleIcons/list_robot.svg";
 import AddRobotForm from "./modals/addRobotForm";
-const { GET_ROBOTS } = socketEvents;
 
 export default class DisplayRobot extends Component {
   state = {

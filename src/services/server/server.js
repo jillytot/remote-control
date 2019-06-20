@@ -1,47 +1,18 @@
-//Plan to replace sockets.js with this at some point : ]
+const http = require("../http");
+require("../wss");
 
-const express = require("express");
-const bodyParser = require("body-parser");
-const path = require("path");
 const { serverPort } = require("../../config/serverSettings");
-const cors = require("cors");
-const { socketEvents } = require("../../events");
 
-const app = express();
+const app = require("../express");
 const port = serverPort;
 
 const { initActiveServers } = require("../../models/robotServer");
 const { initActiveChats } = require("../../models/chatRoom");
 
-app.use(cors());
-//Very important function, never remove.
-app.use((req, res, next) => {
-  res.setHeader("X-Powered-By", "Rainbows & Hamburgers");
-  next();
-});
-
-//setup express
-app.use(bodyParser.urlencoded({ extended: false }));
-app.use(bodyParser.json());
-app.use(express.static(path.join(__dirname, "public")));
-
-//models and routes:
-app.use(require("../../routes"));
-
 //Initalize Active Servers:
 //This is used for storing active users on a server
 initActiveServers();
 initActiveChats();
-
-//open socket:
-const http = require("http").Server(app);
-module.exports.io = require("socket.io")(http);
-const io = this.io;
-
-io.on("connection", socket => {
-  console.log("New Connection: ", socket.id);
-  socketEvents(socket, io);
-});
 
 //run server
 const server = http.listen(port, () => {

@@ -1,123 +1,56 @@
-const user = require("../models/user");
-const { getChatRooms, getChat, chatEvents } = require("../models/chatRoom");
-const { createMessage } = require("../models/chatMessage");
-const { getChannels } = require("../models/channel");
-const {
-  SEND_ROBOT_SERVER_INFO,
-  AUTHENTICATE,
-  VALIDATED,
-  GET_CHAT,
-  SEND_CHAT,
-  MESSAGE_SENT,
-  HEARTBEAT,
-  BUTTON_COMMAND,
-  GET_CHANNELS,
-  JOIN_CHANNEL,
-  GET_ROBOTS
-} = require("./events").socketEvents;
+const events = {}; //event: func
 
-const { sendActiveUsers } = user;
+// message structure {e: event name, d: data}
+module.exports.handleConnection = ws => {
+  ws.isAlive = true;
+  ws.on("pong", () => {
+    ws.isAlive = true;
+  });
 
-const { heartBeat } = require("../config/serverSettings");
-let heartBeatStarted = false;
+  ws.on("message", message => {
+    let messageData;
+    try {
+      messageData = JSON.parse(message);
+    } catch (e) {
+      return console.log("Malformed Message");
+    }
 
-//Main websocket Interface
-module.exports.socketEvents = (socket, io) => {
-  if (!heartBeatStarted) {
-    beat(io);
-    heartBeatStarted = true;
-  }
+    const event = messageData.e;
+    const data = messageData.d;
 
-  let userRoom = "";
-  socket.on(AUTHENTICATE, async data => {
-    const getUser = await user.authUser(data.token);
-    if (getUser) {
-      //setup private user sub for user events
-      socket.user = getUser;
-      userRoom = `${socket.user.id}`;
-      socket.join(userRoom);
-
-      //Confirm Validation:
-      io.to(userRoom).emit(VALIDATED, {
-        username: getUser.username,
-        id: getUser.id
-      });
+    if (events.hasOwnProperty(event)) {
+      events[event](ws, data);
+    } else {
+      console.log("Unknown Event: ", event);
     }
   });
 
-  socket.on(MESSAGE_SENT, message => {
-    console.log("Message Received: ", message);
-    if (socket.user && socket.user.type) message.userType = socket.user.type;
-    createMessage(message);
-  });
-
-  //ROBOT COMMAND HANDLING
-  socket.on(BUTTON_COMMAND, command => {
-    console.log("NEW COMMAND: ", command);
-    const { publicUser } = user;
-    const { tempCommandValidation } = require("../models/controls");
-    command.user = publicUser(socket.user);
-    if (tempCommandValidation(command.button)) {
-      io.to(command.channel).emit(BUTTON_COMMAND, command);
-    }
-
-    //No voting yet,
-  });
-
-  //Send list of chatrooms to user, subscribe user to robot server events
-  socket.on(GET_CHANNELS, async data => {
-    console.log("GET CHAT ROOMS: ", data);
-    socket.join(data.server_id);
-    const sendInfo = {
-      channels: await getChannels(data.server_id),
-      users: await sendActiveUsers(data.server_id)
-      //chatRoom: await getChatRooms(data.server_id)
-    };
-    //io.to(userRoom).emit(SEND_ROBOT_SERVER_INFO, sendInfo);
-    socket.emit(SEND_ROBOT_SERVER_INFO, sendInfo);
-  });
-
-  socket.on(GET_ROBOTS, ({ server_id }) => {
-    console.log("GET ROBOTS CHECK: ", server_id);
-    const { sendRobotsForServer } = require("../models/robot");
-    sendRobotsForServer(server_id);
-  });
-
-  socket.on(JOIN_CHANNEL, async channel_id => {
-    console.log("JOIN CHANNEL: ", channel_id);
-    socket.join(channel_id);
-  });
-  //Subscribe user to a specified chatroom, and send them all the specific info about it
-  socket.on(GET_CHAT, async chatId => {
-    console.log("GET CHAT Chat Id: ", chatId);
-    //io.to(userRoom).emit(SEND_CHAT, await getChat(chatId));
-    socket.emit(SEND_CHAT, await getChat(chatId));
-
-    //Subscribe user to chat
-    const chatRoom = `${chatId}`;
-    socket.join(chatRoom);
-    console.log(
-      `Subbing user: ${socket.user.username} to chatroom: ${chatRoom}`
-    );
-    chatEvents(chatRoom, socket);
-  });
-
-  //More socket Events
-  connectedUsers(socket);
+  ws.emitEvent = (event, data) => {
+    ws.send(JSON.stringify({ e: event, d: data }));
+  };
 };
 
-const beat = io => {
-  let timerId = setTimeout(
-    (tick = () => {
-      io.emit(HEARTBEAT);
-      timerId = setTimeout(tick, heartBeat); // (*)
-    }),
-    heartBeat
-  );
-};
+const interval = setInterval(() => {
+  const wss = require("../services/wss");
+  wss.clients.forEach(ws => {
+    if (ws.isAlive === false) return ws.terminate();
 
-const connectedUsers = socket => {
-  socket.on(HEARTBEAT, user => {
-    console.log("Connected User: ", user);
+    ws.isAlive = false;
+    ws.ping(() => {});
   });
-};
+}, 30000);
+
+function registerEvent(event, func) {
+  events[event] = func;
+}
+
+registerEvent("TEST_EVENT", require("./testEvent"));
+registerEvent("AUTHENTICATE", require("./authenticate"));
+registerEvent("GET_CHANNELS", require("./getChannels"));
+registerEvent("GET_ROBOTS", require("./getRobots"));
+registerEvent("GET_CHANNELS", require("./getChannels"));
+registerEvent("GET_CHAT", require("./getChat"));
+registerEvent("JOIN_CHANNEL", require("./joinChannel"));
+registerEvent("MESSAGE_SENT", require("./messageSent"));
+registerEvent("BUTTON_COMMAND", require("./buttonCommand"));
+//have to register them all with there definitions here

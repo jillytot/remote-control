@@ -10,7 +10,7 @@ const {
 const config = require("../config/serverSettings");
 const tempSecret = config.secret;
 
-const { ACTIVE_USERS_UPDATED } = require("../events/events").socketEvents;
+const { ACTIVE_USERS_UPDATED } = require("../events/definitions");
 
 //User status Prototype:
 const statusPt = {
@@ -26,6 +26,15 @@ const settingsPt = {
 //server_id: {} ...Settings for individual servers will be listed here, scheme will mirror global as much as possible
 //roles will be a more robust way to manage user types
 const rolesPt = [{ server_id: "global", roles: [] }];
+
+module.exports.emitEvent = (user_id, event, data) => {
+  const wss = require("../services/wss");
+  wss.clients.forEach(ws => {
+    if (ws.user && ws.user.id === user_id) {
+      ws.emitEvent(event, data);
+    }
+  });
+};
 
 module.exports.createUser = async user => {
   let response = {};
@@ -286,27 +295,21 @@ module.exports.publicUser = user => {
 };
 
 module.exports.sendActiveUsers = async robot_server => {
-  const { io } = require("../services/server/server");
+  const robotServer = require("./robotServer");
   let users = [];
   return await new Promise((resolve, reject) => {
-    io.of("/")
-      .in(robot_server)
-      .clients((error, clients) => {
-        if (error) {
-          return reject(error);
+    const wss = require("../services/wss");
+    wss.clients.forEach(ws => {
+      if (ws.server_id === robot_server) {
+        if (ws.user) {
+          users.push(this.publicUser(ws.user));
         }
-        clients.map(client => {
-          let activeUser = this.publicUser(io.sockets.connected[client].user);
-          if (activeUser) {
-            users.push(activeUser);
-          } else {
-            console.log("Could not get active user from socket ID");
-          }
-        });
-        io.to(robot_server).emit(ACTIVE_USERS_UPDATED, users);
-        console.log("Send Active Users:", users);
-        return resolve(users);
-      });
+      }
+    });
+
+    robotServer.emitEvent(robot_server, ACTIVE_USERS_UPDATED, users);
+    console.log("Send ACtive Users:", users);
+    return resolve(users);
   });
 };
 
@@ -384,9 +387,8 @@ module.exports.unTimeoutUser = async user => {
 
 //Update client when their status has changed
 module.exports.sendUpdateStatus = user => {
-  const { io } = require("../services/server/server");
-  const { USER_STATUS_UPDATED } = require("../events/events").socketEvents;
-  io.to(user.id).emit(USER_STATUS_UPDATED, user.status);
+  const { USER_STATUS_UPDATED } = require("../events/definitions");
+  this.emitEvent(user.id, USER_STATUS_UPDATED, user.status);
 };
 
 /*

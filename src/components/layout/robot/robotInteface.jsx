@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import { BUTTON_COMMAND } from "../../../events/definitions";
 import "./robot.css";
 
 export default class RobotInterface extends Component {
@@ -16,7 +17,7 @@ export default class RobotInterface extends Component {
 
   commandListener = () => {
     const { socket } = this.props;
-    socket.on("BUTTON_COMMAND", command => {
+    socket.on(BUTTON_COMMAND, command => {
       this.handleLoggingClicks(command);
     });
   };
@@ -24,7 +25,7 @@ export default class RobotInterface extends Component {
   handleClick = click => {
     const { socket } = this.props;
     console.log("CLICK CHECK: ", click);
-    socket.emit("BUTTON_COMMAND", {
+    socket.emit(BUTTON_COMMAND, {
       user: click.user,
       button: click.button,
       channel: click.channel

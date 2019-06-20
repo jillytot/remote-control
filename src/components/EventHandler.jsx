@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import io from "socket.io-client";
+import WebsocketClient from "./websocketClient";
 import Layout from "./layout/layout";
 import { socketUrl } from "../config/clientSettings";
 import axios from "axios";
@@ -48,7 +48,6 @@ export default class EventHandler extends Component {
   handleAuth = token => {
     const { socket } = this.state;
     if (token) {
-      socket.emit(AUTHENTICATE, { token: token });
       axios
         .post(`${apiUrl}/auth`, { token: token })
         .then(response => {
@@ -66,9 +65,12 @@ export default class EventHandler extends Component {
   };
 
   initSocket = () => {
-    const socket = io(socketUrl);
+    const socket = new WebsocketClient();
+    socket.open(socketUrl);
+
     socket.on("connect", () => {
-      console.log("Socket Connected: ", socket["id"]);
+      console.log("Socket Connected");
+      socket.emit(AUTHENTICATE, { token: localStorage.getItem("token") });
     });
     this.setState({ socket });
   };

@@ -7,7 +7,7 @@ const host = localHost;
 
 const api = "/api";
 const apiUrl = `${host}:${serverPort}${api}`;
-const socketUrl = `${host}:${serverPort}`;
+const socketUrl = `ws://localhost:${serverPort}`;
 
 module.exports = {
   defaultRate: 1000, //Message rate limit for most people

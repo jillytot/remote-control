@@ -1,13 +1,13 @@
-module.exports = async (ws, server_id) => {
+module.exports = async (ws, data) => {
   const { GET_ROBOTS } = require("./definitions");
-  console.log("GET ROBOTS CHECK: ", server_id);
-  const requestedRobotServer = await getRobotServer(server_id);
+  const { getRobotsFromServerId } = require("../models/robot");
+  const { getRobotServer } = require("../models/robotServer");
+  console.log("GET ROBOTS CHECK: ", data.server_id);
+  const requestedRobotServer = await getRobotServer(data.server_id);
 
   if (requestedRobotServer.owner_id !== ws.user.id) {
     return;
   }
 
-  const { getRobotsFromServerId } = require("../models/robot");
-
-  ws.emitEvent(GET_ROBOTS, await getRobotsFromServerId(server_id));
+  ws.emitEvent(GET_ROBOTS, await getRobotsFromServerId(data.server_id));
 };

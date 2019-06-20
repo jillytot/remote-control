@@ -1,16 +1,17 @@
 const { VALIDATED } = require("./definitions");
+const user = require("../models/user");
 
-module.exports = (ws, data) => {
-    const getUser = await user.authUser(data.token);
-    if (getUser) {
-      //setup private user sub for user events
-      ws.user = getUser;
+module.exports = async (ws, data) => {
+  const getUser = await user.authUser(data.token);
+  if (getUser) {
+    //setup private user sub for user events
+    ws.user = getUser;
+    console.log("TEST 1234: ", getUser);
 
-
-      //Confirm Validation:
-      ws.emitEvent(VALIDATED, {
-        username: getUser.username,
-        id: getUser.id
-      });
-    }
-}
+    //Confirm Validation:
+    ws.emitEvent(VALIDATED, {
+      username: getUser.username,
+      id: getUser.id
+    });
+  }
+};

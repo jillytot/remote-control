@@ -1,5 +1,5 @@
 const http = require("../http");
-require("../ws");
+require("../wss");
 
 const { serverPort } = require("../../config/serverSettings");
 

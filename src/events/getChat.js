@@ -1,4 +1,5 @@
 const { SEND_CHAT } = require("./definitions");
+const { getChat } = require("../models/chatRoom");
 
 module.exports = async (ws, chatId) => {
   console.log("GET CHAT Chat Id: ", chatId);

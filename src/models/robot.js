@@ -23,10 +23,10 @@ module.exports.createRobot = async robot => {
   const { validateUser } = require("./user");
 
   //Validate Owner
-  const validate = await validateUser(robot.owner);
-  if (!validate) {
-    return { status: "Error, this user does not exist" };
-  }
+  // const validate = await validateUser(robot.owner);
+  // if (!validate) {
+  //   return { status: "Error, this user does not exist" };
+  // }
 
   let makeRobot = {};
   makeRobot.id = `rbot-${makeId()}`;

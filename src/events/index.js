@@ -1,5 +1,5 @@
 const user = require("../models/user");
-const { getChatRooms, getChat, chatEvents } = require("../models/chatRoom");
+const { getChat, chatEvents } = require("../models/chatRoom");
 const { createMessage } = require("../models/chatMessage");
 const { getChannels } = require("../models/channel");
 const {
@@ -71,15 +71,14 @@ module.exports.socketEvents = (socket, io) => {
     const sendInfo = {
       channels: await getChannels(data.server_id),
       users: await sendActiveUsers(data.server_id)
-      //chatRoom: await getChatRooms(data.server_id)
     };
-    //io.to(userRoom).emit(SEND_ROBOT_SERVER_INFO, sendInfo);
     socket.emit(SEND_ROBOT_SERVER_INFO, sendInfo);
   });
 
   socket.on(GET_ROBOTS, ({ server_id }) => {
     console.log("GET ROBOTS CHECK: ", server_id);
     const { sendRobotsForServer } = require("../models/robot");
+    socket.join(server_id); //Not a good solution
     sendRobotsForServer(server_id);
   });
 
@@ -87,10 +86,10 @@ module.exports.socketEvents = (socket, io) => {
     console.log("JOIN CHANNEL: ", channel_id);
     socket.join(channel_id);
   });
+
   //Subscribe user to a specified chatroom, and send them all the specific info about it
   socket.on(GET_CHAT, async chatId => {
     console.log("GET CHAT Chat Id: ", chatId);
-    //io.to(userRoom).emit(SEND_CHAT, await getChat(chatId));
     socket.emit(SEND_CHAT, await getChat(chatId));
 
     //Subscribe user to chat

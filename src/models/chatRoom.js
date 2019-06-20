@@ -7,6 +7,11 @@ const { makeId, createTimeStamp } = require("../modules/utilities");
 const { getActiveServer } = require("./robotServer");
 const { createMessage } = require("./chatMessage");
 
+module.exports.sendEvent = chat_id => {
+  const wss = require("../services/wss");
+  wss.clients.forEach(ws => {w});
+};
+
 module.exports.createChatRoom = (chat, channel) => {
   let makeChat = {};
   makeChat.messages = [];
@@ -95,14 +100,6 @@ module.exports.getChat = async chatId => {
   } catch (err) {
     console.log(err);
   }
-};
-
-//Subscribe user to chat room under server ID
-//Send & Recieve Messages to users subbed in chat
-//Remove users that leave chat...
-module.exports.chatEvents = chatRoom => {
-  const { io } = require("../services/server/server");
-  io.to(chatRoom).emit("SUBBED TO CHAT EVENTS", "Hi");
 };
 
 module.exports.saveMessageToActiveChat = message => {

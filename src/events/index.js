@@ -1,4 +1,5 @@
 const user = require("../models/user");
+const { getRobotServer } = require("../models/robotServer");
 const { getChat, chatEvents } = require("../models/chatRoom");
 const { createMessage } = require("../models/chatMessage");
 const { getChannels } = require("../models/channel");
@@ -75,11 +76,18 @@ module.exports.socketEvents = (socket, io) => {
     socket.emit(SEND_ROBOT_SERVER_INFO, sendInfo);
   });
 
-  socket.on(GET_ROBOTS, ({ server_id }) => {
+  socket.on(GET_ROBOTS, async ({ server_id }) => {
     console.log("GET ROBOTS CHECK: ", server_id);
-    const { sendRobotsForServer } = require("../models/robot");
-    socket.join(server_id); //Not a good solution
-    sendRobotsForServer(server_id);
+    const requestedRobotServer = await getRobotServer(server_id);
+
+    if (requestedRobotServer.owner_id !== socket.user.id) {
+      return;
+    }
+
+    const { getRobotsFromServerId } = require("../models/robot");
+    //socket.join(server_id); //Not a good solution
+    //sendRobotsForServer(server_id);
+    socket.emit(GET_ROBOTS, await getRobotsFromServerId(server_id)); //this will only send
   });
 
   socket.on(JOIN_CHANNEL, async channel_id => {

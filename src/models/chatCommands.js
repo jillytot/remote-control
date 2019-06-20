@@ -130,13 +130,9 @@ module.exports.handleGlobalTimeout = async (
 
     time *= 1000;
 
-    //Make sure this user exists
-    const check = await validateUser({
-      username: username
-    });
+    let thisUser = await getIdFromUsername(username);
 
-    if (check) {
-      let thisUser = await getIdFromUsername(username);
+    if (thisUser) {
       thisUser = await getUserInfoFromId(thisUser);
       thisUser = await timeoutUser(thisUser, time);
 

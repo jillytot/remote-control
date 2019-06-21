@@ -1,16 +1,17 @@
 import React, { Component } from "react";
-import Form from "../../../common/form";
 import "../../../../styles/common.css";
 import Input from "../../../common/input";
+import Toggle from "../../../common/toggle";
 
 import axios from "axios";
 
 export default class RobotSettings extends Component {
-  state = { settings: {} };
+  state = { settings: {}, toggleTest: false };
 
   handleSubmit = async e => {
     e.preventDefault();
 
+    //Do Axios Stuff
     console.log("delete");
     this.props.onCloseModal();
   };
@@ -36,12 +37,22 @@ export default class RobotSettings extends Component {
     );
   };
 
+  handleToggle = () => {
+    let toggle = !this.state.toggleTest;
+    this.setState({ toggleTest: toggle });
+  };
+
   render() {
     return (
       <div className="register-form spacer">
         Settings for robot: {this.props.robot.name}
         <div> </div>
         <Input name={"API Key: "} label={"API Key: "} type={"form"} />
+        <Toggle
+          toggle={this.state.toggleTest}
+          label={"Toggle Label"}
+          onClick={this.handleToggle}
+        />
         {this.renderButton("Delete Robot")}
       </div>
     );

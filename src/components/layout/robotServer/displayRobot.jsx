@@ -3,6 +3,7 @@ import "./robotServer.css";
 import { GET_ROBOTS } from "../../../events/definitions";
 import list_robot from "../../../icons/singleIcons/list_robot.svg";
 import AddRobotForm from "./modals/addRobotForm";
+import RobotSettingsForm from "./modals/robotSettingsForm";
 
 export default class DisplayRobot extends Component {
   state = {
@@ -30,12 +31,13 @@ export default class DisplayRobot extends Component {
       return robots.map((robot, index) => {
         console.log(robot.name);
         return (
-          <div className="robot-item-container">
-            <img className="list-icon" src={list_robot} />
-            <div className="display-robot-item" key={index}>
-              {robot.name}
-            </div>
-          </div>
+          <RobotSettings
+            robot={robot}
+            onCloseModal={this.props.onCloseModal}
+            modal={this.props.modal}
+            user={this.props.user}
+            key={index}
+          />
         );
       });
     }
@@ -63,6 +65,38 @@ export default class DisplayRobot extends Component {
 
   render() {
     return <div>{this.handleDisplay()}</div>;
+  }
+}
+
+class RobotSettings extends Component {
+  handleModal = () => {
+    const { onCloseModal } = this.props;
+    return [
+      {
+        body: (
+          <RobotSettingsForm
+            robot={this.props.robot}
+            onCloseModal={onCloseModal}
+          />
+        )
+      },
+      { header: "" },
+      { footer: "" }
+    ];
+  };
+
+  render() {
+    return (
+      <div
+        className="robot-item-container"
+        onClick={() => {
+          this.props.modal(this.handleModal());
+        }}
+      >
+        <img className="list-icon" src={list_robot} alt={"robot"} />
+        <div className="display-robot-item">{this.props.robot.name}</div>
+      </div>
+    );
   }
 }
 

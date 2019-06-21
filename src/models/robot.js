@@ -131,14 +131,6 @@ module.exports.deleteRobot = async robot => {
   const remove = `DELETE FROM robots WHERE id =$1`;
   let response = {};
   try {
-    // const checkRobotCount = await this.getRobotsFromServerId(host_id);
-    // if (checkRobotCount && checkRobotCount.length <= 1) {
-    //   response.status = "Error!";
-    //   response.error =
-    //     "You cannot delete your last remaining channel, please create another if you wish to delete this one";
-    //   console.log(response);
-    //   return response;
-    // }
     const result = await db.query(remove, [id]);
     response.status = "success!";
     response.result = "Robot successfullly deleted";

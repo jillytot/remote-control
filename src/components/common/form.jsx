@@ -56,9 +56,13 @@ class Form extends Component {
     this.setState({ data, errors });
   };
 
+  handleButtonType = label => {
+    if (label === "Delete Robot") return "btn delete";
+    return "btn";
+  };
   renderButton = label => {
     return (
-      <button className="btn" disabled={this.validate()}>
+      <button className={this.handleButtonType} disabled={this.validate()}>
         {label}
       </button>
     );

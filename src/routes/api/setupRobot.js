@@ -1,6 +1,6 @@
 const router = require("express").Router();
 const Joi = require("joi");
-const { createRobot } = require("../../models/robot");
+const { createRobot, deleteRobot } = require("../../models/robot");
 const auth = require("../auth");
 
 //Use authorization head over body
@@ -49,6 +49,28 @@ router.post("/setup", auth, async (req, res) => {
   });
   res.send(response);
   return;
+});
+
+router.post("/delete", auth, async (req, res) => {
+  console.log(req.body);
+  let response = {};
+  console.log;
+  if (
+    req.body.robot_id &&
+    req.body.host_id &&
+    req.user.id === req.body.owner_id
+  ) {
+    console.log("DELETING ROBOT: ", req.body.robot);
+    const result = await deleteRobot({
+      id: req.body.robot_id,
+      host_id: req.body.host_id
+    });
+    response.status = result.status;
+  } else {
+    response.status = "error";
+    response.error = "Cannot delete robot";
+  }
+  res.send(response);
 });
 
 module.exports = router;

@@ -3,7 +3,7 @@ import "./robotServer.css";
 import { GET_ROBOTS } from "../../../events/definitions";
 import list_robot from "../../../icons/singleIcons/list_robot.svg";
 import AddRobotForm from "./modals/addRobotForm";
-import RobotSettingsForm from "./modals/robotSettingsForm";
+import RobotSettings from "./modals/robotSettings";
 
 export default class DisplayRobot extends Component {
   state = {
@@ -31,7 +31,7 @@ export default class DisplayRobot extends Component {
       return robots.map((robot, index) => {
         console.log(robot.name);
         return (
-          <RobotSettings
+          <GetRobotSettings
             robot={robot}
             onCloseModal={this.props.onCloseModal}
             modal={this.props.modal}
@@ -68,16 +68,13 @@ export default class DisplayRobot extends Component {
   }
 }
 
-class RobotSettings extends Component {
+class GetRobotSettings extends Component {
   handleModal = () => {
     const { onCloseModal } = this.props;
     return [
       {
         body: (
-          <RobotSettingsForm
-            robot={this.props.robot}
-            onCloseModal={onCloseModal}
-          />
+          <RobotSettings robot={this.props.robot} onCloseModal={onCloseModal} />
         )
       },
       { header: "" },

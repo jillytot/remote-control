@@ -7,7 +7,8 @@ import "../../styles/common.css";
 class Form extends Component {
   state = {
     data: {},
-    errors: {}
+    errors: {},
+    validation: true
   };
 
   validate = () => {
@@ -57,15 +58,27 @@ class Form extends Component {
   };
 
   handleButtonType = label => {
-    if (label === "Delete Robot") return "btn delete";
-    return "btn";
+    if (label === "Delete Robot") {
+      console.log(label);
+      return "btn btn-delete";
+    } else {
+      return "btn";
+    }
   };
+
   renderButton = label => {
-    return (
-      <button className={this.handleButtonType} disabled={this.validate()}>
-        {label}
-      </button>
-    );
+    //require validation?
+    if (this.state.validation === true) {
+      return (
+        <button
+          className={this.handleButtonType(label)}
+          disabled={this.validate()}
+        >
+          {label}
+        </button>
+      );
+    }
+    return <button className={this.handleButtonType(label)}>{label}</button>;
   };
 
   renderSelect(name, label, options) {

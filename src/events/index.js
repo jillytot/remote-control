@@ -46,6 +46,7 @@ function registerEvent(event, func) {
 
 registerEvent("TEST_EVENT", require("./testEvent"));
 registerEvent("AUTHENTICATE", require("./authenticate"));
+registerEvent("AUTHENTICATE_ROBOT", require("./authRobot"));
 registerEvent("GET_CHANNELS", require("./getChannels"));
 registerEvent("GET_ROBOTS", require("./getRobots"));
 registerEvent("GET_CHANNELS", require("./getChannels"));

@@ -90,4 +90,22 @@ router.post("/key", auth, async (req, res) => {
   res.send(response);
 });
 
+router.post("/auth", async (req, res) => {
+  let response = {};
+  const { authRobot } = require("../../models/robot");
+  try {
+    let getRobot = await authRobot(req.body.token);
+    if (getRobot) {
+      response.status = "success!";
+      response.robot = getRobot;
+    } else {
+      response.status = "error";
+      response.error = "unable to authorize robot";
+    }
+  } catch (err) {
+    console.log(err);
+  }
+  res.send(response);
+});
+
 module.exports = router;

@@ -159,10 +159,11 @@ module.exports.extractRobotToken = async token => {
 module.exports.authRobot = async token => {
   let auth = await this.extractRobotToken(token);
   console.log("Extracting Robot Token: ", auth);
-  auth = await this.verifyRobotToken(auth);
+  return (auth = await this.verifyRobotToken(auth));
 };
 
 module.exports.verifyRobotToken = async token => {
+  const db = require("../services/db");
   console.log("Check Token: ", token);
   if (token && token.id) {
     const query = `SELECT * FROM robots WHERE id = $1 LIMIT 1`;

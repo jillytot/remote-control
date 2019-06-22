@@ -61,13 +61,15 @@ module.exports.createChannel = async data => {
   let makeChannel = {};
   makeChannel.host_id = data.host_id;
   makeChannel.chat = checkChannelElement(data.chat);
-  makeChannel.controls = checkChannelElement("");
   makeChannel.display = checkChannelElement("");
   makeChannel.name = data.name;
   makeChannel.id = `chan-${makeId()}`;
   makeChannel.created = createTimeStamp();
   makeChannel.settings = settingsPt;
   makeChannel.status = statusPt;
+
+  const { creatControls } = require("./controls");
+  makeChannel.controls = await createControls(makeChannel.id);
 
   console.log("Generating Channel: ", makeChannel);
   this.saveChannel(makeChannel);

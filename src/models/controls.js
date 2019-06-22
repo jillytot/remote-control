@@ -21,19 +21,41 @@ const interfacePt = {
   created: ""
 };
 
-module.exports.createControls = controls => {
-  controls.id = `cont-${makeId()}`;
-  controls.created = createTimeStamp();
-  console.log("CREATE ROBOT CONTROL INTERFACE: ", controls);
+module.exports.createControls = async controls => {
+  let makeInterface = {};
+  makeInterface.id = `cont-${makeId()}`;
+  makeInterface.created = createTimeStamp();
+  makeInterface.host_channel = controls.host_channel || "dev";
+  makeInterface.buttons = testControls;
+
+  //save controls
+  const saveControls = await this.saveControls(makeInterface);
+  if (saveControls) {
+    console.log("CONTROL INTERFACE CREATED: ", makeInterface);
+    return makeInterface;
+  }
+  return null;
+};
+
+saveControls = async controls => {
+  const db = require("../services/db");
+  const { id, host_channel, created, buttons } = robot;
+  const dbPut = `INSERT INTO controls (id, host_channel, created, buttons) VALUES($1, $2, $3, $4) RETURNING *`;
+  try {
+    await db.query(dbPut, [id, host_channel, created, buttons]);
+    // this.sendControlsToChannel(channel_id);
+    return true;
+  } catch (err) {
+    console.log(err);
+    return false;
+  }
 };
 
 module.exports.getControls = channel => {
   return {
     id: `cont-dev`,
-    host_server: "dev", //host server ID
-    command_pallet: testControls, //Buttons, analog sticks, ect...
-    overlay: {}, //Specifically reserved for input relative to video feeds
-    created: 0
+    host_channel: "dev", //host server ID
+    buttons: testControls //Buttons, analog sticks, ect...
   };
 };
 

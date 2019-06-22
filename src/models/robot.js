@@ -157,9 +157,10 @@ module.exports.extractRobotToken = async token => {
 };
 
 module.exports.authRobot = async token => {
-  let auth = await this.extractRobotToken(token);
+  const auth = await this.extractRobotToken(token);
   console.log("Extracting Robot Token: ", auth);
-  return (auth = await this.verifyRobotToken(auth));
+  const robot = await this.verifyRobotToken(auth);
+  return robot;
 };
 
 module.exports.verifyRobotToken = async token => {

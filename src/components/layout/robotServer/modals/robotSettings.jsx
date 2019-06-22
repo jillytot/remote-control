@@ -2,17 +2,36 @@ import React, { Component } from "react";
 import "../../../../styles/common.css";
 import Input from "../../../common/input";
 import Toggle from "../../../common/toggle";
+import { deleteRobot } from "../../../../config/clientSettings";
 
 import axios from "axios";
 
 export default class RobotSettings extends Component {
   state = { settings: {}, toggleTest: false };
 
-  handleSubmit = async e => {
+  handleDelete = async e => {
+    console.log(this.props);
+    const token = localStorage.getItem("token");
     e.preventDefault();
 
+    await axios
+      .post(
+        deleteRobot,
+        {
+          robot_id: this.props.robot.id,
+          host_id: this.props.robot.host_id,
+          owner_id: this.props.robot.owner_id
+        },
+        {
+          headers: { authorization: `Bearer ${token}` }
+        }
+      )
+      .catch(err => {
+        console.log("Could Not Delete Robot", err);
+      });
+
     //Do Axios Stuff
-    console.log("delete");
+    console.log(e, "delete");
     this.props.onCloseModal();
   };
 
@@ -30,7 +49,7 @@ export default class RobotSettings extends Component {
     return (
       <button
         className={this.handleButtonType(label)}
-        onClick={e => this.handleSubmit(e)}
+        onClick={e => this.handleDelete(e)}
       >
         {label}
       </button>
@@ -39,6 +58,7 @@ export default class RobotSettings extends Component {
 
   handleToggle = () => {
     let toggle = !this.state.toggleTest;
+
     this.setState({ toggleTest: toggle });
   };
 

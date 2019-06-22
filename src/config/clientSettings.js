@@ -2,12 +2,16 @@ const { serverPort } = require("./serverSettings");
 
 const reCaptchaKey = "6Lfg_KYUAAAAAH1hvQdp-qDOUToVn6FQWFOvbySo";
 
-const localHost = "http://localhost";
-const host = localHost;
-
+const ws = "ws://";
+const http = "http://";
 const api = "/api";
-const apiUrl = `${host}:${serverPort}${api}`;
-const socketUrl = `ws://localhost:${serverPort}`;
+
+const localHost = "localhost";
+const devServer = "35.185.203.47";
+
+const host = localHost;
+const apiUrl = `${http}${host}:${serverPort}${api}`;
+const socketUrl = `${ws}${host}:${serverPort}`;
 
 module.exports = {
   defaultRate: 1000, //Message rate limit for most people
@@ -23,5 +27,6 @@ module.exports = {
   addServer: `${apiUrl}/robot-server/create`,
   addChannel: `${apiUrl}/channels/create`,
   deleteChannel: `${apiUrl}/channels/delete`,
-  addRobot: `${apiUrl}/robot/setup`
+  addRobot: `${apiUrl}/robot/setup`,
+  deleteRobot: `${apiUrl}/robot/delete`
 };

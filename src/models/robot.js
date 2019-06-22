@@ -146,7 +146,35 @@ module.exports.deleteRobot = async robot => {
   }
 };
 
-this.deleteRobot({
-  id: "rbot-1d4a0319-151b-4265-b331-1b00a09b3023",
-  host_id: "serv-7e2c6372-b985-401f-8f51-991ea6cd7456"
-});
+module.exports.createRobotAuth = robot_id => {
+  const { createAuthToken } = require("./user");
+  return createAuthToken({ id: robot_id });
+};
+
+module.exports.extractRobotToken = async token => {
+  const { extractToken } = require("./user");
+  return await extractToken(token);
+};
+
+module.exports.authRobot = async token => {
+  let auth = await this.extractRobotToken(token);
+  console.log("Extracting Robot Token: ", auth);
+  auth = await this.verifyRobotToken(auth);
+};
+
+module.exports.verifyRobotToken = async token => {
+  console.log("Check Token: ", token);
+  if (token && token.id) {
+    const query = `SELECT * FROM robots WHERE id = $1 LIMIT 1`;
+    const result = await db.query(query, [token["id"]]);
+    console.log("Get user from DB: ", result.rows[0]);
+    return await result.rows[0];
+  } else {
+    let reason = {
+      error: "cannot resolve user data from token"
+    };
+    console.log(reason);
+    Promise.reject(reason);
+    return null;
+  }
+};

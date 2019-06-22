@@ -73,4 +73,12 @@ router.post("/delete", auth, async (req, res) => {
   res.send(response);
 });
 
+router.post("/key", auth, async (req, res) => {
+  let response = {};
+  if (req.body.robot_id) {
+    response.key = req.body.robot_id;
+  }
+  res.send(response);
+});
+
 module.exports = router;

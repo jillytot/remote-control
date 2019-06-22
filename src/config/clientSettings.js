@@ -28,5 +28,6 @@ module.exports = {
   addChannel: `${apiUrl}/channels/create`,
   deleteChannel: `${apiUrl}/channels/delete`,
   addRobot: `${apiUrl}/robot/setup`,
-  deleteRobot: `${apiUrl}/robot/delete`
+  deleteRobot: `${apiUrl}/robot/delete`,
+  robotAPIKey: `${apiUrl}/robot/key`
 };

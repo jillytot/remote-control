@@ -2,12 +2,37 @@ import React, { Component } from "react";
 import "../../../../styles/common.css";
 import Input from "../../../common/input";
 import Toggle from "../../../common/toggle";
-import { deleteRobot } from "../../../../config/clientSettings";
+import { deleteRobot, robotAPIKey } from "../../../../config/clientSettings";
 
 import axios from "axios";
 
 export default class RobotSettings extends Component {
-  state = { settings: {}, apiToggle: false };
+  state = { settings: {}, apiToggle: false, apiKey: "" };
+
+  componentDidMount() {
+    this.handleGetAPIKey();
+  }
+
+  handleGetAPIKey = () => {
+    const token = localStorage.getItem("token");
+    axios
+      .post(
+        robotAPIKey,
+        {
+          robot_id: this.props.robot.id
+        },
+        {
+          headers: { authorization: `Bearer ${token}` }
+        }
+      )
+      .then(res => {
+        console.log(res.data.key);
+        this.setState({ apiKey: res.data.key });
+      })
+      .catch(err => {
+        console.log("Problem Fetching Key", err);
+      });
+  };
 
   handleDelete = async e => {
     console.log(this.props);
@@ -72,7 +97,7 @@ export default class RobotSettings extends Component {
             name={"API Key: "}
             label={"API Key: "}
             type={this.state.apiToggle ? "form" : "password"}
-            value={this.props.robot.id}
+            value={this.state.apiKey}
             autoComplete="off"
           />
           <Toggle

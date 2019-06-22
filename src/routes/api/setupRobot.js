@@ -74,9 +74,18 @@ router.post("/delete", auth, async (req, res) => {
 });
 
 router.post("/key", auth, async (req, res) => {
+  const { createRobotAuth } = require("../../models/robot");
   let response = {};
   if (req.body.robot_id) {
-    response.key = req.body.robot_id;
+    try {
+      response.key = await createRobotAuth(req.body.robot_id);
+      response.status = "success!";
+    } catch (err) {
+      console.log(err);
+      response.status = "error";
+    }
+  } else {
+    (response.status = "error"), (response.error = "Problem Generating Token");
   }
   res.send(response);
 });

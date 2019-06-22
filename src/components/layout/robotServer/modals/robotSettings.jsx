@@ -26,7 +26,6 @@ export default class RobotSettings extends Component {
         }
       )
       .then(res => {
-        console.log(res.data.key);
         this.setState({ apiKey: res.data.key });
       })
       .catch(err => {
@@ -98,7 +97,7 @@ export default class RobotSettings extends Component {
             label={"API Key: "}
             type={this.state.apiToggle ? "form" : "password"}
             value={this.state.apiKey}
-            autoComplete="off"
+            readOnly
           />
           <Toggle
             toggle={this.state.apiToggle}

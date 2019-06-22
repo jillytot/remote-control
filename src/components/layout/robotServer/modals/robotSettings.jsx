@@ -7,7 +7,12 @@ import { deleteRobot, robotAPIKey } from "../../../../config/clientSettings";
 import axios from "axios";
 
 export default class RobotSettings extends Component {
-  state = { settings: {}, apiToggle: false, apiKey: "" };
+  constructor(props) {
+    super(props);
+    this.state = { settings: {}, apiToggle: false, apiKey: "" };
+    this.inputRef = React.createRef();
+    // this.handleCopy = this.handleCopy.bind(this);
+  }
 
   componentDidMount() {
     this.handleGetAPIKey();
@@ -82,8 +87,22 @@ export default class RobotSettings extends Component {
 
   handleToggle = () => {
     let toggle = !this.state.apiToggle;
-
     this.setState({ apiToggle: toggle });
+  };
+
+  handleCopy = e => {
+    console.log("HANDLE COPY");
+    this.inputRef.current.select();
+
+    console.log("STEP 2");
+    document.execCommand("copy");
+    // This is just personal preference.
+    // I prefer to not show the the whole text area selected.
+
+    console.log("STEP 3");
+    e.target.focus();
+    console.log("COPIED");
+    // this.setState({ copySuccess: 'Copied!' });
   };
 
   render() {
@@ -97,13 +116,19 @@ export default class RobotSettings extends Component {
             label={"API Key: "}
             type={this.state.apiToggle ? "form" : "password"}
             value={this.state.apiKey}
+            ref={this.inputRef}
             readOnly
           />
+          {/* <div className="toggle-clipboard-group">
+            <div className="copy-to-clipboard" onClick={this.handleCopy}>
+              copy to clipboard
+            </div> */}
           <Toggle
             toggle={this.state.apiToggle}
             label={"Show API Key"}
             onClick={this.handleToggle}
           />
+          {/* </div> */}
         </div>
         {this.renderButton("Delete Robot")}
       </div>

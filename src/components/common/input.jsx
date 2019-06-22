@@ -1,8 +1,8 @@
 import React from "react";
 import "../../styles/common.css";
 
-const Input = ({ name, label, error, type, ...rest }) => {
-  console.log("Input Props: ", type);
+const Input = ({ name, label, error, type, ref, ...rest }) => {
+  console.log("Input Props: ", type, ref);
 
   return (
     <React.Fragment>
@@ -13,6 +13,7 @@ const Input = ({ name, label, error, type, ...rest }) => {
           </label>
           <input
             {...rest}
+            ref={ref}
             type={type}
             name={name}
             className={type === "chat" ? "chat-input" : "form-control"}

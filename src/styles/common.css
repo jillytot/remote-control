@@ -106,3 +106,57 @@
 
   background: -webkit-linear-gradient(-45deg, #954ed6 0%, #009bee 100%);
 }
+
+.toggle-label {
+  margin-right: 5px;
+}
+
+.toggle-on {
+  color: white;
+  font-weight: bold;
+  background-color: #21c975;
+  border-radius: 24px;
+  padding: 4px;
+  margin-left: 4px;
+  width: 32px;
+}
+
+.toggle-off {
+  background-color: #949b98;
+  font-weight: bold;
+  border-radius: 24px;
+  padding: 4px;
+  margin-left: 4px;
+  width: 32px;
+}
+
+.toggle-pip-on {
+  background-color: white;
+  width: 14px;
+  height: 14px;
+  border-radius: 18px;
+  transition: 0.2s;
+}
+
+.toggle-pip-off {
+  background-color: white;
+  width: 14px;
+  height: 14px;
+  border-radius: 18px;
+  transform: translateX(16px);
+  transition: 0.2s;
+}
+
+.toggle-container {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  margin-bottom: 5px;
+}
+
+.toggle-group {
+  background-color: rgb(15, 24, 39);
+  padding: 6px 24px 6px 24px;
+  border-radius: 24px;
+  margin: 5px;
+}

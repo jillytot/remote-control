@@ -47,12 +47,14 @@ export default class RobotSettings extends Component {
       <div className="register-form spacer">
         Settings for robot: {this.props.robot.name}
         <div> </div>
-        <Input name={"API Key: "} label={"API Key: "} type={"form"} />
-        <Toggle
-          toggle={this.state.toggleTest}
-          label={"Toggle Label"}
-          onClick={this.handleToggle}
-        />
+        <div className="toggle-group">
+          <Input name={"API Key: "} label={"API Key: "} type={"form"} />
+          <Toggle
+            toggle={this.state.toggleTest}
+            label={"Show API Key"}
+            onClick={this.handleToggle}
+          />
+        </div>
         {this.renderButton("Delete Robot")}
       </div>
     );

@@ -7,7 +7,7 @@ import { deleteRobot } from "../../../../config/clientSettings";
 import axios from "axios";
 
 export default class RobotSettings extends Component {
-  state = { settings: {}, toggleTest: false };
+  state = { settings: {}, apiToggle: false };
 
   handleDelete = async e => {
     console.log(this.props);
@@ -57,9 +57,9 @@ export default class RobotSettings extends Component {
   };
 
   handleToggle = () => {
-    let toggle = !this.state.toggleTest;
+    let toggle = !this.state.apiToggle;
 
-    this.setState({ toggleTest: toggle });
+    this.setState({ apiToggle: toggle });
   };
 
   render() {
@@ -68,9 +68,15 @@ export default class RobotSettings extends Component {
         Settings for robot: {this.props.robot.name}
         <div> </div>
         <div className="toggle-group">
-          <Input name={"API Key: "} label={"API Key: "} type={"form"} />
+          <Input
+            name={"API Key: "}
+            label={"API Key: "}
+            type={this.state.apiToggle ? "form" : "password"}
+            value={this.props.robot.id}
+            autoComplete="off"
+          />
           <Toggle
-            toggle={this.state.toggleTest}
+            toggle={this.state.apiToggle}
             label={"Show API Key"}
             onClick={this.handleToggle}
           />

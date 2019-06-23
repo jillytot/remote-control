@@ -25,19 +25,20 @@ send updated data back down the pipe to trigger subsquent component behavior.
 */
 export default class EventHandler extends Component {
   state = {
+    connected: false,
     socket: null,
     user: null
   };
 
   async componentDidMount() {
-    await this.initSocket();
+    this.initSocket();
     this.handleResponse();
     this.handleAuth(this.checkToken());
   }
 
   setUser = async user => {
     const { socket } = this.state;
-    await socket.emit(USER_CONNECTED, user);
+    socket.emit(USER_CONNECTED, user);
     this.setState({ user });
   };
 
@@ -68,10 +69,16 @@ export default class EventHandler extends Component {
     socket.open(socketUrl);
 
     socket.on("connect", () => {
+      this.setState({ connected: true });
       console.log("Socket Connected");
       socket.emit(AUTHENTICATE, { token: localStorage.getItem("token") });
     });
-    this.setState({ socket });
+
+    socket.on("disconnect", () => {
+      this.setState({ connected: false });
+    });
+
+    this.setState({ socket, connected: socket.connected });
   };
 
   handleResponse = () => {
@@ -99,8 +106,13 @@ export default class EventHandler extends Component {
 
   render() {
     const { socket, user } = this.state;
-    return socket !== null ? (
+    return (
       <UserContext.Provider value={{ socket, user }}>
+        {this.state.connected !== true && (
+          <div className="ConnectingOverlay">
+            <h3 className="ConnectingOverlayText">Connecting...</h3>
+          </div>
+        )}
         <Layout
           socket={socket}
           user={user}
@@ -108,8 +120,6 @@ export default class EventHandler extends Component {
           handleAuth={this.handleAuth}
         />
       </UserContext.Provider>
-    ) : (
-      <div>Error, Cannot connect to server!</div>
     );
   }
 }

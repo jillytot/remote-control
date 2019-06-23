@@ -1,7 +1,7 @@
 /*
-A robot interface can incorporate a number of elements: 
-Displays, Control Sets, Control Types, chat room etc... 
-This is all bundled into an interface that is setup on a robotServer channel
+Controls are assigned to a channel, and not tied to a specific robot
+Multiple channels on a robot_server can load the same control set & feed it to different robots
+Right now this only covers buttons, will will eventually include other types of input
 */
 const { makeId, createTimeStamp } = require("../modules/utilities");
 
@@ -59,7 +59,6 @@ module.exports.saveControls = async controls => {
       status
     ]);
     console.log(save.rows);
-    // this.sendControlsToChannel(channel_id);
     return true;
   } catch (err) {
     console.log(err);
@@ -70,6 +69,7 @@ module.exports.saveControls = async controls => {
 
 //replacing soonish
 module.exports.getControls = async id => {
+  if (!id) return null;
   console.log("Get controls from controls ID: ", id);
   const db = require("../services/db");
   const query = `SELECT * FROM controls WHERE id = $1 LIMIT 1`;
@@ -94,29 +94,25 @@ module.exports.validateInput = async input => {
   let response = {};
   let validate = false;
   const checkInput = await this.getControls(input.id);
-  checkInput.map(button => {
-    if (button.label === input.label) validate = true;
-  });
+  if (checkInput && checkInput.buttons) {
+    checkInput.buttons.map(button => {
+      if (button.label === input.button.label) validate = true;
+    });
+  } else {
+    console.log(
+      "No buttons found, validating against default controls instead"
+    );
+    testControls.map(button => {
+      if (button.label === input.button.label) validate = true;
+    });
+  }
+
   if (validate) response.validated = true;
   if (!validate) response.validated = false;
   console.log("Validation Result: ", response.validated);
   return response;
 };
 
-module.exports.tempCommandValidation = button => {
-  console.log("VALIDATE COMMAND: ", button);
-  let validate = false;
-  testControls.map(control => {
-    if (button.label === control.label) validate = true;
-  });
-  if (validate) {
-    console.log("BUTTON VALIDATION PASSED");
-  } else {
-    console.log("BUTTON VALIDATION FAILED");
-  }
-  return validate;
-};
-
 //TESTS:
-this.createControls({ channel_id: "test-2" });
+// this.createControls({ channel_id: "test-2" });
 //this.getControls("cont-8d4c5c3f-df95-4345-beed-9899076fd774");

@@ -91,3 +91,18 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
     monospace;
 }
+
+.ConnectingOverlay {
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background-color: rgba(0, 0, 0, 0.6);
+  z-index: 9999;
+}
+
+.ConnectingOverlayText {
+  font-size: 18pt;
+  margin-top: calc(50vh - 14px);
+}

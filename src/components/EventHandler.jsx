@@ -46,7 +46,6 @@ export default class EventHandler extends Component {
   };
 
   handleAuth = token => {
-    const { socket } = this.state;
     if (token) {
       axios
         .post(`${apiUrl}/auth`, { token: token })

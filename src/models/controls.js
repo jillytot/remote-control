@@ -13,44 +13,51 @@ testControls = [
   { label: "right", hot_key: "d", id: "3" }
 ];
 
-const interfacePt = {
-  id: "",
-  host_server: "", //host server ID
-  command_pallet: [], //Buttons, analog sticks, ect...
-  overlay: {}, //Specifically reserved for input relative to video feeds
-  created: ""
+const defaultStatus = () => {
+  return {
+    placeholder: "test"
+  };
+};
+const defaultSettings = () => {
+  return {
+    enabled: true
+  };
 };
 
 module.exports.createControls = async controls => {
   let makeInterface = {};
   makeInterface.id = `cont-${makeId()}`;
   makeInterface.created = createTimeStamp();
-  makeInterface.host_channel = controls.host_channel || "dev";
-  makeInterface.buttons = [];
-
-  testControls.forEach(button => {
-    makeInterface.buttons.push(button);
-  });
+  makeInterface.channel_id = controls.channel_id || "dev";
+  makeInterface.buttons = controls.buttons || testControls;
+  makeInterface.settings = controls.settings || defaultSettings();
+  makeInterface.status = controls.status || defaultStatus();
 
   //save controls
   console.log("SAVING CONTROLS: ", makeInterface);
-  const saveControls = await saveControls(makeInterface);
-  console.log(saveControls);
-  if (saveControls) {
+  const save = await this.saveControls(makeInterface);
+  console.log(save);
+  if (save) {
     console.log("CONTROL INTERFACE CREATED: ", makeInterface);
     return makeInterface;
   }
   return null;
 };
 
-//saveControls(testSaveControls);
-
-saveControls = async controls => {
+module.exports.saveControls = async controls => {
+  console.log("SAVING CONTROLS TO DB: ", controls);
   const db = require("../services/db");
-  const { id, host_channel, created, buttons } = controls;
-  const dbPut = `INSERT INTO controls (id, host_channel, created, buttons) VALUES($1, $2, $3, $4) RETURNING *`;
+  const { id, channel_id, created, buttons, settings, status } = controls;
+  const dbPut = `INSERT INTO controls (id, channel_id, created, buttons, settings, status) VALUES($1, $2, $3, $4, $5, $6) RETURNING *`;
   try {
-    const save = await db.query(dbPut, [id, host_channel, created, buttons]);
+    const save = await db.query(dbPut, [
+      id,
+      channel_id,
+      created,
+      buttons,
+      settings,
+      status
+    ]);
     console.log(save.rows);
     // this.sendControlsToChannel(channel_id);
     return true;
@@ -58,23 +65,42 @@ saveControls = async controls => {
     console.log(err);
     return false;
   }
-};
-
-module.exports.getTestControls = channel => {
-  return {
-    id: `cont-dev`,
-    host_channel: "dev", //host server ID
-    buttons: testControls //Buttons, analog sticks, ect...
-  };
+  return null;
 };
 
 //replacing soonish
-module.exports.getControls = channel => {
-  return {
-    id: `cont-dev`,
-    host_channel: "dev", //host server ID
-    buttons: testControls //Buttons, analog sticks, ect...
-  };
+module.exports.getControls = async id => {
+  console.log("Get controls from controls ID: ", id);
+  const db = require("../services/db");
+  const query = `SELECT * FROM controls WHERE id = $1 LIMIT 1`;
+  try {
+    const result = await db.query(query, [id]);
+    console.log(result.rows[0]);
+    if (result.rows[0]) return result.rows[0];
+    console.log("Error, could not fetch data for CONTROLS");
+    return null;
+  } catch (err) {
+    console.log(err);
+    return null;
+  }
+  return null;
+};
+
+//TODO: Check against user & user roles
+//is user timed out?
+//Does user have privelage to use this command?
+module.exports.validateInput = async input => {
+  console.log("VALIDATE INPUT: ", input);
+  let response = {};
+  let validate = false;
+  const checkInput = await this.getControls(input.id);
+  checkInput.map(button => {
+    if (button.label === input.label) validate = true;
+  });
+  if (validate) response.validated = true;
+  if (!validate) response.validated = false;
+  console.log("Validation Result: ", response.validated);
+  return response;
 };
 
 module.exports.tempCommandValidation = button => {
@@ -90,3 +116,7 @@ module.exports.tempCommandValidation = button => {
   }
   return validate;
 };
+
+//TESTS:
+this.createControls({ channel_id: "test-2" });
+//this.getControls("cont-8d4c5c3f-df95-4345-beed-9899076fd774");

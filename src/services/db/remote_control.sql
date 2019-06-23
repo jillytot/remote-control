@@ -130,9 +130,12 @@ ALTER TABLE public.robots
 
     CREATE TABLE public.controls
 (
-    id character varying COLLATE pg_catalog."default" NOT NULL,
-    buttons jsonb[],
+     id character varying COLLATE pg_catalog."default" NOT NULL,
     channel_id character varying COLLATE pg_catalog."default",
+    buttons jsonb[],
+    created character varying COLLATE pg_catalog."default",
+    settings jsonb,
+    status jsonb,
     CONSTRAINT controls_pkey PRIMARY KEY (id)
 )
 WITH (

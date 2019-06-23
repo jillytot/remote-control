@@ -11,25 +11,17 @@ export default class RobotInterface extends Component {
   };
 
   componentDidUpdate(prevProps) {
-    if (prevProps.channel !== this.props.channel) {
+    if (prevProps.channel !== this.props.channel && this.props.channel) {
       this.clearAV();
       this.connectAV();
     }
   }
 
   connectAV() {
-    this.videoPlayer = new window.JSMpeg.Player(
-      `ws://dev.remo.tv:1567/recieve?name=${this.props.channel}-video`,
-      {
-        canvas: this.refs["video-canvas"],
-        videoBufferSize: 1 * 1024 * 1024,
-        audio: false
-      }
-    );
-    this.audioPlayer = new window.JSMpeg.Player(
-      `ws://dev.remo.tv:1567/recieve?name=${this.props.channel}-audio`,
-      { video: false }
-    );
+    if (this.props.channel) {
+      this.connectA();
+      this.connectV();
+    }
   }
 
   componentDidMount() {
@@ -37,15 +29,49 @@ export default class RobotInterface extends Component {
     this.commandListener();
   }
 
-  clearAV() {
-    if (this.videoPlayer) {
-      this.videoPlayer.destroy();
-    }
+  connectA = () => {
+    this.audioPlayer = new window.JSMpeg.Player(
+      `ws://dev.remo.tv:1567/recieve?name=${this.props.channel}-audio`,
+      { video: false, disableWebAssembly: true }
+    );
+  };
 
-    if (this.audioPlayer) {
-      this.audioPlayer.destroy();
+  connectV = () => {
+    this.videoPlayer = new window.JSMpeg.Player(
+      `ws://dev.remo.tv:1567/recieve?name=${this.props.channel}-video`,
+      {
+        canvas: this.refs["video-canvas"],
+        videoBufferSize: 1 * 1024 * 1024,
+        audio: false,
+        disableWebAssembly: true
+      }
+    );
+  };
+
+  clearA = () => {
+    try {
+      if (this.audioPlayer) {
+        this.audioPlayer.destroy();
+      }
+    } catch (e) {
+      console.error(e);
     }
-  }
+  };
+
+  clearV = () => {
+    try {
+      if (this.videoPlayer) {
+        this.videoPlayer.destroy();
+      }
+    } catch (e) {
+      console.error(e);
+    }
+  };
+
+  clearAV = () => {
+    this.clearA();
+    this.clearV();
+  };
 
   componentWillUnmount() {
     this.clearAV();

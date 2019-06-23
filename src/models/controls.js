@@ -34,7 +34,7 @@ module.exports.createControls = async controls => {
 
   //save controls
   console.log("SAVING CONTROLS: ", makeInterface);
-  const saveControls = await this.saveControls(makeInterface);
+  const saveControls = await saveControls(makeInterface);
   console.log(saveControls);
   if (saveControls) {
     console.log("CONTROL INTERFACE CREATED: ", makeInterface);
@@ -43,12 +43,15 @@ module.exports.createControls = async controls => {
   return null;
 };
 
+//saveControls(testSaveControls);
+
 saveControls = async controls => {
   const db = require("../services/db");
   const { id, host_channel, created, buttons } = controls;
   const dbPut = `INSERT INTO controls (id, host_channel, created, buttons) VALUES($1, $2, $3, $4) RETURNING *`;
   try {
-    await db.query(dbPut, [id, host_channel, created, buttons]);
+    const save = await db.query(dbPut, [id, host_channel, created, buttons]);
+    console.log(save.rows);
     // this.sendControlsToChannel(channel_id);
     return true;
   } catch (err) {
@@ -57,6 +60,15 @@ saveControls = async controls => {
   }
 };
 
+module.exports.getTestControls = channel => {
+  return {
+    id: `cont-dev`,
+    host_channel: "dev", //host server ID
+    buttons: testControls //Buttons, analog sticks, ect...
+  };
+};
+
+//replacing soonish
 module.exports.getControls = channel => {
   return {
     id: `cont-dev`,

@@ -4,6 +4,11 @@ import json
 import websocket
 
 token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6InJib3QtM2E4ZThjYmUtMmFiMi00OTA4LWE4MWYtMGNhYzYyMmI1NTRhIiwiaWF0IjoxNTYxMjQ0NzMxLCJleHAiOjE1NjM4MzY3MzEsInN1YiI6IiJ9.LNoyMGy34JOJbVR57J8iwvs_BSMHGcCjBsqnGIW7xMA"
+thingy = "serial"
+ser = None
+
+if thingy == "serial":
+    ser = serial.Serial("/dev/ttyUSB0", 9600, timeout=1)
 
 def on_message(ws, message):
     #print(message)
@@ -21,8 +26,26 @@ def on_message(ws, message):
         print(event)
         if event == "BUTTON_COMMAND":
             print("Move: " + data["button"]["label"])
+            if thingy != "serial":
+                return
+
+            direc = data["button"]["label"]
+            if direc == "forward":
+                command = "f"
+                ser.write(command.lower().encode("utf8") + "\r\n")
+            elif direc == "backward":
+                command = "b"
+                ser.write(command.lower().encode("utf8") + "\r\n")
+            elif direc == "left":
+                command = "l"
+                ser.write(command.lower().encode("utf8") + "\r\n")
+            elif direc == "right":
+                command = "r"
+                ser.write(command.lower().encode("utf8") + "\r\n")
+
         elif event == "MESSAGE_RECIEVED":
             print("Say: " + data["message"])
+
     except Exception as e:
         print(e)
 

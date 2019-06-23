@@ -26,10 +26,16 @@ module.exports.createControls = async controls => {
   makeInterface.id = `cont-${makeId()}`;
   makeInterface.created = createTimeStamp();
   makeInterface.host_channel = controls.host_channel || "dev";
-  makeInterface.buttons = testControls;
+  makeInterface.buttons = [];
+
+  testControls.forEach(button => {
+    makeInterface.buttons.push(button);
+  });
 
   //save controls
+  console.log("SAVING CONTROLS: ", makeInterface);
   const saveControls = await this.saveControls(makeInterface);
+  console.log(saveControls);
   if (saveControls) {
     console.log("CONTROL INTERFACE CREATED: ", makeInterface);
     return makeInterface;
@@ -39,7 +45,7 @@ module.exports.createControls = async controls => {
 
 saveControls = async controls => {
   const db = require("../services/db");
-  const { id, host_channel, created, buttons } = robot;
+  const { id, host_channel, created, buttons } = controls;
   const dbPut = `INSERT INTO controls (id, host_channel, created, buttons) VALUES($1, $2, $3, $4) RETURNING *`;
   try {
     await db.query(dbPut, [id, host_channel, created, buttons]);

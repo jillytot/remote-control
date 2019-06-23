@@ -10,9 +10,45 @@ export default class RobotInterface extends Component {
     clickCounter: 0
   };
 
+  componentDidUpdate(prevProps) {
+    if (prevProps.channel !== this.props.channel) {
+      this.clearAV();
+      this.connectAV();
+    }
+  }
+
+  connectAV() {
+    this.videoPlayer = new window.JSMpeg.Player(
+      `ws://dev.remo.tv:1567/recieve?name=${this.props.channel}-video`,
+      {
+        canvas: this.refs["video-canvas"],
+        videoBufferSize: 1 * 1024 * 1024,
+        audio: false
+      }
+    );
+    this.audioPlayer = new window.JSMpeg.Player(
+      `ws://dev.remo.tv:1567/recieve?name=${this.props.channel}-audio`,
+      { video: false }
+    );
+  }
+
   componentDidMount() {
-    this.setState({ controls: testButtons });
+    this.setState({ controls: testButtons }); //temporary solution, controls need to be loaded from
     this.commandListener();
+  }
+
+  clearAV() {
+    if (this.videoPlayer) {
+      this.videoPlayer.destroy();
+    }
+
+    if (this.audioPlayer) {
+      this.audioPlayer.destroy();
+    }
+  }
+
+  componentWillUnmount() {
+    this.clearAV();
   }
 
   commandListener = () => {

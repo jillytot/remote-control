@@ -68,9 +68,10 @@ module.exports.createChannel = async data => {
   makeChannel.settings = settingsPt;
   makeChannel.status = statusPt;
 
-  const { creatControls } = require("./controls");
-  makeChannel.controls = await createControls(makeChannel.id);
-
+  const { createControls } = require("./controls");
+  console.log("Making Controls: ", makeChannel.id);
+  //makeChannel.controls = await createControls(makeChannel.id);
+  makeChannel.controls = checkChannelElement("");
   console.log("Generating Channel: ", makeChannel);
   this.saveChannel(makeChannel);
   // pushToActiveChannels(makeChannel);
@@ -105,9 +106,10 @@ module.exports.saveChannel = async channel => {
     display,
     created,
     settings,
-    status
+    status,
+    robot
   } = channel;
-  const dbPut = `INSERT INTO channels (host_id, name, id, chat, controls, display, created, settings, status) VALUES($1, $2, $3, $4, $5, $6, $7, $8, $9 ) RETURNING *`;
+  const dbPut = `INSERT INTO channels (host_id, name, id, chat, controls, display, created, settings, status, robot) VALUES($1, $2, $3, $4, $5, $6, $7, $8, $9, $10 ) RETURNING *`;
   try {
     console.log("Saving Channel: ", channel);
     const result = await db.query(dbPut, [
@@ -119,7 +121,8 @@ module.exports.saveChannel = async channel => {
       display,
       created,
       settings,
-      status
+      status,
+      robot
     ]);
     this.updateServerChannels(host_id);
     return result.rows;

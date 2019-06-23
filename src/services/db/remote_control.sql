@@ -90,11 +90,12 @@ ALTER TABLE public.chat_rooms
     id character varying COLLATE pg_catalog."default" NOT NULL,
     name character varying COLLATE pg_catalog."default",
     chat character varying COLLATE pg_catalog."default",
-    controls character varying COLLATE pg_catalog."default",
     display character varying COLLATE pg_catalog."default",
     created character varying COLLATE pg_catalog."default",
     status jsonb,
     settings jsonb,
+    robot character varying COLLATE pg_catalog."default",
+    controls character varying COLLATE pg_catalog."default",
     CONSTRAINT channels_pkey PRIMARY KEY (id)
 )
 WITH (
@@ -125,4 +126,19 @@ WITH (
 TABLESPACE pg_default;
 
 ALTER TABLE public.robots
+    OWNER to postgres;
+
+    CREATE TABLE public.controls
+(
+    id character varying COLLATE pg_catalog."default" NOT NULL,
+    buttons jsonb[],
+    channel_id character varying COLLATE pg_catalog."default",
+    CONSTRAINT controls_pkey PRIMARY KEY (id)
+)
+WITH (
+    OIDS = FALSE
+)
+TABLESPACE pg_default;
+
+ALTER TABLE public.controls
     OWNER to postgres;

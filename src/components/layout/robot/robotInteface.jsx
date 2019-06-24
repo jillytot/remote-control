@@ -7,7 +7,8 @@ export default class RobotInterface extends Component {
     controls: [],
     logClicks: [],
     displayLog: true,
-    clickCounter: 0
+    clickCounter: 0,
+    controlsId: ""
   };
 
   componentDidUpdate(prevProps) {
@@ -82,6 +83,11 @@ export default class RobotInterface extends Component {
     socket.on(BUTTON_COMMAND, command => {
       this.handleLoggingClicks(command);
     });
+    socket.on("UPDATE_CONTROLS", controls => {
+      console.log("CONTROLS UPDATED: ", controls);
+      if (controls)
+        this.setState({ controls: controls.buttons, controlsId: controls.id });
+    });
   };
 
   handleClick = click => {
@@ -90,7 +96,8 @@ export default class RobotInterface extends Component {
     socket.emit(BUTTON_COMMAND, {
       user: click.user,
       button: click.button,
-      channel: click.channel
+
+      controls_id: this.state.controlsId
     });
   };
 
@@ -126,7 +133,8 @@ export default class RobotInterface extends Component {
             onClick={() =>
               this.handleClick({
                 user: this.props.user,
-                channel: this.props.channel,
+
+                controls_id: this.state.controlsId,
                 socket: this.props.socket,
                 button: button
               })

@@ -174,9 +174,12 @@ export default class Channels extends Component {
 
   handleClick = channel => {
     this.handleActiveChannel(channel);
+    console.log("CHANNEL INFO CHECK: ", channel);
     const { socket } = this.props;
     const chatId = channel.chat;
+    const controlsId = channel.controls;
     socket.emit(GET_CHAT, chatId);
+    socket.emit("GET_CONTROLS", controlsId);
   };
 
   displayChannels = () => {

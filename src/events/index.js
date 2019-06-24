@@ -54,4 +54,5 @@ registerEvent("GET_CHAT", require("./getChat"));
 registerEvent("JOIN_CHANNEL", require("./joinChannel"));
 registerEvent("MESSAGE_SENT", require("./messageSent"));
 registerEvent("BUTTON_COMMAND", require("./buttonCommand"));
+registerEvent("GET_CONTROLS", require("./getControls"));
 //have to register them all with there definitions here

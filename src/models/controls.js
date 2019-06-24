@@ -72,7 +72,7 @@ module.exports.getControls = async id => {
   if (!id) return null;
   console.log("Get controls from controls ID: ", id);
   const db = require("../services/db");
-  const query = `SELECT * FROM controls WHERE channel_id = $1 LIMIT 1`;
+  const query = `SELECT * FROM controls WHERE id = $1 LIMIT 1`;
   try {
     const result = await db.query(query, [id]);
     console.log(result.rows[0]);
@@ -93,7 +93,7 @@ module.exports.validateInput = async input => {
   console.log("VALIDATE INPUT: ", input);
   let response = {};
   let validate = false;
-  const checkInput = await this.getControls(input.channel);
+  const checkInput = await this.getControls(input.controls_id);
   if (checkInput && checkInput.buttons) {
     checkInput.buttons.map(button => {
       if (button.label === input.button.label) validate = true;
@@ -132,9 +132,8 @@ module.exports.buildButtons = async (buttons, channel_id) => {
   }
   buildControls.buttons = newButtons;
   generateControls = await this.createControls(buildControls);
-  let set = await setControls({
-    channel_id: channel_id,
-    buttons: generateControls.buttons
+  let set = await setControls(generateControls, {
+    channel_id: channel_id
   });
   console.log("SET CHECK: ", set);
   if (set) {

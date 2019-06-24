@@ -215,6 +215,29 @@ module.exports.getServerIdFromChannelId = async channel_id => {
   }
 };
 
+module.exports.setControls = async controlData => {
+  console.log("SET CONTROLS CHECK: ", controlData);
+  //save new controls to channel
+  const db = require("../services/db");
+  const { buttons, channel_id } = controlData;
+  const insert = `UPDATE channels SET controls = $1 WHERE id = $2 RETURNING *`;
+  let response = {};
+  try {
+    const result = await db.query(insert, [buttons, channel_id]);
+    if (result.rows[0]) {
+      console.log("Controls Set: ", result.rows[0]);
+      return result.rows[0];
+    } else {
+      response.status = "error";
+      response.error = "could not set controls for channel";
+    }
+  } catch (err) {
+    response.status = "error";
+    response.error = "could not set controls for channel";
+    console.log(err);
+  }
+};
+
 /* 
 Todo: 
 Have server own this instead of chatroom directly

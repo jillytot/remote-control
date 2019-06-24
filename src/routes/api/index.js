@@ -8,6 +8,7 @@ router.use("/auth", require("./auth"));
 router.use("/robot-server", require("./robotServer"));
 router.use("/robot", require("./setupRobot"));
 router.use("/channels", require("./channels"));
+router.use("/controls", require("./controls"));
 
 //test API
 router.get("/", (req, res) => {

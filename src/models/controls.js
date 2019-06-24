@@ -113,6 +113,47 @@ module.exports.validateInput = async input => {
   return response;
 };
 
+//input: { label: "<string>", hot_key: "<string>", command: "<string>"}
+//output: array of button objects w/ id generated per button
+module.exports.buildButtons = async (buttons, channel_id) => {
+  const { setControls } = require("./channel");
+  let response = {};
+  let newButtons = [];
+  let buildControls = { channel_id: channel_id };
+  //generate json
+  if (buttons) {
+    buttons.map(button => {
+      button.id = makeId();
+      newButtons.push(button);
+    });
+    console.log("Buttons Generated: ", newButtons);
+  } else {
+    return { status: "error!", error: "invalid data to generate buttons" };
+  }
+  buildControls.buttons = newButtons;
+  generateControls = await this.createControls(buildControls);
+  let set = await setControls({
+    channel_id: channel_id,
+    buttons: generateControls.buttons
+  });
+  console.log("SET CHECK: ", set);
+  if (set) {
+    response.status = "success";
+    response.result = set;
+    return response;
+  }
+  response.status = "error";
+  response.error = "problem build buttons (controls.js/buildButtons)";
+  return response;
+};
+
+temp = [
+  { label: "forward", hot_key: "w", command: "f" },
+  { label: "back", hot_key: "s", command: "b" },
+  { label: "left", hot_key: "a", command: "l" },
+  { label: "right", hot_key: "d", command: "r" }
+];
+
 //TESTS:
 // this.createControls({ channel_id: "test-2" });
 //this.getControls("cont-8d4c5c3f-df95-4345-beed-9899076fd774");

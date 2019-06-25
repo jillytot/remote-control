@@ -24,6 +24,10 @@ router.post("/make", auth, async (req, res) => {
       req.body.buttons,
       req.body.channel_id
     );
+
+    //Check for controls reference to update first,
+    //If none exists, then build buttons.
+
     console.log("Setting controls from API: ", setControls);
     response.status = "success";
     response.result = setControls;

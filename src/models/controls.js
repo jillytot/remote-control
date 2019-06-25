@@ -96,7 +96,7 @@ module.exports.getControls = async (id, channel_id) => {
         id: makeControls.id,
         channel_id: channel_id
       });
-      return;
+      if (makeControls) return makeControls;
     }
     console.log("Error, cannot find or generate controls for this channel");
   }

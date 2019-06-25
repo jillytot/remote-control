@@ -1,6 +1,6 @@
 const router = require("express").Router();
 const Joi = require("joi");
-const { createRobot } = require("../../models/robot");
+const { createRobot, deleteRobot } = require("../../models/robot");
 const auth = require("../auth");
 
 //Use authorization head over body
@@ -49,6 +49,63 @@ router.post("/setup", auth, async (req, res) => {
   });
   res.send(response);
   return;
+});
+
+router.post("/delete", auth, async (req, res) => {
+  console.log(req.body);
+  let response = {};
+  console.log;
+  if (
+    req.body.robot_id &&
+    req.body.host_id &&
+    req.user.id === req.body.owner_id
+  ) {
+    console.log("DELETING ROBOT: ", req.body.robot);
+    const result = await deleteRobot({
+      id: req.body.robot_id,
+      host_id: req.body.host_id
+    });
+    response.status = result.status;
+  } else {
+    response.status = "error";
+    response.error = "Cannot delete robot";
+  }
+  res.send(response);
+});
+
+router.post("/key", auth, async (req, res) => {
+  const { createRobotAuth } = require("../../models/robot");
+  let response = {};
+  if (req.body.robot_id) {
+    try {
+      response.key = await createRobotAuth(req.body.robot_id);
+      response.status = "success!";
+    } catch (err) {
+      console.log(err);
+      response.status = "error";
+    }
+  } else {
+    (response.status = "error"), (response.error = "Problem Generating Token");
+  }
+  res.send(response);
+});
+
+router.post("/auth", async (req, res) => {
+  let response = {};
+  const { authRobot } = require("../../models/robot");
+  try {
+    let getRobot = await authRobot(req.body.token);
+    if (getRobot) {
+      response.status = "success!";
+      response.robot = getRobot;
+    } else {
+      response.status = "error";
+      response.error = "unable to authorize robot";
+    }
+  } catch (err) {
+    console.log(err);
+  }
+  res.send(response);
 });
 
 module.exports = router;

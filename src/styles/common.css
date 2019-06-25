@@ -17,6 +17,10 @@
   transform: translateY(4px);
 }
 
+.btn-delete {
+  background: -webkit-linear-gradient(-45deg, #b31515 0%, #ee3b94 100%);
+}
+
 .error {
   text-align: center;
   margin: 5px 0;
@@ -78,6 +82,7 @@
 
 .form-label {
   /* background-color: purple; */
+  font-size: 14px;
   padding: 5px;
   display: flex;
   flex-direction: row;
@@ -100,4 +105,81 @@
   border-radius: 24px;
 
   background: -webkit-linear-gradient(-45deg, #954ed6 0%, #009bee 100%);
+}
+
+.toggle-label {
+  margin-right: 5px;
+  font-size: 11px;
+}
+
+.toggle-on {
+  color: white;
+  font-weight: bold;
+  background-color: #21c975;
+  border-radius: 24px;
+  padding: 4px;
+  margin-left: 4px;
+  width: 32px;
+}
+
+.toggle-off {
+  background-color: #949b98;
+  font-weight: bold;
+  border-radius: 24px;
+  padding: 4px;
+  margin-left: 4px;
+  width: 32px;
+}
+
+.toggle-pip-on {
+  background-color: white;
+  width: 14px;
+  height: 14px;
+  border-radius: 18px;
+  transition: 0.2s;
+}
+
+.toggle-pip-off {
+  background-color: white;
+  width: 14px;
+  height: 14px;
+  border-radius: 18px;
+  transform: translateX(18px);
+  transition: 0.2s;
+}
+
+.toggle-container {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  /* margin-bottom: 5px; */
+  /* background-color: blue; */
+}
+
+.toggle-group {
+  background-color: rgb(15, 24, 39);
+  padding: 6px 24px 6px 24px;
+  border-radius: 24px;
+  margin: 5px;
+}
+
+.copy-to-clipboard {
+  font-size: 11px;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  /* background-color: red; */
+  margin-right: 25px;
+  color: cyan;
+  cursor: pointer;
+}
+
+.copy-to-clipboard:hover {
+  text-decoration: underline;
+}
+
+.toggle-clipboard-group {
+  /* background-color: green; */
+  display: flex;
+  margin-bottom: 5px;
 }

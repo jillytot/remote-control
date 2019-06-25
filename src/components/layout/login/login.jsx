@@ -74,6 +74,7 @@ export default class Login extends Form {
         const { handleAuth } = this.props;
         console.log("Login response: ", res);
         localStorage.setItem("token", res.data.token);
+        this.props.socket.emit("AUTHENTICATE", { token: res.data.token });
         handleAuth(localStorage.getItem("token"));
       })
       .catch(err => {

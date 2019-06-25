@@ -7,18 +7,91 @@ export default class RobotInterface extends Component {
     controls: [],
     logClicks: [],
     displayLog: true,
-    clickCounter: 0
+    clickCounter: 0,
+    controlsId: ""
   };
 
+  componentDidUpdate(prevProps) {
+    if (prevProps.channel !== this.props.channel && this.props.channel) {
+      this.clearAV();
+      this.connectAV();
+    }
+  }
+
+  connectAV() {
+    if (this.props.channel) {
+      this.connectA();
+      this.connectV();
+    }
+  }
+
   componentDidMount() {
-    this.setState({ controls: testButtons });
+    if (this.state.controls.length === 0)
+      this.setState({ controls: testButtons });
     this.commandListener();
+  }
+
+  connectA = () => {
+    this.audioPlayer = new window.JSMpeg.Player(
+      `ws://dev.remo.tv:1567/recieve?name=${this.props.channel}-audio`,
+      { video: false, disableWebAssembly: true }
+    );
+  };
+
+  connectV = () => {
+    this.videoPlayer = new window.JSMpeg.Player(
+      `ws://dev.remo.tv:1567/recieve?name=${this.props.channel}-video`,
+      {
+        canvas: this.refs["video-canvas"],
+        videoBufferSize: 1 * 1024 * 1024,
+        audio: false,
+        disableWebAssembly: true
+      }
+    );
+  };
+
+  clearA = () => {
+    try {
+      if (this.audioPlayer) {
+        this.audioPlayer.destroy();
+      }
+    } catch (e) {
+      console.error(e);
+    }
+  };
+
+  clearV = () => {
+    try {
+      if (this.videoPlayer) {
+        this.videoPlayer.destroy();
+      }
+    } catch (e) {
+      console.error(e);
+    }
+  };
+
+  clearAV = () => {
+    this.clearA();
+    this.clearV();
+  };
+
+  componentWillUnmount() {
+    this.clearAV();
   }
 
   commandListener = () => {
     const { socket } = this.props;
     socket.on(BUTTON_COMMAND, command => {
+      console.log("Button Command Listener", command);
       this.handleLoggingClicks(command);
+    });
+    socket.on("CONTROLS_UPDATED", getControlData => {
+      console.log("CONTROLS UPDATED: ", getControlData);
+      if (getControlData && getControlData.buttons.length > 0)
+        this.setState({
+          controls: getControlData.buttons,
+          controlsId: getControlData.id
+        });
     });
   };
 
@@ -28,7 +101,7 @@ export default class RobotInterface extends Component {
     socket.emit(BUTTON_COMMAND, {
       user: click.user,
       button: click.button,
-      channel: click.channel
+      controls_id: this.state.controlsId
     });
   };
 
@@ -55,7 +128,7 @@ export default class RobotInterface extends Component {
   };
 
   renderButtons = () => {
-    if (this.state.controls !== []) {
+    if (this.state.controls) {
       return this.state.controls.map(button => {
         return (
           <button
@@ -64,7 +137,7 @@ export default class RobotInterface extends Component {
             onClick={() =>
               this.handleClick({
                 user: this.props.user,
-                channel: this.props.channel,
+                controls_id: this.state.controlsId,
                 socket: this.props.socket,
                 button: button
               })

@@ -23,10 +23,10 @@ module.exports.createRobot = async robot => {
   const { validateUser } = require("./user");
 
   //Validate Owner
-  const validate = await validateUser(robot.owner);
-  if (!validate) {
-    return { status: "Error, this user does not exist" };
-  }
+  // const validate = await validateUser(robot.owner);
+  // if (!validate) {
+  //   return { status: "Error, this user does not exist" };
+  // }
 
   let makeRobot = {};
   makeRobot.id = `rbot-${makeId()}`;
@@ -125,4 +125,58 @@ module.exports.sendRobotsForServer = async server_id => {
   );
 };
 
-this.getRobotsFromServerId("serv-7e2c6372-b985-401f-8f51-991ea6cd7456");
+module.exports.deleteRobot = async robot => {
+  const { id, host_id } = robot;
+  const db = require("../services/db");
+  const remove = `DELETE FROM robots WHERE id =$1`;
+  let response = {};
+  try {
+    const result = await db.query(remove, [id]);
+    response.status = "success!";
+    response.result = "Robot successfullly deleted";
+    console.log(response);
+
+    await this.sendRobotsForServer(host_id);
+    return response;
+  } catch (err) {
+    response.error = err;
+    response.status = "error!";
+    console.log(response);
+    return response;
+  }
+};
+
+module.exports.createRobotAuth = robot_id => {
+  const { createAuthToken } = require("./user");
+  return createAuthToken({ id: robot_id });
+};
+
+module.exports.extractRobotToken = async token => {
+  const { extractToken } = require("./user");
+  return await extractToken(token);
+};
+
+module.exports.authRobot = async token => {
+  const auth = await this.extractRobotToken(token);
+  console.log("Extracting Robot Token: ", auth);
+  const robot = await this.verifyRobotToken(auth);
+  return robot;
+};
+
+module.exports.verifyRobotToken = async token => {
+  const db = require("../services/db");
+  console.log("Check Token: ", token);
+  if (token && token.id) {
+    const query = `SELECT * FROM robots WHERE id = $1 LIMIT 1`;
+    const result = await db.query(query, [token["id"]]);
+    console.log("Get user from DB: ", result.rows[0]);
+    return await result.rows[0];
+  } else {
+    let reason = {
+      error: "cannot resolve user data from token"
+    };
+    console.log(reason);
+    Promise.reject(reason);
+    return null;
+  }
+};

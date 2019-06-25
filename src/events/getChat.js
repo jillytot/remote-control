@@ -7,5 +7,9 @@ module.exports = async (ws, chatId) => {
 
   //Subscribe user to chat
   ws.chat_id = chatId;
-  console.log(`Subbing user: ${ws.user.username} to chatroom: ${chatId}`);
+  if (ws.user) {
+    console.log(`Subbing user: ${ws.user.username} to chatroom: ${chatId}`);
+  } else if (ws.robot) {
+    console.log(`Subbing robot: ${ws.robot.id} to chatroom: ${chatId}`);
+  }
 };

@@ -61,7 +61,6 @@ module.exports.createChannel = async data => {
   let makeChannel = {};
   makeChannel.host_id = data.host_id;
   makeChannel.chat = checkChannelElement(data.chat);
-  makeChannel.controls = checkChannelElement("");
   makeChannel.display = checkChannelElement("");
   makeChannel.name = data.name;
   makeChannel.id = `chan-${makeId()}`;
@@ -69,6 +68,10 @@ module.exports.createChannel = async data => {
   makeChannel.settings = settingsPt;
   makeChannel.status = statusPt;
 
+  const { createControls } = require("./controls");
+  console.log("Making Controls: ", makeChannel.id);
+  makeChannel.controls = await createControls({ channel_id: makeChannel.id });
+  // makeChannel.controls = checkChannelElement("");
   console.log("Generating Channel: ", makeChannel);
   this.saveChannel(makeChannel);
   // pushToActiveChannels(makeChannel);
@@ -103,9 +106,10 @@ module.exports.saveChannel = async channel => {
     display,
     created,
     settings,
-    status
+    status,
+    robot
   } = channel;
-  const dbPut = `INSERT INTO channels (host_id, name, id, chat, controls, display, created, settings, status) VALUES($1, $2, $3, $4, $5, $6, $7, $8, $9 ) RETURNING *`;
+  const dbPut = `INSERT INTO channels (host_id, name, id, chat, controls, display, created, settings, status, robot) VALUES($1, $2, $3, $4, $5, $6, $7, $8, $9, $10 ) RETURNING *`;
   try {
     console.log("Saving Channel: ", channel);
     const result = await db.query(dbPut, [
@@ -117,7 +121,8 @@ module.exports.saveChannel = async channel => {
       display,
       created,
       settings,
-      status
+      status,
+      robot
     ]);
     this.updateServerChannels(host_id);
     return result.rows;
@@ -207,6 +212,32 @@ module.exports.getServerIdFromChannelId = async channel_id => {
   } catch (err) {
     (response.status = "error!"), (response.error = err);
     return response;
+  }
+};
+
+module.exports.setControls = async controlData => {
+  const { sendUpdatedControls } = require("./controls");
+  console.log("SET CONTROLS CHECK: ", controlData);
+  //save new controls to channel
+  const db = require("../services/db");
+  const { channel_id, id } = controlData;
+  const insert = `UPDATE channels SET controls = $1 WHERE id = $2 RETURNING *`;
+  let response = {};
+  try {
+    const result = await db.query(insert, [id, channel_id]);
+    if (result.rows[0]) {
+      console.log("Controls Set: ", result.rows[0]);
+      const channel_controls = result.rows[0];
+      sendUpdatedControls(channel_controls.controls, channel_controls.id);
+      return result.rows[0];
+    } else {
+      response.status = "error";
+      response.error = "could not set controls for channel";
+    }
+  } catch (err) {
+    response.status = "error";
+    response.error = "could not set controls for channel";
+    console.log(err);
   }
 };
 

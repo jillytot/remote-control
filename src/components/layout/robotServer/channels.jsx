@@ -22,7 +22,8 @@ export default class Channels extends Component {
     userColors: {},
     currentChannel: null,
     storeSelectedServer: null,
-    defaultLoaded: false
+    defaultLoaded: false,
+    loadControls: ""
   };
 
   // not sure if needed, but why not
@@ -107,6 +108,7 @@ export default class Channels extends Component {
     if (socket) socket.emit(JOIN_CHANNEL, activeChannel.id);
     this.setState({ channels: storeChannels });
     this.setState({ currentChannel: activeChannel.id });
+    this.setState({ loadControls: activeChannel.controls });
   };
 
   generateColor = () => {
@@ -174,9 +176,12 @@ export default class Channels extends Component {
 
   handleClick = channel => {
     this.handleActiveChannel(channel);
+    console.log("CHANNEL INFO CHECK: ", channel);
     const { socket } = this.props;
     const chatId = channel.chat;
+    const controlsId = channel.controls;
     socket.emit(GET_CHAT, chatId);
+    socket.emit("GET_CONTROLS", controlsId);
   };
 
   displayChannels = () => {

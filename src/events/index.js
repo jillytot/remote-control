@@ -46,6 +46,7 @@ function registerEvent(event, func) {
 
 registerEvent("TEST_EVENT", require("./testEvent"));
 registerEvent("AUTHENTICATE", require("./authenticate"));
+registerEvent("AUTHENTICATE_ROBOT", require("./authRobot"));
 registerEvent("GET_CHANNELS", require("./getChannels"));
 registerEvent("GET_ROBOTS", require("./getRobots"));
 registerEvent("GET_CHANNELS", require("./getChannels"));
@@ -53,4 +54,5 @@ registerEvent("GET_CHAT", require("./getChat"));
 registerEvent("JOIN_CHANNEL", require("./joinChannel"));
 registerEvent("MESSAGE_SENT", require("./messageSent"));
 registerEvent("BUTTON_COMMAND", require("./buttonCommand"));
+registerEvent("GET_CONTROLS", require("./getControls"));
 //have to register them all with there definitions here

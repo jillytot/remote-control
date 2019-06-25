@@ -6,7 +6,7 @@ module.exports = async (ws, data) => {
   if (getUser) {
     //setup private user sub for user events
     ws.user = getUser;
-    console.log("TEST 1234: ", getUser);
+    console.log("AUTH USER: ", getUser);
 
     //Confirm Validation:
     ws.emitEvent(VALIDATED, {

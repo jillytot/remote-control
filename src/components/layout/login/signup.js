@@ -4,10 +4,7 @@ import Form from "../../common/form";
 import Joi from "joi-browser";
 import "./login.css";
 import axios from "axios";
-import {
-  apiUrl,
-  reCaptchaSiteKey
-} from "../../../config/clientSettings";
+import { apiUrl, reCaptchaSiteKey } from "../../../config/clientSettings";
 import ReCAPTCHA from "react-google-recaptcha";
 
 export default class Signup extends Form {
@@ -97,6 +94,7 @@ export default class Signup extends Form {
         const { handleAuth } = this.props;
         console.log(response);
         localStorage.setItem("token", response.data.token);
+        this.props.socket.emit("AUTHENTICATE", { token: response.data.token });
         handleAuth(localStorage.getItem("token"));
       })
       .catch(function(error) {
@@ -109,7 +107,7 @@ export default class Signup extends Form {
   handleCaptcha = async () => {
     this.setState({
       captcha: this.recaptchaRef.current.getValue()
-    })
+    });
   };
 
   render() {

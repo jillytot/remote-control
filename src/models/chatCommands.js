@@ -99,6 +99,12 @@ module.exports.handleGlobalTimeout = async (
   time,
   message
 ) => {
+  // console.log("CHECK USERNAME / MODERATOR: ", username, moderator);
+  if (username.toLowerCase() === moderator.username.toLowerCase()) {
+    message.message = `${moderator.username}, You cannot timeout yourself...`;
+    return message;
+  }
+
   const validateCommand = await checkTypes(moderator, globalTypes); //Can this user use this command?
   if (validateCommand) {
     console.log("COMMAND VALIDATION TRUE");

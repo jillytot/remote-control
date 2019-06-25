@@ -17,9 +17,11 @@ const Input = ({ name, label, error, type, ref, ...rest }) => {
             type={type}
             name={name}
             className={type === "chat" ? "chat-input" : "form-control"}
+            autoComplete={type === "chat" ? "off" : ""}
           />
         </div>
-        {error && <div className="alert alert-danger">{error}</div>}
+        {type === "chat" ||
+          (error && <div className="alert alert-danger">{error}</div>)}
       </div>
     </React.Fragment>
   );

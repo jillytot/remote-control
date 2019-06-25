@@ -359,6 +359,13 @@ module.exports.updateStatus = async user => {
 };
 
 //MANAGE TIMEOUTS
+//If a user is timed out already, and a new timeout is applied, then we need to check if the new timeout will expire before the previous timeout.
+/*
+timeout a = 100, timeout b = 50. 
+When timeout a is down to 30, timeout b is applied. 
+timeout b excludes the remainder of timeout a, so timeout b = 20, and it's added to the remainder for a total of 50.
+*/
+
 module.exports.timeoutUser = async (user, time, server_id) => {
   console.log("TIMEOUT USER: ", user, time);
   if (user && time) {

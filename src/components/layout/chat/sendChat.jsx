@@ -33,7 +33,6 @@ export default class SendChat extends Form {
 
   schema = {
     sendChat: Joi.string()
-      .required()
       .min(1)
       .max(512)
       .trim()

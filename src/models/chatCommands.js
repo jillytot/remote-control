@@ -139,8 +139,9 @@ module.exports.handleGlobalTimeout = async (
       if (thisUser) {
         badUser = thisUser;
         console.log("Chat Commands : handleTimeout : thisUser: ", thisUser);
-        message.message = `User ${username} has been globally timed out for ${time /
-          1000} seconds.`;
+        message.message = `User ${
+          badUser.username
+        } has been globally timed out for ${time / 1000} seconds.`;
         console.log("MESSAGE FROM SET GLOBAL TIMEOUT: ", message.message);
         const { sendGlobalTimeout } = require("./robotServer");
         sendGlobalTimeout(message.server_id, badUser);

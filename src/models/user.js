@@ -141,9 +141,10 @@ module.exports.checkUserId = async user => {
 };
 
 module.exports.getIdFromUsername = async username => {
+  lowerCase = username.toLowerCase();
   if (username) {
-    const query = `SELECT * FROM users WHERE username = $1 LIMIT 1;`;
-    const check = await db.query(query, [username]);
+    const query = `SELECT * FROM users WHERE check_username = $1 LIMIT 1;`;
+    const check = await db.query(query, [lowerCase]);
     return check.rows[0].id;
   }
   return null;

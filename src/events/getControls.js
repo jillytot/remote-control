@@ -4,7 +4,7 @@ module.exports = async (ws, controls_id) => {
   console.log("SUBBING USER TO CONTROLS, Controls Id: ", controls_id);
 
   if (controls_id) {
-    ws.emitEvent("UPDATE_CONTROLS", await getControls(controls_id));
+    ws.emitEvent("CONTROLS_UPDATED", await getControls(controls_id));
     //Subscribe user to controls
     ws.controls_id = controls_id;
     if (ws.user) {

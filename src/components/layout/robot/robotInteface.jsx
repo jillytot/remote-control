@@ -26,7 +26,8 @@ export default class RobotInterface extends Component {
   }
 
   componentDidMount() {
-    this.setState({ controls: testButtons }); //temporary solution, controls need to be loaded from
+    if (this.state.controls.length === 0)
+      this.setState({ controls: testButtons });
     this.commandListener();
   }
 
@@ -81,12 +82,16 @@ export default class RobotInterface extends Component {
   commandListener = () => {
     const { socket } = this.props;
     socket.on(BUTTON_COMMAND, command => {
+      console.log("Button Command Listener", command);
       this.handleLoggingClicks(command);
     });
-    socket.on("UPDATE_CONTROLS", controls => {
-      console.log("CONTROLS UPDATED: ", controls);
-      if (controls)
-        this.setState({ controls: controls.buttons, controlsId: controls.id });
+    socket.on("CONTROLS_UPDATED", getControlData => {
+      console.log("CONTROLS UPDATED: ", getControlData);
+      if (getControlData && getControlData.buttons.length > 0)
+        this.setState({
+          controls: getControlData.buttons,
+          controlsId: getControlData.id
+        });
     });
   };
 
@@ -96,7 +101,6 @@ export default class RobotInterface extends Component {
     socket.emit(BUTTON_COMMAND, {
       user: click.user,
       button: click.button,
-
       controls_id: this.state.controlsId
     });
   };
@@ -124,7 +128,7 @@ export default class RobotInterface extends Component {
   };
 
   renderButtons = () => {
-    if (this.state.controls !== []) {
+    if (this.state.controls) {
       return this.state.controls.map(button => {
         return (
           <button
@@ -133,7 +137,6 @@ export default class RobotInterface extends Component {
             onClick={() =>
               this.handleClick({
                 user: this.props.user,
-
                 controls_id: this.state.controlsId,
                 socket: this.props.socket,
                 button: button

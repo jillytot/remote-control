@@ -216,6 +216,7 @@ module.exports.getServerIdFromChannelId = async channel_id => {
 };
 
 module.exports.setControls = async controlData => {
+  const { sendUpdatedControls } = require("./controls");
   console.log("SET CONTROLS CHECK: ", controlData);
   //save new controls to channel
   const db = require("../services/db");
@@ -226,6 +227,8 @@ module.exports.setControls = async controlData => {
     const result = await db.query(insert, [id, channel_id]);
     if (result.rows[0]) {
       console.log("Controls Set: ", result.rows[0]);
+      const channel_controls = result.rows[0];
+      sendUpdatedControls(channel_controls.controls, channel_controls.id);
       return result.rows[0];
     } else {
       response.status = "error";

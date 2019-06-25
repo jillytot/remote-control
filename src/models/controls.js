@@ -1,4 +1,5 @@
 /*
+import SendChat from '../components/layout/chat/sendChat';
 Controls are assigned to a channel, and not tied to a specific robot
 Multiple channels on a robot_server can load the same control set & feed it to different robots
 Right now this only covers buttons, will will eventually include other types of input
@@ -123,7 +124,7 @@ module.exports.buildButtons = async (buttons, channel_id) => {
   //generate json
   if (buttons) {
     buttons.map(button => {
-      button.id = makeId();
+      button.id = `bttn-${makeId()}`;
       newButtons.push(button);
     });
     console.log("Buttons Generated: ", newButtons);
@@ -144,6 +145,17 @@ module.exports.buildButtons = async (buttons, channel_id) => {
   response.status = "error";
   response.error = "problem build buttons (controls.js/buildButtons)";
   return response;
+};
+
+module.exports.sendUpdatedControls = async (controls_id, channel_id) => {
+  //send current controls for current channel to the client
+  //channel stores an ID reference for it's current controls
+  const channel = require("./channel");
+  let sendData = {};
+  sendData.channel_id = channel_id;
+  sendData.controls = await this.getControls(controls_id);
+  console.log("SEND UPDATED CONTROLS: ", sendData);
+  channel.emitEvent(channel_id, "CONTROLS_UPDATED", sendData);
 };
 
 temp = [

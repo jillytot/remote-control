@@ -242,16 +242,28 @@ module.exports.setControls = async controlData => {
   }
 };
 
-/* 
-Todo: 
-Have server own this instead of chatroom directly
-put chatroom under channels
-reflect the new structure on the client side
+//Get data for individual channel
+module.exports.getChannel = async channel_id => {
+  if (!channel_id) return { status: "error!", error: "channel ID required" };
+  const db = require("../services/db");
+  console.log("Fetch data for channel: ", channel_id);
+  try {
+    const query = `SELECT * FROM channels WHERE id = $1 LIMIT 1`;
+    const result = await db.query(query, [channel_id]);
+    console.log(result.rows[0]);
+    if (result.rows[0]) {
+      return result.rows[0];
+    } else {
+      return {
+        status: "error!",
+        error: "Unable to fetch channel with ID: ",
+        channel_id
+      };
+    }
+  } catch (err) {
+    console.log(err);
+  }
+};
 
-module exports: 
-channelEvents
-getChannels
-pushToActiveChannels
-deleteChannel
-
-*/
+//tests
+//console.log(this.getChannel("chan-02063c30-01b8-4d6c-9712-0fa646bcc942"));

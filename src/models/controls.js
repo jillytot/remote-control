@@ -27,7 +27,7 @@ const defaultSettings = () => {
 
 module.exports.createControls = async controls => {
   let makeInterface = {};
-  makeInterface.id = `cont-${makeId()}`;
+  makeInterface.id = controls.id || `cont-${makeId()}`;
   makeInterface.created = createTimeStamp();
   makeInterface.channel_id = controls.channel_id || "dev";
   makeInterface.buttons = controls.buttons || testControls;
@@ -43,6 +43,26 @@ module.exports.createControls = async controls => {
     return makeInterface;
   }
   return null;
+};
+
+module.exports.updateControls = async controls => {
+  console.log("UPDATING EXISTING CONTROLS: ", controls);
+  const db = require("../services/db");
+  const { id, buttons } = controls;
+  const query = `UPDATE controls SET buttons = $1 WHERE id = $2 RETURNING *`;
+  try {
+    const result = await db.query(query, [controls.buttons, controls.id]);
+    console.log(result.rows[0]);
+    if (result.rows[0]) {
+      const details = result.rows[0];
+      this.sendUpdatedControls(details.id, details.channel_id);
+      return result.rows[0];
+    }
+    return { status: "error!", error: "Problem updating controls" };
+  } catch (err) {
+    console.log(err);
+    return { status: "error!", error: "Problem updating controls" };
+  }
 };
 
 module.exports.saveControls = async controls => {
@@ -132,11 +152,14 @@ module.exports.validateInput = async input => {
 
 //input: { label: "<string>", hot_key: "<string>", command: "<string>"}
 //output: array of button objects w/ id generated per button
-module.exports.buildButtons = async (buttons, channel_id) => {
+module.exports.buildButtons = async (buttons, channel_id, controls_id) => {
   const { setControls } = require("./channel");
   let response = {};
   let newButtons = [];
-  let buildControls = { channel_id: channel_id };
+  console.log("CONTROL ID CHECK: ", controls_id);
+  let buildControls = {};
+  buildControls.channel_id = channel_id;
+  buildControls.id = controls_id;
   //generate json
   if (buttons) {
     buttons.map(button => {
@@ -148,14 +171,14 @@ module.exports.buildButtons = async (buttons, channel_id) => {
     return { status: "error!", error: "invalid data to generate buttons" };
   }
   buildControls.buttons = newButtons;
-  generateControls = await this.createControls(buildControls);
-  let set = await setControls(generateControls, {
-    channel_id: channel_id
-  });
-  console.log("SET CHECK: ", set);
-  if (set) {
+  generateControls = await this.updateControls(buildControls);
+  // let set = await setControls(generateControls, {
+  //   channel_id: channel_id
+  // });
+  console.log("UPDATE CONTROLS CHECK: ", generateControls);
+  if (generateControls) {
     response.status = "success";
-    response.result = set;
+    response.result = generateControls;
     return response;
   }
   response.status = "error";

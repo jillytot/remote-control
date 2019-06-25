@@ -9,7 +9,10 @@ router.get("/", async (req, res) => {
 router.post("/make", auth, async (req, res) => {
   let response = {};
   let validate = false;
-  const { getServerIdFromChannelId } = require("../../models/channel");
+  const {
+    getServerIdFromChannelId,
+    getChannel
+  } = require("../../models/channel");
   const { buildButtons } = require("../../models/controls");
   const { getRobotServer } = require("../../models/robotServer");
 
@@ -20,9 +23,12 @@ router.post("/make", auth, async (req, res) => {
 
   if (checkUser.owner_id === req.user.id) validate = true;
   if (req.body.channel_id && req.body.buttons && validate) {
+    const checkForControls = await getChannel(req.body.channel_id);
+    console.log("CHECK FOR CONTROLS CHECK: ", checkForControls);
     const setControls = await buildButtons(
       req.body.buttons,
-      req.body.channel_id
+      req.body.channel_id,
+      checkForControls.controls
     );
 
     //Check for controls reference to update first,

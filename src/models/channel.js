@@ -70,7 +70,8 @@ module.exports.createChannel = async data => {
 
   const { createControls } = require("./controls");
   console.log("Making Controls: ", makeChannel.id);
-  makeChannel.controls = await createControls({ channel_id: makeChannel.id });
+  makeControls = await createControls({ channel_id: makeChannel.id });
+  makeChannel.controls = makeControls.id;
   // makeChannel.controls = checkChannelElement("");
   console.log("Generating Channel: ", makeChannel);
   this.saveChannel(makeChannel);

@@ -68,20 +68,37 @@ module.exports.saveControls = async controls => {
   return null;
 };
 
-module.exports.getControls = async id => {
-  if (!id) return null;
-  console.log("Get controls from controls ID: ", id);
-  const db = require("../services/db");
-  const query = `SELECT * FROM controls WHERE id = $1 LIMIT 1`;
-  try {
-    const result = await db.query(query, [id]);
-    console.log(result.rows[0]);
-    if (result.rows[0]) return result.rows[0];
-    console.log("Error, could not fetch data for CONTROLS");
-    return null;
-  } catch (err) {
-    console.log(err);
-    return null;
+module.exports.getControls = async (id, channel_id) => {
+  if (id) {
+    console.log("Get controls from controls ID: ", id);
+    const db = require("../services/db");
+    const query = `SELECT * FROM controls WHERE id = $1 LIMIT 1`;
+    try {
+      const result = await db.query(query, [id]);
+      console.log(result.rows[0]);
+      if (result.rows[0]) return result.rows[0];
+      console.log("Error, could not fetch data for CONTROLS");
+      return null;
+    } catch (err) {
+      console.log(err);
+      return null;
+    }
+  } else {
+    console.log(
+      "No controls found on this channel, generating controls for this channel"
+    );
+    if (channel_id) {
+      const { setControls } = require("./channel");
+      const makeControls = await this.createControls({
+        channel_id: channel_id
+      });
+      setControls({
+        id: makeControls.id,
+        channel_id: channel_id
+      });
+      return;
+    }
+    console.log("Error, cannot find or generate controls for this channel");
   }
   return null;
 };
@@ -93,7 +110,7 @@ module.exports.validateInput = async input => {
   console.log("VALIDATE INPUT: ", input);
   let response = {};
   let validate = false;
-  const checkInput = await this.getControls(input.controls_id);
+  const checkInput = await this.getControls(input.controls_id, input.channel);
   if (checkInput && checkInput.buttons) {
     checkInput.buttons.map(button => {
       if (button.label === input.button.label) validate = true;
@@ -151,18 +168,11 @@ module.exports.sendUpdatedControls = async (controls_id, channel_id) => {
   //channel stores an ID reference for it's current controls
   const channel = require("./channel");
   let sendData = {};
-  sendData.channel_id = channel_id;
-  sendData.controls = await this.getControls(controls_id);
+  // sendData.channel_id = channel_id;
+  sendData = await this.getControls(controls_id, channel_id);
   console.log("SEND UPDATED CONTROLS: ", sendData);
   channel.emitEvent(channel_id, "CONTROLS_UPDATED", sendData);
 };
-
-temp = [
-  { label: "forward", hot_key: "w", command: "f" },
-  { label: "back", hot_key: "s", command: "b" },
-  { label: "left", hot_key: "a", command: "l" },
-  { label: "right", hot_key: "d", command: "r" }
-];
 
 //TESTS:
 // this.createControls({ channel_id: "test-2" });

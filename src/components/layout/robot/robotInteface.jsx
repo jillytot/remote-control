@@ -101,7 +101,8 @@ export default class RobotInterface extends Component {
     socket.emit(BUTTON_COMMAND, {
       user: click.user,
       button: click.button,
-      controls_id: this.state.controlsId
+      controls_id: this.state.controlsId,
+      channel: this.props.channel
     });
   };
 

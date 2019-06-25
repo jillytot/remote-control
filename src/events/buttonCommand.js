@@ -10,6 +10,7 @@ module.exports = async (ws, command) => {
   command.user = publicUser(ws.user);
 
   if (await validateInput(command)) {
+    console.log("CHECK WS VALIDATE COMMAND INPUT", command);
     channel.emitEvent(command.channel, BUTTON_COMMAND, command);
   }
 };

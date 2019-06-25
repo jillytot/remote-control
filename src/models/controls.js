@@ -68,7 +68,6 @@ module.exports.saveControls = async controls => {
   return null;
 };
 
-//TODO: This should be getting controls.id and not using channel_id..
 module.exports.getControls = async id => {
   if (!id) return null;
   console.log("Get controls from controls ID: ", id);

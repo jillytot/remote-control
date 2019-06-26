@@ -371,6 +371,21 @@ module.exports.timeoutUser = async (user, time, server_id) => {
   if (user && time) {
     let { status } = user;
     status.timeout = true;
+    if (status.expireTimeout && status.expireTimeout > Date.now()) {
+      const addRemainder = status.expireTimeout - (time + Date.now());
+      console.log(
+        "User is already timed out, checking for remainder: ",
+        addRemainder
+      );
+      if (addRemainder <= 0) return status;
+      time = addRemainder;
+    }
+    status.expireTimeout = Date.now() + time;
+    console.log(
+      "TIMEOUT STATUS CHECK: ",
+      status,
+      status.expireTimeout - Date.now()
+    );
     user.status = status;
     let checkUpdatedStatus = await this.updateStatus(user);
     createTimer(time, this.unTimeoutUser, user);
@@ -384,10 +399,14 @@ module.exports.unTimeoutUser = async user => {
   console.log("END TIMEOUT FOR USER: ", user);
   if (user) {
     let { status } = user;
-    status.timeout = false;
-    user.status = status;
-    await this.updateStatus(user);
-    return true;
+    if (status.expireTimeout && Date.now() >= status.expireTimeout) {
+      status.timeout = false;
+      user.status = status;
+      await this.updateStatus(user);
+      return true;
+    }
+    console.log(`${user.username} is already timed out`);
+    return false;
   }
   console.log("Timout Error");
   return null;

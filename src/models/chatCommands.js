@@ -142,6 +142,10 @@ module.exports.handleGlobalTimeout = async (
       return message;
     }
 
+    //Set the maximum timeout
+    const { maxTimeout } = require("../config/serverSettings");
+    if (time > maxTimeout) time = maxTimeout;
+    console.log("TIMEOUT FOR TIME: ", time, maxTimeout);
     time *= 1000;
 
     let thisUser = await getIdFromUsername(username);

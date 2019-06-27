@@ -31,6 +31,7 @@ module.exports.emitEvent = (user_id, event, data) => {
   const wss = require("../services/wss");
   wss.clients.forEach(ws => {
     if (ws.user && ws.user.id === user_id) {
+      console.log("USER EVENT: ", event, data);
       ws.emitEvent(event, data);
     }
   });
@@ -440,6 +441,7 @@ module.exports.checkTypes = async (user, typesToCheck) => {
   return validate;
 };
 
+//This probably shouldn't even need to be called ever
 module.exports.getGlobalTypes = async user_id => {
   const sendTypes = await this.getUserInfoFromId(user_id);
   console.log(sendTypes);

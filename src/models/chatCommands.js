@@ -114,13 +114,16 @@ module.exports.handleGlobalTimeout = async (
   if (validateCommand) {
     console.log("COMMAND VALIDATION TRUE");
   } else {
-    console.log(moderator, " has insufficent privelages for this action");
-    message.displayMessage = false;
-    return {
-      status: "failed",
-      message:
-        "You have insufficent privelages for this action. You must either be type: staff, or global_mod"
-    };
+    // console.log(moderator, " has insufficent privelages for this action");
+    //message.displayMessage = false;
+    message.broadcast = "self";
+    message.message = "You have insufficent privelages for this action";
+    return message;
+    // return {
+    //   status: "failed",
+    //   message:
+    //     "You have insufficent privelages for this action. You must either be type: staff, or global_mod"
+    // };
   }
 
   let badUser = {};

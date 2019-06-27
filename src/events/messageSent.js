@@ -6,12 +6,15 @@ module.exports = async (ws, message) => {
 
   //check for timeouts
 
-  const { getUserInfoFromId } = require("../models/user");
-  const checkStatus = await getUserInfoFromId(message.userId);
+  const { getUserInfoFromId, publicUser } = require("../models/user");
+  const checkStatus = await getUserInfoFromId(ws.user.id); //This user info call is the single source of truth for the message sender
+  message.user = publicUser(checkStatus);
   if (!checkStatus.status.timeout) {
     createMessage(message);
+    return;
   }
-
-  console.log("WS: ", ws);
-  console.log("User is timedout, and cannot emmit this message");
+  message.message = "You are in timeout, and cannot send anymore messages";
+  message.type = "moderation";
+  message.broadcast = "self";
+  createMessage(message);
 };

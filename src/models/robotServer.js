@@ -307,4 +307,4 @@ module.exports.validateOwner = async (user_id, server_id) => {
 };
 
 //test
-this.disableRobotServer("serv-2d3630b6-4e8f-475e-8243-deef9cf70594");
+//this.disableRobotServer("serv-2d3630b6-4e8f-475e-8243-deef9cf70594");

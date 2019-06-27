@@ -6,6 +6,7 @@ const {
   deleteRobotServer,
   updateRobotServer
 } = require("../../models/robotServer");
+const { checkTypes } = require("../../models/user");
 // const { publicUser, validateUser } = require("../../models/user");
 const auth = require("../auth");
 const Joi = require("joi");
@@ -53,9 +54,12 @@ router.post("/delete", auth, async (req, res) => {
   let response = {};
 
   if (req.user) {
-    response.validated = true;
     const robotServerToDelete = await getRobotServer(req.body.server_id);
-    if (robotServerToDelete && req.user.id === robotServerToDelete.owner_id) {
+    const moderator = await checkTypes(req.user, ["staff, global_moderator"]);
+    if (
+      (robotServerToDelete && req.user.id === robotServerToDelete.owner_id) ||
+      moderator
+    ) {
       response.deleting = req.body.server_id;
       try {
         if (await deleteRobotServer(req.body.server_id)) {
@@ -69,7 +73,7 @@ router.post("/delete", auth, async (req, res) => {
         response.error = "Could not Delete Server";
       }
     } else {
-      response.error = "Could not Delete Server";
+      response.error = "Insuffecient privileges to delete server";
     }
   } else {
     response.error = "Invalid User";

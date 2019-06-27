@@ -26,6 +26,8 @@ siteCommands = async message => {
   if (scrubCommand === "mod") message.type = "moderation";
   if (scrubCommand === "unmod") message.type = "moderation";
 
+  if (scrubCommand === "disable") await disbleServer(message);
+
   //Need to work on this more.
   console.log("Do Command: ", scrubCommand);
   console.log("FROM SITE COMMANDS: ", message.message);
@@ -38,6 +40,12 @@ me = message => {
   message.message = message.message.substr(4);
   console.log(message.message);
   return message;
+};
+
+const disableServer = async message => {
+  const { disableRobotServer } = require("./robotServer");
+  //Check roles
+  //Disble Server
 };
 
 //May deprecate
@@ -99,7 +107,6 @@ module.exports.handleGlobalTimeout = async (
   time,
   message
 ) => {
-  // console.log("CHECK USERNAME / MODERATOR: ", username, moderator);
   if (username.toLowerCase() === moderator.username.toLowerCase()) {
     message.message = `${moderator.username}, You cannot timeout yourself...`;
     return message;
@@ -114,16 +121,9 @@ module.exports.handleGlobalTimeout = async (
   if (validateCommand) {
     console.log("COMMAND VALIDATION TRUE");
   } else {
-    // console.log(moderator, " has insufficent privelages for this action");
-    //message.displayMessage = false;
     message.broadcast = "self";
-    message.message = "You have insufficent privelages for this action";
+    message.message = "You have insufficent privileges for this action";
     return message;
-    // return {
-    //   status: "failed",
-    //   message:
-    //     "You have insufficent privelages for this action. You must either be type: staff, or global_mod"
-    // };
   }
 
   let badUser = {};

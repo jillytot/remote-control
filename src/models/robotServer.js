@@ -223,7 +223,11 @@ module.exports.getRobotServer = async server_id => {
   try {
     const query = "SELECT * FROM robot_servers WHERE server_id = $1 LIMIT 1";
     const result = await db.query(query, [server_id]);
-    return result.rows[0];
+    if (result.rows[0]) {
+      const showResult = result.rows[0];
+      console.log(showResult);
+      return showResult;
+    }
   } catch (err) {
     console.log(err);
     return null;
@@ -252,6 +256,47 @@ module.exports.deleteRobotServer = async server_id => {
   }
 };
 
+/* 
+Moderation Feature
+Now:
+Perminately de-lists a server from being displayed publicly
+Cannot be over ridden by owner
+
+Future: 
+Suspends all internal server activity
+Server can only be accessed by owner, or mods at global level
+*/
+module.exports.disableRobotServer = async server_id => {
+  console.log("Kill Server: ", server_id);
+  //get server info
+  let updateServer = await this.getRobotServer(server_id);
+  console.log("GET SERVER TO UPDATE: ", updateServer);
+  updateServer.status.disabled = true;
+  const disableServer = await this.updateRobotServerStatus(
+    server_id,
+    updateServer.status
+  );
+  console.log("DISABLE SERVER RESULT: ", disableServer);
+  //emit event
+};
+
+module.exports.updateRobotServerStatus = async (server_id, status) => {
+  const db = require("../services/db");
+  console.log("Updating Robot Server Status: ", server_id);
+  try {
+    const update = `UPDATE robot_servers SET status = $1 WHERE server_id = $2 RETURNING *`;
+    const result = await db.query(update, [status, server_id]);
+    if (result.rows[0]) {
+      const sendResult = result.rows[0];
+      console.log("Robot Server Updated: ", sendResult);
+      return sendResult;
+      //Server Status Update will need to get sent.
+    }
+  } catch (err) {
+    console.log(err);
+  }
+};
+
 //Does this user own this server?
 module.exports.validateOwner = async (user_id, server_id) => {
   const checkServer = await this.getRobotServer(server_id);
@@ -260,3 +305,6 @@ module.exports.validateOwner = async (user_id, server_id) => {
   }
   return false;
 };
+
+//test
+this.disableRobotServer("serv-2d3630b6-4e8f-475e-8243-deef9cf70594");

@@ -24,6 +24,8 @@
   margin: 5px 5px 0px 5px;
   padding: 0px 5px 0px 5px;
   border-radius: 10px 10px 0px 0px;
+
+  /* border-bottom: solid 3px red; */
 }
 .chat-title {
   /* background-color: blue; */
@@ -127,14 +129,14 @@
   /* border-radius: 6px; */
   display: flex;
   flex-direction: row;
+  /* flex-wrap: wrap; */
   /* background-color: blue; */
 }
 
 .system-message {
-  color: rgb(214, 214, 214);
-  background: -webkit-linear-gradient(-45deg, #bd6294 0%, #8140b6 100%);
-  background-color: #291d52;
-  /* border-left: 6px solid purple; */
+  color: rgb(198, 162, 255);
+  background-color: rgb(51, 36, 75);
+  padding: 5px;
 }
 
 .messages-container {

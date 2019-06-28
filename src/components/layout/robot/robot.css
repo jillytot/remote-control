@@ -22,10 +22,14 @@
   color: white;
   border: 0px;
   font-size: 16px;
-  padding: 13px 20px 13px 10px;
   /* padding: 10px; */
   margin: 4px;
   outline: none;
+  padding: 13px 20px 13px 20px;
+}
+
+.robtn-hot-key {
+  padding: 13px 20px 13px 10px;
 }
 
 .robtn:hover {
@@ -39,8 +43,9 @@
 
 .hotkey {
   background-color: rgb(73, 83, 131);
+  color: rgb(195, 203, 211);
   padding: 6px;
-  margin-right: 2px;
+  margin-right: 4px;
   margin-left: 6px;
   border-radius: 7px;
   width: 200px;

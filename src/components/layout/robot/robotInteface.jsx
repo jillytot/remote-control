@@ -133,7 +133,7 @@ export default class RobotInterface extends Component {
       return this.state.controls.map(button => {
         return (
           <button
-            className="robtn"
+            className={button.hot_key ? "robtn robtn-hot-key" : "robtn"}
             key={button.id}
             onClick={() =>
               this.handleClick({
@@ -144,7 +144,12 @@ export default class RobotInterface extends Component {
               })
             }
           >
-            <span className="hotkey">{button.hot_key} :</span> {button.label}
+            {button.hot_key ? (
+              <span className="hotkey">{button.hot_key} :</span>
+            ) : (
+              <React.Fragment />
+            )}
+            {button.label}
           </button>
         );
       });

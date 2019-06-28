@@ -18,9 +18,9 @@ const schema = Joi.object().keys({
     .required()
 });
 
-router.get("/list", async (req, res) => {
+router.get("/list/:id", async (req, res) => {
   let response = {};
-  const result = await getChannels(req.body.server_id);
+  const result = await getChannels(req.params.id);
   if (result) {
     response.channels = result;
   } else {

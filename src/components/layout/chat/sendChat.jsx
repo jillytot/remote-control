@@ -12,7 +12,8 @@ export default class SendChat extends Form {
     errors: {},
     user: {},
     //uuid: 0, //used to generate keys for locally generated messages
-    coolDown: false
+    coolDown: false,
+    indicator: false
   };
 
   componentDidMount() {
@@ -118,18 +119,33 @@ export default class SendChat extends Form {
     this.setState({ error });
   };
 
+  handleIndicator = () => {
+    if (this.state.indicator) {
+      return "indicator indicator-active";
+    } else {
+      return "indicator";
+    }
+  };
+
   render() {
     return (
-      <div className="send-chat-container">
-        <form onSubmit={this.handleSubmit}>
-          <div className="input-field-container">
-            {this.renderChatInput("sendChat", "", "chat")}
-            <div className="send-chat-btn">
-              {this.renderButton("Chat", "chat", "chat")}
+      <React.Fragment>
+        <div className="send-chat-options">
+          {" "}
+          <div className={this.handleIndicator()} />
+          control{" "}
+        </div>
+        <div className="send-chat-container">
+          <form onSubmit={this.handleSubmit}>
+            <div className="input-field-container">
+              {this.renderChatInput("sendChat", "", "chat")}
+              <div className="send-chat-btn">
+                {this.renderButton("Chat", "chat", "chat")}
+              </div>
             </div>
-          </div>
-        </form>
-      </div>
+          </form>
+        </div>
+      </React.Fragment>
     );
   }
 }

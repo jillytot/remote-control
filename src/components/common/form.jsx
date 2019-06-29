@@ -10,7 +10,8 @@ class Form extends Component {
   state = {
     data: {},
     errors: {},
-    validation: true
+    validation: true,
+    indicator: false
   };
 
   validate = () => {
@@ -132,6 +133,16 @@ class Form extends Component {
     if (e.keyCode === 13 && e.shiftKey === false) {
       console.log("ON ENTER", e);
       this.handleSubmit(e); //solution 100
+    }
+
+    if (e.keyCode === 9) {
+      console.log("TAB", e);
+
+      const changeIndicator = !this.state.indicator;
+      console.log(changeIndicator);
+      this.setState({ indicator: changeIndicator });
+
+      //this.handleSubmit(e); //solution 100
     }
   };
 

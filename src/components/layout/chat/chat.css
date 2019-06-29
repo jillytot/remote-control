@@ -153,7 +153,7 @@
 .chat-background {
   /* background-color: purple; */
   /* height: calc(100vh - 162px); */
-  height: calc(100vh - 174px);
+  height: calc(100vh - 200px);
   background-color: #221b3a;
 }
 
@@ -251,4 +251,23 @@
   outline: 0px;
   /* border: solid 2px rgb(150, 123, 194); */
   background-color: rgb(111, 90, 143);
+}
+
+.send-chat-options {
+  background-color: rgb(42, 44, 56);
+  padding: 5px;
+  color: rgb(189, 189, 189);
+}
+
+.indicator {
+  height: 12px;
+  width: 12px;
+  background-color: rgb(92, 92, 92);
+  display: inline-block;
+  border-radius: 12px;
+  margin-right: 5px;
+}
+
+.indicator-active {
+  background-color: rgb(0, 218, 0);
 }

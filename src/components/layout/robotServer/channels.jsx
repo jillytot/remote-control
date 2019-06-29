@@ -23,7 +23,12 @@ export default class Channels extends Component {
     currentChannel: null,
     storeSelectedServer: null,
     defaultLoaded: false,
-    loadControls: ""
+    loadControls: "",
+    chatTabbed: false
+  };
+
+  setChatTabbed = value => {
+    this.setState({ chatTabbed: value });
   };
 
   // not sure if needed, but why not
@@ -62,7 +67,16 @@ export default class Channels extends Component {
     }, 30000); //garbage cleanup every 30s
 
     this.loadDefaultChannel();
+    document.addEventListener("keydown", this.handleKeyPress);
   }
+
+  handleKeyPress = e => {
+    if (e.keyCode === 9) {
+      e.preventDefault();
+      console.log(this.state.chatTabbed);
+      this.setChatTabbed(!this.state.chatTabbed);
+    }
+  };
 
   loadDefaultChannel = () => {
     //const { channels, selectedServer } = this.props;
@@ -259,8 +273,15 @@ export default class Channels extends Component {
               user={user}
               socket={socket}
               channel={this.state.currentChannel}
+              chatTabbed={this.state.chatTabbed}
             />
-            <Chat user={user} socket={socket} users={users} />
+            <Chat
+              user={user}
+              socket={socket}
+              users={users}
+              setChatTabbed={this.setChatTabbed}
+              chatTabbed={this.state.chatTabbed}
+            />
           </React.Fragment>
         ) : (
           <React.Fragment />
@@ -271,6 +292,7 @@ export default class Channels extends Component {
 
   componentWillUnmount() {
     clearInterval(this.colorCleanup);
+    document.removeEventListener("keydown", this.handleKeyPress);
   }
 }
 

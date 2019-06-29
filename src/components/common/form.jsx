@@ -4,14 +4,14 @@ import Input from "./input";
 import Select from "./select";
 import TextArea from "./textArea";
 import TextAreaChat from "./textAreaChat";
+//import HotKeyListener from "../hotKeyListener";
 import "../../styles/common.css";
 
 class Form extends Component {
   state = {
     data: {},
     errors: {},
-    validation: true,
-    indicator: false
+    validation: true
   };
 
   validate = () => {
@@ -47,8 +47,7 @@ class Form extends Component {
   };
 
   handleChange = ({ currentTarget: input }) => {
-    console.log(input, input.value);
-
+    console.log(input.value);
     const errors = { ...this.state.errors };
     const errorMessage = this.validateProperty(input);
     if (errorMessage) errors[input.name] = errorMessage;
@@ -128,21 +127,10 @@ class Form extends Component {
     );
   }
 
-  onEnterPress = e => {
-    console.log("ON ENTER", e);
+  handleKeyPress = (e) => {
     if (e.keyCode === 13 && e.shiftKey === false) {
       console.log("ON ENTER", e);
       this.handleSubmit(e); //solution 100
-    }
-
-    if (e.keyCode === 9) {
-      console.log("TAB", e);
-
-      const changeIndicator = !this.state.indicator;
-      console.log(changeIndicator);
-      this.setState({ indicator: changeIndicator });
-
-      //this.handleSubmit(e); //solution 100
     }
   };
 
@@ -156,7 +144,7 @@ class Form extends Component {
         onChange={this.handleChange}
         error={errors[name]}
         value={data[name]}
-        onKeyDown={e => this.onEnterPress(e)}
+        onKeyDown={e => this.handleKeyPress(e)}
       />
     );
   }

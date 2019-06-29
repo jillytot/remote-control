@@ -20,6 +20,14 @@ export default class SendChat extends Form {
     //set the rate limit from global vars
   }
 
+  componentDidUpdate = () => {
+    if (this.props.chatTabbed) {
+      this.refs.chatForm.sendChat.focus();
+    } else {
+      this.refs.chatForm.sendChat.blur();
+    }
+  };
+
   startTimer = () => {
     if (!this.state.coolDown) {
       this.setState({ coolDown: true });
@@ -43,8 +51,6 @@ export default class SendChat extends Form {
   doSubmit = () => {
     let keepGoing = true;
     const { user, socket, chatId, server_id, onChatFeedback } = this.props;
-    // console.log("CHECK USER STATUS TIMEOUT: ", user.status.timeout);
-    // console.log("CHECK USER STATUS: ", user.status);
 
     if (user.status && user.status.timeout) {
       keepGoing = false;
@@ -119,24 +125,45 @@ export default class SendChat extends Form {
     this.setState({ error });
   };
 
+  //This should only appear for desktop, no need for mobile
   handleIndicator = () => {
-    if (this.state.indicator) {
-      return "indicator indicator-active";
+    console.log(this.props.chatTabbed);
+    if (!this.props.chatTabbed) {
+      return (
+        <div className="send-chat-options">
+          <div className="indicator indicator-active" />
+          you are controlling the robot ( --tab to chat )
+        </div>
+      );
     } else {
-      return "indicator";
+      return (
+        <div className="send-chat-options">
+          <div className="indicator" />
+          chatting ( --tab to control robot, or use mouse )
+        </div>
+      );
     }
+  };
+
+  handleFocus = () => {
+    this.props.setChatTabbed(true);
+  };
+
+  handleBlur = () => {
+    this.props.setChatTabbed(false);
   };
 
   render() {
     return (
       <React.Fragment>
-        <div className="send-chat-options">
-          {" "}
-          <div className={this.handleIndicator()} />
-          control{" "}
-        </div>
+        {this.handleIndicator()}
         <div className="send-chat-container">
-          <form onSubmit={this.handleSubmit}>
+          <form
+            onSubmit={this.handleSubmit}
+            onFocus={this.handleFocus}
+            onBlur={this.handleBlur}
+            ref="chatForm"
+          >
             <div className="input-field-container">
               {this.renderChatInput("sendChat", "", "chat")}
               <div className="send-chat-btn">

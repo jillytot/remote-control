@@ -115,6 +115,8 @@ export default class Chat extends Component {
               chatId={chatroom ? chatroom.id : ""}
               server_id={chatroom ? chatroom.host_id : ""}
               onChatFeedback={this.handleChatFeedback}
+              setChatTabbed={this.props.setChatTabbed}
+              chatTabbed={this.props.chatTabbed}
             />
           </div>
         );

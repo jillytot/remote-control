@@ -2,6 +2,8 @@ import Joi from "joi-browser";
 import React, { Component } from "react";
 import Input from "./input";
 import Select from "./select";
+import TextArea from "./textArea";
+import TextAreaChat from "./textAreaChat";
 import "../../styles/common.css";
 
 class Form extends Component {
@@ -40,12 +42,11 @@ class Form extends Component {
     const errors = this.validate();
     this.setState({ errors: errors || {} });
     if (errors) return;
-
     this.doSubmit();
   };
 
   handleChange = ({ currentTarget: input }) => {
-    console.log(input.value);
+    console.log(input, input.value);
 
     const errors = { ...this.state.errors };
     const errorMessage = this.validateProperty(input);
@@ -61,6 +62,8 @@ class Form extends Component {
     if (label === "Delete Robot") {
       console.log(label);
       return "btn btn-delete";
+    } else if (label === "Chat") {
+      return "chat-btn";
     } else {
       return "btn";
     }
@@ -106,6 +109,43 @@ class Form extends Component {
         onChange={this.handleChange}
         error={errors[name]}
         value={data[name]}
+      />
+    );
+  }
+
+  renderTextArea(name, label, type) {
+    const { data, errors } = this.state;
+    return (
+      <TextArea
+        type={type}
+        name={name}
+        label={label}
+        onChange={this.handleChange}
+        error={errors[name]}
+        value={data[name]}
+      />
+    );
+  }
+
+  onEnterPress = e => {
+    console.log("ON ENTER", e);
+    if (e.keyCode === 13 && e.shiftKey === false) {
+      console.log("ON ENTER", e);
+      this.handleSubmit(e); //solution 100
+    }
+  };
+
+  renderChatInput(name, label, type) {
+    const { data, errors } = this.state;
+    return (
+      <TextAreaChat
+        type={type}
+        name={name}
+        label={label}
+        onChange={this.handleChange}
+        error={errors[name]}
+        value={data[name]}
+        onKeyDown={e => this.onEnterPress(e)}
       />
     );
   }

@@ -6,6 +6,7 @@ const Message = ({ message }) => {
   const types = {
     default: "",
     moderation: "moderation",
+    robot: "robot",
     admin: "admin",
     channel: "channel",
     special: "special",
@@ -106,6 +107,8 @@ const Message = ({ message }) => {
     if (message.type === types.moderation) {
       // console.log("Moderation Type Message");
       return `chat-message system-message`;
+    } else if (message.type === types.robot) {
+      return `chat-message robot-message`;
     } else {
       return `chat-message ${color} ${
         message.type === types.self ? types.self : ""

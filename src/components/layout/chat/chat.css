@@ -133,6 +133,12 @@
   /* background-color: blue; */
 }
 
+.robot-message {
+  color: rgb(255, 255, 255);
+/*  background-color: rgb(51, 36, 75); */
+  padding: 5px;
+}
+
 .system-message {
   color: rgb(198, 162, 255);
   background-color: rgb(51, 36, 75);

@@ -1,6 +1,7 @@
 import React from "react";
 import "../../styles/common.css";
 import "../layout/chat/chat.css";
+import { chatCharMax } from "../../config/clientSettings";
 
 const TextAreaChat = ({
   name,
@@ -19,7 +20,7 @@ const TextAreaChat = ({
         type={type}
         name={name}
         rows="2"
-        maxLength="300"
+        maxLength={chatCharMax}
         placeholder="The chatbox makes the robots talk"
         className="chat-input"
         autoComplete="off"

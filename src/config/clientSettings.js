@@ -17,6 +17,7 @@ module.exports = {
   defaultRate: 1000, //Message rate limit for most people
   minRate: 250, //Message rate limit for admins / server owners etc..
   slowMo: 30000, //Message rate limit for when we need to slow things down!
+  chatCharMax: 300, //Maximum amount of characters a user can type in the chat box
   reCaptchaSiteKey: reCaptchaKey,
   socketUrl: socketUrl,
   apiUrl: apiUrl,

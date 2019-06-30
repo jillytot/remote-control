@@ -11,7 +11,8 @@ export default class RobotInterface extends Component {
     displayLog: true,
     clickCounter: 0,
     controlsId: "",
-    renderCurrentKey: null
+    renderCurrentKey: null,
+    renderPresses: []
   };
 
   currentKey = null;
@@ -135,6 +136,7 @@ export default class RobotInterface extends Component {
     socket.on(BUTTON_COMMAND, command => {
       //console.log("Button Command Listener", command);
       this.handleLoggingClicks(command);
+      this.handleRenderPresses(command);
     });
     socket.on("CONTROLS_UPDATED", getControlData => {
       console.log("CONTROLS UPDATED: ", getControlData);
@@ -155,6 +157,35 @@ export default class RobotInterface extends Component {
       controls_id: this.state.controlsId,
       channel: this.props.channel
     });
+  };
+
+  handleRenderPresses = press => {
+    // press.counter = (
+    //   <Counter press={press} onClear={this.handleClear} count={500} />
+    // );
+    console.log("set counter: ", press.counter);
+    let updatePresses = this.state.renderPresses;
+    updatePresses.push(press);
+    this.setState({ renderPresses: updatePresses });
+    console.log(
+      "ADDING PRESS TO RENDER: ",
+      press.button,
+      this.state.renderPresses
+    );
+  };
+
+  handleClear = press => {
+    console.log("boop! ", press.counter);
+    let updatePresses = [];
+    this.state.renderPresses.map(getPress => {
+      if (press.button.id === getPress.button.id) {
+        //do nothing
+      } else {
+        updatePresses.push(getPress);
+      }
+    });
+    console.log("Presses Check: ", this.state.renderPresses, updatePresses);
+    this.setState({ renderPresses: updatePresses });
   };
 
   handleLoggingClicks = click => {
@@ -190,6 +221,19 @@ export default class RobotInterface extends Component {
             WebkitTransform: "translateY(4px)"
           }; // noice!
         }
+
+        let updatePresses = this.state.renderPresses;
+        this.state.renderPresses.map(press => {
+          if (press && press.button.id === button.id) {
+            console.log("RENDER PRESSES: ", this.state.renderPresses);
+            style.backgroundColor = "red";
+            updatePresses.splice(press);
+          }
+        });
+
+        if (this.state.renderPresses !== updatePresses)
+          this.setState({ renderPresses: updatePresses });
+
         return (
           <button
             className={button.hot_key ? "robtn robtn-hot-key" : "robtn"}

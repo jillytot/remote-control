@@ -126,7 +126,7 @@ export default class RobotInterface extends Component {
   setupKeyMap = controls => {
     const keyMap = {};
     controls.map(button => {
-      keyMap[button.hot_key] = button;
+      return (keyMap[button.hot_key] = button);
     });
     this.keyMap = keyMap;
   };
@@ -181,6 +181,7 @@ export default class RobotInterface extends Component {
       } else {
         updatePresses.push(getPress);
       }
+      return null;
     });
     console.log("Presses Check: ", this.state.renderPresses, updatePresses);
     if (this.state.renderPresses !== updatePresses)
@@ -228,6 +229,7 @@ export default class RobotInterface extends Component {
             hotKeyStyle = "hotkey hotkey-highlight";
             // this.handleClear(press);
           }
+          return null;
         });
 
         return (

@@ -413,6 +413,17 @@ module.exports.unTimeoutUser = async user => {
   return null;
 };
 
+module.exports.clearGlobalTimeout = async user => {
+  if (user) {
+    user.status.expireTimeout = 0;
+    user.status.timeout = false;
+    const clearUser = await this.updateStatus(user);
+    console.log("Clear User: ", clearUser);
+    if (clearUser) return true;
+  }
+  return false;
+};
+
 //Update client when their status has changed
 module.exports.sendUpdateStatus = user => {
   const { USER_STATUS_UPDATED } = require("../events/definitions");

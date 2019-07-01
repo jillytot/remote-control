@@ -21,7 +21,10 @@ siteCommands = async message => {
 
   if (scrubCommand === "me") updateCommand = me(updateCommand);
   if (scrubCommand === "w") message.type = "whisper";
-  if (scrubCommand === "timeout") message = await parseTimeout(message);
+  if (scrubCommand === "timeout")
+    message = await parseModerate(message, scrubCommand);
+  if (scrubCommand === "untimeout")
+    message = await parseModerate(message, scrubCommand);
 
   if (scrubCommand === "mod") message.type = "moderation";
   if (scrubCommand === "unmod") message.type = "moderation";
@@ -45,7 +48,7 @@ me = message => {
 const disableServer = async message => {
   const { disableRobotServer } = require("./robotServer");
   //Check roles
-  //Disble Server
+  //Disable Server
 };
 
 //May deprecate
@@ -68,30 +71,34 @@ module.exports.calcTimeout = time => {
 //TIMEOUT LOGIC
 
 //Preparing information to get fed into timeout handler
-const parseTimeout = async message => {
+const parseModerate = async (message, action) => {
   message.type = "moderation";
-  const doTimeout = await this.handleGlobalTimeout(
-    message.message
-      .substr(1)
-      .split(" ")[1]
-      .toLowerCase(),
-    {
-      username: message.sender, //Create Object for message sender
-      id: message.sender_id,
-      chat_id: message.chat_id
-    },
-    message.message
+  let moderate = {};
+
+  moderate.username = message.message
+    .substr(1)
+    .split(" ")[1]
+    .toLowerCase();
+  moderate.moderator = {
+    username: message.sender, //Create Object for message sender
+    id: message.sender_id,
+    chat_id: message.chat_id
+  };
+  moderate.message = message;
+  moderate.action = action;
+
+  if (action === "timeout") {
+    moderate.time = message.message
       .substr(1)
       .split(" ")[2]
-      .toLowerCase(),
-    message
-  );
-  console.log("MESSAGE FROM PARSETIMEOUT: ", doTimeout);
+      .toLowerCase();
+  }
+  const doTimeout = await this.handleGlobalTimeout(moderate);
+  console.log("MESSAGE FROM parseModerate: ", doTimeout);
   return doTimeout;
 };
 
 const {
-  validateUser,
   getIdFromUsername,
   timeoutUser,
   getUserInfoFromId,
@@ -101,12 +108,15 @@ const {
 const globalTypes = ["staff", "global_moderator"]; // Types that can access this command
 
 //This is basically a global timeout
-module.exports.handleGlobalTimeout = async (
+module.exports.handleGlobalTimeout = async ({
   username,
   moderator,
   time,
-  message
-) => {
+  message,
+  action
+}) => {
+  console.log(username, moderator, time, message);
+
   if (username.toLowerCase() === moderator.username.toLowerCase()) {
     message.message = `${moderator.username}, You cannot timeout yourself...`;
     return message;
@@ -126,16 +136,21 @@ module.exports.handleGlobalTimeout = async (
     return message;
   }
 
-  let badUser = {};
+  let thisUser = await getIdFromUsername(username);
+  thisUser = await getUserInfoFromId(thisUser);
+  let actOnUser = {};
   //Execute Timeout
-  if (username && time) {
-    time = parseInt(time);
-    if (Number.isInteger(time)) {
-      //continue
-    } else {
-      console.log("INTEGER REQUIRED");
-      message.displayMessage = false;
-      return message;
+
+  if (action === "timeout") {
+    if (username) {
+      time = parseInt(time);
+      if (Number.isInteger(time)) {
+        //continue
+      } else {
+        console.log("INTEGER REQUIRED");
+        message.displayMessage = false;
+        return message;
+      }
     }
     if (time < 0) {
       message.displayMessage = false;
@@ -147,25 +162,37 @@ module.exports.handleGlobalTimeout = async (
     if (time > maxTimeout) time = maxTimeout;
     console.log("TIMEOUT FOR TIME: ", time, maxTimeout);
     time *= 1000;
-
-    let thisUser = await getIdFromUsername(username);
+    thisUser = await timeoutUser(thisUser, time);
 
     if (thisUser) {
-      thisUser = await getUserInfoFromId(thisUser);
-      thisUser = await timeoutUser(thisUser, time);
-
-      if (thisUser) {
-        badUser = thisUser;
-        console.log("Chat Commands : handleTimeout : thisUser: ", thisUser);
-        message.message = `User ${
-          badUser.username
-        } has been globally timed out for ${time / 1000} seconds.`;
-        console.log("MESSAGE FROM SET GLOBAL TIMEOUT: ", message.message);
-        const { sendGlobalTimeout } = require("./robotServer");
-        sendGlobalTimeout(message.server_id, badUser);
-        return message;
-      }
+      actOnUser = thisUser;
+      console.log("Chat Commands : handleTimeout : thisUser: ", thisUser);
+      message.message = `User ${
+        actOnUser.username
+      } has been globally timed out for ${time / 1000} seconds.`;
+      console.log("MESSAGE FROM SET GLOBAL TIMEOUT: ", message.message);
+      const { sendGlobalTimeout } = require("./robotServer");
+      sendGlobalTimeout(message.server_id, actOnUser);
+      return message;
     }
+  }
+
+  if (action === "untimeout") {
+    const { clearGlobalTimeout } = require("./user");
+    let unTimeout = clearGlobalTimeout(thisUser);
+    if (unTimeout) {
+      actOnUser = thisUser;
+      console.log("Chat Commands : handleUntimeout : thisUser: ", thisUser);
+      message.message = `User ${
+        actOnUser.username
+      } your global timeout status has been removed`;
+
+      console.log("MESSAGE FROM GLOBAL UNTIMEOUT: ", message.message);
+      // const { sendGlobalTimeout } = require("./robotServer");
+      // sendGlobalTimeout(message.server_id, actOnUser);
+      return message;
+    }
+
     console.log("Could not locate user");
     message.displayMessage = false;
 

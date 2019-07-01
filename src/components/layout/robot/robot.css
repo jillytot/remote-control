@@ -54,6 +54,10 @@
   width: 200px;
 }
 
+.hotkey-highlight {
+  background-color: rgb(86, 99, 165);
+}
+
 .display-info-container {
   display: flex;
   position: absolute;

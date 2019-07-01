@@ -8,6 +8,12 @@ export default class Counter extends Component {
     };
   }
 
+  componentWillReceiveProps(nextProps) {
+    if (this.props.start === false && nextProps.start === true) {
+      this.startInterval(); // handleClick function in your case
+    }
+  }
+
   componentDidMount() {
     console.log("mounting counter: ", this.props);
     this.interval = setInterval(() => {

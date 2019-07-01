@@ -160,11 +160,8 @@ export default class RobotInterface extends Component {
   };
 
   handleRenderPresses = press => {
-    // press.counter = (
-    //   <Counter press={press} onClear={this.handleClear} count={500} />
-    // );
-    console.log("set counter: ", press.counter);
     let updatePresses = this.state.renderPresses;
+    press.counter = setTimeout(() => this.handleClear(press), 200);
     updatePresses.push(press);
     this.setState({ renderPresses: updatePresses });
     console.log(
@@ -175,7 +172,8 @@ export default class RobotInterface extends Component {
   };
 
   handleClear = press => {
-    console.log("boop! ", press.counter);
+    clearTimeout(press.counter);
+    console.log("PRESS CHECK: ", press);
     let updatePresses = [];
     this.state.renderPresses.map(getPress => {
       if (press.button.id === getPress.button.id) {
@@ -185,7 +183,8 @@ export default class RobotInterface extends Component {
       }
     });
     console.log("Presses Check: ", this.state.renderPresses, updatePresses);
-    this.setState({ renderPresses: updatePresses });
+    if (this.state.renderPresses !== updatePresses)
+      this.setState({ renderPresses: updatePresses });
   };
 
   handleLoggingClicks = click => {
@@ -213,6 +212,7 @@ export default class RobotInterface extends Component {
   renderButtons = () => {
     if (this.state.controls) {
       return this.state.controls.map(button => {
+        let hotKeyStyle = "hotkey";
         let style = {};
         if (button.hot_key === this.state.renderCurrentKey) {
           style = {
@@ -221,18 +221,14 @@ export default class RobotInterface extends Component {
             WebkitTransform: "translateY(4px)"
           }; // noice!
         }
-
-        let updatePresses = this.state.renderPresses;
         this.state.renderPresses.map(press => {
           if (press && press.button.id === button.id) {
             console.log("RENDER PRESSES: ", this.state.renderPresses);
-            style.backgroundColor = "red";
-            updatePresses.splice(press);
+            style.backgroundColor = "rgb(64, 76, 131)";
+            hotKeyStyle = "hotkey hotkey-highlight";
+            // this.handleClear(press);
           }
         });
-
-        if (this.state.renderPresses !== updatePresses)
-          this.setState({ renderPresses: updatePresses });
 
         return (
           <button
@@ -249,7 +245,7 @@ export default class RobotInterface extends Component {
             style={style}
           >
             {button.hot_key ? (
-              <span className="hotkey">{button.hot_key} :</span>
+              <span className={hotKeyStyle}>{button.hot_key} :</span>
             ) : (
               <React.Fragment />
             )}

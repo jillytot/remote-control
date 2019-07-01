@@ -164,16 +164,10 @@ export default class RobotInterface extends Component {
     press.counter = setTimeout(() => this.handleClear(press), 200);
     updatePresses.push(press);
     this.setState({ renderPresses: updatePresses });
-    console.log(
-      "ADDING PRESS TO RENDER: ",
-      press.button,
-      this.state.renderPresses
-    );
   };
 
   handleClear = press => {
     clearTimeout(press.counter);
-    console.log("PRESS CHECK: ", press);
     let updatePresses = [];
     this.state.renderPresses.map(getPress => {
       if (press.button.id === getPress.button.id) {
@@ -183,7 +177,7 @@ export default class RobotInterface extends Component {
       }
       return null;
     });
-    console.log("Presses Check: ", this.state.renderPresses, updatePresses);
+
     if (this.state.renderPresses !== updatePresses)
       this.setState({ renderPresses: updatePresses });
   };
@@ -224,10 +218,8 @@ export default class RobotInterface extends Component {
         }
         this.state.renderPresses.map(press => {
           if (press && press.button.id === button.id) {
-            console.log("RENDER PRESSES: ", this.state.renderPresses);
             style.backgroundColor = "rgb(64, 76, 131)";
             hotKeyStyle = "hotkey hotkey-highlight";
-            // this.handleClear(press);
           }
           return null;
         });

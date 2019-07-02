@@ -1,12 +1,11 @@
-const { createMessage } = require("../models/chatMessage");
+const { createRobotMessage } = require("../models/chatMessage");
 
 module.exports = async (ws, message) => {
   if (ws.robot) {
-    console.log("Robot Message Received: ", message);
-    const { getUserInfoFromId, publicUser } = require("../models/user");
-    message.user = { "username": ws.robot.name, "id": ws.robot.id };
+    console.log("Robot Message Received: ", message, ws.robot);
+    message.robot = ws.robot;
     message.type = "robot";
-    createMessage(message);
+    createRobotMessage(message);
   } else {
     console.log("Robot Message Rejected (not authed): ", message);
   }

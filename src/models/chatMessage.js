@@ -43,6 +43,29 @@ module.exports.createMessage = async message => {
   this.sendMessage(makeMess);
 };
 
+//Like User Message, except for robots
+module.exports.createRobotMessage = async message => {
+  let makeMess = {};
+  makeMess.message = message.message;
+  makeMess.sender = message.robot.name; //Will deprecate
+  makeMess.sender_id = message.robot.id; //Will deprecate
+  makeMess.chat_id = message.chatId;
+  makeMess.server_id = message.server_id;
+  makeMess.id = `mesg-${makeId()}`;
+  makeMess.time_stamp = createTimeStamp();
+  makeMess.broadcast = message.broadcast || ""; // Flag for determining if message is broadcasted to the room, or just to the user
+  makeMess.displayMessage = true;
+  makeMess.badges = await this.getBadges(
+    message.type,
+    message.server_id,
+    message.userId
+  );
+  makeMess.type = message.type;
+  console.log("Generating Robot Chat Message: ", makeMess);
+  //makeMess = await getMessageType(makeMess);
+  this.sendMessage(makeMess);
+};
+
 module.exports.sendMessage = message => {
   const chatRoomModel = require("../models/chatRoom");
   const userModel = require("../models/user");
@@ -52,8 +75,9 @@ module.exports.sendMessage = message => {
     userModel.emitEvent(message.sender_id, "MESSAGE_RECIEVED", message);
     return;
   }
+
   let chatRoom = message.chat_id;
-  console.log("Chat Room from SendMessage: ", chatRoom);
+  console.log("Chat Room from SendMessage: ", chatRoom, message);
   chatRoomModel.emitEvent(chatRoom, "MESSAGE_RECIEVED", message);
 };
 

@@ -56,7 +56,7 @@ module.exports.createRobotMessage = async message => {
   makeMess.broadcast = message.broadcast || ""; // Flag for determining if message is broadcasted to the room, or just to the user
   makeMess.displayMessage = true;
   makeMess.badges = await this.getBadges(
-    message.type,
+    [message.type],
     message.server_id,
     message.userId
   );

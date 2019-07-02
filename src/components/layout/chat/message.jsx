@@ -97,6 +97,19 @@ const Message = ({ message }) => {
             </span>
           );
         }
+
+        if (badge === "robot") {
+          return (
+            <span key={message.id + badge}>
+              <img
+                className="message-badge"
+                src={defaultImages["robot"]}
+                alt={badge}
+                title={"Robot"}
+              />
+            </span>
+          );
+        }
         return <React.Fragment key={badge} />;
       });
     }

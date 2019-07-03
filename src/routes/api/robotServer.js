@@ -33,10 +33,8 @@ router.post("/invite", auth, async (req, res) => {
     let invite = {};
     invite.user = req.user;
     if (req.body.expires) invite.expires = req.body.expires;
-    const {
-      getRobotServer,
-      generateInvite
-    } = require("../../models/robotServer");
+    const { getRobotServer } = require("../../models/robotServer");
+    const { generateInvite } = require("../../models/invites");
     invite.server = await getRobotServer(req.body.server_id);
     const makeInvite = await generateInvite(invite);
     response.invite = makeInvite;

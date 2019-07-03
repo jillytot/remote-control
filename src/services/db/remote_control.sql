@@ -145,3 +145,22 @@ TABLESPACE pg_default;
 
 ALTER TABLE public.controls
     OWNER to postgres;
+
+CREATE TABLE public.robot_servers
+(
+    owner_id character varying COLLATE pg_catalog."default",
+    server_id character varying COLLATE pg_catalog."default" NOT NULL,
+    server_name character varying COLLATE pg_catalog."default",
+    created character varying COLLATE pg_catalog."default",
+    settings jsonb,
+    status jsonb,
+    channels jsonb[],
+    CONSTRAINT "robotServers_pkey" PRIMARY KEY (server_id)
+)
+WITH (
+    OIDS = FALSE
+)
+TABLESPACE pg_default;
+
+ALTER TABLE public.robot_servers
+    OWNER to postgres;

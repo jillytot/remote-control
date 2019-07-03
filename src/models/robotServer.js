@@ -1,33 +1,5 @@
-/* 
-Robot server is owned by a user
-Robot server starts with a default channel assigned a chatroom
-multiple channels can be added
-Robot server should be able to operate independently on its on physical machine
-
-Global: User: Robot Server
-
-On Boot: 
-Get Servers From DB
-Build active Servers from DB
-Build Channels within each server, 
-Build chatrooms within each channel
-Load recent chats for each chat room
-Set built server to active server. 
-
-Operate from active server, limit the active server memmory and set rules
-
-Adding a new server: 
-Build the server out
-Build out it's default channels
-Build out it's default chat
-Save it to DB
-Push Server to Active Servers
-
-*/
-
 const { makeId, createTimeStamp } = require("../modules/utilities");
 const { ACTIVE_USERS_UPDATED } = require("../events/definitions");
-
 const { extractToken } = require("./user");
 
 //Used to generate / create a new robot server
@@ -107,27 +79,21 @@ module.exports.saveServer = async server => {
     server_name,
     owner_id,
     channels,
-    users,
     created,
     settings,
-    status,
-    invites,
-    roles
+    status
   } = server;
 
-  const dbPut = `INSERT INTO robot_servers (server_id, server_name, owner_id, channels, users, created, settings, status, invites, roles ) VALUES($1, $2, $3, $4, $5, $6, $7, $8, $9, $10) RETURNING *`;
+  const dbPut = `INSERT INTO robot_servers (server_id, server_name, owner_id, channels, created, settings, status ) VALUES($1, $2, $3, $4, $5, $6, $7 ) RETURNING *`;
   try {
     await db.query(dbPut, [
       server_id,
       server_name,
       owner_id,
       channels,
-      users,
       created,
       settings,
-      status,
-      invites,
-      roles
+      status
     ]);
   } catch (err) {
     console.log(err.stack);
@@ -325,7 +291,7 @@ module.exports.validateOwner = async (user_id, server_id) => {
 //test
 //this.disableRobotServer("serv-2d3630b6-4e8f-475e-8243-deef9cf70594");
 
-module.exports.addMember = user => {
+module.exports.addMember = (user, invite) => {
   //add user to this server as a member
 };
 
@@ -378,17 +344,11 @@ module.exports.updateInvites = async (invites, server_id) => {
 
 const memberPt = [
   {
-    username: "name",
-    id: "userId",
-    invite: {
-      created_by: "default",
-      id: "inviteId",
-      created: "timestamp",
-      expires: "timestamp"
-    },
+    user_id: "userId",
+    server_id: "serverId",
+    invites: ["inviteId"],
     status: { timeout: false, expireTimeout: null, roles: [""] },
     settings: {},
-    joined: "timestamp",
-    member: true
+    joined: "timestamp"
   }
 ];

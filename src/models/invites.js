@@ -8,6 +8,11 @@ const invitePt = {
   expires: "timestamp"
 };
 
+//All server members require an invite to be a part of a server
+//Open servers will automatically generate a public invite
+//This invite can be revoked at anytime,
+//thereby invalidating all the members that came in on that invite
+
 module.exports.generateInvite = async invite => {
   const { makeId, createTimeStamp } = require("../modules/utilities");
   console.log("Generating Invite for Server: ", invite);
@@ -52,6 +57,23 @@ module.exports.saveInvite = async invite => {
   return {
     status: "Error!",
     error: "There was a problem saving invite into DB"
+  };
+};
+
+module.exports.getInvitesForServer = async server_id => {
+  console.log("get invites for server: ", server_id);
+  const db = require("../services/db");
+  const query = `SELECT * FROM invites WHERE server_id = $1`;
+  try {
+    const result = await db.query(query, [server_id]);
+    console.log(result.rows);
+    return result.rows;
+  } catch (err) {
+    console.log(err);
+  }
+  return {
+    status: "error!",
+    error: "Could not find any invites generated for this server"
   };
 };
 

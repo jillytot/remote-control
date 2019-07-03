@@ -2,6 +2,19 @@ const { makeId, createTimeStamp } = require("../modules/utilities");
 const { ACTIVE_USERS_UPDATED } = require("../events/definitions");
 const { extractToken } = require("./user");
 
+//Template for robot server object
+const robotServerPt = {
+  serverName: "",
+  serverId: "",
+  ownerId: "",
+  channels: [{ name: "name", id: "channelId" }], //Probably not needed here anymore
+  created: "",
+  settings: {},
+  status: {},
+  invites: [],
+  roles: []
+};
+
 //Used to generate / create a new robot server
 module.exports.createRobotServer = async (server, token) => {
   console.log("About to build server: ", server, token);
@@ -27,38 +40,15 @@ module.exports.createRobotServer = async (server, token) => {
     ]
   };
 
-  buildServer.roles = [
-    /* generate default roles */
-  ];
-
   buildServer.status = {
     public: true
   };
-
-  buildServer.users = [];
-  buildServer.invites = [
-    /* create default invite */
-  ];
 
   buildServer.channels.push(await this.initChannels(buildServer));
   await this.saveServer(buildServer);
   console.log("Generating Server: ", buildServer);
   this.pushToActiveServers(buildServer);
   return buildServer;
-};
-
-//Template for robot server object
-const robotServer = {
-  serverName: "",
-  serverId: "",
-  ownerId: "",
-  channels: ["Welcome", "General"],
-  users: [],
-  created: "",
-  settings: {},
-  status: {},
-  invites: [],
-  roles: []
 };
 
 module.exports.emitEvent = (server_id, event, data) => {
@@ -284,60 +274,6 @@ module.exports.validateOwner = async (user_id, server_id) => {
   const checkServer = await this.getRobotServer(server_id);
   if (checkServer) {
     if (user_id === checkServer.owner_id) return true;
-  }
-  return false;
-};
-
-//test
-//this.disableRobotServer("serv-2d3630b6-4e8f-475e-8243-deef9cf70594");
-
-module.exports.addMember = (user, invite) => {
-  //add user to this server as a member
-};
-
-//All server members require an invite to be a part of a server
-//Open servers will automatically generate a public invite
-//This invite can be revoked at anytime,
-//thereby invalidating all the members that came in on that invite
-module.exports.generateInvite = async invite => {
-  console.log("Generating Invite for Server: ", invite);
-  let validate = false;
-  if (invite.user.id === invite.server.owner_id) validate = true; //simple validation, will eventually need to check for invite authority instead
-  if (!validate)
-    return {
-      status: "error!",
-      error: "You are not authorized to create this invite"
-    };
-  let make = {};
-  make.created_by = invite.user.id;
-  make.created = createTimeStamp();
-  make.id = `join-${makeId()}`;
-  make.server_id = invite.server.server_id;
-  make.expires = invite.expires || "";
-
-  let updateInvites = invite.server.invites;
-  if (updateInvites === null || updateInvites === undefined) updateInvites = [];
-  updateInvites.push(make);
-
-  const saveInvite = await this.updateInvites(
-    updateInvites,
-    invite.server.server_id
-  );
-  if (saveInvite) return make;
-  return { status: "error", error: "problem generating invite" };
-};
-
-module.exports.updateInvites = async (invites, server_id) => {
-  const db = require("../services/db");
-  console.log("Saving Invite...");
-  const query = `UPDATE robot_servers SET invites = $1 WHERE server_id = $2 RETURNING invites`;
-  try {
-    const result = await db.query(query, [invites, server_id]);
-    const response = result.rows[0];
-    console.log("Invites Updated: ", response);
-    return true;
-  } catch (err) {
-    console.log(err);
   }
   return false;
 };

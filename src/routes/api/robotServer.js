@@ -47,10 +47,10 @@ router.post("/invite", auth, async (req, res) => {
 
 //get list of invites for a specific server, right now only owner can request
 router.get("/invites", auth, async (req, res) => {
-  const { getRobotServer } = require("../../models/robotServer");
+  const { getInvitesForServer } = require("../../models/invites");
   if (req.user && req.body.server_id) {
-    let getInvites = await getRobotServer(req.body.server_id);
-    res.send(getInvites.invites);
+    let getInvites = await getInvitesForServer(req.body.server_id);
+    res.send(getInvites);
   }
 });
 

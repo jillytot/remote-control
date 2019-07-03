@@ -46,6 +46,7 @@ module.exports.createRobotServer = async (server, token) => {
   buildServer.settings = {
     default_channel: "General",
     roles: [
+      //TODO: Deprecate this structure after finishing up server members / roles / invites structure
       {
         role: "default",
         members: ["@everyone"]
@@ -53,10 +54,19 @@ module.exports.createRobotServer = async (server, token) => {
       { role: "owner", members: [getUserId.id] }
     ]
   };
+
+  buildServer.roles = [
+    /* generate default roles */
+  ];
+
   buildServer.status = {
     public: true
   };
+
   buildServer.users = [];
+  buildServer.invites = [
+    /* create default invite */
+  ];
 
   buildServer.channels.push(await this.initChannels(buildServer));
   await this.saveServer(buildServer);
@@ -74,7 +84,9 @@ const robotServer = {
   users: [],
   created: "",
   settings: {},
-  status: {}
+  status: {},
+  invites: [],
+  roles: []
 };
 
 module.exports.emitEvent = (server_id, event, data) => {
@@ -98,10 +110,12 @@ module.exports.saveServer = async server => {
     users,
     created,
     settings,
-    status
+    status,
+    invites,
+    roles
   } = server;
 
-  const dbPut = `INSERT INTO robot_servers (server_id, server_name, owner_id, channels, users, created, settings, status ) VALUES($1, $2, $3, $4, $5, $6, $7, $8) RETURNING *`;
+  const dbPut = `INSERT INTO robot_servers (server_id, server_name, owner_id, channels, users, created, settings, status, invites, roles ) VALUES($1, $2, $3, $4, $5, $6, $7, $8, $9, $10) RETURNING *`;
   try {
     await db.query(dbPut, [
       server_id,
@@ -111,7 +125,9 @@ module.exports.saveServer = async server => {
       users,
       created,
       settings,
-      status
+      status,
+      invites,
+      roles
     ]);
   } catch (err) {
     console.log(err.stack);
@@ -308,3 +324,71 @@ module.exports.validateOwner = async (user_id, server_id) => {
 
 //test
 //this.disableRobotServer("serv-2d3630b6-4e8f-475e-8243-deef9cf70594");
+
+module.exports.addMember = user => {
+  //add user to this server as a member
+};
+
+//All server members require an invite to be a part of a server
+//Open servers will automatically generate a public invite
+//This invite can be revoked at anytime,
+//thereby invalidating all the members that came in on that invite
+module.exports.generateInvite = async invite => {
+  console.log("Generating Invite for Server: ", invite);
+  let validate = false;
+  if (invite.user.id === invite.server.owner_id) validate = true; //simple validation, will eventually need to check for invite authority instead
+  if (!validate)
+    return {
+      status: "error!",
+      error: "You are not authorized to create this invite"
+    };
+  let make = {};
+  make.created_by = invite.user.id;
+  make.created = createTimeStamp();
+  make.id = `join-${makeId()}`;
+  make.server_id = invite.server.server_id;
+  make.expires = invite.expires || "";
+
+  let updateInvites = invite.server.invites;
+  if (updateInvites === null || updateInvites === undefined) updateInvites = [];
+  updateInvites.push(make);
+
+  const saveInvite = await this.updateInvites(
+    updateInvites,
+    invite.server.server_id
+  );
+  if (saveInvite) return make;
+  return { status: "error", error: "problem generating invite" };
+};
+
+module.exports.updateInvites = async (invites, server_id) => {
+  const db = require("../services/db");
+  console.log("Saving Invite...");
+  const query = `UPDATE robot_servers SET invites = $1 WHERE server_id = $2 RETURNING invites`;
+  try {
+    const result = await db.query(query, [invites, server_id]);
+    const response = result.rows[0];
+    console.log("Invites Updated: ", response);
+    return true;
+  } catch (err) {
+    console.log(err);
+  }
+  return false;
+};
+
+const memberPt = [
+  {
+    username: "name",
+    id: "userId",
+    invite: {
+      created_by: "default",
+      id: "inviteId",
+      created: "timestamp",
+      expires: "timestamp"
+    },
+    status: { timeout: false, expireTimeout: null, roles: [""] },
+    settings: {},
+    joined: "timestamp",
+    member: true
+  }
+];

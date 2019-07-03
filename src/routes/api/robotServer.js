@@ -26,6 +26,7 @@ router.get("/create", (req, res) => {
   res.send(response);
 });
 
+//generate invite for a server, right now only owner can make this
 router.post("/invite", auth, async (req, res) => {
   let response = {};
   if (req.user && req.body.server_id) {
@@ -44,6 +45,15 @@ router.post("/invite", auth, async (req, res) => {
   }
   (response.status = "error"), (response.error = "Unable to generate invite");
   res.send(response);
+});
+
+//get list of invites for a specific server, right now only owner can request
+router.get("/invites", auth, async (req, res) => {
+  const { getRobotServer } = require("../../models/robotServer");
+  if (req.user && req.body.server_id) {
+    let getInvites = await getRobotServer(req.body.server_id);
+    res.send(getInvites.invites);
+  }
 });
 
 router.post("/create", auth, async (req, res) => {

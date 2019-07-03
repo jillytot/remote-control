@@ -22,6 +22,11 @@ module.exports.createRobotServer = async (server, token) => {
   const getUserId = await extractToken(token);
   console.log("GET USER ID FROM TOKEN: ", getUserId, getUserId.id);
 
+  //check for unique servername
+  const checkName = await this.checkServerName(server_name);
+  if (checkName)
+    return { status: "error!", error: "This server name is already taken" };
+
   let buildServer = {};
   buildServer.owner_id = getUserId.id;
   buildServer.server_name = server_name;
@@ -288,3 +293,17 @@ const memberPt = [
     joined: "timestamp"
   }
 ];
+
+//Does this servername already exist?
+module.exports.checkServerName = async serverName => {
+  const db = require("../services/db");
+  const query = `SELECT server_name FROM robot_servers WHERE LOWER(server_name)=LOWER( $1 )`;
+  try {
+    const result = await db.query(query, [serverName]);
+    console.log(result.rows);
+    if (result.rows[0]) return true;
+  } catch (err) {
+    console.log(err);
+  }
+  return false;
+};

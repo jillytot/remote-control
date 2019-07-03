@@ -64,9 +64,7 @@ router.post("/create", auth, async (req, res) => {
     return;
   }
   const buildRobotServer = await createRobotServer(req.body, req.token);
-  buildRobotServer !== null
-    ? res.send(buildRobotServer)
-    : res.send("Error generating server");
+  res.send(buildRobotServer);
 });
 
 //REMOVE SERVER

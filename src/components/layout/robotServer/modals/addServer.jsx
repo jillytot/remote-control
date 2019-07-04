@@ -41,7 +41,8 @@ export default class AddServer extends React.Component {
 class AddServerForm extends Form {
   state = {
     data: { server: "" },
-    errors: {}
+    errors: {},
+    error: ""
   };
 
   schema = {
@@ -66,11 +67,20 @@ class AddServerForm extends Form {
       });
   }
 
+  handleSubmitError = () => {
+    const { error } = this.state;
+    if (error === "") {
+      return <React.Fragment />;
+    }
+    return <div className="alert">{this.state.error}</div>;
+  };
+
   doSubmit = async () => {
     console.log("SUBMITTED");
     const { server } = this.state.data;
     const token = localStorage.getItem("token");
     //axios call
+    this.setState({ error: "" });
     await axios
       .post(
         addServer,
@@ -81,10 +91,18 @@ class AddServerForm extends Form {
           headers: { authorization: `Bearer ${token}` }
         }
       )
+      .then(response => {
+        console.log("SUBMIT SERVER RESPONSE: ", response, response.data.status);
+        if (response.data.status === "error!") {
+          console.log("ERROR! ", response.data.error);
+          this.setState({ error: response.data.error });
+        }
+      })
       .catch(err => {
         console.log("Add Server Error: ", err);
       });
-    this.props.onCloseModal();
+
+    if (this.state.error === "") this.props.onCloseModal();
 
     //Call the server
   };
@@ -93,6 +111,7 @@ class AddServerForm extends Form {
     return (
       <div className="register-form">
         Setup a robot Server:
+        {this.handleSubmitError()}
         <form onSubmit={this.handleSubmit}>
           {this.renderInput("server", "Server Name: ", "text")}
           {this.renderButton("Submit", "Submit")}

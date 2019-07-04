@@ -3,8 +3,9 @@ import "./user.css";
 import "./../../../styles/common.css";
 import { LOGOUT } from "../../../events/definitions";
 import defaultImages from "../../../imgs/placeholders";
+import { Link } from "react-router-dom";
 
-const User = ({ user, socket }) => {
+const NavBar = ({ user, socket }) => {
   const displayName = user["username"];
 
   const handleClick = user => {
@@ -21,9 +22,13 @@ const User = ({ user, socket }) => {
 
   return (
     <div className="nav-container">
-      <div className="logo-container">
-        <img className="logo" alt="" src={defaultImages.remoLogo} />
-      </div>
+      <Link to="/">
+        {" "}
+        <div className="logo-container">
+          <img className="logo" alt="" src={defaultImages.remoLogo} />
+        </div>
+      </Link>
+
       <div className="user-container">
         <div className="user">
           {displayName}{" "}
@@ -41,4 +46,4 @@ const User = ({ user, socket }) => {
   );
 };
 
-export default User;
+export default NavBar;

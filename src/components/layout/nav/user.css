@@ -13,8 +13,8 @@
 }
 
 .logo {
-  width: 200px;
-  height: 34px;
+  /* width: 200px; */
+  height: 28px;
 }
 
 .nav-container {
@@ -25,6 +25,9 @@
 }
 
 .logo-container {
-  margin: 4px;
-  padding: 2px;
+  display: flex;
+  flex-direction: row;
+  margin: 10px;
+  /* margin: 4px;
+  padding: 2px; */
 }

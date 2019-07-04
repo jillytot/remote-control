@@ -90,12 +90,12 @@ module.exports.saveControls = async controls => {
 
 module.exports.getControls = async (id, channel_id) => {
   if (id) {
-    console.log("Get controls from controls ID: ", id);
+    //console.log("Get controls from controls ID: ", id);
     const db = require("../services/db");
     const query = `SELECT * FROM controls WHERE id = $1 LIMIT 1`;
     try {
       const result = await db.query(query, [id]);
-      console.log(result.rows[0]);
+      //console.log(result.rows[0]);
       if (result.rows[0]) return result.rows[0];
       console.log("Error, could not fetch data for CONTROLS");
       return null;
@@ -127,7 +127,7 @@ module.exports.getControls = async (id, channel_id) => {
 //is user timed out?
 //Does user have privelage to use this command?
 module.exports.validateInput = async input => {
-  console.log("VALIDATE INPUT: ", input);
+  //console.log("VALIDATE INPUT: ", input);
   let response = {};
   let validate = false;
   const checkInput = await this.getControls(input.controls_id, input.channel);

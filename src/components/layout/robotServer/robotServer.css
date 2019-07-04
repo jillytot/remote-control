@@ -20,6 +20,23 @@
 .display-robot-server {
   font-size: 12px;
   margin-bottom: 8px;
+  color: white;
+}
+
+a:link {
+  text-decoration: none;
+}
+
+a:visited {
+  text-decoration: none;
+}
+
+a:hover {
+  text-decoration: none;
+}
+
+a:active {
+  text-decoration: none;
 }
 
 .display-robot-server-container:hover {

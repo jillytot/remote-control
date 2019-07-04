@@ -5,7 +5,7 @@ import Signup from "./login/signup";
 import RobotServer from "./robotServer/robotServer";
 import Modal from "../common/modal";
 import "../common/overlay.css";
-import { BrowserRouter as Router, Route } from "react-router-dom";
+import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 
 export default class Layout extends Component {
   state = {
@@ -43,6 +43,20 @@ export default class Layout extends Component {
     );
   };
 
+  handleRouting = () => {
+    const { user, socket } = this.props;
+    return (
+      <React.Fragment>
+        <Router>
+          <NavBar user={user} socket={socket} />
+          <Switch>
+            <Route path="/" component={this.getRobotServers} />
+          </Switch>
+        </Router>
+      </React.Fragment>
+    );
+  };
+
   render() {
     const { socket, user, setUser, handleAuth } = this.props;
     const { modalContent, isShowing } = this.state;
@@ -68,12 +82,7 @@ export default class Layout extends Component {
             )}
 
             {user ? (
-              <React.Fragment>
-                <Router>
-                  <NavBar user={user} socket={socket} />
-                  <Route path="/" exact component={this.getRobotServers} />
-                </Router>
-              </React.Fragment>
+              this.handleRouting()
             ) : (
               <React.Fragment>
                 <Signup

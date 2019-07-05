@@ -5,7 +5,7 @@ import Signup from "./login/signup";
 import RobotServer from "./robotServer/robotServer";
 import Modal from "../common/modal";
 import "../common/overlay.css";
-import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
+import { BrowserRouter as Router, Route } from "react-router-dom";
 import "./layoutStyles.css";
 import Channels from "./robotServer/channels";
 

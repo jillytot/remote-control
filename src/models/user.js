@@ -122,10 +122,15 @@ module.exports.validateUser = async input => {
 module.exports.checkUserId = async user => {
   const { id } = user;
   const query = `SELECT COUNT(*) FROM users WHERE id = $1 LIMIT 1`;
-  const check = await db.query(query, [id]);
-  if (check.rows[0].count > 0) {
-    return false;
-  } else {
+  try {
+    const check = await db.query(query, [id]);
+    if (check.rows[0].count > 0) {
+      return false;
+    } else {
+      return true;
+    }
+  } catch (err) {
+    console.log(err);
     return true;
   }
 };
@@ -133,21 +138,29 @@ module.exports.checkUserId = async user => {
 module.exports.getIdFromUsername = async username => {
   if (username) {
     const query = `SELECT * FROM users WHERE LOWER (username) = LOWER ( $1 );`;
-    const check = await db.query(query, [username]);
-    console.log(check.rows[0]);
-    return check.rows[0].id;
+    try {
+      const check = await db.query(query, [username]);
+      console.log(check.rows[0]);
+      return check.rows[0].id;
+    } catch (err) {
+      console.log(err);
+    }
   }
   return null;
 };
 
 module.exports.getUserInfoFromId = async userId => {
   if (userId) {
-    console.log("Get username from Id: ", userId);
-    const query = `SELECT * FROM users WHERE id = $1 LIMIT 1;`;
-    const check = await db.query(query, [userId]);
-    const getInfo = this.publicUser(check.rows[0]);
-    //console.log(getInfo);
-    return getInfo;
+    try {
+      console.log("Get username from Id: ", userId);
+      const query = `SELECT * FROM users WHERE id = $1 LIMIT 1;`;
+      const check = await db.query(query, [userId]);
+      const getInfo = this.publicUser(check.rows[0]);
+      //console.log(getInfo);
+      return getInfo;
+    } catch (err) {
+      console.log(err);
+    }
   }
   return null;
 };
@@ -258,20 +271,23 @@ module.exports.extractToken = async token => {
 };
 
 module.exports.verifyAuthToken = async token => {
-  console.log("Check Token: ", token);
-  if (token && token.id) {
-    const query = `SELECT * FROM users WHERE id = $1 LIMIT 1`;
-    const result = await db.query(query, [token["id"]]);
-    console.log("Get user from DB: ", result.rows[0]);
-    return await result.rows[0];
-  } else {
-    let reason = {
-      error: "cannot resolve user data from token"
-    };
-    console.log(reason);
-    Promise.reject(reason);
-    return null;
+  try {
+    console.log("Check Token: ", token);
+    if (token && token.id) {
+      const query = `SELECT * FROM users WHERE id = $1 LIMIT 1`;
+      const result = await db.query(query, [token["id"]]);
+      console.log("Get user from DB: ", result.rows[0]);
+      return await result.rows[0];
+    }
+  } catch (err) {
+    console.log(err);
   }
+  let reason = {
+    error: "cannot resolve user data from token"
+  };
+  console.log(reason);
+  Promise.reject(reason);
+  return null;
 };
 
 module.exports.publicUser = user => {

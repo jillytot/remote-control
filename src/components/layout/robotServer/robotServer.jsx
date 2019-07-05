@@ -2,7 +2,6 @@ import React, { Component } from "react";
 import { listRobotServers } from "../../../config/clientSettings";
 import axios from "axios";
 import DisplayRobotServer from "./displayRobotServer";
-import Channels from "./channels";
 import "./robotServer.css";
 import {
   ROBOT_SERVER_UPDATED,
@@ -16,12 +15,6 @@ export default class RobotServer extends Component {
     robotServers: [],
     selectedServer: null //Has the user clicked on a server
   };
-
-  componentDidUpdate(prevState) {
-    if (prevState !== this.state) {
-      this.loadServerChannels();
-    }
-  }
 
   async componentDidMount() {
     await this.getServers();
@@ -80,36 +73,21 @@ export default class RobotServer extends Component {
       return null;
     });
     this.setState({ robotServers });
-  };
-
-  loadServerChannels = () => {
-    const { socket, user } = this.props;
-    return (
-      <Channels
-        socket={socket}
-        user={user}
-        selectedServer={this.state.selectedServer}
-        modal={this.props.modal}
-        onCloseModal={this.props.onCloseModal}
-      />
-    );
+    this.props.getServer(e);
   };
 
   render() {
     return (
       <React.Fragment>
-        <div className="server-channel-container">
-          <div className="robot-server-container">
-            {this.state.robotServers !== []
-              ? this.displayServers(this.state.robotServers)
-              : "Fetching Servers"}
-            <AddServer
-              modal={this.props.modal}
-              onCloseModal={this.props.onCloseModal}
-            />
-            ...
-          </div>
-          {this.loadServerChannels()}
+        <div className="robot-server-container">
+          {this.state.robotServers !== []
+            ? this.displayServers(this.state.robotServers)
+            : "Fetching Servers"}
+          <AddServer
+            modal={this.props.modal}
+            onCloseModal={this.props.onCloseModal}
+          />
+          ...
         </div>
       </React.Fragment>
     );

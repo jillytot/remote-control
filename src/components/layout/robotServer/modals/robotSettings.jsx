@@ -116,7 +116,6 @@ export default class RobotSettings extends Component {
             label={"API Key: "}
             type={this.state.apiToggle ? "form" : "password"}
             value={this.state.apiKey}
-            ref={this.inputRef}
             readOnly
           />
           {/* <div className="toggle-clipboard-group">

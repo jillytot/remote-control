@@ -301,7 +301,7 @@ module.exports.checkServerName = async serverName => {
   try {
     const result = await db.query(query, [serverName]);
     console.log(result.rows);
-    if (result.rows[0]) return true;
+    if (result.rows[0].count > 0) return true;
   } catch (err) {
     console.log(err);
   }

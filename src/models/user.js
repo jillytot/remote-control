@@ -66,29 +66,19 @@ module.exports.createUser = async user => {
   user.password = await hash(user.password);
   user.created = createTimeStamp();
   user.type = []; //Change to "Roles" at some point.
-  user.check_username = checkUser; //save a copy of username all lowercase
   user.status = statusPt;
   user.settings = settingsPt;
   user.session = "";
   console.log(
-    `${user.username} also saved as ${user.check_username}, status set: ${
+    `${user.username} also saved will be saved,  status set: ${
       user.status
     } intialized settings: ${user.settings}`
   );
 
   console.log("Generating User: ", user);
 
-  const {
-    username,
-    id,
-    password,
-    created,
-    check_username,
-    status,
-    settings,
-    session
-  } = user;
-  const dbPut = `INSERT INTO users (username, id, password, email, created, check_username, status, settings, session) VALUES($1, $2, $3, $4, $5, $6, $7, $8, $9) RETURNING *`;
+  const { username, id, password, created, status, settings, session } = user;
+  const dbPut = `INSERT INTO users (username, id, password, email, created, status, settings, session) VALUES( $1, $2, $3, $4, $5, $6, $7, $8 ) RETURNING *`;
   try {
     await db.query(dbPut, [
       username,
@@ -96,7 +86,6 @@ module.exports.createUser = async user => {
       password,
       email,
       created,
-      check_username,
       status,
       settings,
       session
@@ -142,10 +131,10 @@ module.exports.checkUserId = async user => {
 };
 
 module.exports.getIdFromUsername = async username => {
-  lowerCase = username.toLowerCase();
   if (username) {
-    const query = `SELECT * FROM users WHERE check_username = $1 LIMIT 1;`;
-    const check = await db.query(query, [lowerCase]);
+    const query = `SELECT * FROM users WHERE LOWER (username) = LOWER ( $1 );`;
+    const check = await db.query(query, [username]);
+    console.log(check.rows[0]);
     return check.rows[0].id;
   }
   return null;
@@ -172,22 +161,23 @@ Gedyy: in pgadmin query tool
 
 //Check for duplicate usernames
 module.exports.checkUsername = async user => {
+  console.log(user);
   let check_username = "";
-  if (user && user.username) {
-    check_username = user.username.toLowerCase();
-  } else {
-    check_username = user;
-  }
-  if (check_username === "") return false;
-  console.log("CHECK USERNAME", check_username);
-  const checkName = `SELECT COUNT(*) FROM users WHERE check_username = $1 LIMIT 1`;
-  const checkRes = await db.query(checkName, [check_username]);
-  console.log(checkRes.rows[0]);
-  if (checkRes.rows[0].count > 0) {
-    return true;
-  } else {
+  if (user) {
+    if (user.username) {
+      check_username = user.username;
+    } else {
+      check_username = user;
+    }
+
+    console.log("CHECK USERNAME", check_username);
+    const checkName = `SELECT COUNT(*) FROM users WHERE LOWER (check_username) = LOWER ( $1 ) LIMIT 1`;
+    const checkRes = await db.query(checkName, [check_username]);
+    console.log(checkRes.rows[0]);
+    if (checkRes.rows[0].count > 0) return true;
     return false;
   }
+  return null;
 };
 
 //Check for duplicate emails

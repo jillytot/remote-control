@@ -34,7 +34,6 @@ CREATE TABLE public.users
     id character varying COLLATE pg_catalog."default",
     created bigint,
     type character varying[] COLLATE pg_catalog."default",
-    check_username character varying COLLATE pg_catalog."default",
     session character varying COLLATE pg_catalog."default",
     status jsonb,
     settings jsonb

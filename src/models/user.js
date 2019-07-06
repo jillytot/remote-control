@@ -255,7 +255,7 @@ module.exports.extractToken = async token => {
   try {
     return (checkToken = await new Promise((resolve, reject) => {
       jwt.verify(token, tempSecret, "HS256", (err, res) => {
-        console.log("JWT Verify: ", token);
+        if (token) console.log("JWT Verified");
         if (err) return reject(err);
         return resolve(res);
       });
@@ -276,7 +276,7 @@ module.exports.verifyAuthToken = async token => {
     if (token && token.id) {
       const query = `SELECT * FROM users WHERE id = $1 LIMIT 1`;
       const result = await db.query(query, [token["id"]]);
-      console.log("Get user from DB: ", result.rows[0]);
+      console.log("Get user from DB: ", result.rows[0].username);
       return await result.rows[0];
     }
   } catch (err) {

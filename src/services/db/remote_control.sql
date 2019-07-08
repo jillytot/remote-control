@@ -172,7 +172,7 @@ ALTER TABLE public.robot_servers
     created_by character varying COLLATE pg_catalog."default",
     server_id character varying COLLATE pg_catalog."default",
     created character varying COLLATE pg_catalog."default",
-    expires character varying COLLATE pg_catalog."default",
+    expires character varying COLLATE pg_catalog."default" NOT NULL,
     status character varying COLLATE pg_catalog."default",
     CONSTRAINT invites_pkey PRIMARY KEY (id)
 )

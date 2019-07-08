@@ -184,7 +184,7 @@ module.exports.checkUsername = async user => {
     }
 
     console.log("CHECK USERNAME", check_username);
-    const checkName = `SELECT COUNT(*) FROM users WHERE LOWER (check_username) = LOWER ( $1 ) LIMIT 1`;
+    const checkName = `SELECT COUNT(*) FROM users WHERE LOWER (username) = LOWER ( $1 ) LIMIT 1`;
     const checkRes = await db.query(checkName, [check_username]);
     console.log(checkRes.rows[0]);
     if (checkRes.rows[0].count > 0) return true;

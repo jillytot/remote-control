@@ -180,3 +180,22 @@ TABLESPACE pg_default;
 
 ALTER TABLE public.invites
     OWNER to postgres;
+
+    CREATE TABLE public.members
+(
+    server_id character varying COLLATE pg_catalog."default" NOT NULL,
+    user_id character varying COLLATE pg_catalog."default" NOT NULL,
+    roles character varying[] COLLATE pg_catalog."default",
+    status jsonb,
+    settings jsonb[],
+    joined character varying COLLATE pg_catalog."default",
+    invites character varying[] COLLATE pg_catalog."default",
+    CONSTRAINT member_id PRIMARY KEY (user_id, server_id)
+)
+WITH (
+    OIDS = FALSE
+)
+TABLESPACE pg_default;
+
+ALTER TABLE public.members
+    OWNER to postgres;

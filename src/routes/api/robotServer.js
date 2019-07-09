@@ -45,6 +45,24 @@ router.post("/invite", auth, async (req, res) => {
   res.send(response);
 });
 
+router.post("/join", auth, async (req, res) => {
+  const { createMember } = require("../../models/serverMembers");
+  let response = {};
+  if (req.user && req.body.join && req.body.server_id) {
+    response = await createMember({
+      user_id: req.user.id,
+      server_id: req.body.server_id,
+      join: req.body.join
+    });
+    console.log(response);
+    res.send(response);
+    return;
+  }
+  response.status = "Error!";
+  response.error = "Unable to join server with provided information";
+  res.send(response);
+});
+
 //get list of invites for a specific server, right now only owner can request
 router.get("/invites", auth, async (req, res) => {
   const { getInvitesForServer } = require("../../models/invites");

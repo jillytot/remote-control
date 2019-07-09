@@ -77,5 +77,24 @@ module.exports.getInvitesForServer = async server_id => {
   };
 };
 
+module.exports.getInviteById = id => {
+  console.log("Get invite by id: ", id);
+  const db = require("../services/db");
+  const query = `SELECT * FROM invites WHERE id = $1 LIMIT 1`;
+  try {
+    const result = await db.query(query, [id]);
+    if (result.rows[0].count > 0) {
+      console.log(result.rows[0])
+      return result.rows[0];
+    }
+  } catch (err) {
+    console.log(err);
+  }
+  return {
+    status: "error!",
+    error: "Could not find any invites generated for this server"
+  };
+};
+
 //invite validation: make sure this user can generate this invite
 //make sure each server starts out with a default invite

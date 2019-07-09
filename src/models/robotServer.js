@@ -248,7 +248,7 @@ module.exports.deleteRobotServer = async server_id => {
 Moderation Feature
 Now:
 Perminately de-lists a server from being displayed publicly
-Cannot be over ridden by owner
+Cannot be overwritten by owner
 
 Future: 
 Suspends all internal server activity

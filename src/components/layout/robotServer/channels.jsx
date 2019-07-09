@@ -12,6 +12,7 @@ import RobotInterface from "../robot/robotInteface";
 import AddChannelForm from "./modals/addChannelForm";
 import EditChannel from "./modals/editChannel";
 import DisplayRobot from "./displayRobot";
+import DisplayServerDetails from "./displayServerDetails";
 
 //placeholder
 //var chatroom = { messages: [{ sender: "user2" }] }; // (this.state.chatroom)
@@ -295,33 +296,6 @@ export default class Channels extends Component {
     document.removeEventListener("keydown", this.handleKeyPress);
   }
 }
-
-const DisplayServerDetails = ({ server, channels, user, users }) => {
-  if (channels && channels.length > 0) {
-    return (
-      <div className="server-info-container">
-        <div className="display-server-name">
-          {server.server_name}
-          {user.id === server.owner_id ? (
-            <div className="server-settings"> {`(edit)`}</div>
-          ) : (
-            <div className="server-settings" />
-          )}
-        </div>
-
-        <div className="display-server-info">
-          Users Online:
-          <ActiveUserCount users={users} />
-        </div>
-      </div>
-    );
-  }
-  return <React.Fragment />;
-};
-
-const ActiveUserCount = ({ users }) => {
-  return <span> {users.length}</span>;
-};
 
 //Add Channel
 class AddChannel extends Component {

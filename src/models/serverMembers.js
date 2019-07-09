@@ -12,6 +12,10 @@ module.exports.createMember = async data => {
   console.log("Let Memeber Join Server: ", data);
   const { createTimeStamp } = require("../modules/utilities");
 
+  const checkInvite = await this.validateInvite(data);
+  console.log("CHECKING INVITE", checkInvite);
+  if (!checkInvite) return { status: "Error!", error: "Invite is not valid" };
+
   const checkMembership = await this.checkMembership(data);
   if (checkMembership) return checkMembership;
 
@@ -67,18 +71,19 @@ module.exports.saveMember = async member => {
 };
 
 module.exports.validateInvite = async invite => {
-  console.log("Validating Invite");
+  console.log("Validating Invite", invite);
   const { getInvitesForServer } = require("./invites");
   const checkInvite = await getInvitesForServer(invite.server_id);
   let validate = false;
   checkInvite.map(inv => {
-    if (inv.id === invite.id) {
+    if (inv.id === invite.id || inv.id === invite.join) {
       validate = true;
     }
   });
   return validate;
 };
 
+//Is this user already a member?
 module.exports.checkMembership = async member => {
   console.log("Checking Membership");
   const db = require("../services/db");
@@ -94,3 +99,32 @@ module.exports.checkMembership = async member => {
 };
 
 //TODO: UpdateMembership
+//TODO: Remove Membership
+
+module.exports.leaveServer = async member => {
+  const db = require("../services/db");
+  console.log("removing member...");
+  const { server_id, user_id } = member;
+  const remove = `DELETE FROM members WHERE ( server_id, user_id ) = ( $1, $2 )`;
+  try {
+    const result = await db.query(remove, [server_id, user_id]);
+    console.log(result.rowCount);
+    return true;
+  } catch (err) {
+    console.log(err);
+  }
+  return false;
+};
+
+module.exports.getMembers = async server_id => {
+  const db = require("../services/db");
+  console.log("Get Members for Server...");
+  const query = `SELECT * FROM members WHERE server_id = $1`;
+  try {
+    const result = await db.query(query, [server_id]);
+    if (result.rows[0]) return result.rows;
+  } catch (err) {
+    console.log(err);
+  }
+  return { status: "Error!", error: "Unable to get members for server" };
+};

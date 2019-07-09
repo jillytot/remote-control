@@ -77,14 +77,14 @@ module.exports.getInvitesForServer = async server_id => {
   };
 };
 
-module.exports.getInviteById = id => {
+module.exports.getInviteById = async id => {
   console.log("Get invite by id: ", id);
   const db = require("../services/db");
   const query = `SELECT * FROM invites WHERE id = $1 LIMIT 1`;
   try {
     const result = await db.query(query, [id]);
     if (result.rows[0].count > 0) {
-      console.log(result.rows[0])
+      console.log(result.rows[0]);
       return result.rows[0];
     }
   } catch (err) {

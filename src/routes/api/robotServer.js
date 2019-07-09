@@ -7,7 +7,6 @@ const {
   updateRobotServer
 } = require("../../models/robotServer");
 const { checkTypes } = require("../../models/user");
-// const { publicUser, validateUser } = require("../../models/user");
 const auth = require("../auth");
 const Joi = require("joi");
 
@@ -15,6 +14,19 @@ const Joi = require("joi");
 router.get("/list", async (req, res) => {
   let display = await getRobotServers();
   res.send(display);
+});
+
+router.get("/members", async (req, res) => {
+  let response = {};
+  const { getMembers } = require("../../models/serverMembers");
+  if (req.body.server_id) {
+    const listMembers = await getMembers(req.body.server_id);
+    response = listMembers;
+  } else {
+    response.status = "Error!";
+    response.error = "Unable to get members";
+  }
+  res.send(response);
 });
 
 //CREATE SERVER
@@ -60,6 +72,25 @@ router.post("/join", auth, async (req, res) => {
   }
   response.status = "Error!";
   response.error = "Unable to join server with provided information";
+  res.send(response);
+});
+
+router.post("/leave", auth, async (req, res) => {
+  const { leaveServer } = require("../../models/serverMembers");
+  let response = {};
+  if (req.user && req.body.server_id) {
+    const leave = await leaveServer({
+      user_id: req.user.id,
+      server_id: req.body.server_id
+    });
+    if (leave) {
+      response.status = "Success";
+      response.result = `Successfully Left Server ${req.body.server_id}`;
+    } else {
+      (response.status = "Error!"),
+        (response.error = "Unable to leave server...");
+    }
+  }
   res.send(response);
 });
 

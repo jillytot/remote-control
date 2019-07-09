@@ -1,16 +1,26 @@
 import React, { Component } from "react";
 import Login from "./login/login";
-import User from "./nav/user";
+import NavBar from "./nav/navBar";
 import Signup from "./login/signup";
 import RobotServer from "./robotServer/robotServer";
 import Modal from "../common/modal";
 import "../common/overlay.css";
+import { BrowserRouter as Router, Route } from "react-router-dom";
+import "./layoutStyles.css";
+import Channels from "./robotServer/channels";
 
 export default class Layout extends Component {
   state = {
     isShowing: false,
-    modalContent: []
+    modalContent: [],
+    selectedServer: null
   };
+
+  componentDidUpdate(prevState) {
+    if (prevState !== this.state) {
+      this.handleLoadChannels();
+    }
+  }
 
   closeModalHandler = () => {
     this.setState({
@@ -28,6 +38,62 @@ export default class Layout extends Component {
       modalContent: updateContent
     });
     return null;
+  };
+
+  getRobotServers = () => {
+    const { socket, user } = this.props;
+    return (
+      <RobotServer
+        socket={socket}
+        user={user}
+        modal={this.getModal}
+        onCloseModal={this.closeModalHandler}
+        getServer={e => this.getSelectedServer(e)}
+      />
+    );
+  };
+
+  getSelectedServer = e => {
+    this.setState({ selectedServer: e });
+    console.log("SELECTED SERVER: ", e);
+  };
+
+  handleLoadChannels = () => {
+    const { socket, user } = this.props;
+    return (
+      <Channels
+        socket={socket}
+        user={user}
+        selectedServer={this.state.selectedServer}
+        modal={this.getModal}
+        onCloseModal={this.closeModalHandler}
+      />
+    );
+  };
+
+  handleRouting = () => {
+    const { user, socket } = this.props;
+    return (
+      <React.Fragment>
+        <Router>
+          <NavBar user={user} socket={socket} />
+
+          <div className="server-container">
+            <Route path="/" component={this.getRobotServers} />
+
+            {this.state.selectedServer ? (
+              <Route
+                path={`/${this.state.selectedServer.server_name}`}
+                exact
+                component={this.handleLoadChannels}
+              />
+            ) : (
+              <React.Fragment />
+            )}
+          </div>
+        </Router>
+      </React.Fragment>
+    );
   };
 
   render() {
@@ -55,15 +121,7 @@ export default class Layout extends Component {
             )}
 
             {user ? (
-              <React.Fragment>
-                <User user={user} socket={socket} />
-                <RobotServer
-                  socket={socket}
-                  user={user}
-                  modal={this.getModal}
-                  onCloseModal={this.closeModalHandler}
-                />
-              </React.Fragment>
+              this.handleRouting()
             ) : (
               <React.Fragment>
                 <Signup

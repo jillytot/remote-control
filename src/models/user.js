@@ -31,6 +31,7 @@ module.exports.emitEvent = (user_id, event, data) => {
   const wss = require("../services/wss");
   wss.clients.forEach(ws => {
     if (ws.user && ws.user.id === user_id) {
+      console.log("USER EVENT: ", event, data);
       ws.emitEvent(event, data);
     }
   });
@@ -65,29 +66,19 @@ module.exports.createUser = async user => {
   user.password = await hash(user.password);
   user.created = createTimeStamp();
   user.type = []; //Change to "Roles" at some point.
-  user.check_username = checkUser; //save a copy of username all lowercase
   user.status = statusPt;
   user.settings = settingsPt;
   user.session = "";
   console.log(
-    `${user.username} also saved as ${user.check_username}, status set: ${
+    `${user.username} also saved will be saved,  status set: ${
       user.status
     } intialized settings: ${user.settings}`
   );
 
   console.log("Generating User: ", user);
 
-  const {
-    username,
-    id,
-    password,
-    created,
-    check_username,
-    status,
-    settings,
-    session
-  } = user;
-  const dbPut = `INSERT INTO users (username, id, password, email, created, check_username, status, settings, session) VALUES($1, $2, $3, $4, $5, $6, $7, $8, $9) RETURNING *`;
+  const { username, id, password, created, status, settings, session } = user;
+  const dbPut = `INSERT INTO users (username, id, password, email, created, status, settings, session) VALUES( $1, $2, $3, $4, $5, $6, $7, $8 ) RETURNING *`;
   try {
     await db.query(dbPut, [
       username,
@@ -95,7 +86,6 @@ module.exports.createUser = async user => {
       password,
       email,
       created,
-      check_username,
       status,
       settings,
       session
@@ -132,31 +122,45 @@ module.exports.validateUser = async input => {
 module.exports.checkUserId = async user => {
   const { id } = user;
   const query = `SELECT COUNT(*) FROM users WHERE id = $1 LIMIT 1`;
-  const check = await db.query(query, [id]);
-  if (check.rows[0].count > 0) {
-    return false;
-  } else {
+  try {
+    const check = await db.query(query, [id]);
+    if (check.rows[0].count > 0) {
+      return false;
+    } else {
+      return true;
+    }
+  } catch (err) {
+    console.log(err);
     return true;
   }
 };
 
 module.exports.getIdFromUsername = async username => {
   if (username) {
-    const query = `SELECT * FROM users WHERE username = $1 LIMIT 1;`;
-    const check = await db.query(query, [username]);
-    return check.rows[0].id;
+    const query = `SELECT * FROM users WHERE LOWER (username) = LOWER ( $1 );`;
+    try {
+      const check = await db.query(query, [username]);
+      console.log(check.rows[0]);
+      return check.rows[0].id;
+    } catch (err) {
+      console.log(err);
+    }
   }
   return null;
 };
 
 module.exports.getUserInfoFromId = async userId => {
   if (userId) {
-    console.log("Get username from Id: ", userId);
-    const query = `SELECT * FROM users WHERE id = $1 LIMIT 1;`;
-    const check = await db.query(query, [userId]);
-    const getInfo = this.publicUser(check.rows[0]);
-    //console.log(getInfo);
-    return getInfo;
+    try {
+      console.log("Get username from Id: ", userId);
+      const query = `SELECT * FROM users WHERE id = $1 LIMIT 1;`;
+      const check = await db.query(query, [userId]);
+      const getInfo = this.publicUser(check.rows[0]);
+      //console.log(getInfo);
+      return getInfo;
+    } catch (err) {
+      console.log(err);
+    }
   }
   return null;
 };
@@ -170,22 +174,23 @@ Gedyy: in pgadmin query tool
 
 //Check for duplicate usernames
 module.exports.checkUsername = async user => {
+  console.log(user);
   let check_username = "";
-  if (user && user.username) {
-    check_username = user.username.toLowerCase();
-  } else {
-    check_username = user;
-  }
-  if (check_username === "") return false;
-  console.log("CHECK USERNAME", check_username);
-  const checkName = `SELECT COUNT(*) FROM users WHERE check_username = $1 LIMIT 1`;
-  const checkRes = await db.query(checkName, [check_username]);
-  console.log(checkRes.rows[0]);
-  if (checkRes.rows[0].count > 0) {
-    return true;
-  } else {
+  if (user) {
+    if (user.username) {
+      check_username = user.username;
+    } else {
+      check_username = user;
+    }
+
+    console.log("CHECK USERNAME", check_username);
+    const checkName = `SELECT COUNT(*) FROM users WHERE LOWER (username) = LOWER ( $1 ) LIMIT 1`;
+    const checkRes = await db.query(checkName, [check_username]);
+    console.log(checkRes.rows[0]);
+    if (checkRes.rows[0].count > 0) return true;
     return false;
   }
+  return null;
 };
 
 //Check for duplicate emails
@@ -250,7 +255,7 @@ module.exports.extractToken = async token => {
   try {
     return (checkToken = await new Promise((resolve, reject) => {
       jwt.verify(token, tempSecret, "HS256", (err, res) => {
-        console.log("JWT Verify: ", token);
+        if (token) console.log("JWT Verified");
         if (err) return reject(err);
         return resolve(res);
       });
@@ -266,20 +271,23 @@ module.exports.extractToken = async token => {
 };
 
 module.exports.verifyAuthToken = async token => {
-  console.log("Check Token: ", token);
-  if (token && token.id) {
-    const query = `SELECT * FROM users WHERE id = $1 LIMIT 1`;
-    const result = await db.query(query, [token["id"]]);
-    console.log("Get user from DB: ", result.rows[0]);
-    return await result.rows[0];
-  } else {
-    let reason = {
-      error: "cannot resolve user data from token"
-    };
-    console.log(reason);
-    Promise.reject(reason);
-    return null;
+  try {
+    console.log("Check Token: ", token);
+    if (token && token.id) {
+      const query = `SELECT * FROM users WHERE id = $1 LIMIT 1`;
+      const result = await db.query(query, [token["id"]]);
+      console.log("Get user from DB: ", result.rows[0].username);
+      return await result.rows[0];
+    }
+  } catch (err) {
+    console.log(err);
   }
+  let reason = {
+    error: "cannot resolve user data from token"
+  };
+  console.log(reason);
+  Promise.reject(reason);
+  return null;
 };
 
 module.exports.publicUser = user => {
@@ -358,11 +366,33 @@ module.exports.updateStatus = async user => {
 };
 
 //MANAGE TIMEOUTS
+//If a user is timed out already, and a new timeout is applied, then we need to check if the new timeout will expire before the previous timeout.
+/*
+timeout a = 100, timeout b = 50. 
+When timeout a is down to 30, timeout b is applied. 
+timeout b excludes the remainder of timeout a, so timeout b = 20, and it's added to the remainder for a total of 50.
+*/
+
 module.exports.timeoutUser = async (user, time, server_id) => {
   console.log("TIMEOUT USER: ", user, time);
   if (user && time) {
     let { status } = user;
     status.timeout = true;
+    if (status.expireTimeout && status.expireTimeout > Date.now()) {
+      const addRemainder = status.expireTimeout - (time + Date.now());
+      console.log(
+        "User is already timed out, checking for remainder: ",
+        addRemainder
+      );
+      if (addRemainder <= 0) return status;
+      time = addRemainder;
+    }
+    status.expireTimeout = Date.now() + time;
+    console.log(
+      "TIMEOUT STATUS CHECK: ",
+      status,
+      status.expireTimeout - Date.now()
+    );
     user.status = status;
     let checkUpdatedStatus = await this.updateStatus(user);
     createTimer(time, this.unTimeoutUser, user);
@@ -376,13 +406,28 @@ module.exports.unTimeoutUser = async user => {
   console.log("END TIMEOUT FOR USER: ", user);
   if (user) {
     let { status } = user;
-    status.timeout = false;
-    user.status = status;
-    await this.updateStatus(user);
-    return true;
+    if (status.expireTimeout && Date.now() >= status.expireTimeout) {
+      status.timeout = false;
+      user.status = status;
+      await this.updateStatus(user);
+      return true;
+    }
+    console.log(`${user.username} is already timed out`);
+    return false;
   }
   console.log("Timout Error");
   return null;
+};
+
+module.exports.clearGlobalTimeout = async user => {
+  if (user) {
+    user.status.expireTimeout = 0;
+    user.status.timeout = false;
+    const clearUser = await this.updateStatus(user);
+    console.log("Clear User: ", clearUser);
+    if (clearUser) return true;
+  }
+  return false;
 };
 
 //Update client when their status has changed
@@ -413,6 +458,7 @@ module.exports.checkTypes = async (user, typesToCheck) => {
   return validate;
 };
 
+//This probably shouldn't even need to be called ever
 module.exports.getGlobalTypes = async user_id => {
   const sendTypes = await this.getUserInfoFromId(user_id);
   console.log(sendTypes);

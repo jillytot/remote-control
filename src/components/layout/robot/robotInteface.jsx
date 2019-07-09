@@ -1,5 +1,7 @@
 import React, { Component } from "react";
 import { BUTTON_COMMAND } from "../../../events/definitions";
+import { buttonRate } from "../../../config/clientSettings";
+
 import "./robot.css";
 
 export default class RobotInterface extends Component {
@@ -8,7 +10,23 @@ export default class RobotInterface extends Component {
     logClicks: [],
     displayLog: true,
     clickCounter: 0,
-    controlsId: ""
+    controlsId: "",
+    renderCurrentKey: null,
+    renderPresses: []
+  };
+
+  currentKey = null;
+
+  sendCurrentKey = () => {
+    const button = this.keyMap[this.currentKey];
+    if (button && this.props.chatTabbed === false) {
+      this.handleClick({
+        user: this.props.user,
+        controls_id: this.state.controlsId,
+        socket: this.props.socket,
+        button: button
+      });
+    }
   };
 
   componentDidUpdate(prevProps) {
@@ -28,7 +46,11 @@ export default class RobotInterface extends Component {
   componentDidMount() {
     if (this.state.controls.length === 0)
       this.setState({ controls: testButtons });
+    this.setupKeyMap(testButtons);
     this.commandListener();
+    document.addEventListener("keydown", this.handleKeyDown);
+    document.addEventListener("keyup", this.handleKeyUp);
+    this.sendInterval = setInterval(this.sendCurrentKey, buttonRate);
   }
 
   connectA = () => {
@@ -77,13 +99,44 @@ export default class RobotInterface extends Component {
 
   componentWillUnmount() {
     this.clearAV();
+    document.removeEventListener("keydown", this.handleKeyDown);
+    document.removeEventListener("keyup", this.handleKeyUp);
+    clearInterval(this.sendInterval);
   }
+
+  handleKeyDown = e => {
+    if (!this.props.chatTabbed) {
+      if (this.currentKey !== e.key) {
+        this.setState({ renderCurrentKey: e.key });
+        this.currentKey = e.key;
+        this.sendCurrentKey();
+      }
+    }
+  };
+
+  handleKeyUp = e => {
+    if (e.key === this.currentKey) {
+      this.currentKey = null;
+      this.setState({ renderCurrentKey: null });
+    }
+  };
+
+  keyMap = {};
+
+  setupKeyMap = controls => {
+    const keyMap = {};
+    controls.map(button => {
+      return (keyMap[button.hot_key] = button);
+    });
+    this.keyMap = keyMap;
+  };
 
   commandListener = () => {
     const { socket } = this.props;
     socket.on(BUTTON_COMMAND, command => {
-      console.log("Button Command Listener", command);
+      //console.log("Button Command Listener", command);
       this.handleLoggingClicks(command);
+      this.handleRenderPresses(command);
     });
     socket.on("CONTROLS_UPDATED", getControlData => {
       console.log("CONTROLS UPDATED: ", getControlData);
@@ -92,17 +145,41 @@ export default class RobotInterface extends Component {
           controls: getControlData.buttons,
           controlsId: getControlData.id
         });
+      this.setupKeyMap(getControlData.buttons);
     });
   };
 
   handleClick = click => {
     const { socket } = this.props;
-    console.log("CLICK CHECK: ", click);
     socket.emit(BUTTON_COMMAND, {
       user: click.user,
       button: click.button,
-      controls_id: this.state.controlsId
+      controls_id: this.state.controlsId,
+      channel: this.props.channel
     });
+  };
+
+  handleRenderPresses = press => {
+    let updatePresses = this.state.renderPresses;
+    press.counter = setTimeout(() => this.handleClear(press), 200);
+    updatePresses.push(press);
+    this.setState({ renderPresses: updatePresses });
+  };
+
+  handleClear = press => {
+    clearTimeout(press.counter);
+    let updatePresses = [];
+    this.state.renderPresses.map(getPress => {
+      if (press.button.id === getPress.button.id) {
+        //do nothing
+      } else {
+        updatePresses.push(getPress);
+      }
+      return null;
+    });
+
+    if (this.state.renderPresses !== updatePresses)
+      this.setState({ renderPresses: updatePresses });
   };
 
   handleLoggingClicks = click => {
@@ -130,9 +207,26 @@ export default class RobotInterface extends Component {
   renderButtons = () => {
     if (this.state.controls) {
       return this.state.controls.map(button => {
+        let hotKeyStyle = "hotkey";
+        let style = {};
+        if (button.hot_key === this.state.renderCurrentKey) {
+          style = {
+            boxShadow: "inset 0 0 0 2px rgb(5, 214, 186)",
+            transform: "translateY(4px)",
+            WebkitTransform: "translateY(4px)"
+          }; // noice!
+        }
+        this.state.renderPresses.map(press => {
+          if (press && press.button.id === button.id) {
+            style.backgroundColor = "rgb(64, 76, 131)";
+            hotKeyStyle = "hotkey hotkey-highlight";
+          }
+          return null;
+        });
+
         return (
           <button
-            className="robtn"
+            className={button.hot_key ? "robtn robtn-hot-key" : "robtn"}
             key={button.id}
             onClick={() =>
               this.handleClick({
@@ -142,8 +236,14 @@ export default class RobotInterface extends Component {
                 button: button
               })
             }
+            style={style}
           >
-            <span className="hotkey">{button.hot_key} :</span> {button.label}
+            {button.hot_key ? (
+              <span className={hotKeyStyle}>{button.hot_key} :</span>
+            ) : (
+              <React.Fragment />
+            )}
+            {button.label}
           </button>
         );
       });
@@ -163,7 +263,7 @@ export default class RobotInterface extends Component {
                 ) : (
                   <React.Fragment />
                 )}
-              </div>{" "}
+              </div>
             </div>
             <div className="robot-controls-container">
               {this.renderButtons()}

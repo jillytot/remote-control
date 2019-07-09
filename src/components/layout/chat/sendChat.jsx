@@ -12,12 +12,21 @@ export default class SendChat extends Form {
     errors: {},
     user: {},
     //uuid: 0, //used to generate keys for locally generated messages
-    coolDown: false
+    coolDown: false,
+    indicator: false
   };
 
   componentDidMount() {
     //set the rate limit from global vars
   }
+
+  componentDidUpdate = () => {
+    if (this.props.chatTabbed) {
+      this.refs.chatForm.sendChat.focus();
+    } else {
+      this.refs.chatForm.sendChat.blur();
+    }
+  };
 
   startTimer = () => {
     if (!this.state.coolDown) {
@@ -33,7 +42,6 @@ export default class SendChat extends Form {
 
   schema = {
     sendChat: Joi.string()
-      .required()
       .min(1)
       .max(512)
       .trim()
@@ -43,8 +51,6 @@ export default class SendChat extends Form {
   doSubmit = () => {
     let keepGoing = true;
     const { user, socket, chatId, server_id, onChatFeedback } = this.props;
-    // console.log("CHECK USER STATUS TIMEOUT: ", user.status.timeout);
-    // console.log("CHECK USER STATUS: ", user.status);
 
     if (user.status && user.status.timeout) {
       keepGoing = false;
@@ -119,16 +125,54 @@ export default class SendChat extends Form {
     this.setState({ error });
   };
 
+  //This should only appear for desktop, no need for mobile
+  handleIndicator = () => {
+    console.log(this.props.chatTabbed);
+    if (!this.props.chatTabbed) {
+      return (
+        <div className="send-chat-options">
+          <div className="indicator indicator-active" />
+          you are controlling the robot ( --tab to chat )
+        </div>
+      );
+    } else {
+      return (
+        <div className="send-chat-options">
+          <div className="indicator" />
+          chatting ( --tab to control robot, or use mouse )
+        </div>
+      );
+    }
+  };
+
+  handleFocus = () => {
+    this.props.setChatTabbed(true);
+  };
+
+  handleBlur = () => {
+    this.props.setChatTabbed(false);
+  };
+
   render() {
     return (
-      <div className="send-chat-container">
-        <form onSubmit={this.handleSubmit}>
-          <div className="input-field-container">
-            {this.renderInput("sendChat", "", "chat")}
-          </div>
-          <div className="send-chat-btn"> {this.renderButton("Chat")}</div>
-        </form>
-      </div>
+      <React.Fragment>
+        {this.handleIndicator()}
+        <div className="send-chat-container">
+          <form
+            onSubmit={this.handleSubmit}
+            onFocus={this.handleFocus}
+            onBlur={this.handleBlur}
+            ref="chatForm"
+          >
+            <div className="input-field-container">
+              {this.renderChatInput("sendChat", "", "chat")}
+              <div className="send-chat-btn">
+                {this.renderButton("Chat", "chat", "chat")}
+              </div>
+            </div>
+          </form>
+        </div>
+      </React.Fragment>
     );
   }
 }

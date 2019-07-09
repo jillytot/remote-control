@@ -27,7 +27,7 @@ const defaultSettings = () => {
 
 module.exports.createControls = async controls => {
   let makeInterface = {};
-  makeInterface.id = `cont-${makeId()}`;
+  makeInterface.id = controls.id || `cont-${makeId()}`;
   makeInterface.created = createTimeStamp();
   makeInterface.channel_id = controls.channel_id || "dev";
   makeInterface.buttons = controls.buttons || testControls;
@@ -43,6 +43,26 @@ module.exports.createControls = async controls => {
     return makeInterface;
   }
   return null;
+};
+
+module.exports.updateControls = async controls => {
+  console.log("UPDATING EXISTING CONTROLS: ", controls);
+  const db = require("../services/db");
+  const { id, buttons } = controls;
+  const query = `UPDATE controls SET buttons = $1 WHERE id = $2 RETURNING *`;
+  try {
+    const result = await db.query(query, [controls.buttons, controls.id]);
+    console.log(result.rows[0]);
+    if (result.rows[0]) {
+      const details = result.rows[0];
+      this.sendUpdatedControls(details.id, details.channel_id);
+      return result.rows[0];
+    }
+    return { status: "error!", error: "Problem updating controls" };
+  } catch (err) {
+    console.log(err);
+    return { status: "error!", error: "Problem updating controls" };
+  }
 };
 
 module.exports.saveControls = async controls => {
@@ -68,21 +88,37 @@ module.exports.saveControls = async controls => {
   return null;
 };
 
-//TODO: This should be getting controls.id and not using channel_id..
-module.exports.getControls = async id => {
-  if (!id) return null;
-  console.log("Get controls from controls ID: ", id);
-  const db = require("../services/db");
-  const query = `SELECT * FROM controls WHERE id = $1 LIMIT 1`;
-  try {
-    const result = await db.query(query, [id]);
-    console.log(result.rows[0]);
-    if (result.rows[0]) return result.rows[0];
-    console.log("Error, could not fetch data for CONTROLS");
-    return null;
-  } catch (err) {
-    console.log(err);
-    return null;
+module.exports.getControls = async (id, channel_id) => {
+  if (id) {
+    //console.log("Get controls from controls ID: ", id);
+    const db = require("../services/db");
+    const query = `SELECT * FROM controls WHERE id = $1 LIMIT 1`;
+    try {
+      const result = await db.query(query, [id]);
+      //console.log(result.rows[0]);
+      if (result.rows[0]) return result.rows[0];
+      console.log("Error, could not fetch data for CONTROLS");
+      return null;
+    } catch (err) {
+      console.log(err);
+      return null;
+    }
+  } else {
+    console.log(
+      "No controls found on this channel, generating controls for this channel"
+    );
+    if (channel_id) {
+      const { setControls } = require("./channel");
+      const makeControls = await this.createControls({
+        channel_id: channel_id
+      });
+      setControls({
+        id: makeControls.id,
+        channel_id: channel_id
+      });
+      if (makeControls) return makeControls;
+    }
+    console.log("Error, cannot find or generate controls for this channel");
   }
   return null;
 };
@@ -91,10 +127,10 @@ module.exports.getControls = async id => {
 //is user timed out?
 //Does user have privelage to use this command?
 module.exports.validateInput = async input => {
-  console.log("VALIDATE INPUT: ", input);
+  //console.log("VALIDATE INPUT: ", input);
   let response = {};
   let validate = false;
-  const checkInput = await this.getControls(input.controls_id);
+  const checkInput = await this.getControls(input.controls_id, input.channel);
   if (checkInput && checkInput.buttons) {
     checkInput.buttons.map(button => {
       if (button.label === input.button.label) validate = true;
@@ -116,11 +152,14 @@ module.exports.validateInput = async input => {
 
 //input: { label: "<string>", hot_key: "<string>", command: "<string>"}
 //output: array of button objects w/ id generated per button
-module.exports.buildButtons = async (buttons, channel_id) => {
+module.exports.buildButtons = async (buttons, channel_id, controls_id) => {
   const { setControls } = require("./channel");
   let response = {};
   let newButtons = [];
-  let buildControls = { channel_id: channel_id };
+  console.log("CONTROL ID CHECK: ", controls_id);
+  let buildControls = {};
+  buildControls.channel_id = channel_id;
+  buildControls.id = controls_id;
   //generate json
   if (buttons) {
     buttons.map(button => {
@@ -132,14 +171,14 @@ module.exports.buildButtons = async (buttons, channel_id) => {
     return { status: "error!", error: "invalid data to generate buttons" };
   }
   buildControls.buttons = newButtons;
-  generateControls = await this.createControls(buildControls);
-  let set = await setControls(generateControls, {
-    channel_id: channel_id
-  });
-  console.log("SET CHECK: ", set);
-  if (set) {
+  generateControls = await this.updateControls(buildControls);
+  // let set = await setControls(generateControls, {
+  //   channel_id: channel_id
+  // });
+  console.log("UPDATE CONTROLS CHECK: ", generateControls);
+  if (generateControls) {
     response.status = "success";
-    response.result = set;
+    response.result = generateControls;
     return response;
   }
   response.status = "error";
@@ -152,18 +191,11 @@ module.exports.sendUpdatedControls = async (controls_id, channel_id) => {
   //channel stores an ID reference for it's current controls
   const channel = require("./channel");
   let sendData = {};
-  sendData.channel_id = channel_id;
-  sendData.controls = await this.getControls(controls_id);
+  // sendData.channel_id = channel_id;
+  sendData = await this.getControls(controls_id, channel_id);
   console.log("SEND UPDATED CONTROLS: ", sendData);
   channel.emitEvent(channel_id, "CONTROLS_UPDATED", sendData);
 };
-
-temp = [
-  { label: "forward", hot_key: "w", command: "f" },
-  { label: "back", hot_key: "s", command: "b" },
-  { label: "left", hot_key: "a", command: "l" },
-  { label: "right", hot_key: "d", command: "r" }
-];
 
 //TESTS:
 // this.createControls({ channel_id: "test-2" });

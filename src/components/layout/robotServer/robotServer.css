@@ -20,6 +20,23 @@
 .display-robot-server {
   font-size: 12px;
   margin-bottom: 8px;
+  color: white;
+}
+
+a:link {
+  text-decoration: none;
+}
+
+a:visited {
+  text-decoration: none;
+}
+
+a:hover {
+  text-decoration: none;
+}
+
+a:active {
+  text-decoration: none;
 }
 
 .display-robot-server-container:hover {
@@ -152,7 +169,7 @@
 }
 
 .display-server-info {
-  font-size: 14px;
+  font-size: 12px;
   font-style: italic;
   color: rgb(172, 172, 172);
 }
@@ -219,4 +236,41 @@
 
 .robot-item-container:hover {
   background-color: rgb(86, 86, 119);
+}
+
+.join-server-container {
+  /* background-color: red; */
+  display: flex;
+  flex-direction: row;
+  font-size: 12px;
+  margin-bottom: 2px;
+  align-items: center;
+}
+
+.follow-icon {
+  margin-right: 6px;
+  /* background-color: green; */
+}
+
+.heart-container {
+  display: flex;
+  flex-direction: row;
+  background-color: rgb(66, 116, 209);
+  padding: 7px;
+  border-radius: 6px 0 0 6px;
+  cursor: pointer;
+  font-weight: bold;
+  align-items: center;
+}
+
+.heart-container:hover {
+  background-color: cornflowerblue;
+}
+
+.member-count {
+  padding: 8px;
+  text-justify: right;
+  background-color: rgb(57, 57, 75);
+  border-radius: 0 6px 6px 0;
+  padding-right: 10px;
 }

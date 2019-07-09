@@ -28,16 +28,17 @@ GRANT ALL ON SCHEMA public TO PUBLIC;
 
 CREATE TABLE public.users
 (
+
     username character varying(25) COLLATE pg_catalog."default",
     password character varying COLLATE pg_catalog."default",
     email character varying COLLATE pg_catalog."default",
-    id character varying COLLATE pg_catalog."default",
+    id character varying COLLATE pg_catalog."default" NOT NULL,
     created bigint,
     type character varying[] COLLATE pg_catalog."default",
-    check_username character varying COLLATE pg_catalog."default",
     session character varying COLLATE pg_catalog."default",
     status jsonb,
-    settings jsonb
+    settings jsonb,
+    CONSTRAINT users_pkey PRIMARY KEY (id)
 )
 WITH (
     OIDS = FALSE
@@ -53,7 +54,6 @@ CREATE TABLE public.robot_servers
     owner_id character varying COLLATE pg_catalog."default",
     server_id character varying COLLATE pg_catalog."default" NOT NULL,
     server_name character varying COLLATE pg_catalog."default",
-    users character varying[] COLLATE pg_catalog."default",
     created character varying COLLATE pg_catalog."default",
     settings jsonb,
     status jsonb,
@@ -71,10 +71,11 @@ ALTER TABLE public.robot_servers
 CREATE TABLE public.chat_rooms
 (
     name character varying COLLATE pg_catalog."default",
-    id character varying COLLATE pg_catalog."default",
+    id character varying COLLATE pg_catalog."default" NOT NULL,
     host_id character varying COLLATE pg_catalog."default",
     messages character varying[] COLLATE pg_catalog."default",
-    created character varying COLLATE pg_catalog."default"
+    created character varying COLLATE pg_catalog."default",
+    CONSTRAINT chat_rooms_pkey PRIMARY KEY (id)
 )
 WITH (
     OIDS = FALSE
@@ -84,7 +85,7 @@ TABLESPACE pg_default;
 ALTER TABLE public.chat_rooms
     OWNER to postgres;
 
-    CREATE TABLE public.channels
+CREATE TABLE public.channels
 (
     host_id character varying COLLATE pg_catalog."default",
     id character varying COLLATE pg_catalog."default" NOT NULL,
@@ -144,4 +145,68 @@ WITH (
 TABLESPACE pg_default;
 
 ALTER TABLE public.controls
+    OWNER to postgres;
+
+CREATE TABLE public.robot_servers
+(
+    owner_id character varying COLLATE pg_catalog."default",
+    server_id character varying COLLATE pg_catalog."default" NOT NULL,
+    server_name character varying COLLATE pg_catalog."default",
+    created character varying COLLATE pg_catalog."default",
+    settings jsonb,
+    status jsonb,
+    channels jsonb[],
+    CONSTRAINT "robotServers_pkey" PRIMARY KEY (server_id)
+)
+WITH (
+    OIDS = FALSE
+)
+TABLESPACE pg_default;
+
+ALTER TABLE public.robot_servers
+    OWNER to postgres;
+
+    CREATE TABLE public.invites
+(
+    id character varying COLLATE pg_catalog."default" NOT NULL,
+    created_by character varying COLLATE pg_catalog."default",
+    server_id character varying COLLATE pg_catalog."default",
+    created character varying COLLATE pg_catalog."default",
+    expires character varying COLLATE pg_catalog."default" NOT NULL,
+    status character varying COLLATE pg_catalog."default",
+    CONSTRAINT invites_pkey PRIMARY KEY (id)
+)
+WITH (
+    OIDS = FALSE
+)
+TABLESPACE pg_default;
+
+ALTER TABLE public.invites
+    OWNER to postgres;
+
+CREATE TABLE public.members
+(
+    server_id character varying COLLATE pg_catalog."default" NOT NULL,
+    user_id character varying COLLATE pg_catalog."default" NOT NULL,
+    roles character varying[] COLLATE pg_catalog."default",
+    status jsonb,
+    settings jsonb[],
+    joined character varying COLLATE pg_catalog."default",
+    invites character varying[] COLLATE pg_catalog."default",
+    CONSTRAINT member_pkey PRIMARY KEY (user_id, server_id),
+    CONSTRAINT server_pkey FOREIGN KEY (server_id)
+        REFERENCES public.robot_servers (server_id) MATCH SIMPLE
+        ON UPDATE NO ACTION
+        ON DELETE NO ACTION,
+    CONSTRAINT user_pkey FOREIGN KEY (user_id)
+        REFERENCES public.users (id) MATCH SIMPLE
+        ON UPDATE NO ACTION
+        ON DELETE NO ACTION
+)
+WITH (
+    OIDS = FALSE
+)
+TABLESPACE pg_default;
+
+ALTER TABLE public.members
     OWNER to postgres;

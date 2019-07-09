@@ -13,11 +13,15 @@
 }
 
 .logo {
-  width: 200px;
-  height: 34px;
+  /* width: 200px; */
+  height: 28px;
 }
 
 .nav-container {
+  /* position: absolute;
+  flex-direction: column;
+  left: 0;
+  top: 0; */
   display: flex;
   height: 48px;
   background: -webkit-linear-gradient(-45deg, #19191d 0%, #162755 100%);
@@ -25,6 +29,9 @@
 }
 
 .logo-container {
-  margin: 4px;
-  padding: 2px;
+  display: flex;
+  flex-direction: row;
+  margin: 10px;
+  /* margin: 4px;
+  padding: 2px; */
 }

@@ -9,7 +9,7 @@ module.exports = async (ws, controls_id) => {
     ws.controls_id = controls_id;
     if (ws.user) {
       console.log(
-        `Subbing user: ${ws.user.username} to chatroom: ${controls_id}`
+        `Subbing user: ${ws.user.username} to controls: ${controls_id}`
       );
     } else if (ws.robot) {
       console.log(`Subbing robot: ${ws.robot.id} to controls: ${controls_id}`);

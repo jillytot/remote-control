@@ -9,6 +9,9 @@ module.exports = async (ws, data) => {
     console.log("AUTH ROBOT: ", getRobot);
 
     //Confirm Validation:
-    ws.emitEvent("ROBOT_VALIDATED", { id: getRobot.id });
+    ws.emitEvent("ROBOT_VALIDATED", {
+      id: getRobot.id,
+      host: getRobot.host_id
+    });
   }
 };

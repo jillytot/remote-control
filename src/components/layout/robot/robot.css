@@ -3,11 +3,14 @@
 }
 
 .robot-display-container {
-  background-color: rgb(15, 13, 15);
+  background-color: rgb(0, 0, 0);
   min-height: 432px;
   min-width: 768px;
   margin: 5px;
   position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 .robot-controls-container {
@@ -22,10 +25,14 @@
   color: white;
   border: 0px;
   font-size: 16px;
-  padding: 13px 20px 13px 10px;
   /* padding: 10px; */
   margin: 4px;
   outline: none;
+  padding: 13px 20px 13px 20px;
+}
+
+.robtn-hot-key {
+  padding: 13px 20px 13px 10px;
 }
 
 .robtn:hover {
@@ -39,20 +46,27 @@
 
 .hotkey {
   background-color: rgb(73, 83, 131);
+  color: rgb(195, 203, 211);
   padding: 6px;
-  margin-right: 2px;
+  margin-right: 4px;
   margin-left: 6px;
   border-radius: 7px;
   width: 200px;
 }
 
+.hotkey-highlight {
+  background-color: rgb(86, 99, 165);
+}
+
 .display-info-container {
   display: flex;
+  position: absolute;
   flex-direction: column;
   justify-content: flex-end;
   font-size: 12px;
-  width: 50%;
-  min-height: 432px;
+  left: 0;
+  top: 0;
+  bottom: 0;
   /* background-color: red; */
   align-items: flex-start;
   padding: 5px;
@@ -63,7 +77,6 @@
 
 .display-info {
   background-color: rgba(255, 255, 255, 0.05);
-  /* position: absolute; */
   padding: 2px;
   margin-bottom: 1px;
   display: flex;
@@ -71,12 +84,9 @@
 }
 
 .video-canvas {
+  display: flex;
   background-color: rgb(15, 15, 15);
-  width: 100%;
-  height: 100%;
-  position: absolute;
   top: 0;
-  left: 0;
-  right: 0;
   bottom: 0;
+  max-width: 100%;
 }

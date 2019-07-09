@@ -11,6 +11,7 @@ import remoStaffBadge from "./img/staff.png";
 import globalModerator from "./img/global_moderator.png";
 import moderator from "./img/moderator.png";
 import owner from "./img/owner.png";
+import robot from "./img/robot.png";
 
 const defaultImages = {
   default01: default01,
@@ -25,7 +26,8 @@ const defaultImages = {
   remoStaffBadge: remoStaffBadge,
   globalModerator: globalModerator,
   moderator: moderator,
-  owner: owner
+  owner: owner,
+  robot: robot
 };
 
 export default defaultImages;

@@ -1,7 +1,7 @@
 import React from "react";
 import "../../styles/common.css";
 
-const Input = ({ name, label, error, type, ref, ...rest }) => {
+const TextArea = ({ name, label, error, type, ref, ...rest }) => {
   console.log("Input Props: ", type, ref);
 
   return (
@@ -11,7 +11,7 @@ const Input = ({ name, label, error, type, ref, ...rest }) => {
           <label className="form-label" htmlFor={name}>
             {label}
           </label>
-          <input
+          <textarea
             {...rest}
             ref={ref}
             type={type}
@@ -27,4 +27,4 @@ const Input = ({ name, label, error, type, ref, ...rest }) => {
   );
 };
 
-export default Input;
+export default TextArea;

@@ -12,6 +12,7 @@ import RobotInterface from "../robot/robotInteface";
 import AddChannelForm from "./modals/addChannelForm";
 import EditChannel from "./modals/editChannel";
 import DisplayRobot from "./displayRobot";
+import DisplayServerDetails from "./displayServerDetails";
 
 //placeholder
 //var chatroom = { messages: [{ sender: "user2" }] }; // (this.state.chatroom)
@@ -23,7 +24,12 @@ export default class Channels extends Component {
     currentChannel: null,
     storeSelectedServer: null,
     defaultLoaded: false,
-    loadControls: ""
+    loadControls: "",
+    chatTabbed: false
+  };
+
+  setChatTabbed = value => {
+    this.setState({ chatTabbed: value });
   };
 
   // not sure if needed, but why not
@@ -62,7 +68,16 @@ export default class Channels extends Component {
     }, 30000); //garbage cleanup every 30s
 
     this.loadDefaultChannel();
+    document.addEventListener("keydown", this.handleKeyPress);
   }
+
+  handleKeyPress = e => {
+    if (e.keyCode === 9) {
+      e.preventDefault();
+      console.log(this.state.chatTabbed);
+      this.setChatTabbed(!this.state.chatTabbed);
+    }
+  };
 
   loadDefaultChannel = () => {
     //const { channels, selectedServer } = this.props;
@@ -150,7 +165,8 @@ export default class Channels extends Component {
         console.log("SEND ROBOT SERVER INFO: ", data);
         this.setState({
           channels: data.channels,
-          users: this.getUserColors(data.users)
+          users: this.getUserColors(data.users),
+          invites: data.invites
         });
         if (this.state.currentChannel) this.handleClick(data.channels[0]);
       });
@@ -235,6 +251,8 @@ export default class Channels extends Component {
             channels={this.state.channels}
             user={user}
             users={users}
+            socket={socket}
+            invites={this.state.invites}
           />
           {this.displayChannels()}
           <AddChannel
@@ -259,8 +277,15 @@ export default class Channels extends Component {
               user={user}
               socket={socket}
               channel={this.state.currentChannel}
+              chatTabbed={this.state.chatTabbed}
             />
-            <Chat user={user} socket={socket} users={users} />
+            <Chat
+              user={user}
+              socket={socket}
+              users={users}
+              setChatTabbed={this.setChatTabbed}
+              chatTabbed={this.state.chatTabbed}
+            />
           </React.Fragment>
         ) : (
           <React.Fragment />
@@ -271,35 +296,9 @@ export default class Channels extends Component {
 
   componentWillUnmount() {
     clearInterval(this.colorCleanup);
+    document.removeEventListener("keydown", this.handleKeyPress);
   }
 }
-
-const DisplayServerDetails = ({ server, channels, user, users }) => {
-  if (channels && channels.length > 0) {
-    return (
-      <div className="server-info-container">
-        <div className="display-server-name">
-          {server.server_name}
-          {user.id === server.owner_id ? (
-            <div className="server-settings"> {`(edit)`}</div>
-          ) : (
-            <div className="server-settings" />
-          )}
-        </div>
-
-        <div className="display-server-info">
-          Users Online:
-          <ActiveUserCount users={users} />
-        </div>
-      </div>
-    );
-  }
-  return <React.Fragment />;
-};
-
-const ActiveUserCount = ({ users }) => {
-  return <span> {users.length}</span>;
-};
 
 //Add Channel
 class AddChannel extends Component {

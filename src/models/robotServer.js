@@ -11,7 +11,6 @@ const robotServerPt = {
   created: "",
   settings: {},
   status: {},
-  invites: [],
   roles: []
 };
 
@@ -50,9 +49,18 @@ module.exports.createRobotServer = async (server, token) => {
   };
 
   buildServer.channels.push(await this.initChannels(buildServer));
-  await this.saveServer(buildServer);
+  const save = await this.saveServer(buildServer);
+  if (!save) return { status: "Error!", error: "Unable to save server" };
   console.log("Generating Server: ", buildServer);
   this.pushToActiveServers(buildServer);
+
+  console.log("GENERATE DEFAULT INVITE...");
+  const { generateInvite } = require("./invites");
+  const makeInvite = await generateInvite({
+    user: { id: buildServer.owner_id },
+    server: { server_id: buildServer.server_id, owner_id: buildServer.owner_id }
+  });
+  console.log(makeInvite);
   return buildServer;
 };
 
@@ -90,11 +98,14 @@ module.exports.saveServer = async server => {
       settings,
       status
     ]);
+    if (result.rows[0]) {
+      this.updateRobotServer();
+      return result.rows[0];
+    }
   } catch (err) {
     console.log(err.stack);
   }
-  //Save to DB
-  this.updateRobotServer();
+  return false;
 };
 
 //Keep list of active users in memmory for now
@@ -116,7 +127,7 @@ module.exports.initActiveServers = async () => {
 //add a new active server to the active servers list
 module.exports.pushToActiveServers = robotServer => {
   activeServers.push(robotServer);
-  console.log("Active Servers Updated: ", activeServers);
+  //console.log("Active Servers Updated: ", activeServers);
 };
 
 //return specified server from the list of active servers

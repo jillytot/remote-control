@@ -15,7 +15,11 @@ const invitePt = {
 
 module.exports.generateInvite = async invite => {
   const { makeId, createTimeStamp } = require("../modules/utilities");
-  console.log("Generating Invite for Server: ", invite);
+  console.log(
+    "Generating Invite for Server: ",
+    invite.user.id,
+    invite.server.server_id
+  );
   let validate = false;
   if (invite.user.id === invite.server.owner_id) validate = true; //simple validation, will eventually need to check for invite authority instead
   if (!validate)

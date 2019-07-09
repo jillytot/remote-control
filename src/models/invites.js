@@ -126,9 +126,8 @@ module.exports.generateDefaults = async () => {
   return invites;
 };
 
-const generate = async () => {
+module.exports.initDefaultInvites = async () => {
   console.log(await this.generateDefaults());
 };
-//generate();
 
 //invite validation: make sure this user can generate this invite

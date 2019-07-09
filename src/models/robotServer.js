@@ -143,10 +143,14 @@ module.exports.getActiveServer = server_id => {
 module.exports.getRobotServers = async () => {
   //TODO: Some kind of sorting / capping list #
   const db = require("../services/db");
-  const query = `SELECT * FROM robot_servers`;
-  result = await db.query(query);
-  console.log(result.rows);
-  return result.rows;
+  try {
+    const query = `SELECT * FROM robot_servers`;
+    result = await db.query(query);
+    console.log(result.rows);
+    return result.rows;
+  } catch (err) {
+    console.log(err);
+  }
 };
 
 module.exports.updateRobotServer = () => {

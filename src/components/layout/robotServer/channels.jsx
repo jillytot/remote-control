@@ -165,7 +165,8 @@ export default class Channels extends Component {
         console.log("SEND ROBOT SERVER INFO: ", data);
         this.setState({
           channels: data.channels,
-          users: this.getUserColors(data.users)
+          users: this.getUserColors(data.users),
+          invites: data.invites
         });
         if (this.state.currentChannel) this.handleClick(data.channels[0]);
       });
@@ -250,6 +251,8 @@ export default class Channels extends Component {
             channels={this.state.channels}
             user={user}
             users={users}
+            socket={socket}
+            invites={this.state.invites}
           />
           {this.displayChannels()}
           <AddChannel

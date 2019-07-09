@@ -1,9 +1,45 @@
 import React, { Component } from "react";
 import Icon from "../../common/icon";
 import ICONS from "../../../icons/icons";
+import axios from "axios";
+import { joinServer, leaveServer } from "../../../config/clientSettings";
 
 export default class DisplayServerDetails extends Component {
-  state = {};
+  state = {
+    joined: false,
+    publicInvite: null
+  };
+
+  async componentDidMount() {
+    this.initSocket();
+  }
+
+  initSocket = () => {
+    const { socket } = this.props;
+    if (socket) {
+      //do socket things
+    }
+  };
+
+  handleJoinClick = () => {
+    const { server, invites } = this.props;
+    console.log("CHECK INVITES: ", invites);
+    const { joined } = this.state;
+    const token = localStorage.getItem("token");
+
+    axios
+      .post(
+        joinServer,
+        {
+          server_id: server.server_id,
+          join: invites[0].id
+        },
+        { headers: { authorization: `Bearer ${token}` } }
+      )
+      .then(result => {
+        console.log(result.data);
+      });
+  };
 
   displayDetails = () => {
     const { server, channels, user, users } = this.props;
@@ -19,7 +55,10 @@ export default class DisplayServerDetails extends Component {
             )}
           </div>
           <div className="join-server-container">
-            <div className="heart-container">
+            <div
+              className="heart-container"
+              onClick={() => this.handleJoinClick()}
+            >
               <div className="follow-icon">
                 <Icon icon={ICONS.FOLLOW} />
               </div>

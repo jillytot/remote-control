@@ -27,9 +27,12 @@ module.exports = {
   apiLogin: `${apiUrl}/login`,
   listRobotServers: `${apiUrl}/robot-server/list`,
   addServer: `${apiUrl}/robot-server/create`,
+  joinServer: `${apiUrl}/robot-server/join`,
+  leaveServer: `${apiUrl}/robot-server/leave`,
   addChannel: `${apiUrl}/channels/create`,
   deleteChannel: `${apiUrl}/channels/delete`,
   addRobot: `${apiUrl}/robot/setup`,
   deleteRobot: `${apiUrl}/robot/delete`,
-  robotAPIKey: `${apiUrl}/robot/key`
+  robotAPIKey: `${apiUrl}/robot/key`,
+  getInvites: `${apiUrl}/robot-server/invites`
 };

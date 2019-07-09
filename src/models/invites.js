@@ -100,5 +100,35 @@ module.exports.getInviteById = async id => {
   };
 };
 
+//Tool for retroactively adding default invites
+module.exports.generateDefaults = async () => {
+  const { getRobotServers } = require("./robotServer");
+  let invites = [];
+  try {
+    const servers = await getRobotServers();
+    servers.forEach(async server => {
+      const invite = await this.getInvitesForServer(server.server_id);
+      console.log("INVITE CHECK: ", invite);
+      if (!invite[0]) {
+        console.log("GENERATING DEFAULT INVITE ...");
+        const makeInvite = await this.generateInvite({
+          user: { id: server.owner_id },
+          server: { server_id: server.server_id, owner_id: server.owner_id }
+        });
+        console.log("Creating Default Invite: ", makeInvite);
+        invites.push(makeInvite);
+        return;
+      }
+    });
+  } catch (err) {
+    console.log(err);
+  }
+  return invites;
+};
+
+const generate = async () => {
+  console.log(await this.generateDefaults());
+};
+//generate();
+
 //invite validation: make sure this user can generate this invite
-//make sure each server starts out with a default invite

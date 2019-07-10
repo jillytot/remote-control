@@ -86,5 +86,3 @@ export default class DisplayServerDetails extends Component {
 const ActiveUserCount = ({ users }) => {
   return <span> {users.length}</span>;
 };
-
-//= ({ server, channels, user, users }) => {

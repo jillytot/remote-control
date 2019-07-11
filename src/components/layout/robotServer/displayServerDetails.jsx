@@ -4,20 +4,60 @@ import ICONS from "../../../icons/icons";
 import axios from "axios";
 import { joinServer, leaveServer } from "../../../config/clientSettings";
 
+/*
+Todo: 
+Join Server: 
+Users will automatically get listed as "guests" until they join. 
+Once they join, call the server and check for valid "member" role, 
+If they have a member role, display "joined" state. 
+
+Before joining: 
+<3 Join Count
+
+On Join: 
+<3 Joined Count
+onhover: 
+<3 Leave Count
+*/
+
 export default class DisplayServerDetails extends Component {
   state = {
     joined: false,
-    publicInvite: null
+    publicInvite: null,
+    currentStatus: null,
+    localStatus: null
   };
 
+  componentDidUpdate(prevProps) {
+    if (
+      prevProps.server.server_id !== this.props.server.server_id &&
+      this.props.socket
+    ) {
+      this.handleGetLocalStatus();
+    }
+  }
+
   async componentDidMount() {
+    this.setState({ currentStatus: this.props.server.server_id });
     this.initSocket();
   }
+
+  handleGetLocalStatus = () => {
+    const { socket } = this.props;
+    socket.emit("GET_LOCAL_STATUS", {
+      server_id: this.props.server.server_id,
+      user_id: this.props.user.id
+    });
+  };
 
   initSocket = () => {
     const { socket } = this.props;
     if (socket) {
-      //do socket things
+      this.handleGetLocalStatus();
+      socket.on("SEND_LOCAL_STATUS", status => {
+        console.log("GET LOCAL STATUS!", status);
+        this.setState({ localStatus: status });
+      });
     }
   };
 
@@ -39,6 +79,8 @@ export default class DisplayServerDetails extends Component {
       .then(result => {
         console.log(result.data);
       });
+
+    this.setState({ joined: true });
   };
 
   displayDetails = () => {
@@ -56,7 +98,11 @@ export default class DisplayServerDetails extends Component {
           </div>
           <div className="join-server-container">
             <div
-              className="heart-container"
+              className={
+                this.state.localStatus && this.state.localStatus.member === true
+                  ? "heart-container-joined"
+                  : "heart-container"
+              }
               onClick={() => this.handleJoinClick()}
             >
               <div className="follow-icon">

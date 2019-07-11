@@ -2,7 +2,7 @@ const memberPt = {
   server_id: "",
   user_id: "",
   roles: ["@everyone"],
-  status: { timeout: false, expireTimeout: null },
+  status: { timeout: false, expireTimeout: null, member: false },
   settings: { notifications: false },
   joined: "timestamp",
   invites: []
@@ -12,9 +12,9 @@ module.exports.createMember = async data => {
   console.log("Let Memeber Join Server: ", data);
   const { createTimeStamp } = require("../modules/utilities");
 
-  const checkInvite = await this.validateInvite(data);
-  console.log("CHECKING INVITE", checkInvite);
-  if (!checkInvite) return { status: "Error!", error: "Invite is not valid" };
+  //const checkInvite = await this.validateInvite(data);
+  //console.log("CHECKING INVITE", checkInvite);
+  //if (!checkInvite) return { status: "Error!", error: "Invite is not valid" };
 
   const checkMembership = await this.checkMembership(data);
   if (checkMembership) return checkMembership;
@@ -22,11 +22,20 @@ module.exports.createMember = async data => {
   let makeMember = {};
   makeMember.user_id = data.user_id;
   makeMember.server_id = data.server_id;
-  makeMember.roles = ["member"]; //default role
-  makeMember.joined = createTimeStamp();
-  makeMember.status = memberPt.status;
+  makeMember.roles = []; //default role
   makeMember.settings = {};
-  makeMember.invites = [data.join];
+
+  if (data.join) {
+    //If joining as a member w/ an invite
+    makeMember.invites = [data.join];
+    makeMember.status = { timeout: false, expireTimeout: null, member: true };
+    makeMember.joined = createTimeStamp();
+  } else {
+    //default behavior for browsing public servers (needed to track moderation)
+    makeMember.invites = [];
+    makeMember.status = { timeout: false, expireTimeout: null, member: false };
+    makeMember.joined = null;
+  }
 
   const save = this.saveMember(makeMember);
   if (save) return save;
@@ -101,7 +110,7 @@ module.exports.checkMembership = async member => {
 //TODO: UpdateMembership
 //TODO: Remove Membership
 
-module.exports.leaveServer = async member => {
+module.exports.deleteMember = async member => {
   const db = require("../services/db");
   console.log("removing member...");
   const { server_id, user_id } = member;
@@ -127,4 +136,40 @@ module.exports.getMembers = async server_id => {
     console.log(err);
   }
   return { status: "Error!", error: "Unable to get members for server" };
+};
+
+module.exports.updateMemberStatus = async member => {
+  const db = require("../services/db");
+  const { status, server_id, user_id } = member;
+  console.log("Updating Membership Status..");
+  const update = `UPDATE members SET status = $1 WHERE ( server_id, user_id ) = ( $2, $3 ) RETURNING *`;
+  try {
+    const result = await db.query(update, [status, server_id, user_id]);
+    if (result.rows[0]) return result.rows[0];
+  } catch (err) {
+    console.log(err);
+  }
+  return null;
+};
+
+module.exports.updateMemberInvites = async member => {
+  const db = require("../services/db");
+  const { invites, server_id, user_id } = member;
+  console.log("Updating Membership Invites..");
+  const update = `UPDATE members SET invites = $1 WHERE ( server_id, user_id ) = ( $2, $3 ) RETURNING *`;
+  try {
+    const result = await db.query(update, [invites, server_id, user_id]);
+    if (result.rows[0]) return result.rows[0];
+  } catch (err) {
+    console.log(err);
+  }
+  return null;
+};
+
+//PLACEHOLDER - NOT DONE
+module.exports.addMemberShip = async (member, invite) => {
+  const checkInvite = await this.validateInvite(invite.id);
+  console.log("CHECKING INVITE", checkInvite);
+  if (!checkInvite) return { status: "Error!", error: "Invite is not valid" };
+  return;
 };

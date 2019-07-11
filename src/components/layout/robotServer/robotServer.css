@@ -265,6 +265,21 @@ a:active {
   background: -webkit-linear-gradient(-45deg, rgb(66, 116, 209), #ee3b94 100%);
 }
 
+.heart-container-joined {
+  display: flex;
+  flex-direction: row;
+  background-color: rgb(69, 69, 90);
+  padding: 7px;
+  border-radius: 6px 0 0 6px;
+  cursor: pointer;
+  font-weight: bold;
+  align-items: center;
+}
+
+.heart-container-joined:hover {
+  background-color: rgb(110, 45, 76);
+}
+
 .heart-container:hover {
   background-color: cornflowerblue;
   background: -webkit-linear-gradient(-45deg, rgb(91, 142, 236), #fa68b1 100%);

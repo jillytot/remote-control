@@ -49,12 +49,11 @@ registerEvent("AUTHENTICATE", require("./authenticate"));
 registerEvent("AUTHENTICATE_ROBOT", require("./authRobot"));
 registerEvent("GET_CHANNELS", require("./getChannels"));
 registerEvent("GET_ROBOTS", require("./getRobots"));
-registerEvent("GET_CHANNELS", require("./getChannels"));
 registerEvent("GET_CHAT", require("./getChat"));
 registerEvent("JOIN_CHANNEL", require("./joinChannel"));
 registerEvent("MESSAGE_SENT", require("./messageSent"));
 registerEvent("ROBOT_MESSAGE_SENT", require("./robotMessageSent"));
 registerEvent("BUTTON_COMMAND", require("./buttonCommand"));
 registerEvent("GET_CONTROLS", require("./getControls"));
-//registerEvent("GET_LOCAL_STATUS", require())
+registerEvent("GET_LOCAL_STATUS", require("./getLocalStatus"));
 //have to register them all with there definitions here

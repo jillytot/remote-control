@@ -57,6 +57,7 @@ router.post("/invite", auth, async (req, res) => {
   res.send(response);
 });
 
+//Todo: Call updatemember / update invites
 router.post("/join", auth, async (req, res) => {
   const { createMember } = require("../../models/serverMembers");
   let response = {};
@@ -75,11 +76,12 @@ router.post("/join", auth, async (req, res) => {
   res.send(response);
 });
 
-router.post("/leave", auth, async (req, res) => {
-  const { leaveServer } = require("../../models/serverMembers");
+//TODO: This is more like "remove or delete" a member.
+router.post("/delete-member", auth, async (req, res) => {
+  const { deleteMember } = require("../../models/serverMembers");
   let response = {};
   if (req.user && req.body.server_id) {
-    const leave = await leaveServer({
+    const leave = await deleteMember({
       user_id: req.user.id,
       server_id: req.body.server_id
     });

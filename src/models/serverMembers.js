@@ -110,6 +110,20 @@ module.exports.checkMembership = async member => {
 //TODO: UpdateMembership
 //TODO: Remove Membership
 
+module.exports.getMember = async member => {
+  const db = require("../services/db");
+  console.log("get member...");
+  const { server_id, member_id } = member;
+  const query = `SELECT * FROM members WHERE ( server_id, user_id ) = ( $1, $2 )`;
+  try {
+    const result = await db.query(query, [server_id, user_id]);
+    if (result.rows[0]) return result.rows[0];
+  } catch (err) {
+    console.log(err);
+  }
+  return null;
+};
+
 module.exports.deleteMember = async member => {
   const db = require("../services/db");
   console.log("removing member...");

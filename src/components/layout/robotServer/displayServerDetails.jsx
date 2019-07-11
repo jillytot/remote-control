@@ -22,7 +22,6 @@ onhover:
 
 export default class DisplayServerDetails extends Component {
   state = {
-    joined: false,
     publicInvite: null,
     currentStatus: null,
     localStatus: null
@@ -77,10 +76,10 @@ export default class DisplayServerDetails extends Component {
         { headers: { authorization: `Bearer ${token}` } }
       )
       .then(result => {
-        console.log(result.data);
+        if (result.data.status.member) this.handleGetLocalStatus();
       });
 
-    this.setState({ joined: true });
+    // this.setState({ joined: true });
   };
 
   displayDetails = () => {

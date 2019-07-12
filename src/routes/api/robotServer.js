@@ -59,41 +59,22 @@ router.post("/invite", auth, async (req, res) => {
 
 //Todo: Call updatemember / update invites
 router.post("/join", auth, async (req, res) => {
-  const {
-    createMember,
-    getMember,
-    validateInvite,
-    updateMemberStatus
-  } = require("../../models/serverMembers");
+  const { joinServer } = require("../../controllers/members");
   let response = {};
   if (req.user && req.body.join && req.body.server_id) {
-    //check membership:
-    let check = await getMember({
+    const join = await joinServer({
+      user_id: req.user.id,
       server_id: req.body.server_id,
-      user_id: req.user.id
+      join: req.body.join
     });
 
-    if (!check) {
-      check = await createMember({
-        user_id: req.user.id,
-        server_id: req.body.server_id,
-        join: req.body.join
-      });
-    }
-
-    const validate = await validateInvite({
-      id: req.body.join,
-      server_id: req.body.server_id
-    });
-
-    if (check && validate) {
-      check.status.member = true;
-      check = await updateMemberStatus(check);
-      response = check;
-      res.send(response);
+    if (join) {
+      response = join;
+      res.send(join);
       return;
     }
   }
+
   response.status = "Error!";
   response.error = "Unable to join server with provided information";
   res.send(response);

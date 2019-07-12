@@ -91,19 +91,6 @@ module.exports.saveMember = async member => {
   };
 };
 
-module.exports.validateInvite = async invite => {
-  console.log("Validating Invite", invite);
-  const { getInvitesForServer } = require("./invites");
-  const checkInvite = await getInvitesForServer(invite.server_id);
-  let validate = false;
-  checkInvite.map(inv => {
-    if (inv.id === invite.id || inv.id === invite.join) {
-      validate = true;
-    }
-  });
-  return validate;
-};
-
 //Is this user already a member?
 module.exports.checkMembership = async member => {
   console.log("Checking Membership");
@@ -119,13 +106,10 @@ module.exports.checkMembership = async member => {
   return false;
 };
 
-//TODO: UpdateMembership
-//TODO: Remove Membership
-
 module.exports.getMember = async member => {
   const db = require("../services/db");
   console.log("get member...");
-  const { server_id, member_id } = member;
+  const { server_id, user_id } = member;
   const query = `SELECT * FROM members WHERE ( server_id, user_id ) = ( $1, $2 )`;
   try {
     const result = await db.query(query, [server_id, user_id]);
@@ -191,14 +175,4 @@ module.exports.updateMemberInvites = async member => {
     console.log(err);
   }
   return null;
-};
-
-//For future use
-module.exports.addMemberShip = async (member, invite) => {
-  const checkInvite = await this.validateInvite(invite.id);
-  console.log("CHECKING INVITE", checkInvite);
-  if (!checkInvite) return { status: "Error!", error: "Invite is not valid" };
-  member.invites.push(invite.id);
-  const updateInvite = await this.updateMemberInvites(member);
-  return updateInvite;
 };

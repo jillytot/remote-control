@@ -11,27 +11,13 @@ module.exports = async (ws, data) => {
 
     if (!getLocalStatus) {
       //TODO: Only create a default member is server is open!
-      //add a default member
       getLocalStatus = await createMember({
         user_id: user_id,
         server_id: server_id
       });
     }
 
-    console.log("GET LOCAL STATUS RESULT: ", getLocalStatus);
-    if (ws.user.localStatus) {
-      let push = true;
-      ws.user.localStatus.forEach(status => {
-        if (status.server_id === server_id) {
-          status = getLocalStatus;
-          push = false;
-        }
-      });
-      if (push) ws.user.localStatus.push(getLocalStatus);
-    } else {
-      ws.user.localStatus = [];
-      ws.user.localStatus.push(getLocalStatus);
-    }
+    ws.user.localStatus = getLocalStatus.status;
     console.log(ws.user.localStatus);
     ws.emitEvent("SEND_LOCAL_STATUS", getLocalStatus.status);
   }

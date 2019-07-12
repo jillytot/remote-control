@@ -8,6 +8,18 @@ const memberPt = {
   invites: []
 };
 
+/*
+Each server contains a list of members, 
+An entry is created for a user who visits a server by default, 
+however member is set to false. 
+They have to join the server, or follow an invite to officially become a member. 
+If the server is set to privite, then all non-members will be unable to access it
+Each member entry is used to handle status and settings per user per robot server.
+For example, local moderation is handled here. 
+Member status is sent to the user via the API / WS as "localStatus", same with "localSettings"
+The client will ask for local status on whichever server they actively enter on load.
+*/
+
 module.exports.createMember = async data => {
   console.log("Let Memeber Join Server: ", data);
   const { createTimeStamp } = require("../modules/utilities");
@@ -166,6 +178,7 @@ module.exports.updateMemberStatus = async member => {
   return null;
 };
 
+//For future use
 module.exports.updateMemberInvites = async member => {
   const db = require("../services/db");
   const { invites, server_id, user_id } = member;
@@ -180,10 +193,12 @@ module.exports.updateMemberInvites = async member => {
   return null;
 };
 
-//PLACEHOLDER - NOT DONE
+//For future use
 module.exports.addMemberShip = async (member, invite) => {
   const checkInvite = await this.validateInvite(invite.id);
   console.log("CHECKING INVITE", checkInvite);
   if (!checkInvite) return { status: "Error!", error: "Invite is not valid" };
-  return;
+  member.invites.push(invite.id);
+  const updateInvite = await this.updateMemberInvites(member);
+  return updateInvite;
 };

@@ -162,14 +162,27 @@ module.exports.updateMemberStatus = async member => {
   return null;
 };
 
-//For future use
 module.exports.updateMemberInvites = async member => {
   const db = require("../services/db");
   const { invites, server_id, user_id } = member;
-  console.log("Updating Membership Invites..");
-  const update = `UPDATE members SET invites = $1 WHERE ( server_id, user_id ) = ( $2, $3 ) RETURNING *`;
+  console.log("Updating Membership Invites..", invites);
+  const update = `UPDATE members SET invites = ( $1 ) WHERE ( server_id, user_id ) = ( $2, $3 ) RETURNING *`;
   try {
     const result = await db.query(update, [invites, server_id, user_id]);
+    console.log("UPDATE INVITES CHECK: ", result.rows[0]);
+    if (result.rows[0]) return result.rows[0];
+  } catch (err) {
+    console.log(err);
+  }
+  return null;
+};
+
+module.exports.updateMemberRoles = async member => {
+  const db = require("../services/db");
+  const { roles, server_id, user_id } = member;
+  const update = `UPDATE members SET roles = ( $1 ) WHERE ( server_id, user_id ) = ( $2, $3 ) RETURNING *`;
+  try {
+    const result = await db.query(update, [roles, server_id, user_id]);
     if (result.rows[0]) return result.rows[0];
   } catch (err) {
     console.log(err);

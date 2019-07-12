@@ -3,10 +3,10 @@ module.exports.joinServer = async member => {
     updateMemberInvites,
     updateMemberStatus,
     getMember,
-    createMember
+    createMember,
+    updateMemberRoles
   } = require("../models/serverMembers");
   console.log("Joining Server");
-  //   console.log(member);
 
   if (member.status && member.status.member)
     return { status: "Error!", error: "this user is already a emember" };
@@ -24,9 +24,20 @@ module.exports.joinServer = async member => {
   if (validate && checkMembership) {
     member = checkMembership;
     member.status.member = true;
-    member.invites.push(join);
+    let { roles, invites } = member;
+
     member = await updateMemberStatus(member);
+
+    roles.push("member");
+    roles = Array.from(new Set(roles)); //no dupes
+    member.roles = roles;
+    member = await updateMemberRoles(member);
+
+    invites.push(join);
+    invites = Array.from(new Set(invites)); //no dupes
+    member.invites = invites;
     member = await updateMemberInvites(member);
+
     return member;
   }
   return validate;

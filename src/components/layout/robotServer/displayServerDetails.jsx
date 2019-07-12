@@ -24,7 +24,8 @@ export default class DisplayServerDetails extends Component {
   state = {
     publicInvite: null,
     currentStatus: null,
-    localStatus: null
+    localStatus: null,
+    hoverText: "Joined"
   };
 
   componentDidUpdate(prevProps) {
@@ -76,10 +77,17 @@ export default class DisplayServerDetails extends Component {
         { headers: { authorization: `Bearer ${token}` } }
       )
       .then(result => {
+        //TODO: We probably don't need so much data getting sent back here since we are just triggering a socket event
         if (result.data.status.member) this.handleGetLocalStatus();
       });
+  };
 
-    // this.setState({ joined: true });
+  handleMouseEnter = () => {
+    this.setState({ hoverText: "Leave Server" });
+  };
+
+  handleMouseLeave = () => {
+    this.setState({ hoverText: "Joined" });
   };
 
   displayDetails = () => {
@@ -103,11 +111,18 @@ export default class DisplayServerDetails extends Component {
                   : "heart-container"
               }
               onClick={() => this.handleJoinClick()}
+              onMouseEnter={() => this.handleMouseEnter()}
+              onMouseLeave={() => this.handleMouseLeave()}
             >
               <div className="follow-icon">
                 <Icon icon={ICONS.FOLLOW} />
               </div>
-              <div> Join Server </div>
+              <div>
+                {this.state.localStatus &&
+                this.state.localStatus.member === true
+                  ? this.state.hoverText
+                  : "join server"}
+              </div>
             </div>
 
             <div className="member-count"> Count </div>

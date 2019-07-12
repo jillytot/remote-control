@@ -64,22 +64,35 @@ export default class DisplayServerDetails extends Component {
   handleJoinClick = () => {
     const { server, invites } = this.props;
     console.log("CHECK INVITES: ", invites);
-    const { joined } = this.state;
     const token = localStorage.getItem("token");
 
-    axios
-      .post(
-        joinServer,
-        {
-          server_id: server.server_id,
-          join: invites[0].id
-        },
-        { headers: { authorization: `Bearer ${token}` } }
-      )
-      .then(result => {
-        //TODO: We probably don't need so much data getting sent back here since we are just triggering a socket event
-        if (result.data.status.member) this.handleGetLocalStatus();
-      });
+    if (this.state.localStatus && this.state.localStatus.member === true) {
+      axios
+        .post(
+          leaveServer,
+          {
+            server_id: server.server_id,
+            join: invites[0].id
+          },
+          { headers: { authorization: `Bearer ${token}` } }
+        )
+        .then(result => {
+          if (result.data.status.member === false) this.handleGetLocalStatus();
+        });
+    } else {
+      axios
+        .post(
+          joinServer,
+          {
+            server_id: server.server_id,
+            join: invites[0].id
+          },
+          { headers: { authorization: `Bearer ${token}` } }
+        )
+        .then(result => {
+          if (result.data.status.member) this.handleGetLocalStatus();
+        });
+    }
   };
 
   handleMouseEnter = () => {
@@ -121,7 +134,7 @@ export default class DisplayServerDetails extends Component {
                 {this.state.localStatus &&
                 this.state.localStatus.member === true
                   ? this.state.hoverText
-                  : "join server"}
+                  : "Join server"}
               </div>
             </div>
 

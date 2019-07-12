@@ -45,14 +45,23 @@ module.exports.joinServer = async member => {
 
 module.exports.leaveServer = async member => {
   const {
+    getMember,
     updateMemberInvites,
-    updateMemberStatus
+    updateMemberStatus,
+    updateMemberRoles
   } = require("../models/serverMembers");
   console.log("Leaving Server");
+  member = await getMember(member);
+
   member.status.member = false;
-  member.invites = [];
   member = await updateMemberStatus(member);
-  member = await updateMemberInvites(leave);
+
+  member.invites = [];
+  member = await updateMemberInvites(member);
+
+  member.roles = [];
+  member = await updateMemberRoles(member);
+
   return member;
 };
 

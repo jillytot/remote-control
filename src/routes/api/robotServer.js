@@ -57,7 +57,7 @@ router.post("/invite", auth, async (req, res) => {
   res.send(response);
 });
 
-//Todo: Call updatemember / update invites
+//JOIN SERVER, MAIN METHOD FOR JOINING PUBLICLY LISTED SERVERS
 router.post("/join", auth, async (req, res) => {
   const { joinServer } = require("../../controllers/members");
   let response = {};
@@ -80,7 +80,29 @@ router.post("/join", auth, async (req, res) => {
   res.send(response);
 });
 
-//TODO: This is more like "remove or delete" a member.
+//LEAVE SERVER, DOES NOT DELETE USER FROM MEMBERLIST
+router.post("/leave", auth, async (req, res) => {
+  const { leaveServer } = require("../../controllers/members");
+  let response = {};
+  if (req.user && req.body.join && req.body.server_id) {
+    const leave = await leaveServer({
+      user_id: req.user.id,
+      server_id: req.body.server_id,
+      join: req.body.join
+    });
+
+    if (leave) {
+      response = leave;
+      res.send(response);
+      return;
+    }
+  }
+  response.status = "Error!";
+  response.error = "Unable to leave server";
+  res.send(response);
+});
+
+//THIS WILL COMPLETELY REMOVE A MEMBER FROM A SERVER & CONSEQUENTLY REMOVE ALL THEIR DATA
 router.post("/delete-member", auth, async (req, res) => {
   const { deleteMember } = require("../../models/serverMembers");
   let response = {};

@@ -188,6 +188,11 @@ module.exports.sendGlobalTimeout = (server_id, badUser) => {
   this.emitEvent(server_id, GLOBAL_TIMEOUT, publicUser(badUser));
 };
 
+module.exports.sendRobotStatus = (server_id, status) => {
+  console.log("SEND ROBOT STATUS CHECK: ", server_id, status);
+  this.emitEvent(server_id, "SERVER_STATUS", status);
+};
+
 //Get user roles / types for a specific server
 module.exports.getLocalTypes = async (server_id, user_id) => {
   let localTypes = [];

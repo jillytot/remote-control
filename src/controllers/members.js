@@ -6,6 +6,7 @@ module.exports.joinServer = async member => {
     createMember,
     updateMemberRoles
   } = require("../models/serverMembers");
+
   console.log("Joining Server");
 
   if (member.status && member.status.member)
@@ -37,6 +38,7 @@ module.exports.joinServer = async member => {
     invites = Array.from(new Set(invites)); //no dupes
     member.invites = invites;
     member = await updateMemberInvites(member);
+    this.updateMemberCount(member.server_id);
 
     return member;
   }
@@ -62,6 +64,8 @@ module.exports.leaveServer = async member => {
   member.roles = [];
   member = await updateMemberRoles(member);
 
+  this.updateMemberCount(member.server_id);
+
   return member;
 };
 
@@ -78,6 +82,34 @@ module.exports.validateInvite = async invite => {
   return validate;
 };
 
-module.exports.getMemberCount = server_id => {
+module.exports.getMemberCount = async server_id => {
   const { getMembers } = require("../models/serverMembers");
+  const members = await getMembers(server_id);
+  let count = 0;
+  members.forEach(member => {
+    if (member.status.member === true) count++;
+  });
+  return count;
+};
+
+module.exports.updateMemberCount = async server_id => {
+  const {
+    getRobotServer,
+    updateRobotServerStatus,
+    sendRobotStatus
+  } = require("../models/robotServer");
+
+  const updateMemberCount = await this.getMemberCount(server_id);
+
+  let robotServer = await getRobotServer(server_id);
+  robotServer.status.count = updateMemberCount;
+  console.log("UPDATING ROBOT STATUS / COUNT: ", robotServer.status);
+  const updateStatus = await updateRobotServerStatus(
+    server_id,
+    robotServer.status
+  );
+
+  if (updateStatus) {
+    sendRobotStatus(server_id, robotServer.status);
+  }
 };

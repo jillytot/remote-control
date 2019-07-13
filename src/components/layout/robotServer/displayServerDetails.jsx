@@ -4,27 +4,12 @@ import ICONS from "../../../icons/icons";
 import axios from "axios";
 import { joinServer, leaveServer } from "../../../config/clientSettings";
 
-/*
-Todo: 
-Join Server: 
-Users will automatically get listed as "guests" until they join. 
-Once they join, call the server and check for valid "member" role, 
-If they have a member role, display "joined" state. 
-
-Before joining: 
-<3 Join Count
-
-On Join: 
-<3 Joined Count
-onhover: 
-<3 Leave Count
-*/
-
 export default class DisplayServerDetails extends Component {
   state = {
     publicInvite: null,
     currentStatus: null,
     localStatus: null,
+    memberCount: "...",
     hoverText: "Joined",
     icon: <React.Fragment />
   };
@@ -35,6 +20,13 @@ export default class DisplayServerDetails extends Component {
       this.props.socket
     ) {
       this.handleGetLocalStatus();
+      this.handleGetServerStatus();
+
+      if (this.state.localStatus && this.state.localStatus.member === true) {
+        this.setState({ icon: <Icon icon={ICONS.FOLLOW} color={"#FF0000"} /> });
+      } else {
+        this.setState({ icon: <Icon icon={ICONS.FOLLOW} /> });
+      }
     }
   }
 
@@ -49,6 +41,16 @@ export default class DisplayServerDetails extends Component {
     }
   }
 
+  handleGetServerStatus = () => {
+    console.log("GET SERVER STATUS CHECK");
+    const { socket } = this.props;
+    if (socket) {
+      socket.emit("GET_SERVER_STATUS", {
+        server_id: this.props.server.server_id
+      });
+    }
+  };
+
   handleGetLocalStatus = () => {
     const { socket } = this.props;
     socket.emit("GET_LOCAL_STATUS", {
@@ -57,13 +59,22 @@ export default class DisplayServerDetails extends Component {
     });
   };
 
+  handleMemberCount = () => {
+    return this.state.memberCount;
+  };
+
   initSocket = () => {
     const { socket } = this.props;
     if (socket) {
       this.handleGetLocalStatus();
+      this.handleGetServerStatus();
+
       socket.on("SEND_LOCAL_STATUS", status => {
         console.log("GET LOCAL STATUS!", status);
         this.setState({ localStatus: status });
+      });
+      socket.on("SERVER_STATUS", status => {
+        this.setState({ memberCount: status.count });
       });
     }
   };
@@ -159,7 +170,7 @@ export default class DisplayServerDetails extends Component {
               <div>{this.handleHoverText()}</div>
             </div>
 
-            <div className="member-count"> Count </div>
+            <div className="member-count"> {this.handleMemberCount()} </div>
           </div>
 
           <div className="display-server-info">

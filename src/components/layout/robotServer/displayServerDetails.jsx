@@ -22,8 +22,9 @@ export default class DisplayServerDetails extends Component {
       this.handleGetLocalStatus();
       this.handleGetServerStatus();
       this.setState({ memberCount: "..." });
+      this.setState({ icon: <React.Fragment /> });
 
-      if (this.state.localStatus && this.state.localStatus.member === true) {
+      if (this.state.localStatus && this.state.localStatus.member) {
         this.setState({ icon: <Icon icon={ICONS.FOLLOW} color={"#FF0000"} /> });
       } else {
         this.setState({ icon: <Icon icon={ICONS.FOLLOW} /> });
@@ -121,9 +122,10 @@ export default class DisplayServerDetails extends Component {
         hoverText: "Leave Server",
         icon: <Icon icon={ICONS.UNFOLLOW} color={"#FF0000"} />
       });
-      return;
     }
-    this.setState({ icon: <Icon icon={ICONS.FOLLOW} color={"#FF0000"} /> });
+    if (this.state.localStatus && this.state.localStatus.member === false) {
+      this.setState({ icon: <Icon icon={ICONS.FOLLOW} color={"#FF0000"} /> });
+    }
   };
 
   handleMouseLeave = () => {
@@ -132,9 +134,11 @@ export default class DisplayServerDetails extends Component {
         hoverText: "Joined",
         icon: <Icon icon={ICONS.FOLLOW} color={"#FF0000"} />
       });
-      return;
     }
-    this.setState({ icon: <Icon icon={ICONS.FOLLOW} /> });
+
+    if (this.state.localStatus && this.state.localStatus.member === false) {
+      this.setState({ icon: <Icon icon={ICONS.FOLLOW} /> });
+    }
   };
 
   handleHoverText = () => {
@@ -142,6 +146,10 @@ export default class DisplayServerDetails extends Component {
       return this.state.hoverText;
     }
     return "Join Server";
+  };
+
+  handleHeartIcon = () => {
+    return this.state.icon;
   };
 
   displayDetails = () => {
@@ -168,7 +176,7 @@ export default class DisplayServerDetails extends Component {
               onMouseEnter={() => this.handleMouseEnter()}
               onMouseLeave={() => this.handleMouseLeave()}
             >
-              <div className="follow-icon">{this.state.icon}</div>
+              <div className="follow-icon">{this.handleHeartIcon()}</div>
               <div>{this.handleHoverText()}</div>
             </div>
 

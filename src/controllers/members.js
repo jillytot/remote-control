@@ -77,3 +77,7 @@ module.exports.validateInvite = async invite => {
   });
   return validate;
 };
+
+module.exports.getMemberCount = server_id => {
+  const { getMembers } = require("../models/serverMembers");
+};

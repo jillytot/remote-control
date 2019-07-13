@@ -25,7 +25,8 @@ export default class DisplayServerDetails extends Component {
     publicInvite: null,
     currentStatus: null,
     localStatus: null,
-    hoverText: "Joined"
+    hoverText: "Joined",
+    icon: <React.Fragment />
   };
 
   componentDidUpdate(prevProps) {
@@ -40,6 +41,12 @@ export default class DisplayServerDetails extends Component {
   async componentDidMount() {
     this.setState({ currentStatus: this.props.server.server_id });
     this.initSocket();
+
+    if (this.state.localStatus && this.state.localStatus.member) {
+      this.setState({ icon: <Icon icon={ICONS.FOLLOW} color={"#FF0000"} /> });
+    } else {
+      this.setState({ icon: <Icon icon={ICONS.FOLLOW} /> });
+    }
   }
 
   handleGetLocalStatus = () => {
@@ -96,11 +103,32 @@ export default class DisplayServerDetails extends Component {
   };
 
   handleMouseEnter = () => {
-    this.setState({ hoverText: "Leave Server" });
+    if (this.state.localStatus && this.state.localStatus.member === true) {
+      this.setState({
+        hoverText: "Leave Server",
+        icon: <Icon icon={ICONS.UNFOLLOW} color={"#FF0000"} />
+      });
+      return;
+    }
+    this.setState({ icon: <Icon icon={ICONS.FOLLOW} color={"#FF0000"} /> });
   };
 
   handleMouseLeave = () => {
-    this.setState({ hoverText: "Joined" });
+    if (this.state.localStatus && this.state.localStatus.member === true) {
+      this.setState({
+        hoverText: "Joined",
+        icon: <Icon icon={ICONS.FOLLOW} color={"#FF0000"} />
+      });
+      return;
+    }
+    this.setState({ icon: <Icon icon={ICONS.FOLLOW} /> });
+  };
+
+  handleHoverText = () => {
+    if (this.state.localStatus && this.state.localStatus.member === true) {
+      return this.state.hoverText;
+    }
+    return "Join Server";
   };
 
   displayDetails = () => {
@@ -127,15 +155,8 @@ export default class DisplayServerDetails extends Component {
               onMouseEnter={() => this.handleMouseEnter()}
               onMouseLeave={() => this.handleMouseLeave()}
             >
-              <div className="follow-icon">
-                <Icon icon={ICONS.FOLLOW} />
-              </div>
-              <div>
-                {this.state.localStatus &&
-                this.state.localStatus.member === true
-                  ? this.state.hoverText
-                  : "Join server"}
-              </div>
+              <div className="follow-icon">{this.state.icon}</div>
+              <div>{this.handleHoverText()}</div>
             </div>
 
             <div className="member-count"> Count </div>

@@ -21,6 +21,7 @@ export default class DisplayServerDetails extends Component {
     ) {
       this.handleGetLocalStatus();
       this.handleGetServerStatus();
+      this.setState({ memberCount: "..." });
 
       if (this.state.localStatus && this.state.localStatus.member === true) {
         this.setState({ icon: <Icon icon={ICONS.FOLLOW} color={"#FF0000"} /> });
@@ -60,6 +61,7 @@ export default class DisplayServerDetails extends Component {
   };
 
   handleMemberCount = () => {
+    if (this.state.memberCount === "...") return this.props.server.status.count;
     return this.state.memberCount;
   };
 

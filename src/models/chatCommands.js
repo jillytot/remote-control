@@ -1,13 +1,21 @@
 const { createTimeStamp } = require("../modules/utilities");
 
+/*
+Reactor Todos: 
+
+Command Router: 
+Message >> Command Router >> Executables >> Return Message
+Message comes from client via webosckets
+Command Router will parse the first two arguments, 
+Then any further parsing will happen in the executables themselves
+A message must be returned, as that will be sent out to the client side users
+*/
+
 module.exports.getMessageType = async message => {
-  //Check entry character & assign message types
-  if (message.message.charAt(0) === "/") message.type = "site-command";
-
-  //execute based on message types
-  if (message.type === "site-command") message = siteCommands(message);
-
-  //send final message to chat
+  if (message.message.charAt(0) === "/") {
+    message.type = "site-command";
+    message = await siteCommands(message);
+  }
   return message;
 };
 
@@ -22,6 +30,7 @@ siteCommands = async message => {
   if (scrubCommand === "me") updateCommand = me(updateCommand);
   if (scrubCommand === "w") message.type = "whisper";
   if (scrubCommand === "timeout")
+    //TODO: Call the new moderation script
     message = await parseModerate(message, scrubCommand);
   if (scrubCommand === "untimeout")
     message = await parseModerate(message, scrubCommand);
@@ -29,7 +38,7 @@ siteCommands = async message => {
   if (scrubCommand === "mod") message.type = "moderation";
   if (scrubCommand === "unmod") message.type = "moderation";
 
-  if (scrubCommand === "disable") await disbleServer(message);
+  // if (scrubCommand === "disable") await disbleServer(message);
 
   //Need to work on this more.
   console.log("Do Command: ", scrubCommand);
@@ -43,12 +52,6 @@ me = message => {
   message.message = message.message.substr(4);
   console.log(message.message);
   return message;
-};
-
-const disableServer = async message => {
-  const { disableRobotServer } = require("./robotServer");
-  //Check roles
-  //Disable Server
 };
 
 //May deprecate
@@ -202,14 +205,3 @@ module.exports.handleGlobalTimeout = async ({
   }
   return message;
 };
-
-/*
-User gets timed out. User's status is set to being timed out. 
-A general message should be shown to people in chat that tells them who has been timed out, and for how long
-Making an incorrect command should give the user direct feedback on the client side
-If timedout user tries to type or do things, they will get a message telling them they are still timedout / banned
-
-All messages by removed user also get removed
-A log is added to the user indicating when and where they got timed out and by who
-YOU SHOULD NOT BE ABLE TO BAN YOURSELF
-*/

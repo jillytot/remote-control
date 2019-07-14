@@ -149,6 +149,20 @@ module.exports.getIdFromUsername = async username => {
   return null;
 };
 
+module.exports.getInfoFromUsername = async username => {
+  if (username) {
+    const query = `SELECT * FROM users WHERE LOWER (username) = LOWER ( $1 );`;
+    try {
+      const check = await db.query(query, [username]);
+      console.log(check.rows[0]);
+      if (check.rows[0]) return check.rows[0];
+    } catch (err) {
+      console.log(err);
+    }
+  }
+  return null;
+};
+
 module.exports.getUserInfoFromId = async userId => {
   if (userId) {
     try {

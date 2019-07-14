@@ -5,12 +5,14 @@ import Joi from "joi-browser";
 import "./login.css";
 import axios from "axios";
 import { apiLogin } from "../../../config/clientSettings";
+import { Redirect } from "react-router-dom";
 
 export default class Login extends Form {
   state = {
     data: { username: "", password: "" },
     errors: {},
-    isUser: null
+    isUser: null,
+    redirect: false
   };
 
   async componentDidMount() {
@@ -71,11 +73,9 @@ export default class Login extends Form {
         password: data.password
       })
       .then(res => {
-        const { handleAuth } = this.props;
         console.log("Login response: ", res);
         localStorage.setItem("token", res.data.token);
-        this.props.socket.emit("AUTHENTICATE", { token: res.data.token });
-        handleAuth(localStorage.getItem("token"));
+        this.setState({redirect: true})
       })
       .catch(err => {
         console.log("Login Error: ", err);
@@ -84,13 +84,17 @@ export default class Login extends Form {
 
   render() {
     return (
-      <div className="register-form">
-        <form onSubmit={this.handleSubmit}>
-          {this.renderInput("username", "Username", "text")}
-          {this.renderInput("password", "Password", "password")}
-          {this.renderButton("Submit")}
-        </form>
-      </div>
+      this.state.redirect ? (
+        <Redirect to="/"></Redirect>
+      ) : (
+        <div className="register-form">
+          <form onSubmit={this.handleSubmit}>
+            {this.renderInput("username", "Username", "text")}
+            {this.renderInput("password", "Password", "password")}
+            {this.renderButton("Submit")}
+          </form>
+        </div>
+      )
     );
   }
 }

@@ -1,49 +1,48 @@
-import React from "react";
+import React, {Component} from "react";
 import "./user.css";
 import "./../../../styles/common.css";
 import { LOGOUT } from "../../../events/definitions";
 import defaultImages from "../../../imgs/placeholders";
-import { Link } from "react-router-dom";
+import { Link, Redirect } from "react-router-dom";
+import socket from '../../socket';
 
-const NavBar = ({ user, socket }) => {
-  const displayName = user["username"];
+export default class NavBar extends Component {
+  constructor(props){
+    super(props)
+    this.state = {
+      redirect: false
+    }
+  }
 
-  const handleClick = user => {
-    console.log("Handle Logout: ", user);
-    user !== null
-      ? socket.emit(LOGOUT, user, () => {
-          console.log("Logging Out");
-        })
-      : console.log("User Logout Error");
-    console.log("Clearing token from local storage");
+  logout = () => {
     localStorage.removeItem("token");
-    window.location.href = "/";
-  };
+    socket.emit(LOGOUT)
+    this.setState({redirect: true})
+  }
 
-  return (
-    <div className="nav-container">
-      <Link to="/">
-        {" "}
-        <div className="logo-container">
-          <img className="logo" alt="" src={defaultImages.remoLogo} />
+  render(){
+    return (
+      this.state.redirect ? (
+        <Redirect to="/login"></Redirect>
+      ) : (
+        <div className="nav-container">
+          <Link to="/">
+            {" "}
+            <div className="logo-container">
+              <img className="logo" alt="" src={defaultImages.remoLogo} />
+            </div>
+          </Link>
+
+          <div className="user-container">
+            <div className="user">
+              {this.props.user.username}{" "}
+              <button className="user-logout btn" onClick={this.logout}>
+                logout
+              </button>
+            </div>
+          </div>
         </div>
-      </Link>
-
-      <div className="user-container">
-        <div className="user">
-          {displayName}{" "}
-          <button
-            className="user-logout btn"
-            onClick={() => {
-              handleClick(user);
-            }}
-          >
-            logout
-          </button>
-        </div>
-      </div>
-    </div>
-  );
-};
-
-export default NavBar;
+      )
+    )
+  }
+}

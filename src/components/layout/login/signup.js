@@ -6,6 +6,7 @@ import "./login.css";
 import axios from "axios";
 import { apiUrl, reCaptchaSiteKey } from "../../../config/clientSettings";
 import ReCAPTCHA from "react-google-recaptcha";
+import { Redirect } from "react-router-dom";
 
 export default class Signup extends Form {
   state = {
@@ -13,7 +14,8 @@ export default class Signup extends Form {
     errors: {},
     isUser: null,
     error: "",
-    captcha: ""
+    captcha: "",
+    redirect: false
   };
 
   schema = {
@@ -91,11 +93,9 @@ export default class Signup extends Form {
         response: captcha
       })
       .then(response => {
-        const { handleAuth } = this.props;
         console.log(response);
         localStorage.setItem("token", response.data.token);
-        this.props.socket.emit("AUTHENTICATE", { token: response.data.token });
-        handleAuth(localStorage.getItem("token"));
+        this.setState({redirect: true})
       })
       .catch(function(error) {
         console.log(error);
@@ -112,23 +112,27 @@ export default class Signup extends Form {
 
   render() {
     return (
-      <div className="register-form">
-        Please do not use actual passwords or emails for this build.
-        {this.handleSubmitError()}
-        <form onSubmit={this.handleSubmit}>
-          {this.renderInput("username", "Username", "text")}
-          {this.renderInput("password", "Password", "password")}
-          {this.renderInput("confirm", "Confirm Password", "password")}
-          {this.renderInput("email", "Email", "email")}
-          <ReCAPTCHA
-            sitekey={reCaptchaSiteKey}
-            ref={this.recaptchaRef}
-            onChange={this.handleCaptcha} // this parameter is required.
-            // theme="dark"   // Did you know captcha has a dark theme?
-          />
-          {this.renderButton("Submit")}
-        </form>
-      </div>
+      this.state.redirect ? (
+        <Redirect to="/"></Redirect>
+      ) : (
+        <div className="register-form">
+          Please do not use actual passwords or emails for this build.
+          {this.handleSubmitError()}
+          <form onSubmit={this.handleSubmit}>
+            {this.renderInput("username", "Username", "text")}
+            {this.renderInput("password", "Password", "password")}
+            {this.renderInput("confirm", "Confirm Password", "password")}
+            {this.renderInput("email", "Email", "email")}
+            <ReCAPTCHA
+              sitekey={reCaptchaSiteKey}
+              ref={this.recaptchaRef}
+              onChange={this.handleCaptcha} // this parameter is required.
+              // theme="dark"   // Did you know captcha has a dark theme?
+            />
+            {this.renderButton("Submit")}
+          </form>
+        </div>
+      )
     );
   }
 }

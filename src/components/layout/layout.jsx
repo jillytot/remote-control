@@ -10,15 +10,22 @@ import "./layoutStyles.css";
 import Channels from "./robotServer/channels";
 
 export default class Layout extends Component {
-  state = {
-    isShowing: false,
-    modalContent: [],
-    selectedServer: null
-  };
+  constructor(props){
+    super(props)
+    this.state = {
+      isShowing: false,
+      modalContent: [],
+      selectedServer: null
+    };
+
+
+  }
+
 
   componentDidUpdate(prevState) {
     if (prevState !== this.state) {
-      this.handleLoadChannels();
+      //this.handleLoadChannels(); no?
+      
     }
   }
 
@@ -58,7 +65,8 @@ export default class Layout extends Component {
     console.log("SELECTED SERVER: ", e);
   };
 
-  handleLoadChannels = () => {
+  handleLoadChannels() {
+    console.log('yes', this)
     const { socket, user } = this.props;
     return (
       <Channels
@@ -83,7 +91,7 @@ export default class Layout extends Component {
 
             {this.state.selectedServer ? (
               <Route
-                path={`/${this.state.selectedServer.server_name}`}
+                path={`/:id`}
                 exact
                 component={this.handleLoadChannels}
               />

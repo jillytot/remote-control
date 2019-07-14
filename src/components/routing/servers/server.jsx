@@ -1,8 +1,6 @@
 import React, { Component } from "react";
 import { Redirect } from "react-router-dom";
 import Channels from '../../layout/robotServer/channels';
-import socket from '../../socket';
-import RobotServer from "../../layout/robotServer/robotServer";
 
 export default class ServerPage extends Component {
     constructor(props){
@@ -29,7 +27,9 @@ export default class ServerPage extends Component {
             if (robotServer.server_name === this.props.match.params.name){
                 this.props.setServer(robotServer)
                 found = true;
+                return true;
             }
+            return false;
         })
 
         if (!found){

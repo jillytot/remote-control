@@ -1,10 +1,8 @@
 import React, { Component } from "react";
 import {
   SEND_ROBOT_SERVER_INFO,
-  GET_CHAT,
   ACTIVE_USERS_UPDATED,
-  CHANNELS_UPDATED,
-  JOIN_CHANNEL
+  CHANNELS_UPDATED
 } from "../../../events/definitions";
 import { colors } from "../../../config/colors";
 import AddChannelForm from "./modals/addChannelForm";

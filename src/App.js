@@ -1,7 +1,6 @@
 import React, { Component } from "react";
 import "./App.css";
 import "./styles/common.css";
-import EventHandler from "./components/EventHandler";
 import IndexRouter from './components/routing'
 
 class App extends Component {

@@ -37,7 +37,10 @@ export default class Channel extends Component {
                     socket.emit("GET_CONTROLS", channel.controls);
                     socket.emit("JOIN_CHANNEL", channel.id);
                 }
+                
+                return true
             }
+            return false
         })
 
         if (!found){

@@ -56,4 +56,5 @@ registerEvent("ROBOT_MESSAGE_SENT", require("./robotMessageSent"));
 registerEvent("BUTTON_COMMAND", require("./buttonCommand"));
 registerEvent("GET_CONTROLS", require("./getControls"));
 registerEvent("GET_LOCAL_STATUS", require("./getLocalStatus"));
+registerEvent("GET_SERVER_STATUS", require("./getServerStatus"));
 //have to register them all with there definitions here

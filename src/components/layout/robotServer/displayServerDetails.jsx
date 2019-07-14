@@ -4,28 +4,14 @@ import ICONS from "../../../icons/icons";
 import axios from "axios";
 import { joinServer, leaveServer } from "../../../config/clientSettings";
 
-/*
-Todo: 
-Join Server: 
-Users will automatically get listed as "guests" until they join. 
-Once they join, call the server and check for valid "member" role, 
-If they have a member role, display "joined" state. 
-
-Before joining: 
-<3 Join Count
-
-On Join: 
-<3 Joined Count
-onhover: 
-<3 Leave Count
-*/
-
 export default class DisplayServerDetails extends Component {
   state = {
     publicInvite: null,
     currentStatus: null,
     localStatus: null,
-    hoverText: "Joined"
+    memberCount: "...",
+    hoverText: "Joined",
+    icon: <React.Fragment />
   };
 
   componentDidUpdate(prevProps) {
@@ -34,13 +20,38 @@ export default class DisplayServerDetails extends Component {
       this.props.socket
     ) {
       this.handleGetLocalStatus();
+      this.handleGetServerStatus();
+      this.setState({ memberCount: "..." });
+      this.setState({ icon: <React.Fragment /> });
+
+      if (this.state.localStatus && this.state.localStatus.member) {
+        this.setState({ icon: <Icon icon={ICONS.FOLLOW} color={"#FF0000"} /> });
+      } else {
+        this.setState({ icon: <Icon icon={ICONS.FOLLOW} /> });
+      }
     }
   }
 
   async componentDidMount() {
     this.setState({ currentStatus: this.props.server.server_id });
     this.initSocket();
+
+    if (this.state.localStatus && this.state.localStatus.member) {
+      this.setState({ icon: <Icon icon={ICONS.FOLLOW} color={"#FF0000"} /> });
+    } else {
+      this.setState({ icon: <Icon icon={ICONS.FOLLOW} /> });
+    }
   }
+
+  handleGetServerStatus = () => {
+    console.log("GET SERVER STATUS CHECK");
+    const { socket } = this.props;
+    if (socket) {
+      socket.emit("GET_SERVER_STATUS", {
+        server_id: this.props.server.server_id
+      });
+    }
+  };
 
   handleGetLocalStatus = () => {
     const { socket } = this.props;
@@ -50,13 +61,23 @@ export default class DisplayServerDetails extends Component {
     });
   };
 
+  handleMemberCount = () => {
+    if (this.state.memberCount === "...") return this.props.server.status.count;
+    return this.state.memberCount;
+  };
+
   initSocket = () => {
     const { socket } = this.props;
     if (socket) {
       this.handleGetLocalStatus();
+      this.handleGetServerStatus();
+
       socket.on("SEND_LOCAL_STATUS", status => {
         console.log("GET LOCAL STATUS!", status);
         this.setState({ localStatus: status });
+      });
+      socket.on("SERVER_STATUS", status => {
+        this.setState({ memberCount: status.count });
       });
     }
   };
@@ -96,11 +117,39 @@ export default class DisplayServerDetails extends Component {
   };
 
   handleMouseEnter = () => {
-    this.setState({ hoverText: "Leave Server" });
+    if (this.state.localStatus && this.state.localStatus.member === true) {
+      this.setState({
+        hoverText: "Leave Server",
+        icon: <Icon icon={ICONS.UNFOLLOW} color={"#FF0000"} />
+      });
+    }
+    if (this.state.localStatus && this.state.localStatus.member === false) {
+      this.setState({ icon: <Icon icon={ICONS.FOLLOW} color={"#FF0000"} /> });
+    }
   };
 
   handleMouseLeave = () => {
-    this.setState({ hoverText: "Joined" });
+    if (this.state.localStatus && this.state.localStatus.member === true) {
+      this.setState({
+        hoverText: "Joined",
+        icon: <Icon icon={ICONS.FOLLOW} color={"#FF0000"} />
+      });
+    }
+
+    if (this.state.localStatus && this.state.localStatus.member === false) {
+      this.setState({ icon: <Icon icon={ICONS.FOLLOW} /> });
+    }
+  };
+
+  handleHoverText = () => {
+    if (this.state.localStatus && this.state.localStatus.member === true) {
+      return this.state.hoverText;
+    }
+    return "Join Server";
+  };
+
+  handleHeartIcon = () => {
+    return this.state.icon;
   };
 
   displayDetails = () => {
@@ -127,18 +176,11 @@ export default class DisplayServerDetails extends Component {
               onMouseEnter={() => this.handleMouseEnter()}
               onMouseLeave={() => this.handleMouseLeave()}
             >
-              <div className="follow-icon">
-                <Icon icon={ICONS.FOLLOW} />
-              </div>
-              <div>
-                {this.state.localStatus &&
-                this.state.localStatus.member === true
-                  ? this.state.hoverText
-                  : "Join server"}
-              </div>
+              <div className="follow-icon">{this.handleHeartIcon()}</div>
+              <div>{this.handleHoverText()}</div>
             </div>
 
-            <div className="member-count"> Count </div>
+            <div className="member-count"> {this.handleMemberCount()} </div>
           </div>
 
           <div className="display-server-info">

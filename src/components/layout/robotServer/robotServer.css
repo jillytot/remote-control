@@ -249,13 +249,14 @@ a:active {
 }
 
 .join-server-container {
-  /* background-color: red; */
   display: flex;
   flex-direction: row;
   font-size: 12px;
   margin-bottom: 2px;
-  /* margin-top: 10px; */
+  margin-bottom: 10px;
   align-items: center;
+  border-radius: 6px;
+  background-color: rgb(57, 57, 75);
 }
 
 .follow-icon {
@@ -273,6 +274,7 @@ a:active {
   font-weight: bold;
   align-items: center;
   background: -webkit-linear-gradient(-45deg, rgb(66, 116, 209), #ee3b94 100%);
+  flex: 2;
 }
 
 .heart-container-joined {
@@ -284,6 +286,7 @@ a:active {
   cursor: pointer;
   font-weight: bold;
   align-items: center;
+  flex: 2;
 }
 
 .heart-container-joined:hover {
@@ -301,4 +304,6 @@ a:active {
   background-color: rgb(57, 57, 75);
   border-radius: 0 6px 6px 0;
   padding-right: 10px;
+  display: flex;
+  flex: 1;
 }

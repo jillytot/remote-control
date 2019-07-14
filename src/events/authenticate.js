@@ -11,7 +11,10 @@ module.exports = async (ws, data) => {
     //Confirm Validation:
     ws.emitEvent(VALIDATED, {
       username: getUser.username,
-      id: getUser.id
+      id: getUser.id,
+      status: getUser.status
     });
+  } else {
+    ws.emitEvent(VALIDATED, null) //for frontend to redirect to login
   }
 };

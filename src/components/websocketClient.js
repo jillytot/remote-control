@@ -6,6 +6,9 @@ function WebSocketClient() {
   this.on = (event, func) => {
     this.eventEmmiter.on(event, func);
   };
+  this.off = (event, func) => {
+    this.eventEmmiter.off(event, func);
+  };
   this.connected = false;
 }
 

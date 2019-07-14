@@ -16,7 +16,7 @@ export default class DisplayServerDetails extends Component {
 
   componentDidUpdate(prevProps) {
     if (
-      prevProps.server.server_id !== this.props.server.server_id &&
+      this.props.server && (!prevProps.server | prevProps.server.server_id !== this.props.server.server_id) &&
       this.props.socket
     ) {
       this.handleGetLocalStatus();

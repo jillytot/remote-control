@@ -1,24 +1,23 @@
 import React, { Component } from "react";
-import Chat from "../chat/chat";
 import {
   SEND_ROBOT_SERVER_INFO,
-  GET_CHAT,
   ACTIVE_USERS_UPDATED,
-  CHANNELS_UPDATED,
-  JOIN_CHANNEL
+  CHANNELS_UPDATED
 } from "../../../events/definitions";
 import { colors } from "../../../config/colors";
-import RobotInterface from "../robot/robotInteface";
 import AddChannelForm from "./modals/addChannelForm";
 import EditChannel from "./modals/editChannel";
 import DisplayRobot from "./displayRobot";
 import DisplayServerDetails from "./displayServerDetails";
+import socket from '../../socket';
+import { Link, Route, Switch } from "react-router-dom";
+import Channel from './channel';
 
 //placeholder
 //var chatroom = { messages: [{ sender: "user2" }] }; // (this.state.chatroom)
 export default class Channels extends Component {
   state = {
-    channels: [],
+    channels: null,
     users: [],
     userColors: {},
     currentChannel: null,
@@ -33,15 +32,20 @@ export default class Channels extends Component {
   };
 
   // not sure if needed, but why not
-  componentDidUpdate(prevState) {
-    if (prevState !== this.state) {
+  componentDidUpdate(prevProps) {
+    /*if (prevState !== this.state) {
       this.displayChannels();
+    }no.*/
+    if (prevProps.selectedServer.server_id !== this.props.selectedServer.server_id){
+      this.handleServer()
     }
   }
 
   componentDidMount() {
+    console.log('channels mount')
     this._isMounted = true;
     this.channelListener();
+    this.handleServer();
 
     this.colorCleanup = setInterval(() => {
       const newColors = this.state.userColors;
@@ -67,7 +71,7 @@ export default class Channels extends Component {
       this.setState({ userColors: newColors });
     }, 30000); //garbage cleanup every 30s
 
-    this.loadDefaultChannel();
+    //this.loadDefaultChannel();
     document.addEventListener("keydown", this.handleKeyPress);
   }
 
@@ -79,7 +83,7 @@ export default class Channels extends Component {
     }
   };
 
-  loadDefaultChannel = () => {
+  loadDefaultChannel = () => { // REMOVE DO NOT USE
     //const { channels, selectedServer } = this.props;
     const {
       currentChannel,
@@ -107,10 +111,10 @@ export default class Channels extends Component {
     return;
   };
 
+  /*
   handleActiveChannel = activeChannel => {
     console.log("LOAD CHANNEL", activeChannel);
-    const { channels } = this.state;
-    const { socket } = this.props;
+    const { channels, currentChannel } = this.state;
     let storeChannels = channels.map(channel => {
       if (channel.id === activeChannel.id) {
         console.log(activeChannel, channel);
@@ -125,6 +129,7 @@ export default class Channels extends Component {
     this.setState({ currentChannel: activeChannel.id });
     this.setState({ loadControls: activeChannel.controls });
   };
+  */
 
   generateColor = () => {
     return colors[Math.floor(Math.random() * colors.length)];
@@ -157,7 +162,7 @@ export default class Channels extends Component {
   };
 
   channelListener = () => {
-    const { socket, selectedServer } = this.props;
+    const { selectedServer } = this.props;
 
     if (socket && this._isMounted) {
       //Currently doesn't handle channels being dynamically updated
@@ -168,7 +173,7 @@ export default class Channels extends Component {
           users: this.getUserColors(data.users),
           invites: data.invites
         });
-        if (this.state.currentChannel) this.handleClick(data.channels[0]);
+        //if (this.state.currentChannel) this.handleClick(data.channels[0]);
       });
 
       socket.on(ACTIVE_USERS_UPDATED, users => {
@@ -190,36 +195,43 @@ export default class Channels extends Component {
     }
   };
 
+  handleServer = () => {
+    socket.emit("GET_CHANNELS", { user: this.props.user.id, server_id: this.props.selectedServer.server_id });
+    socket.emit("GET_ROBOTS", { server_id: this.props.selectedServer.server_id });
+  }
+
+  /*
   handleClick = channel => {
     this.handleActiveChannel(channel);
     console.log("CHANNEL INFO CHECK: ", channel);
-    const { socket } = this.props;
     const chatId = channel.chat;
     const controlsId = channel.controls;
     socket.emit(GET_CHAT, chatId);
     socket.emit("GET_CONTROLS", controlsId);
   };
+  */
 
   displayChannels = () => {
-    const { channels } = this.state;
+    const { channels, currentChannel } = this.state;
 
-    this.loadDefaultChannel();
+    //this.loadDefaultChannel();
 
     return channels.map((channel, index) => {
       return (
         <div className="channel-container" key={index}>
-          <div
-            className={
-              channel.active
-                ? "list-channels list-channels-selected"
-                : "list-channels"
-            }
-            key={channel.id}
-            onClick={() => this.handleClick(channel)}
-          >
-            {"# "}
-            {channel.name}
-          </div>
+          <Link className="channel-delink" to={`/${this.props.selectedServer.server_name}/${channel.id}`}>
+            <div
+              className={
+                channel.id === currentChannel
+                  ? "list-channels list-channels-selected"
+                  : "list-channels"
+              }
+              key={channel.id}
+            >
+              {"# "}
+              {channel.name}
+            </div>
+          </Link>
           <EditChannel
             channel={channel}
             server={this.props.selectedServer}
@@ -240,9 +252,16 @@ export default class Channels extends Component {
     }
   };
 
+  setCurrentChannel = (channel) => {
+    this.setState({currentChannel: channel})
+  }
+
   render() {
-    const { socket, user, selectedServer } = this.props;
-    const { users } = this.state;
+    const { user, selectedServer } = this.props;
+    const { users, currentChannel, chatTabbed, channels } = this.state;
+
+    if (!channels) return <React.Fragment></React.Fragment>
+
     return (
       <React.Fragment>
         <div className={this.handleDisplayChannels()}>
@@ -271,25 +290,10 @@ export default class Channels extends Component {
             socket={socket}
           />
         </div>
-        {users !== [] ? (
-          <React.Fragment>
-            <RobotInterface
-              user={user}
-              socket={socket}
-              channel={this.state.currentChannel}
-              chatTabbed={this.state.chatTabbed}
-            />
-            <Chat
-              user={user}
-              socket={socket}
-              users={users}
-              setChatTabbed={this.setChatTabbed}
-              chatTabbed={this.state.chatTabbed}
-            />
-          </React.Fragment>
-        ) : (
-          <React.Fragment />
-        )}
+        <Switch>
+          <Route path="/:name/:id" render={(props) => (<Channel {...props} user={user} users={users} currentChannel={currentChannel} setCurrentChannel={this.setCurrentChannel} chatTabbed={chatTabbed} setChatTabbed={this.setChatTabbed} channels={this.state.channels}></Channel>)}></Route>
+          <Route path="/:name" render={(props) => (<NoChannel {...props} setCurrentChannel={this.setCurrentChannel} channels={this.state.channels}></NoChannel>)}></Route>
+        </Switch>
       </React.Fragment>
     );
   }
@@ -337,5 +341,15 @@ class AddChannel extends Component {
 
   render() {
     return <React.Fragment>{this.handleDisplayAddChannel()}</React.Fragment>;
+  }
+}
+
+class NoChannel extends Component {
+  componentDidMount(){
+    this.props.setCurrentChannel(null)
+  }
+
+  render(){
+    return <React.Fragment></React.Fragment>
   }
 }

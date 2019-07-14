@@ -1,0 +1,6 @@
+.server-container {
+    display: flex;
+    height: calc(100vh - 72px);
+    top: 48px;
+}
+  

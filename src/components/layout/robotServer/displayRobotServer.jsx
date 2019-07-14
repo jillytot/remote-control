@@ -3,9 +3,9 @@ import "./robotServer.css";
 import defaultImages from "../../../imgs/placeholders";
 import { Link } from "react-router-dom";
 
-const DisplayRobotServer = ({ serverName, displayClasses }) => {
+const DisplayRobotServer = ({ serverName, defaultChannel, displayClasses }) => {
   return (
-    <Link to={serverName}>
+    <Link to={`/${serverName}/${defaultChannel}`}>
       <div className={displayClasses}>
         <img
           className="display-robot-server-img"

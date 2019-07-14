@@ -95,6 +95,16 @@ a:active {
   align-items: center;
 }
 
+.channel-delink {
+  display: flex;
+  color: inherit; /* blue colors for links too */
+  text-decoration: inherit; /* no underline */
+  max-width: 200px;
+  flex-direction: row;
+  justify-self: flex-start;
+  width: 100%;
+}
+
 .edit-channel {
   /* background-color: green; */
   display: flex;

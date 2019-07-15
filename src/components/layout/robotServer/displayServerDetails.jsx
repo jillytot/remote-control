@@ -3,6 +3,7 @@ import Icon from "../../common/icon";
 import ICONS from "../../../icons/icons";
 import axios from "axios";
 import { joinServer, leaveServer } from "../../../config/clientSettings";
+import socket from "../../socket";
 
 export default class DisplayServerDetails extends Component {
   state = {
@@ -14,10 +15,16 @@ export default class DisplayServerDetails extends Component {
     icon: <React.Fragment />
   };
 
+  componentWillUnmount() {
+    socket.off("SEND_LOCAL_STATUS", this.handleSocketLocalStatus);
+    socket.off("SERVER_STATUS", this.handleSocketServerStatus);
+  }
+
   componentDidUpdate(prevProps) {
     if (
-      this.props.server && (!prevProps.server | prevProps.server.server_id !== this.props.server.server_id) &&
-      this.props.socket
+      this.props.server &&
+      !prevProps.server |
+        (prevProps.server.server_id !== this.props.server.server_id)
     ) {
       this.handleGetLocalStatus();
       this.handleGetServerStatus();
@@ -33,6 +40,8 @@ export default class DisplayServerDetails extends Component {
   }
 
   async componentDidMount() {
+    socket.on("SEND_LOCAL_STATUS", this.handleSocketLocalStatus);
+    socket.on("SERVER_STATUS", this.handleSocketServerStatus);
     this.setState({ currentStatus: this.props.server.server_id });
     this.initSocket();
 
@@ -45,16 +54,12 @@ export default class DisplayServerDetails extends Component {
 
   handleGetServerStatus = () => {
     console.log("GET SERVER STATUS CHECK");
-    const { socket } = this.props;
-    if (socket) {
-      socket.emit("GET_SERVER_STATUS", {
-        server_id: this.props.server.server_id
-      });
-    }
+    socket.emit("GET_SERVER_STATUS", {
+      server_id: this.props.server.server_id
+    });
   };
 
   handleGetLocalStatus = () => {
-    const { socket } = this.props;
     socket.emit("GET_LOCAL_STATUS", {
       server_id: this.props.server.server_id,
       user_id: this.props.user.id
@@ -67,19 +72,17 @@ export default class DisplayServerDetails extends Component {
   };
 
   initSocket = () => {
-    const { socket } = this.props;
-    if (socket) {
-      this.handleGetLocalStatus();
-      this.handleGetServerStatus();
+    this.handleGetLocalStatus();
+    this.handleGetServerStatus();
+  };
 
-      socket.on("SEND_LOCAL_STATUS", status => {
-        console.log("GET LOCAL STATUS!", status);
-        this.setState({ localStatus: status });
-      });
-      socket.on("SERVER_STATUS", status => {
-        this.setState({ memberCount: status.count });
-      });
-    }
+  handleSocketLocalStatus = status => {
+    console.log("GET LOCAL STATUS!", status);
+    this.setState({ localStatus: status });
+  };
+
+  handleSocketServerStatus = status => {
+    this.setState({ memberCount: status.count });
   };
 
   handleJoinClick = () => {

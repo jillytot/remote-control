@@ -16,16 +16,20 @@ import Channel from "./channel";
 //placeholder
 //var chatroom = { messages: [{ sender: "user2" }] }; // (this.state.chatroom)
 export default class Channels extends Component {
-  state = {
-    channels: null,
-    users: [],
-    userColors: {},
-    currentChannel: null,
-    storeSelectedServer: null,
-    defaultLoaded: false,
-    loadControls: "",
-    chatTabbed: false
-  };
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      channels: null,
+      users: [],
+      userColors: {},
+      currentChannel: null,
+      storeSelectedServer: null,
+      defaultLoaded: false,
+      loadControls: "",
+      chatTabbed: false
+    };
+  }
 
   setChatTabbed = value => {
     this.setState({ chatTabbed: value });
@@ -33,10 +37,12 @@ export default class Channels extends Component {
 
   // not sure if needed, but why not
   componentDidUpdate(prevProps) {
+    console.log("aaaa");
     if (
       prevProps.selectedServer.server_id !== this.props.selectedServer.server_id
     ) {
-      this.handleServer();
+      console.log("bbbb");
+      this.handleServer(true);
     }
   }
 
@@ -144,7 +150,10 @@ export default class Channels extends Component {
     }
   };
 
-  handleServer = () => {
+  handleServer = resetState => {
+    console.log("handle server");
+    if (resetState) this.setState({ channels: null, currentChannel: null });
+    console.log("get channels for", this.props.selectedServer.server_name);
     socket.emit("GET_CHANNELS", {
       user: this.props.user.id,
       server_id: this.props.selectedServer.server_id
@@ -204,7 +213,11 @@ export default class Channels extends Component {
     const { user, selectedServer } = this.props;
     const { users, currentChannel, chatTabbed, channels } = this.state;
 
-    if (!channels) return <React.Fragment />;
+    if (!channels) {
+      console.log("waiting for channels");
+      return <React.Fragment />;
+    }
+    console.log("t23", channels);
 
     return (
       <React.Fragment>
@@ -214,7 +227,6 @@ export default class Channels extends Component {
             channels={this.state.channels}
             user={user}
             users={users}
-            socket={socket}
             invites={this.state.invites}
           />
           {this.displayChannels()}
@@ -231,7 +243,6 @@ export default class Channels extends Component {
             user={user}
             modal={this.props.modal}
             onCloseModal={this.props.onCloseModal}
-            socket={socket}
           />
         </div>
         <Switch>

@@ -48,7 +48,13 @@ export default class Channel extends Component {
     });
 
     if (!found) {
-      this.setState({ redirect: true });
+      console.log(
+        "somehow couldnt find",
+        this.props.match.params.id,
+        "in",
+        this.props.channels
+      );
+      //this.setState({ redirect: true }); todo fix race
     }
   };
 

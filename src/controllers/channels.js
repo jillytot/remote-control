@@ -11,6 +11,7 @@ module.exports.tempEnsureDefaultChannel = async (server_id, channel_id) => {
     let { settings } = getServer;
     newDefault = await getChannels(server_id);
     settings.default_channel = newDefault[0].id;
+    console.log("SETTING NEW DEFAULT CHANNEL: ", settings);
     await updateRobotServerSettings(server_id, settings);
     updateRobotServer();
   }

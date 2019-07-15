@@ -4,6 +4,7 @@ import { GET_ROBOTS } from "../../../events/definitions";
 import list_robot from "../../../icons/singleIcons/list_robot.svg";
 import AddRobotForm from "./modals/addRobotForm";
 import RobotSettings from "./modals/robotSettings";
+import socket from "../../socket";
 
 export default class DisplayRobot extends Component {
   state = {
@@ -11,18 +12,16 @@ export default class DisplayRobot extends Component {
   };
 
   componentDidMount() {
-    this.socketListener();
+    socket.on(GET_ROBOTS, this.socketRobotsHandler);
   }
 
-  socketListener = () => {
-    const { socket } = this.props;
-    if (socket) {
-      socket.on(GET_ROBOTS, robots => {
-        console.log("GET ROBOTS CHECK: ", robots);
-        this.setState({ robots: robots });
-      });
-      console.log(this.state.robots);
-    }
+  componentWillUnmount() {
+    socket.off(GET_ROBOTS, this.socketRobotsHandler);
+  }
+
+  socketRobotsHandler = robots => {
+    console.log("GET ROBOTS CHECK: ", robots);
+    this.setState({ robots: robots });
   };
 
   handleListRobots = () => {

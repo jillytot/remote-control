@@ -9,9 +9,9 @@ import AddChannelForm from "./modals/addChannelForm";
 import EditChannel from "./modals/editChannel";
 import DisplayRobot from "./displayRobot";
 import DisplayServerDetails from "./displayServerDetails";
-import socket from '../../socket';
+import socket from "../../socket";
 import { Link, Route, Switch } from "react-router-dom";
-import Channel from './channel';
+import Channel from "./channel";
 
 //placeholder
 //var chatroom = { messages: [{ sender: "user2" }] }; // (this.state.chatroom)
@@ -36,13 +36,15 @@ export default class Channels extends Component {
     /*if (prevState !== this.state) {
       this.displayChannels();
     }no.*/
-    if (prevProps.selectedServer.server_id !== this.props.selectedServer.server_id){
-      this.handleServer()
+    if (
+      prevProps.selectedServer.server_id !== this.props.selectedServer.server_id
+    ) {
+      this.handleServer();
     }
   }
 
   componentDidMount() {
-    console.log('channels mount')
+    console.log("channels mount");
     this._isMounted = true;
     this.channelListener();
     this.handleServer();
@@ -83,7 +85,8 @@ export default class Channels extends Component {
     }
   };
 
-  loadDefaultChannel = () => { // REMOVE DO NOT USE
+  loadDefaultChannel = () => {
+    // REMOVE DO NOT USE
     //const { channels, selectedServer } = this.props;
     const {
       currentChannel,
@@ -110,26 +113,6 @@ export default class Channels extends Component {
     }
     return;
   };
-
-  /*
-  handleActiveChannel = activeChannel => {
-    console.log("LOAD CHANNEL", activeChannel);
-    const { channels, currentChannel } = this.state;
-    let storeChannels = channels.map(channel => {
-      if (channel.id === activeChannel.id) {
-        console.log(activeChannel, channel);
-        channel.active = true;
-      } else {
-        channel.active = false;
-      }
-      return channel;
-    });
-    if (socket) socket.emit(JOIN_CHANNEL, activeChannel.id);
-    this.setState({ channels: storeChannels });
-    this.setState({ currentChannel: activeChannel.id });
-    this.setState({ loadControls: activeChannel.controls });
-  };
-  */
 
   generateColor = () => {
     return colors[Math.floor(Math.random() * colors.length)];
@@ -196,20 +179,14 @@ export default class Channels extends Component {
   };
 
   handleServer = () => {
-    socket.emit("GET_CHANNELS", { user: this.props.user.id, server_id: this.props.selectedServer.server_id });
-    socket.emit("GET_ROBOTS", { server_id: this.props.selectedServer.server_id });
-  }
-
-  /*
-  handleClick = channel => {
-    this.handleActiveChannel(channel);
-    console.log("CHANNEL INFO CHECK: ", channel);
-    const chatId = channel.chat;
-    const controlsId = channel.controls;
-    socket.emit(GET_CHAT, chatId);
-    socket.emit("GET_CONTROLS", controlsId);
+    socket.emit("GET_CHANNELS", {
+      user: this.props.user.id,
+      server_id: this.props.selectedServer.server_id
+    });
+    socket.emit("GET_ROBOTS", {
+      server_id: this.props.selectedServer.server_id
+    });
   };
-  */
 
   displayChannels = () => {
     const { channels, currentChannel } = this.state;
@@ -219,7 +196,10 @@ export default class Channels extends Component {
     return channels.map((channel, index) => {
       return (
         <div className="channel-container" key={index}>
-          <Link className="channel-delink" to={`/${this.props.selectedServer.server_name}/${channel.id}`}>
+          <Link
+            className="channel-delink"
+            to={`/${this.props.selectedServer.server_name}/${channel.id}`}
+          >
             <div
               className={
                 channel.id === currentChannel
@@ -252,15 +232,15 @@ export default class Channels extends Component {
     }
   };
 
-  setCurrentChannel = (channel) => {
-    this.setState({currentChannel: channel})
-  }
+  setCurrentChannel = channel => {
+    this.setState({ currentChannel: channel });
+  };
 
   render() {
     const { user, selectedServer } = this.props;
     const { users, currentChannel, chatTabbed, channels } = this.state;
 
-    if (!channels) return <React.Fragment></React.Fragment>
+    if (!channels) return <React.Fragment />;
 
     return (
       <React.Fragment>
@@ -291,8 +271,31 @@ export default class Channels extends Component {
           />
         </div>
         <Switch>
-          <Route path="/:name/:id" render={(props) => (<Channel {...props} user={user} users={users} currentChannel={currentChannel} setCurrentChannel={this.setCurrentChannel} chatTabbed={chatTabbed} setChatTabbed={this.setChatTabbed} channels={this.state.channels}></Channel>)}></Route>
-          <Route path="/:name" render={(props) => (<NoChannel {...props} setCurrentChannel={this.setCurrentChannel} channels={this.state.channels}></NoChannel>)}></Route>
+          <Route
+            path="/:name/:id"
+            render={props => (
+              <Channel
+                {...props}
+                user={user}
+                users={users}
+                currentChannel={currentChannel}
+                setCurrentChannel={this.setCurrentChannel}
+                chatTabbed={chatTabbed}
+                setChatTabbed={this.setChatTabbed}
+                channels={this.state.channels}
+              />
+            )}
+          />
+          <Route
+            path="/:name"
+            render={props => (
+              <NoChannel
+                {...props}
+                setCurrentChannel={this.setCurrentChannel}
+                channels={this.state.channels}
+              />
+            )}
+          />
         </Switch>
       </React.Fragment>
     );
@@ -345,11 +348,11 @@ class AddChannel extends Component {
 }
 
 class NoChannel extends Component {
-  componentDidMount(){
-    this.props.setCurrentChannel(null)
+  componentDidMount() {
+    this.props.setCurrentChannel(null);
   }
 
-  render(){
-    return <React.Fragment></React.Fragment>
+  render() {
+    return <React.Fragment />;
   }
 }

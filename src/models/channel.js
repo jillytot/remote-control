@@ -161,6 +161,7 @@ module.exports.updateServerChannels = async server_id => {
 
 module.exports.deleteChannel = async (channel_id, server_id) => {
   const db = require("../services/db");
+  const { tempEnsureDefaultChannel } = require("../controllers/channels");
   const remove = `DELETE FROM channels WHERE id =$1`;
   let response = {};
   try {
@@ -175,12 +176,13 @@ module.exports.deleteChannel = async (channel_id, server_id) => {
     }
 
     const result = await db.query(remove, [channel_id]);
-    // if (result.rows > 0) {
+    // if (result.rows[0]) {
     response.status = "success!";
     response.result = result.rows[0];
+    await tempEnsureDefaultChannel(server_id, channel_id);
     this.updateServerChannels(server_id);
-
     return response;
+    //}
   } catch (err) {
     response.error = err;
     response.status = "error!";

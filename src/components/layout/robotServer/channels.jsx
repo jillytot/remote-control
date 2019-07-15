@@ -10,7 +10,7 @@ import EditChannel from "./modals/editChannel";
 import DisplayRobot from "./displayRobot";
 import DisplayServerDetails from "./displayServerDetails";
 import socket from "../../socket";
-import { Link, Route, Switch } from "react-router-dom";
+import { Link, Route, Switch, Redirect } from "react-router-dom";
 import Channel from "./channel";
 
 //placeholder
@@ -33,9 +33,6 @@ export default class Channels extends Component {
 
   // not sure if needed, but why not
   componentDidUpdate(prevProps) {
-    /*if (prevState !== this.state) {
-      this.displayChannels();
-    }no.*/
     if (
       prevProps.selectedServer.server_id !== this.props.selectedServer.server_id
     ) {
@@ -72,8 +69,6 @@ export default class Channels extends Component {
       // console.log(newColors);
       this.setState({ userColors: newColors });
     }, 30000); //garbage cleanup every 30s
-
-    //this.loadDefaultChannel();
     document.addEventListener("keydown", this.handleKeyPress);
   }
 
@@ -83,35 +78,6 @@ export default class Channels extends Component {
       console.log(this.state.chatTabbed);
       this.setChatTabbed(!this.state.chatTabbed);
     }
-  };
-
-  loadDefaultChannel = () => {
-    // REMOVE DO NOT USE
-    //const { channels, selectedServer } = this.props;
-    const {
-      currentChannel,
-      defaultLoaded,
-      channels,
-      storeSelectedServer
-    } = this.state;
-    if (
-      this.props.selectedServer &&
-      this.props.selectedServer.server_id &&
-      this.props.selectedServer.server_id !== storeSelectedServer
-    ) {
-      this.setState({
-        storeSelectedServer: this.props.selectedServer.server_id,
-        defaultLoaded: false,
-        currentChannel: null
-      });
-    }
-    if (currentChannel || defaultLoaded) return;
-
-    if (channels && channels.length > 0) {
-      console.log("LOADING DEFAULT CHANNEL");
-      this.handleActiveChannel(channels[0]);
-    }
-    return;
   };
 
   generateColor = () => {
@@ -190,8 +156,6 @@ export default class Channels extends Component {
 
   displayChannels = () => {
     const { channels, currentChannel } = this.state;
-
-    //this.loadDefaultChannel();
 
     return channels.map((channel, index) => {
       return (

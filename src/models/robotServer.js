@@ -49,7 +49,7 @@ module.exports.createRobotServer = async (server, token) => {
   };
 
   buildServer.channels.push(await this.initChannels(buildServer));
-  buildServer.settings.default_channel = buildServer.channels[0];
+  buildServer.settings.default_channel = buildServer.channels[0].id;
   const save = await this.saveServer(buildServer);
   if (!save) return { status: "Error!", error: "Unable to save server" };
   console.log("Generating Server: ", buildServer);
@@ -284,6 +284,23 @@ module.exports.updateRobotServerStatus = async (server_id, status) => {
   try {
     const update = `UPDATE robot_servers SET status = $1 WHERE server_id = $2 RETURNING *`;
     const result = await db.query(update, [status, server_id]);
+    if (result.rows[0]) {
+      const sendResult = result.rows[0];
+      console.log("Robot Server Updated: ", sendResult);
+      return sendResult;
+      //Server Status Update will need to get sent.
+    }
+  } catch (err) {
+    console.log(err);
+  }
+};
+
+module.exports.updateRobotServerSettings = async (server_id, settings) => {
+  const db = require("../services/db");
+  console.log("Updating Robot Server Status: ", server_id);
+  try {
+    const update = `UPDATE robot_servers SET settings = $1 WHERE server_id = $2 RETURNING *`;
+    const result = await db.query(update, [settings, server_id]);
     if (result.rows[0]) {
       const sendResult = result.rows[0];
       console.log("Robot Server Updated: ", sendResult);

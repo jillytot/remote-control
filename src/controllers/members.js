@@ -96,7 +96,7 @@ module.exports.updateMemberCount = async server_id => {
   const {
     getRobotServer,
     updateRobotServerStatus,
-    sendRobotStatus
+    sendRobotServerStatus
   } = require("../models/robotServer");
 
   const updateMemberCount = await this.getMemberCount(server_id);
@@ -110,6 +110,6 @@ module.exports.updateMemberCount = async server_id => {
   );
 
   if (updateStatus) {
-    sendRobotStatus(server_id, robotServer.status);
+    sendRobotServerStatus(server_id, robotServer.status);
   }
 };

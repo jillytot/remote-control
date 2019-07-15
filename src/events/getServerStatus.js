@@ -2,11 +2,11 @@ module.exports = async (ws, data) => {
   console.log("GET LOCAL STATUS ", data, ws.user);
 
   const {
-    sendRobotStatus,
+    sendRobotServerStatus,
     getRobotServer
-  } = require("../models/serverMembers");
+  } = require("../models/robotServer");
   const { server_id } = data;
 
   const getServer = await getRobotServer(server_id);
-  sendRobotStatus(server_id, getServer.status);
+  sendRobotServerStatus(server_id, getServer.status);
 };

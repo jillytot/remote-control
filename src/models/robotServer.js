@@ -49,6 +49,7 @@ module.exports.createRobotServer = async (server, token) => {
   };
 
   buildServer.channels.push(await this.initChannels(buildServer));
+  buildServer.settings.default_channel = buildServer.channels[0];
   const save = await this.saveServer(buildServer);
   if (!save) return { status: "Error!", error: "Unable to save server" };
   console.log("Generating Server: ", buildServer);
@@ -188,7 +189,7 @@ module.exports.sendGlobalTimeout = (server_id, badUser) => {
   this.emitEvent(server_id, GLOBAL_TIMEOUT, publicUser(badUser));
 };
 
-module.exports.sendRobotStatus = (server_id, status) => {
+module.exports.sendRobotServerStatus = (server_id, status) => {
   console.log("SEND ROBOT STATUS CHECK: ", server_id, status);
   this.emitEvent(server_id, "SERVER_STATUS", status);
 };

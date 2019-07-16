@@ -38,7 +38,7 @@ module.exports.createMessage = async message => {
   //Turn this back on once you start removing active chats from memmory
   //saveMessageToActiveChat(makeMess);
 
-  console.log("Generating Chat Message: ", makeMess);
+  // console.log("Generating Chat Message: ", makeMess);
   makeMess = await getMessageType(makeMess);
   this.sendMessage(makeMess);
 };
@@ -61,7 +61,7 @@ module.exports.createRobotMessage = async message => {
     message.userId
   );
   makeMess.type = message.type;
-  console.log("Generating Robot Chat Message: ", makeMess);
+  // console.log("Generating Robot Chat Message: ", makeMess);
   //makeMess = await getMessageType(makeMess);
   this.sendMessage(makeMess);
 };
@@ -77,7 +77,7 @@ module.exports.sendMessage = message => {
   }
 
   let chatRoom = message.chat_id;
-  console.log("Chat Room from SendMessage: ", chatRoom, message);
+  // console.log("Chat Room from SendMessage: ", chatRoom, message);
   chatRoomModel.emitEvent(chatRoom, "MESSAGE_RECIEVED", message);
 };
 

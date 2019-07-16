@@ -94,7 +94,7 @@ const parseModerate = async (message, action) => {
   moderate.message = message;
   moderate.action = action;
 
-  if (action === "timeout") {
+  if (action === "suspend") {
     moderate.time = message.message
       .substr(1)
       .split(" ")[2]
@@ -148,7 +148,7 @@ module.exports.handleGlobalTimeout = async ({
   let actOnUser = {};
   //Execute Timeout
 
-  if (action === "timeout") {
+  if (action === "suspend") {
     if (username) {
       time = parseInt(time);
       if (Number.isInteger(time)) {
@@ -176,7 +176,7 @@ module.exports.handleGlobalTimeout = async ({
       console.log("Chat Commands : handleTimeout : thisUser: ", thisUser);
       message.message = `User ${
         actOnUser.username
-      } has been globally timed out for ${time / 1000} seconds.`;
+      } has been put in timeout for ${time / 1000} seconds.`;
       console.log("MESSAGE FROM SET GLOBAL TIMEOUT: ", message.message);
       const { sendGlobalTimeout } = require("./robotServer");
       sendGlobalTimeout(message.server_id, actOnUser);
@@ -184,7 +184,7 @@ module.exports.handleGlobalTimeout = async ({
     }
   }
 
-  if (action === "untimeout") {
+  if (action === "unsuspend") {
     const { clearGlobalTimeout } = require("./user");
     let unTimeout = clearGlobalTimeout(thisUser);
     if (unTimeout) {
@@ -192,7 +192,7 @@ module.exports.handleGlobalTimeout = async ({
       console.log("Chat Commands : handleUntimeout : thisUser: ", thisUser);
       message.message = `User ${
         actOnUser.username
-      } your global timeout status has been removed`;
+      } your timeout status has been removed`;
 
       console.log("MESSAGE FROM GLOBAL UNTIMEOUT: ", message.message);
       // const { sendGlobalTimeout } = require("./robotServer");

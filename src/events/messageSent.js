@@ -1,4 +1,5 @@
 const { createMessage } = require("../models/chatMessage");
+const { getMember } = require("../models/serverMembers");
 
 module.exports = async (ws, message) => {
   console.log("Message Received: ", ws.user, message);
@@ -9,7 +10,11 @@ module.exports = async (ws, message) => {
   const { getUserInfoFromId, publicUser } = require("../models/user");
   const checkStatus = await getUserInfoFromId(ws.user.id); //This user info call is the single source of truth for the message sender
   message.user = publicUser(checkStatus);
-  if (!checkStatus.status.timeout && !ws.user.status.timeout) {
+  const getLocalStatus = await getMember({
+    user_id: ws.user.id,
+    server_id: message.server_id
+  });
+  if (!checkStatus.status.timeout && !getLocalStatus.status.timeout) {
     createMessage(message);
     return;
   }

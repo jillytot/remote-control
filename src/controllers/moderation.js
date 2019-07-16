@@ -25,11 +25,12 @@ module.exports.localTimeout = async moderate => {
   if (moderate.message["error"] === false) moderate = checkTime(moderate);
   if (moderate.message["error"] === false)
     moderate = await this.handleLocalTimeout(moderate);
+  console.log("MODERATION CHECK: ", moderate);
   return moderate.message;
 };
 
 const checkTime = ({ arg, badUser, moderator, message }) => {
-  console.log("Check timeout time: ", arg);
+  // console.log("Check timeout time: ", arg);
   const { maxTimeout } = require("../config/serverSettings");
   let time = parseInt(arg);
   if (!Number.isInteger(time)) {
@@ -74,7 +75,7 @@ const getMembers = async ({ arg, badUser, moderator, message }) => {
     server_id: message.server_id,
     user_id: message.sender_id
   });
-  console.log("MODERATOR CHECK");
+
   //TOOD: CHECK MODERATOR ROLES, THIS SHOULD BE CHECKED BEFORE BADUSER IS SEARCHED FOR
   if (!moderator) {
     message.message = `Moderation Verification Error!`;
@@ -157,8 +158,9 @@ module.exports.handleLocalTimeout = async ({
   if (!checkUpdatedStatus) {
     message = handleError(message, "Unable to timeout user");
   } else {
-    message.message = `User ${badUser.username} has been timed out for ${time /
-      1000} seconds.`;
+    message.message = `User ${
+      badUser.username
+    } has been put in timeout for ${time / 1000} seconds.`;
     createTimer(time, clearLocalTimeout, badUser);
   }
   return { arg, badUser, moderator, message };

@@ -21,12 +21,26 @@ module.exports.localTimeout = async moderate => {
   moderate.error = false; //init error flag
   moderate = parseInput(moderate);
   moderate = await getMembers(moderate);
+  if (moderate.message["error"] === false)
+    moderate = await authCommand(moderate);
   if (moderate.message["error"] === false) moderate = checkTimeout(moderate);
   if (moderate.message["error"] === false) moderate = checkTime(moderate);
   if (moderate.message["error"] === false)
     moderate = await this.handleLocalTimeout(moderate);
-  console.log("MODERATION CHECK: ", moderate);
+
+  // console.log("MODERATION CHECK: ", moderate);
   return moderate.message;
+};
+
+const authCommand = async ({ arg, badUser, moderator, message }) => {
+  const { getRobotServer } = require("../models/robotServer");
+  //TEMPORARY! ONLY SERVER OWNERS CAN DO THINGS
+  const server = await getRobotServer(message.server_id);
+  if (moderator.user_id !== server.owner_id) {
+    handleError(message, "You are not authorized to use this command.");
+    return { arg, badUser, moderator, message };
+  }
+  return { arg, badUser, moderator, message };
 };
 
 const checkTime = ({ arg, badUser, moderator, message }) => {
@@ -90,7 +104,7 @@ const getMembers = async ({ arg, badUser, moderator, message }) => {
   if (!badUser) {
     message = handleError(
       message,
-      `${badUsername}, does not exist, are you sure you typed it correctly?`
+      `User ${badUsername}, does not exist, are you sure you typed it correctly?`
     );
     return { arg, badUser, moderator, message };
   }

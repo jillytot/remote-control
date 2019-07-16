@@ -163,23 +163,7 @@ WITH (
 )
 TABLESPACE pg_default;
 
-ALTER TABLE public.robot_servers
-    OWNER to postgres;
 
-    CREATE TABLE public.invites
-(
-    id character varying COLLATE pg_catalog."default" NOT NULL,
-    created_by character varying COLLATE pg_catalog."default",
-    server_id character varying COLLATE pg_catalog."default",
-    created character varying COLLATE pg_catalog."default",
-    expires character varying COLLATE pg_catalog."default" NOT NULL,
-    status character varying COLLATE pg_catalog."default",
-    CONSTRAINT invites_pkey PRIMARY KEY (id)
-)
-WITH (
-    OIDS = FALSE
-)
-TABLESPACE pg_default;
 
 ALTER TABLE public.invites
     OWNER to postgres;

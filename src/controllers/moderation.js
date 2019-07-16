@@ -1,4 +1,5 @@
 /*
+import Message from '../components/layout/chat/message';
 Server Level: 
 Timeout - No chat or controls
 Kick - Remove user as a member, but doesn't ban them
@@ -16,33 +17,38 @@ Delete Server - Delete
 */
 
 //LOCAL TIMEOUT SEQUENCE
-module.exports.localTimeout = async message => {
-  let moderate = parseInput(message);
+module.exports.localTimeout = async moderate => {
+  moderate.error = false; //init error flag
+  moderate = parseInput(moderate);
   moderate = await getMembers(moderate);
-  moderate = checkTimeout(moderate);
-  moderate = checkTime(moderate);
+  if (moderate.message["error"] === false) moderate = checkTimeout(moderate);
+  if (moderate.message["error"] === false) moderate = checkTime(moderate);
+  if (moderate.message["error"] === false)
+    moderate = await this.handleLocalTimeout(moderate);
+  return moderate.message;
 };
 
-const checkTime = moderate => {
-  console.log("Check timeout time: ", moderate.arg);
+const checkTime = ({ arg, badUser, moderator, message }) => {
+  console.log("Check timeout time: ", arg);
   const { maxTimeout } = require("../config/serverSettings");
-  let time = parseInt(moderate.arg);
+  let time = parseInt(arg);
   if (!Number.isInteger(time)) {
-    moderate.message.message = "Integer Required for Timeout";
-    moderate.message.broadcast = "self";
-    moderate.message.error = true;
-    return moderate;
+    message.message = "Integer Required for Timeout";
+    message.broadcast = "self";
+    message.error = true;
+    return { arg, badUser, moderator, message };
   }
 
   if (time < 0) time = 0;
   if (time > maxTimeout) time = maxTimeout;
-  moderate.arg = time * 1000;
-  return moderate;
+  arg = time * 1000;
+  return { arg, badUser, moderator, message };
 };
 
 //PARSE INPUT
 const parseInput = message => {
   console.log("Parsing Command Input");
+  message.type = "moderation";
   let badUser = message.message
     .substr(1)
     .split(" ")[1]
@@ -58,118 +64,119 @@ const parseInput = message => {
   return { arg: arg, badUser: badUser, moderator: moderator, message: message };
 };
 
-const getMembers = async moderate => {
+const getMembers = async ({ arg, badUser, moderator, message }) => {
   console.log("Verifying users for moderation");
-  let { badUser, moderator, message } = moderate;
   const badUsername = badUser;
   const { getIdFromUsername } = require("../models/user");
   const { getMember } = require("../models/serverMembers");
-  badUser = await getIdFromUsername(badUsername);
-  badUser = await getMember({ server_id: message.server_id, user_id: badUser });
-  //If No Bad User ?
-  if (!badUser) {
-    moderate.message.message = `${
-      badUser.username
-    }, does not exist, are you sure you typed it correctly?`;
-    moderate.message.error = true;
-    moderate.message.broadcast = "self";
-  }
 
-  badUser.username = badUsername;
-  moderator = await getMember(moderator);
+  moderator = await getMember({
+    server_id: message.server_id,
+    user_id: message.sender_id
+  });
+  console.log("MODERATOR CHECK");
+  //TOOD: CHECK MODERATOR ROLES, THIS SHOULD BE CHECKED BEFORE BADUSER IS SEARCHED FOR
   if (!moderator) {
-    moderate.message.message = `Moderation Verification Error!`;
-    moderate.message.error = true;
-    moderate.message.broadcast = "self";
+    message.message = `Moderation Verification Error!`;
+    message.error = true;
+    message.broadcast = "self";
+    return { arg, badUser, moderator, message };
   }
 
   moderator.username = message.sender;
-  moderate.badUser = badUser;
-  moderate.moderator = moderator;
-  return moderate;
+  badUser = await getIdFromUsername(badUsername);
+  //If No Bad User ?
+  if (!badUser) {
+    message = handleError(
+      message,
+      `${badUsername}, does not exist, are you sure you typed it correctly?`
+    );
+    return { arg, badUser, moderator, message };
+  }
+
+  badUser = await getMember({ server_id: message.server_id, user_id: badUser });
+  badUser.username = badUsername;
+  return { arg, badUser, moderator, message };
 };
 
 //CHECK TIMEOUT COMMAND FOR ERRORS
-const checkTimeout = async moderate => {
+const checkTimeout = ({ arg, badUser, moderator, message }) => {
   console.log("Checking timeout command for errors");
-  let { arg, badUser, moderator, message } = moderate;
-
-  //YOU CAN'T TIME YOURSELF OUT
-  if (badUser.username.toLowerCase() === moderator.username.toLowerCase()) {
-    message.message = `${badUser.username}, You cannot timeout yourself...`;
-    message.error = true;
-    message.broadcast = "self";
-    moderate = { arg, badUser, moderator, message };
-    return moderate;
-  }
 
   //YOU CAN'T TIMEOUT JILL, DONT EVEN TRY
   if (badUser.username === "jill") {
-    message.message = `${moderator.username}, how dare you timeout jill`;
-    message.error = true;
-    message.broadcast = "self";
-    moderate = { arg, badUser, moderator, message };
-    return moderate;
+    message = handleError(
+      message,
+      `${moderator.username}, how dare you timeout jill`
+    );
+    return { arg, badUser, moderator, message };
   }
-  moderate = { arg, badUser, moderator, message };
-  return moderate;
+
+  //YOU CAN'T TIME YOURSELF OUT
+  if (badUser.username.toLowerCase() === moderator.username.toLowerCase()) {
+    message = handleError(
+      message,
+      `${badUser.username}, You cannot timeout yourself...`
+    );
+    return { arg, badUser, moderator, message };
+  }
+
+  return { arg, badUser, moderator, message };
 };
 
 //Note: User refers to global user, Member refers to server member (AKA local user)
-module.exports.handleLocalTimeout = async (user_id, server_id, time) => {
+module.exports.handleLocalTimeout = async ({
+  arg,
+  badUser,
+  moderator,
+  message
+}) => {
   const { createTimer } = require("../modules/utilities");
   const { updateMemberStatus } = require("../models/serverMembers");
+  let time = arg;
+  badUser.status.timeout = true;
 
-  //Todo:
-  //Verify Member
-  //Check Member Roles
-
-  console.log("TIMEOUT USER: ", member, time);
-  if (user && time) {
-    let { status } = member;
-    status.timeout = true;
-    if (status.expireTimeout && status.expireTimeout > Date.now()) {
-      const addRemainder = status.expireTimeout - (time + Date.now());
-      console.log(
-        "User is already timed out, checking for remainder: ",
-        addRemainder
-      );
-      if (addRemainder <= 0) return status;
-      time = addRemainder;
-    }
-    status.expireTimeout = Date.now() + time;
+  if (
+    badUser.status.expireTimeout &&
+    badUser.status.expireTimeout > Date.now()
+  ) {
+    const addRemainder = badUser.status.expireTimeout - (time + Date.now());
     console.log(
-      "TIMEOUT STATUS CHECK: ",
-      status,
-      status.expireTimeout - Date.now()
+      "User is already timed out, checking for remainder: ",
+      addRemainder
     );
-    member.status = status;
-    let checkUpdatedStatus = await updateMemberStatus(member); //Member Status
-    createTimer(time, removeLocalTimeout, member);
-    return checkUpdatedStatus;
+    if (addRemainder > 0) time = addRemainder;
   }
-  console.log("Timout Error");
+  badUser.status.expireTimeout = Date.now() + time;
+  console.log(
+    "TIMEOUT STATUS CHECK: ",
+    badUser.status,
+    badUser.status.expireTimeout - Date.now()
+  );
+  let checkUpdatedStatus = await updateMemberStatus(badUser); //Member Status
+  if (!checkUpdatedStatus) {
+    message = handleError(message, "Unable to timeout user");
+  } else {
+    message.message = `User ${badUser.username} has been timed out for ${time /
+      1000} seconds.`;
+    createTimer(time, clearLocalTimeout, badUser);
+  }
+  return { arg, badUser, moderator, message };
+};
+
+const clearLocalTimeout = async member => {
+  console.log("Clearing timeout for local member");
+  const { updateMemberStatus } = require("../models/serverMembers");
+  member.status.expireTimeout = 0;
+  member.status.timeout = false;
+  const clearUser = await updateMemberStatus(member);
+  if (clearUser) return true;
   return null;
 };
 
-// const removeLocalTimeout = () => {};
-
-const calcTimeout = time => {
-  console.log(typeof time);
-  const { createTimeStamp } = require("../modules/utilities");
-
-  let makeTimeStamp = createTimeStamp();
-  let timeStamp = Math.floor(makeTimeStamp / 1000);
-  const calculate = (timeStamp + time) * 1000;
-  console.log(
-    "Calculating Timeout: ",
-    makeTimeStamp,
-    timeStamp,
-    time,
-    calculate
-  );
-  return calculate;
+const handleError = (message, error) => {
+  message.error = true;
+  message.broadcast = "self";
+  message.message = error;
+  return message;
 };
-
-//Authorize Moderator - Verify, Check Roles
-//Verify badUser

@@ -1,4 +1,5 @@
 const { createTimeStamp } = require("../modules/utilities");
+const { localTimeout } = require("../controllers/moderation");
 
 /*
 Reactor Todos: 
@@ -29,11 +30,14 @@ siteCommands = async message => {
 
   if (scrubCommand === "me") updateCommand = me(updateCommand);
   if (scrubCommand === "w") message.type = "whisper";
-  if (scrubCommand === "timeout")
+  if (scrubCommand === "suspend")
+    //Suspend is the global version of timeout
     //TODO: Call the new moderation script
     message = await parseModerate(message, scrubCommand);
-  if (scrubCommand === "untimeout")
+  if (scrubCommand === "unsuspend")
     message = await parseModerate(message, scrubCommand);
+
+  if (scrubCommand === "timeout") message = await localTimeout(message);
 
   if (scrubCommand === "mod") message.type = "moderation";
   if (scrubCommand === "unmod") message.type = "moderation";

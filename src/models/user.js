@@ -141,7 +141,7 @@ module.exports.getIdFromUsername = async username => {
     try {
       const check = await db.query(query, [username]);
       console.log(check.rows[0]);
-      return check.rows[0].id;
+      if (check.rows[0]) return check.rows[0].id;
     } catch (err) {
       console.log(err);
     }

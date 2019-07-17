@@ -338,8 +338,8 @@ module.exports.checkServerName = async serverName => {
   const query = `SELECT server_name FROM robot_servers WHERE LOWER(server_name)=LOWER( $1 )`;
   try {
     const result = await db.query(query, [serverName]);
-    console.log(result.rows);
-    if (result.rows[0].count > 0) return true;
+    console.log(result.rows[0]);
+    if (result.rows[0]) return true;
   } catch (err) {
     console.log(err);
   }

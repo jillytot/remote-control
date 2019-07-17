@@ -32,6 +32,23 @@ module.exports.localTimeout = async moderate => {
   return moderate.message;
 };
 
+module.exports.localUnTimeout = async moderate => {
+  moderate.error = false; //init error flag
+  moderate = parseInput(moderate);
+  moderate = await getMembers(moderate);
+  if (moderate.badUser["status"].timeout === false) {
+    moderate.message = handleError(
+      moderate.message,
+      "This user is not currently timed out"
+    );
+  }
+  if (moderate.message["error"] === false)
+    moderate = await authCommand(moderate);
+  if (moderate.message["error"] === false)
+    moderate = await this.handleLocalUnTimeout(moderate);
+  return moderate.messsage;
+};
+
 const authCommand = async ({ arg, badUser, moderator, message }) => {
   const { getRobotServer } = require("../models/robotServer");
   //TEMPORARY! ONLY SERVER OWNERS CAN DO THINGS

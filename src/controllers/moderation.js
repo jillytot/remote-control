@@ -36,17 +36,21 @@ module.exports.localUnTimeout = async moderate => {
   moderate.error = false; //init error flag
   moderate = parseInput(moderate);
   moderate = await getMembers(moderate);
-  if (moderate.badUser["status"].timeout === false) {
-    moderate.message = handleError(
-      moderate.message,
-      "This user is not currently timed out"
-    );
-  }
   if (moderate.message["error"] === false)
     moderate = await authCommand(moderate);
+  if (moderate.message["error"] === false) checkForTimeouts(moderate);
   if (moderate.message["error"] === false)
     moderate = await this.handleLocalUnTimeout(moderate);
-  return moderate.messsage;
+
+  console.log("UNTIMEOUT CHECK: ", moderate);
+  return moderate.message;
+};
+
+const checkForTimeouts = ({ arg, badUser, moderator, message }) => {
+  if (badUser["status"].timeout === false) {
+    message = handleError(message, "This user is not currently in timeout.");
+  }
+  return { arg, badUser, moderator, message };
 };
 
 const authCommand = async ({ arg, badUser, moderator, message }) => {
@@ -80,15 +84,19 @@ const checkTime = ({ arg, badUser, moderator, message }) => {
 //PARSE INPUT
 const parseInput = message => {
   console.log("Parsing Command Input");
+  let arg = "";
   message.type = "moderation";
   let badUser = message.message
     .substr(1)
     .split(" ")[1]
     .toLowerCase();
-  const arg = message.message
-    .substr(1)
-    .split(" ")[2]
-    .toLowerCase();
+
+  if (message.message.substr(1).split(" ")[2])
+    arg = message.message
+      .substr(1)
+      .split(" ")[2]
+      .toLowerCase();
+
   let moderator = {
     user_id: message.sender_id,
     server_id: message.server_id
@@ -153,6 +161,23 @@ const checkTimeout = ({ arg, badUser, moderator, message }) => {
     return { arg, badUser, moderator, message };
   }
 
+  return { arg, badUser, moderator, message };
+};
+
+module.exports.handleLocalUnTimeout = async ({
+  arg,
+  badUser,
+  moderator,
+  message
+}) => {
+  const removeTimeout = await clearLocalTimeout(badUser);
+  if (removeTimeout) {
+    message.message = `User ${
+      badUser.username
+    }, your timeout status has been removed for this server.`;
+  } else {
+    message = handleError(message, "Unable to clear timeout for user");
+  }
   return { arg, badUser, moderator, message };
 };
 

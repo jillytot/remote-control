@@ -1,5 +1,5 @@
 const { createTimeStamp } = require("../modules/utilities");
-const { localTimeout } = require("../controllers/moderation");
+const { localTimeout, localUnTimeout } = require("../controllers/moderation");
 
 /*
 Reactor Todos: 
@@ -38,6 +38,7 @@ siteCommands = async message => {
     message = await parseModerate(message, scrubCommand);
 
   if (scrubCommand === "timeout") message = await localTimeout(message);
+  if (scrubCommand === "untimeout") message = await localUnTimeout(message);
 
   if (scrubCommand === "mod") message.type = "moderation";
   if (scrubCommand === "unmod") message.type = "moderation";

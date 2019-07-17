@@ -1,29 +1,20 @@
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+If you want to run just the frontend, you can connect it to the live dev server. 
+In clientSettings.js you can: 
 
-Current Map:
+```
+const localHost = "localhost"; //default
+const devServer = "35.185.203.47"; //default
 
-src <br>
-. |\_components<br>
-. | |\_common<br>
-. | |\_layout<br>
-. | |\_chat<br>
-. | |\_login<br>
-. | |\_nav<br>
-. |\_config<br>
-. | |\_env<br>
-. |\_emotes<br>
-. | |\_imgs<br>
-. |\_events<br>
-. |\_icons<br>
-. |\_routes<br>
-. | |\_api<br>
-. | |\_modules<br>
-. |\_services<br>
-. | |\_db<br>
-. | |\_server<br>
-. | |\_sockets<br>
-. | |\_chat<br>
-. |\_styles<br>
+const host = localHost; //If you want to run just the frontend, change this to devServer, instead of localHost
+```
+Like so: 
+```
+const host = devServer;
+```
+
+Then in termal run: 
+```npm run react```
+
 
 ## Available Scripts
 

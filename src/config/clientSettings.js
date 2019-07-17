@@ -6,10 +6,13 @@ const ws = "ws://";
 const http = "http://";
 const api = "/api";
 
-const localHost = "localhost";
+const localHost = "localhost"; //default
 const devServer = "35.185.203.47";
 
+//If you want to run just the frontend, change this to "devServer";
 const host = localHost;
+//Then you can run "npm run react" to start.
+
 const apiUrl = `${http}${host}:${serverPort}${api}`;
 const socketUrl = `${ws}${host}:${serverPort}`;
 

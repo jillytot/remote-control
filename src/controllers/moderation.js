@@ -1,15 +1,16 @@
 /*
 import Message from '../components/layout/chat/message';
 Server Level: 
-Timeout - No chat or controls
-Kick - Remove user as a member, but doesn't ban them
-Ban - Removes user's ability to enter a server
-Lock - No Controls
-Mute - No TTS
-Block - Users invisible to each other
+Done -  Timeout - No chat or controls
+Done -  Untimeout - remove a timeout
+        Kick - Remove user as a member, but doesn't ban them
+        Ban - Removes user's ability to enter a server
+        Lock - No Controls
+        Mute - No TTS
+        Block - Users invisible to each other
 
 Global Level: 
-Global Timeout - Unable to Use any site features that interact with users or robots
+suspend, AKA Global Timeout - Unable to Use any site features that interact with users or robots
 Global Ban - Same, but permanent 
 Disable Server - Removes access to server for all users except owner and global level moderators
 Lock Server - No one can access a lock server except for global level mods

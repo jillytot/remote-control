@@ -239,3 +239,12 @@ const handleError = (message, error) => {
   message.message = error;
   return message;
 };
+
+const updateUserWS = async user => {
+  const { wss } = require("../services/wss/index");
+  wss.clients.forEach(ws => {
+    if (user.id === ws.user.id) {
+      console.log(user);
+    }
+  });
+};

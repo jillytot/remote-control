@@ -69,6 +69,7 @@ export default class Channel extends Component {
           socket={socket}
           channel={this.props.currentChannel}
           chatTabbed={this.props.chatTabbed}
+          server={this.props.server}
         />
         <Chat
           user={this.props.user}

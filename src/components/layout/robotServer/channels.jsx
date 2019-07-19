@@ -258,6 +258,7 @@ export default class Channels extends Component {
                 chatTabbed={chatTabbed}
                 setChatTabbed={this.setChatTabbed}
                 channels={this.state.channels}
+                server={selectedServer}
               />
             )}
           />

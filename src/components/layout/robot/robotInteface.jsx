@@ -155,7 +155,8 @@ export default class RobotInterface extends Component {
       user: click.user,
       button: click.button,
       controls_id: this.state.controlsId,
-      channel: this.props.channel
+      channel: this.props.channel,
+      server: this.props.server.server_id
     });
   };
 

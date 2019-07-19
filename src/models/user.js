@@ -478,3 +478,16 @@ module.exports.getGlobalTypes = async user_id => {
   console.log(sendTypes);
   return sendTypes.type;
 };
+
+module.exports.getTotalUserCount = async () => {
+  const db = require("../services/db");
+  const count = `SELECT COUNT(*) FROM users`;
+  try {
+    const result = await db.query(count);
+    // console.log("GET TOTAL USER COUNT: ", result);
+    if (result) return result.rows[0].count;
+  } catch (err) {
+    console.log(err);
+  }
+  return "...";
+};

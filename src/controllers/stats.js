@@ -25,3 +25,34 @@ module.exports.getActiveRobots = async () => {
   if (robots) return robots.length;
   return 0;
 };
+
+module.exports.getTotalUserCount = async () => {
+  const { getTotalUserCount } = require("../models/user");
+  const count = await getTotalUserCount();
+  console.log("TOTAL USER COUNT: ", count);
+  return count;
+};
+
+module.exports.getRobotServerCount = async () => {
+  const { getRobotServerCount } = require("../models/robotServer");
+  const count = await getRobotServerCount();
+  console.log("TOTAL ROBOT SERVER COUNT: ", count);
+  return count;
+};
+
+module.exports.getTotalRobotCount = async () => {
+  const { getTotalRobotCount } = require("../models/robot");
+  const count = await getTotalRobotCount();
+  console.log("TOTAL ROBOT COUNT: ", count);
+  return count;
+};
+
+// const test = async () => {
+//   await this.getActiveUsers();
+//   await this.getActiveRobots();
+//   await this.getTotalUserCount();
+//   await this.getRobotServerCount();
+//   await this.getTotalRobotCount();
+// };
+
+// test();

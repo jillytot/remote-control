@@ -1,15 +1,20 @@
 const router = require("express").Router();
-const { getActiveUsers, getActiveRobots } = require("../../controllers/stats");
+const {
+  getActiveUsers,
+  getActiveRobots,
+  getTotalUserCount,
+  getRobotServerCount,
+  getTotalRobotCount
+} = require("../../controllers/stats");
 
 router.get("/", async (req, res) => {
   console.log("Get Stats!");
-
   res.send({
     activeUsers: await getActiveUsers(),
-    totalUsers: "...",
-    totalServers: "...",
+    totalUsers: await getTotalUserCount(),
+    totalServers: await getRobotServerCount(),
     activeDevices: await getActiveRobots(),
-    registeredDevices: "..."
+    registeredDevices: await getTotalRobotCount()
   });
 });
 

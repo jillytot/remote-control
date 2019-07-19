@@ -118,7 +118,7 @@ module.exports.initActiveServers = async () => {
   const query = `SELECT * FROM robot_servers`;
   try {
     result = await db.query(query);
-    console.log("Active Servers Initailized", result.rows);
+    //console.log("Active Servers Initailized", result.rows);
     activeServers = result.rows;
   } catch (err) {
     console.log(err);
@@ -152,6 +152,19 @@ module.exports.getRobotServers = async () => {
   } catch (err) {
     console.log(err);
   }
+};
+
+module.exports.getRobotServerCount = async () => {
+  const db = require("../services/db");
+  const count = `SELECT COUNT(*) FROM robot_servers`;
+  try {
+    const result = await db.query(count);
+    // console.log("GET ACTIVE SERVER COUNT: ", result);
+    if (result) return result.rows[0].count;
+  } catch (err) {
+    console.log(err);
+  }
+  return "...";
 };
 
 module.exports.updateRobotServer = () => {

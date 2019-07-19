@@ -180,3 +180,16 @@ module.exports.verifyRobotToken = async token => {
     return null;
   }
 };
+
+module.exports.getTotalRobotCount = async () => {
+  const db = require("../services/db");
+  const count = `SELECT COUNT(*) FROM robots`;
+  try {
+    const result = await db.query(count);
+    // console.log("GET TOTAL ROBOT COUNT: ", result);
+    if (result) return result.rows[0].count;
+  } catch (err) {
+    console.log(err);
+  }
+  return "...";
+};

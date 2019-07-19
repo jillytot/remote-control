@@ -47,7 +47,7 @@ module.exports.initActiveChats = async () => {
   const query = `SELECT * FROM chat_rooms`;
   try {
     result = await db.query(query);
-    console.log("Active Chatrooms Initialized", result.rows);
+    // console.log("Active Chatrooms Initialized", result.rows);
     activeChats = result.rows;
   } catch (err) {
     console.log(err);
@@ -85,7 +85,7 @@ module.exports.getChatRooms = async server_id => {
   const query = `SELECT name, id FROM chat_rooms WHERE host_id = $1`;
   try {
     result = await db.query(query, [server_id]);
-    console.log("Get Chatrooms from DB Result:", result.rows);
+    // console.log("Get Chatrooms from DB Result:", result.rows);
     return result.rows;
   } catch (err) {
     console.log(err);

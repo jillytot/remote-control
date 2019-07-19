@@ -17,6 +17,13 @@ export default class RobotInterface extends Component {
 
   currentKey = null;
 
+  handleBlur = () => {
+    if (this.currentKey) {
+      this.currentKey = null;
+      this.setState({ renderCurrentKey: null });
+    }
+  };
+
   sendCurrentKey = () => {
     const button = this.keyMap[this.currentKey];
     if (button && this.props.chatTabbed === false) {
@@ -50,6 +57,7 @@ export default class RobotInterface extends Component {
     this.commandListener();
     document.addEventListener("keydown", this.handleKeyDown);
     document.addEventListener("keyup", this.handleKeyUp);
+    document.addEventListener("blur", this.handleBlur);
     this.sendInterval = setInterval(this.sendCurrentKey, buttonRate);
   }
 
@@ -101,6 +109,7 @@ export default class RobotInterface extends Component {
     this.clearAV();
     document.removeEventListener("keydown", this.handleKeyDown);
     document.removeEventListener("keyup", this.handleKeyUp);
+    document.removeEventListener("blur", this.handleBlur);
     clearInterval(this.sendInterval);
   }
 

@@ -5,7 +5,7 @@ module.exports = async (ws, data) => {
   console.log("GET ROBOTS CHECK: ", data.server_id);
   const requestedRobotServer = await getRobotServer(data.server_id);
 
-  if (requestedRobotServer.owner_id !== ws.user.id) {
+  if (ws.user && requestedRobotServer.owner_id !== ws.user.id) {
     return;
   }
 

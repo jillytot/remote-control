@@ -9,6 +9,7 @@ import { listRobotServers } from "../../../config/clientSettings";
 import axios from "axios";
 import Modal from "../../common/modal";
 import "../../common/overlay.css";
+import FrontPage from "../../layout/frontPage/frontPage";
 
 export default class ServersPage extends Component {
   constructor(props) {
@@ -166,6 +167,6 @@ class NoServerPage extends Component {
   }
 
   render() {
-    return <React.Fragment />;
+    return <FrontPage />;
   }
 }

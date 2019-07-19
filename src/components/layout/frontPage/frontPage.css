@@ -1,0 +1,15 @@
+.front-page-container {
+  /* background-color: black; */
+  width: 100%;
+  font-size: 14px;
+}
+
+.front-page-text {
+  background-color: rgb(25, 25, 36);
+  border-radius: 6px;
+  padding: 5%;
+  margin: 5%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}

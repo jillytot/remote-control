@@ -23,6 +23,9 @@ module.exports.handleConnection = ws => {
     } else {
       console.log("Unknown Event: ", event);
     }
+
+    // const { getWss } = require("../controllers/wss");
+    //getWss();
   });
 
   ws.emitEvent = (event, data) => {

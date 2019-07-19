@@ -37,5 +37,6 @@ module.exports = {
   addRobot: `${apiUrl}/robot/setup`,
   deleteRobot: `${apiUrl}/robot/delete`,
   robotAPIKey: `${apiUrl}/robot/key`,
-  getInvites: `${apiUrl}/robot-server/invites`
+  getInvites: `${apiUrl}/robot-server/invites`,
+  getStats: `${apiUrl}/stats`
 };

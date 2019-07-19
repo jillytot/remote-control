@@ -19,6 +19,19 @@ export default class FrontPage extends Component {
     registeredDevices: "..."
   };
 
+  async componentDidMount() {
+    await axios.get(getStats).then(res => {
+      console.log(res);
+      this.setState({
+        activeUsers: res.data.activeUsers,
+        totalUsers: res.data.totalUsers,
+        totalServers: res.data.totalServers,
+        activeDevices: res.data.activeDevices,
+        registeredDevices: res.data.registeredDevices
+      });
+    });
+  }
+
   render() {
     const {
       activeUsers,

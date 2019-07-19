@@ -8,10 +8,10 @@ const { makeId, createTimeStamp } = require("../modules/utilities");
 
 //TEMPORARY VALUES JUST TO ENSURE VALIDATION:
 testControls = [
-  { label: "forward", hot_key: "w", id: "1" },
-  { label: "back", hot_key: "s", id: "2" },
-  { label: "left", hot_key: "a", id: "4" },
-  { label: "right", hot_key: "d", id: "3" }
+  { label: "forward", hot_key: "w", command: "f", id: "1" },
+  { label: "back", hot_key: "s", command: "b", id: "2" },
+  { label: "left", hot_key: "a", command: "l", id: "4" },
+  { label: "right", hot_key: "d", command: "r", id: "3" }
 ];
 
 const defaultStatus = () => {

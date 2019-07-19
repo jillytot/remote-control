@@ -46,13 +46,3 @@ module.exports.getTotalRobotCount = async () => {
   console.log("TOTAL ROBOT COUNT: ", count);
   return count;
 };
-
-// const test = async () => {
-//   await this.getActiveUsers();
-//   await this.getActiveRobots();
-//   await this.getTotalUserCount();
-//   await this.getRobotServerCount();
-//   await this.getTotalRobotCount();
-// };
-
-// test();

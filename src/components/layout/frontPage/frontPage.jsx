@@ -43,7 +43,8 @@ export default class FrontPage extends Component {
     return (
       <div className="front-page-container">
         <div className="front-page-text">
-          Users currently Online: {activeUsers}
+          <div>...</div>
+          <div>Users currently Online: {activeUsers}</div>
           <div>Total users signed up to site: {totalUsers} </div>
           <div>Robot Servers: {totalServers}</div>
           <div>Active Devices Online: {activeDevices} </div>

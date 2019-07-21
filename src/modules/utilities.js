@@ -83,7 +83,7 @@ module.exports.isEqual = (value, other) => {
 module.exports.compare = (item1, item2) => {
   const itemType = Object.prototype.toString.call(item1);
   if (["[object Array]", "[object Object]"].indexOf(itemType) >= 0) {
-    if (!isEqual(item1, item2)) return false;
+    if (!this.isEqual(item1, item2)) return false;
   } else {
     if (itemType !== Object.prototype.toString.call(item2)) return false;
     if (itemType === "[object Function]") {

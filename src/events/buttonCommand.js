@@ -7,7 +7,7 @@ module.exports = async (ws, command) => {
   const { publicUser } = user;
   const { validateInput } = require("../models/controls");
   command.user = publicUser(ws.user);
-  console.log("USER FROM WS", ws.user, "COMMAND: ", command);
+  // console.log("USER FROM WS", ws.user, "COMMAND: ", command);
 
   if (
     !ws.user.localStatus ||

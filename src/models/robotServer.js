@@ -45,7 +45,9 @@ module.exports.createRobotServer = async (server, token) => {
   };
 
   buildServer.status = {
-    public: true
+    public: true,
+    liveDevices: [],
+    count: 0
   };
 
   buildServer.channels.push(await this.initChannels(buildServer));
@@ -147,7 +149,7 @@ module.exports.getRobotServers = async () => {
   try {
     const query = `SELECT * FROM robot_servers`;
     result = await db.query(query);
-    console.log(result.rows);
+    // console.log(result.rows);
     return result.rows;
   } catch (err) {
     console.log(err);

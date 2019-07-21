@@ -8,9 +8,25 @@ module.exports.robotStatus = async () => {
     console.log("////////////////////////////////////////////////////////");
     prevRobots = robots;
     robots = checkRobots;
-    updateRobotStatus();
+    updateRobotStatus(getLiveRobotList(), true);
+  }
+
+  if (!isEqual(prevRobots, robots)) {
+    console.log("Checking for offline robots");
+    const deadRobots = getDeadRobots(prevRobots, robots);
+    prevRobots = robots;
+    if (deadRobots) {
+      //TODO: Update deadbots to no live status
+    }
   }
   checkInterval();
+};
+
+const getDeadRobots = (prevRobots, robots) => {
+  const { getArrayDifference } = require("../modules/utilities");
+  const deadBots = getArrayDifference(prevRobots, robots);
+  console.log(deadBots);
+  return deadBots;
 };
 
 const getLiveRobots = async () => {
@@ -31,9 +47,8 @@ const checkInterval = async () => {
   return;
 };
 
-updateRobotStatus = async () => {
-  const robotsToUpdate = getLiveRobotList();
-  if (robotsToUpdate !== []) {
+updateRobotStatus = async (robotsToUpdate, online) => {
+  if (robotsToUpdate !== [] && online === true) {
     const getUpdates = await setLiveRobots(robotsToUpdate);
     if (!getUpdates) return;
     const keys = Object.keys(getUpdates);

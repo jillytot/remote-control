@@ -94,3 +94,24 @@ module.exports.compare = (item1, item2) => {
   }
   return true;
 };
+
+module.exports.getArrayDifference = (array1, array2, select) => {
+  function comparer(otherArray) {
+    return function(current) {
+      return (
+        otherArray.filter(function(other) {
+          return (
+            other.value == current.value && other.display == current.display
+          );
+        }).length == 0
+      );
+    };
+  }
+  var onlyInA = array1.filter(comparer(array2));
+  var onlyInB = array2.filter(comparer(array1));
+  const result = onlyInA.concat(onlyInB);
+  console.log("Get Array Difference Result: ", result);
+  if (select && select === 1) return onlyInA;
+  if (select && select === 2) return onlyInB;
+  return onlyInA.concat(onlyInB);
+};

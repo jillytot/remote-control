@@ -43,13 +43,39 @@ export default class FrontPage extends Component {
     return (
       <div className="front-page-container">
         <div className="front-page-text">
-          <div>Best used with Desktop / Chrome</div>
+          <div>Best used on Desktop with Chrome Browser</div>
           <div>...</div>
-          <div>Users currently Online: {activeUsers}</div>
-          <div>Total users signed up to site: {totalUsers} </div>
-          <div>Robot Servers: {totalServers}</div>
-          <div>Active Devices Online: {activeDevices} </div>
-          <div> Total Devices Registered: {registeredDevices} </div>
+          <div>
+            Users currently Online: <span className="stat">{activeUsers}</span>{" "}
+          </div>
+          <div>
+            Total users signed up to site:{" "}
+            <span className="stat">{totalUsers}</span>{" "}
+          </div>
+          <div>
+            Robot Servers: <span className="stat">{totalServers}</span>
+          </div>
+          <div>
+            Active Devices Online: <span className="stat">{activeDevices}</span>{" "}
+          </div>
+          <div>
+            {" "}
+            Total Devices Registered:{" "}
+            <span className="stat">{registeredDevices}</span>
+          </div>
+          <div>...</div>
+          <div>
+            Project Github:{" "}
+            <a href="https://github.com/jillytot/remote-control">
+              https://github.com/jillytot/remote-control
+            </a>
+          </div>
+          <div>
+            Software for adding a robot:{" "}
+            <a href="https://github.com/remotv/controller">
+              https://github.com/remotv/controller
+            </a>{" "}
+          </div>
         </div>
       </div>
     );

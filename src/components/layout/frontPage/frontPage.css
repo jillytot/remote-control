@@ -13,3 +13,12 @@
   flex-direction: column;
   justify-content: center;
 }
+
+a {
+  color: rgb(176, 115, 211);
+}
+
+.stat {
+  color: rgb(106, 171, 255);
+  font-weight: bold;
+}

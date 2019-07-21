@@ -193,3 +193,21 @@ module.exports.getTotalRobotCount = async () => {
   }
   return "...";
 };
+
+module.exports.updateRobotStatus = async (robot_id, status) => {
+  const db = require("../services/db");
+  // console.log("Updating Robot Server Status: ", robot_id);
+  try {
+    const update = `UPDATE robots SET status = $1 WHERE id = $2 RETURNING *`;
+    const result = await db.query(update, [status, robot_id]);
+    if (result.rows[0]) {
+      const sendResult = result.rows[0];
+      console.log("Robot Server Updated: ", sendResult);
+      return sendResult;
+      //Server Status Update will need to get sent.
+    }
+  } catch (err) {
+    console.log(err);
+  }
+  return null;
+};

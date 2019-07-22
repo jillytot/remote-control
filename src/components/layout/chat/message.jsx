@@ -124,6 +124,7 @@ const Message = ({ message }) => {
       return `chat-message robot-message`;
     } else {
       return `chat-message ${color} ${
+        // return `chat-message rainbow ${
         message.type === types.self ? types.self : ""
       }`;
     }
@@ -136,13 +137,18 @@ const Message = ({ message }) => {
     return message.sender;
   };
 
+  const handleSenderColor = message => {
+    if (message.sender === "remo") return "chat-user-name rainbow";
+    return "chat-user-name";
+  };
+
   return (
     <div>
       <div className={handleMessageType(message)}>
         {handleBadges(message)}
-        <span className="chat-user-name">{`${handleMessageSender(message)}${
-          message.type === types.self ? "" : ":"
-        }  `}</span>
+        <span className={handleSenderColor(message)}>{`${handleMessageSender(
+          message
+        )}${message.type === types.self ? "" : ":"}  `}</span>
         <span className="message-spacing">
           {handleEmotes(message.message).map(element => {
             return element;

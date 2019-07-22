@@ -96,6 +96,21 @@
   color: #b251eb;
 }
 
+.rainbow {
+  background: -webkit-linear-gradient(
+    0deg,
+    #b251eb,
+    #ff5ca3,
+    #ffa557,
+    #f7ff66,
+    #7cff1e,
+    #00dfd3,
+    #1f93ff
+  );
+  background-clip: text;
+  color: transparent;
+}
+
 .chat-header {
   background-color: #1c1829;
   padding: 2% 0 2% 0;

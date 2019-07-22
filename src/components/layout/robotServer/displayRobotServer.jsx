@@ -9,7 +9,7 @@ const DisplayRobotServer = ({
   displayClasses,
   liveDevices
 }) => {
-  console.log("LIVE DEVICES: ", liveDevices);
+  // console.log("LIVE DEVICES: ", liveDevices);
   return (
     <Link to={`/${serverName}/${defaultChannel}`}>
       <div className={displayClasses}>

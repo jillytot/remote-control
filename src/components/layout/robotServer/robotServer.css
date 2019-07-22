@@ -3,6 +3,10 @@
   border-radius: 24px;
 }
 
+.live {
+  border: solid rgb(2, 255, 2) 2px;
+}
+
 .add-server {
   background-color: rgb(33, 33, 37);
   /* border: dashed 1px rgb(170, 170, 170); */

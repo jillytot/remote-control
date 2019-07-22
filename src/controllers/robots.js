@@ -10,7 +10,8 @@ module.exports.robotStatus = async () => {
   console.log("Checking Live Robots");
   await updateRobotStatus(robots);
   await checkForLiveRobots();
-  if (!isEqual(prevBots, robots)) updateRobotServer(); //only send update event on changes
+  //if (!isEqual(prevBots, robots))
+  updateRobotServer(); //only send update event on changes
   checkInterval();
 };
 

@@ -14,6 +14,9 @@ export default class RobotServer extends Component {
           defaultChannel={server.settings.default_channel}
           serverName={server.server_name}
           displayClasses={this.handleActive(server)}
+          liveDevices={
+            server.status.liveDevices ? server.status.liveDevices : []
+          }
         />
       );
     });

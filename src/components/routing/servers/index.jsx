@@ -20,7 +20,7 @@ export default class ServersPage extends Component {
     this.state = {
       robotServers: undefined,
       selectedServer: undefined,
-      followedServers: undefined,
+      followedServers: [],
       socketConnected: false,
       user: undefined, // undefined: waiting for gateway, null: gateway said auth no no
       isShowing: false,
@@ -55,6 +55,22 @@ export default class ServersPage extends Component {
       console.error(e);
       setTimeout(this.getServers, 600); //retry
     }
+    return null;
+  };
+
+  getFollowedServers = async () => {
+    const token = localStorage.getItem("token");
+    try {
+      const response = await axios.get(listFollowedServers, {
+        headers: { authorization: `Bearer ${token}` }
+      });
+      console.log(response);
+      this.setState({ followedServers: response.data });
+    } catch (e) {
+      console.error(e);
+      setTimeout(this.getFollowedServers, 600); //retry
+    }
+    return null;
   };
 
   async componentDidMount() {
@@ -67,7 +83,7 @@ export default class ServersPage extends Component {
       this.emitAuthentication();
     }
 
-    await this.getServers();
+    Promise.all([this.getServers(), this.getFollowedServers()]);
   }
 
   setServer = server => {
@@ -136,6 +152,7 @@ export default class ServersPage extends Component {
             user={this.state.user}
             robotServers={this.state.robotServers}
             selectedServer={this.state.selectedServer}
+            followedServers={this.state.followedServers}
           />
           <Switch>
             <Route

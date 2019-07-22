@@ -21,7 +21,7 @@ export default class RobotServer extends Component {
   };
 
   handleSorting = servers => {
-    const { robotServers } = this.props;
+    const { robotServers, followedServers } = this.props;
     let live = [];
     //let followed = [];
     let rest = [];

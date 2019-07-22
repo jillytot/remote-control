@@ -38,21 +38,21 @@ module.exports.createTimeStamp = () => {
 };
 
 module.exports.createTimer = (interval, callback, object) => {
-  console.log("DING");
+  // console.log("DING");
   const timer = new setInterval(() => {
     callback(object);
     clearInterval(timer);
   }, interval);
-  console.log(interval, callback, object);
+  // console.log(interval, callback, object);
 };
 
 module.exports.createSimpleTimer = (interval, callback) => {
-  console.log("DING");
+  // console.log("DING");
   const timer = new setInterval(() => {
     callback();
     clearInterval(timer);
   }, interval);
-  console.log(interval, callback);
+  // console.log(interval, callback);
 };
 
 module.exports.isEqual = (value, other) => {

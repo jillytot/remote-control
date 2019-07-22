@@ -295,13 +295,13 @@ module.exports.disableRobotServer = async server_id => {
 
 module.exports.updateRobotServerStatus = async (server_id, status) => {
   const db = require("../services/db");
-  console.log("Updating Robot Server Status: ", server_id);
+  //console.log("Updating Robot Server Status: ", server_id);
   try {
     const update = `UPDATE robot_servers SET status = $1 WHERE server_id = $2 RETURNING *`;
     const result = await db.query(update, [status, server_id]);
     if (result.rows[0]) {
       const sendResult = result.rows[0];
-      console.log("Robot Server Updated: ", sendResult);
+      //console.log("Robot Server Updated: ", sendResult);
       return sendResult;
       //Server Status Update will need to get sent.
     }

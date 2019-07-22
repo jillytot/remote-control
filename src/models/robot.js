@@ -97,12 +97,12 @@ module.exports.getRobotFromId = async robot_id => {
 
 module.exports.getRobotsFromServerId = async server_id => {
   const db = require("../services/db");
-  console.log("SERVER ID CHECK: ", server_id);
+  // console.log("SERVER ID CHECK: ", server_id);
   if (server_id) {
     try {
       const query = `SELECT * FROM robots WHERE host_id = $1`;
       const check = await db.query(query, [server_id]);
-      console.log(check.rows);
+      // console.log(check.rows);
       if (check.rows[0]) return check.rows;
       return {
         status: "error",
@@ -202,7 +202,7 @@ module.exports.updateRobotStatus = async (robot_id, status) => {
     const result = await db.query(update, [status, robot_id]);
     if (result.rows[0]) {
       const sendResult = result.rows[0];
-      console.log("Robot Server Updated: ", sendResult);
+      // console.log("Robot Server Updated: ", sendResult);
       return sendResult;
       //Server Status Update will need to get sent.
     }

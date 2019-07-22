@@ -4,11 +4,13 @@ let prevBots = [];
 module.exports.robotStatus = async () => {
   const { updateRobotServer } = require("../models/robotServer");
   const { isEqual } = require("../modules/utilities");
+  const { checkForLiveRobots } = require("../controllers/robotServer");
   prevBots = robots;
   robots = await getLiveRobots();
-  console.log("/////CHECK LIVE ROBOTS////////", robots);
+  console.log("Checking Live Robots");
   await updateRobotStatus(robots);
-  if (!isEqual(prevBots, robots)) updateRobotServer();
+  await checkForLiveRobots();
+  if (!isEqual(prevBots, robots)) updateRobotServer(); //only send update event on changes
   checkInterval();
 };
 

@@ -15,6 +15,7 @@ export default class RobotServer extends Component {
           liveDevices={
             server.status.liveDevices ? server.status.liveDevices : []
           }
+          followed={server.followed}
         />
       );
     });
@@ -22,19 +23,39 @@ export default class RobotServer extends Component {
 
   handleSorting = servers => {
     const { robotServers, followedServers } = this.props;
+    let followedLive = [];
     let live = [];
-    //let followed = [];
+    let followed = [];
     let rest = [];
 
     robotServers.map(server => {
-      if (server.status.liveDevices && server.status.liveDevices.length > 0) {
+      if (
+        followedServers.includes(server.server_id) &&
+        server.status.liveDevices &&
+        server.status.liveDevices.length > 0
+      ) {
+        server.followed = true;
+        followedLive.push(server);
+      } else if (
+        followedServers.includes(server.server_id) &&
+        server.status.liveDevices &&
+        server.status.liveDevices.length <= 0
+      ) {
+        server.followed = true;
+        followed.push(server);
+      } else if (
+        server.status.liveDevices &&
+        server.status.liveDevices.length > 0
+      ) {
+        server.followed = false;
         live.push(server);
       } else {
+        server.followed = false;
         rest.push(server);
       }
     });
 
-    const sorted = live.concat(rest);
+    const sorted = followedLive.concat(followed, live, rest);
     return this.displayServers(sorted);
   };
 

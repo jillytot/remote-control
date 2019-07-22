@@ -106,6 +106,19 @@ module.exports.checkMembership = async member => {
   return false;
 };
 
+//TODO: Find more effecient query string for getting servers where status.member = true
+module.exports.getFollowedServers = async user_id => {
+  const db = require("../services/db");
+  const query = `SELECT * FROM members WHERE user_id = $1`;
+  try {
+    const result = await db.query(query, [user_id]);
+    if (result.rows[0]) return result.rows;
+  } catch (err) {
+    console.log(err);
+  }
+  return null;
+};
+
 module.exports.getMember = async member => {
   const db = require("../services/db");
   console.log("get member...");

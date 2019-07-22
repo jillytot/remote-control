@@ -38,5 +38,6 @@ module.exports = {
   deleteRobot: `${apiUrl}/robot/delete`,
   robotAPIKey: `${apiUrl}/robot/key`,
   getInvites: `${apiUrl}/robot-server/invites`,
-  getStats: `${apiUrl}/stats`
+  getStats: `${apiUrl}/stats`,
+  listFollowedServers: `${apiUrl}/user/followed`
 };

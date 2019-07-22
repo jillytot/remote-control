@@ -5,7 +5,10 @@ import RobotServer from "../../layout/robotServer/robotServer";
 import NavBar from "../../layout/nav/navBar";
 import socket from "../../socket";
 import ServerPage from "./server";
-import { listRobotServers } from "../../../config/clientSettings";
+import {
+  listRobotServers,
+  listFollowedServers
+} from "../../../config/clientSettings";
 import axios from "axios";
 import Modal from "../../common/modal";
 import "../../common/overlay.css";
@@ -17,6 +20,7 @@ export default class ServersPage extends Component {
     this.state = {
       robotServers: undefined,
       selectedServer: undefined,
+      followedServers: undefined,
       socketConnected: false,
       user: undefined, // undefined: waiting for gateway, null: gateway said auth no no
       isShowing: false,

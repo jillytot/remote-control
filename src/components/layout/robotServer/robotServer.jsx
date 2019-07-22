@@ -5,9 +5,7 @@ import AddServer from "./modals/addServer";
 
 export default class RobotServer extends Component {
   displayServers = servers => {
-    //console.log("From Servers: ", servers);
-    return this.props.robotServers.map(server => {
-      //console.log("Server Name: ", server.server_name);
+    return servers.map(server => {
       return (
         <DisplayRobotServer
           key={server.server_id}
@@ -20,6 +18,24 @@ export default class RobotServer extends Component {
         />
       );
     });
+  };
+
+  handleSorting = servers => {
+    const { robotServers } = this.props;
+    let live = [];
+    //let followed = [];
+    let rest = [];
+
+    robotServers.map(server => {
+      if (server.status.liveDevices && server.status.liveDevices.length > 0) {
+        live.push(server);
+      } else {
+        rest.push(server);
+      }
+    });
+
+    const sorted = live.concat(rest);
+    return this.displayServers(sorted);
   };
 
   handleActive = server => {
@@ -37,7 +53,7 @@ export default class RobotServer extends Component {
     return (
       <React.Fragment>
         <div className="robot-server-container">
-          {this.displayServers(this.props.robotServers)}
+          {this.handleSorting(this.props.robotServers)}
           <AddServer
             modal={this.props.modal}
             onCloseModal={this.props.onCloseModal}

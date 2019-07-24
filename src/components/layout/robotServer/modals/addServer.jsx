@@ -84,6 +84,7 @@ class AddServerForm extends Form {
     //axios call
     this.setState({ error: "" });
     let redirect = ``;
+
     await axios
       .post(
         addServer,
@@ -106,6 +107,7 @@ class AddServerForm extends Form {
               response.data.settings.default_channel
             }`
           });
+
           console.log("redirecting", this.state.redirect);
 
           //wait just a second...
@@ -115,7 +117,7 @@ class AddServerForm extends Form {
         console.log("Add Server Error: ", err);
       });
 
-    if (this.state.error === "") this.props.onCloseModal();
+    if (this.state.error === "") this.props.onCloseModal({ reload: true });
 
     //Call the server
   };

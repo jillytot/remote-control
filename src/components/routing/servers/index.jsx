@@ -25,15 +25,24 @@ export default class ServersPage extends Component {
       socketConnected: false,
       user: undefined, // undefined: waiting for gateway, null: gateway said auth no no
       isShowing: false,
-      modalContent: []
+      modalContent: [],
+      reload: false
     };
   }
 
-  onCloseModal = () => {
-    this.setState({
-      isShowing: false,
-      modalContent: []
-    });
+  onCloseModal = e => {
+    if (e && e.reload) {
+      this.setState({
+        isShowing: false,
+        modalContent: [],
+        reload: true
+      });
+    } else {
+      this.setState({
+        isShowing: false,
+        modalContent: []
+      });
+    }
   };
 
   setModal = input => {
@@ -45,6 +54,12 @@ export default class ServersPage extends Component {
       modalContent: updateContent
     });
     return null;
+  };
+
+  handleReload = async () => {
+    await this.getServers();
+    this.setState({ reload: false });
+    window.location.reload();
   };
 
   getServers = async () => {
@@ -132,6 +147,8 @@ export default class ServersPage extends Component {
       <div className="ConnectingOverlay">
         <h3 className="ConnectingOverlayText">{loadingText}</h3>
       </div>
+    ) : this.state.reload ? (
+      this.handleReload()
     ) : (
       <React.Fragment>
         {this.state.isShowing && (

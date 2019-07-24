@@ -42,6 +42,9 @@ module.exports.createMember = async data => {
     makeMember.invites = [data.join];
     makeMember.status = { timeout: false, expireTimeout: null, member: true };
     makeMember.joined = createTimeStamp();
+    if (data.owner) {
+      makeMember.roles = ["@owner", "@member"];
+    }
   } else {
     //default behavior for browsing public servers (needed to track moderation)
     makeMember.invites = [];

@@ -47,7 +47,7 @@ module.exports.createRobotServer = async (server, token) => {
   buildServer.status = {
     public: true,
     liveDevices: [],
-    count: 0
+    count: 1 //Owner is first member
   };
 
   buildServer.channels.push(await this.initChannels(buildServer));
@@ -63,6 +63,17 @@ module.exports.createRobotServer = async (server, token) => {
     user: { id: buildServer.owner_id },
     server: { server_id: buildServer.server_id, owner_id: buildServer.owner_id }
   });
+
+  const { createMember } = require("./serverMembers");
+  const addOwnerAsMember = await createMember({
+    owner: true,
+    user_id: buildServer.owner_id,
+    server_id: buildServer.server_id,
+    join: makeInvite.id
+  });
+  console.log("/////////ADDING OWNER AS MEMBER////////////", addOwnerAsMember);
+  //make owner a member
+
   console.log(makeInvite);
   return buildServer;
 };

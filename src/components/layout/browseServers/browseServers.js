@@ -30,6 +30,7 @@ export default class BrowseServers extends Component {
             server.status.liveDevices ? server.status.liveDevices : []
           }
           followed={server.followed}
+          count={server.status.count}
         />
       );
     });
@@ -46,6 +47,7 @@ const DisplayBrowseServers = ({
   serverName,
   defaultChannel,
   liveDevices,
+  count,
   followed
 }) => {
   return (
@@ -61,6 +63,7 @@ const DisplayBrowseServers = ({
           src={defaultImages.default01}
         />
         <div className={"browse-display-robot-server"}>{serverName}</div>
+        <div className="browse-display-robot-stats"> Members: {count}</div>
       </div>
     </Link>
   );

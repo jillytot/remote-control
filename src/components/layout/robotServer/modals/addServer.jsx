@@ -7,6 +7,7 @@ import Form from "../../../common/form";
 import Joi from "joi-browser";
 import axios from "axios";
 import { apiUrl, addServer } from "../../../../config/clientSettings";
+import { Redirect } from "react-router-dom";
 
 export default class AddServer extends React.Component {
   state = {};
@@ -42,7 +43,8 @@ class AddServerForm extends Form {
   state = {
     data: { server: "" },
     errors: {},
-    error: ""
+    error: "",
+    redirect: ""
   };
 
   schema = {
@@ -81,6 +83,7 @@ class AddServerForm extends Form {
     const token = localStorage.getItem("token");
     //axios call
     this.setState({ error: "" });
+    let redirect = ``;
     await axios
       .post(
         addServer,
@@ -96,6 +99,16 @@ class AddServerForm extends Form {
         if (response.data.status === "error!") {
           console.log("ERROR! ", response.data.error);
           this.setState({ error: response.data.error });
+        } else {
+          //Redirect to server.
+          this.setState({
+            redirect: `/${response.data.server_name}/${
+              response.data.settings.default_channel
+            }`
+          });
+          console.log("redirecting", this.state.redirect);
+
+          //wait just a second...
         }
       })
       .catch(err => {
@@ -107,8 +120,12 @@ class AddServerForm extends Form {
     //Call the server
   };
 
+  componentWillUnmount() {}
+
   render() {
-    return (
+    return this.state.redirect ? (
+      <Redirect to={this.state.redirect} />
+    ) : (
       <div className="register-form">
         Setup a robot Server:
         {this.handleSubmitError()}

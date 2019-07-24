@@ -64,17 +64,15 @@ module.exports.createRobotServer = async (server, token) => {
     server: { server_id: buildServer.server_id, owner_id: buildServer.owner_id }
   });
 
+  //Register server owner as member of their own server
   const { createMember } = require("./serverMembers");
-  const addOwnerAsMember = await createMember({
+  await createMember({
     owner: true,
     user_id: buildServer.owner_id,
     server_id: buildServer.server_id,
     join: makeInvite.id
   });
-  console.log("/////////ADDING OWNER AS MEMBER////////////", addOwnerAsMember);
-  //make owner a member
 
-  console.log(makeInvite);
   return buildServer;
 };
 
@@ -90,7 +88,7 @@ module.exports.emitEvent = (server_id, event, data) => {
 //Saves robot server to the Database
 module.exports.saveServer = async server => {
   const db = require("../services/db");
-  console.log("Saving Server: ", server);
+  console.log("Saving Server: ", server.server_name);
   const {
     server_id,
     server_name,

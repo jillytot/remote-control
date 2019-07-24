@@ -37,7 +37,8 @@
 }
 
 .display-robot-server-container {
-  margin-top: -12px;
+  padding-top: 8px;
+  /* background-color: red; */
 }
 
 .add-server {
@@ -49,7 +50,17 @@
   border-radius: 24px;
   margin-left: auto;
   margin-right: auto;
-  margin-top: 24px;
+}
+
+.browse-servers {
+  background-color: rgb(33, 33, 37);
+  /* border: dashed 1px rgb(170, 170, 170); */
+  width: 64px;
+  height: 38px;
+  padding-top: 8px;
+  border-radius: 24px;
+  margin-left: auto;
+  margin-right: auto;
 }
 
 /* .align-add-server {
@@ -57,8 +68,9 @@
 
 .display-robot-server {
   font-size: 12px;
-  margin-bottom: 8px;
+  padding-bottom: 8px;
   color: white;
+  /* background-color: blue; */
 }
 
 a:link {

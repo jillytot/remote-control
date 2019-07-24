@@ -2,6 +2,8 @@ import React, { Component } from "react";
 import DisplayRobotServer from "./displayRobotServer";
 import "./robotServer.css";
 import AddServer from "./modals/addServer";
+import Browse from "../../routing/servers/browse";
+import sortServers from "./sortServers";
 
 export default class RobotServer extends Component {
   displayServers = servers => {
@@ -23,39 +25,9 @@ export default class RobotServer extends Component {
 
   handleSorting = servers => {
     const { robotServers, followedServers } = this.props;
-    let followedLive = [];
-    let live = [];
-    let followed = [];
-    let rest = [];
 
-    robotServers.map(server => {
-      if (
-        followedServers.includes(server.server_id) &&
-        server.status.liveDevices &&
-        server.status.liveDevices.length > 0
-      ) {
-        server.followed = true;
-        followedLive.push(server);
-      } else if (
-        followedServers.includes(server.server_id) &&
-        server.status.liveDevices &&
-        server.status.liveDevices.length <= 0
-      ) {
-        server.followed = true;
-        followed.push(server);
-      } else if (
-        server.status.liveDevices &&
-        server.status.liveDevices.length > 0
-      ) {
-        server.followed = false;
-        live.push(server);
-      } else {
-        server.followed = false;
-        rest.push(server);
-      }
-    });
-
-    const sorted = followedLive.concat(followed, live, rest);
+    //const sorted = followedLive.concat(followed, live, rest);
+    const sorted = sortServers(robotServers, followedServers);
     return this.displayServers(sorted);
   };
 
@@ -75,6 +47,7 @@ export default class RobotServer extends Component {
       <React.Fragment>
         <div className="robot-server-container">
           {this.handleSorting(this.props.robotServers)}
+          <Browse />
           <AddServer
             modal={this.props.modal}
             onCloseModal={this.props.onCloseModal}

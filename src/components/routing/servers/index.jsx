@@ -13,6 +13,7 @@ import axios from "axios";
 import Modal from "../../common/modal";
 import "../../common/overlay.css";
 import FrontPage from "../../layout/frontPage/frontPage";
+import BrowseServers from "../../layout/browseServers/browseServers";
 
 export default class ServersPage extends Component {
   constructor(props) {
@@ -155,6 +156,18 @@ export default class ServersPage extends Component {
             followedServers={this.state.followedServers}
           />
           <Switch>
+            <Route
+              path="/get"
+              render={props => (
+                <BrowseServers
+                  {...props}
+                  setServer={this.setServer}
+                  user={this.state.user}
+                  robotServers={this.state.robotServers}
+                  followedServers={this.state.followedServers}
+                />
+              )}
+            />
             <Route
               path="/:name"
               render={props => (

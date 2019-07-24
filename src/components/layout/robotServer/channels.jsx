@@ -217,7 +217,7 @@ export default class Channels extends Component {
       console.log("waiting for channels");
       return <React.Fragment />;
     }
-    console.log("t23", channels);
+    // console.log("t23", channels);
 
     return (
       <React.Fragment>

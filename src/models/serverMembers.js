@@ -24,11 +24,12 @@ module.exports.createMember = async data => {
   console.log("Let Memeber Join Server: ", data);
   const { createTimeStamp } = require("../modules/utilities");
 
-  //const checkInvite = await this.validateInvite(data);
-  //console.log("CHECKING INVITE", checkInvite);
+  // const checkInvite = await this.validateInvite(data);
+  // console.log("CHECKING INVITE", checkInvite);
   //if (!checkInvite) return { status: "Error!", error: "Invite is not valid" };
 
   const checkMembership = await this.checkMembership(data);
+  console.log("CHECKING MEMBERSHIP", checkMembership);
   if (checkMembership) return checkMembership;
 
   let makeMember = {};
@@ -82,7 +83,7 @@ module.exports.saveMember = async member => {
       invites
     ]);
     if (result.rows[0]) {
-      console.log(result);
+      console.log(result.rows[0]);
       return result.rows[0];
     }
   } catch (err) {

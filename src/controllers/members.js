@@ -6,6 +6,7 @@ module.exports.joinServer = async member => {
     createMember,
     updateMemberRoles
   } = require("../models/serverMembers");
+  const { getRobotServer } = require("../models/robotServer");
 
   console.log("Joining Server");
 
@@ -38,7 +39,9 @@ module.exports.joinServer = async member => {
     invites = Array.from(new Set(invites)); //no dupes
     member.invites = invites;
     member = await updateMemberInvites(member);
-    this.updateMemberCount(member.server_id);
+
+    const robotServer = await getRobotServer(member.server_id);
+    this.updateMemberCount(robotServer);
 
     return member;
   }
@@ -52,8 +55,12 @@ module.exports.leaveServer = async member => {
     updateMemberStatus,
     updateMemberRoles
   } = require("../models/serverMembers");
+  const { getRobotServer } = require("../models/robotServer");
+
   console.log("Leaving Server");
   member = await getMember(member);
+  const robotServer = await getRobotServer(member.server_id);
+  if (member.user_id === robotServer.owner_id) return member; //SERVER OWNERS CANNOT LEAVE THEIR OWN SERVER
 
   member.status.member = false;
   member = await updateMemberStatus(member);
@@ -64,9 +71,13 @@ module.exports.leaveServer = async member => {
   member.roles = [];
   member = await updateMemberRoles(member);
 
-  this.updateMemberCount(member.server_id);
+  this.updateMemberCount(robotServer);
 
   return member;
+};
+
+const isOwner = member => {
+  member.user_id;
 };
 
 module.exports.validateInvite = async invite => {
@@ -92,16 +103,15 @@ module.exports.getMemberCount = async server_id => {
   return count;
 };
 
-module.exports.updateMemberCount = async server_id => {
+module.exports.updateMemberCount = async robotServer => {
   const {
-    getRobotServer,
     updateRobotServerStatus,
     sendRobotServerStatus
   } = require("../models/robotServer");
+  const { server_id } = robotServer;
 
   const updateMemberCount = await this.getMemberCount(server_id);
 
-  let robotServer = await getRobotServer(server_id);
   robotServer.status.count = updateMemberCount;
   console.log("UPDATING ROBOT STATUS / COUNT: ", robotServer.status);
   const updateStatus = await updateRobotServerStatus(

@@ -50,6 +50,12 @@ export default class DisplayServerDetails extends Component {
     } else {
       this.setState({ icon: <Icon icon={ICONS.FOLLOW} /> });
     }
+
+    if (this.props.server.owner_id === this.props.user.id)
+      this.setState({
+        hoverText: "Members",
+        icon: <Icon icon={ICONS.FOLLOW} color={"#FF0000"} />
+      });
   }
 
   handleGetServerStatus = () => {
@@ -90,6 +96,7 @@ export default class DisplayServerDetails extends Component {
     console.log("CHECK INVITES: ", invites);
     const token = localStorage.getItem("token");
 
+    if (this.props.server.owner_id === this.props.user.id) return; //Cannot join or leave server as it's owner
     if (this.state.localStatus && this.state.localStatus.member === true) {
       axios
         .post(
@@ -120,27 +127,33 @@ export default class DisplayServerDetails extends Component {
   };
 
   handleMouseEnter = () => {
-    if (this.state.localStatus && this.state.localStatus.member === true) {
-      this.setState({
-        hoverText: "Leave Server",
-        icon: <Icon icon={ICONS.UNFOLLOW} color={"#FF0000"} />
-      });
-    }
-    if (this.state.localStatus && this.state.localStatus.member === false) {
-      this.setState({ icon: <Icon icon={ICONS.FOLLOW} color={"#FF0000"} /> });
+    if (this.props.server.owner_id === this.props.user.id) {
+    } else {
+      if (this.state.localStatus && this.state.localStatus.member === true) {
+        this.setState({
+          hoverText: "Leave Server",
+          icon: <Icon icon={ICONS.UNFOLLOW} color={"#FF0000"} />
+        });
+      }
+      if (this.state.localStatus && this.state.localStatus.member === false) {
+        this.setState({ icon: <Icon icon={ICONS.FOLLOW} color={"#FF0000"} /> });
+      }
     }
   };
 
   handleMouseLeave = () => {
-    if (this.state.localStatus && this.state.localStatus.member === true) {
-      this.setState({
-        hoverText: "Joined",
-        icon: <Icon icon={ICONS.FOLLOW} color={"#FF0000"} />
-      });
-    }
+    if (this.props.server.owner_id === this.props.user.id) {
+    } else {
+      if (this.state.localStatus && this.state.localStatus.member === true) {
+        this.setState({
+          hoverText: "Joined",
+          icon: <Icon icon={ICONS.FOLLOW} color={"#FF0000"} />
+        });
+      }
 
-    if (this.state.localStatus && this.state.localStatus.member === false) {
-      this.setState({ icon: <Icon icon={ICONS.FOLLOW} /> });
+      if (this.state.localStatus && this.state.localStatus.member === false) {
+        this.setState({ icon: <Icon icon={ICONS.FOLLOW} /> });
+      }
     }
   };
 

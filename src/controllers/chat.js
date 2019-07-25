@@ -3,12 +3,15 @@ module.exports.loadChat = async chat_id => {
   const { loadMessages } = require("../config/serverSettings");
   const { getChat } = require("../models/chatRoom");
   let chat = await getChat(chat_id);
-  const messages = await getRecentMessages(chat_id, loadMessages);
+  let messages = await getRecentMessages(chat_id, loadMessages);
+  messages = messages.reverse();
   console.log("MESSAGES CHECK: ", messages);
   if (messages) {
     messages.map(message => {
       chat.messages.push(message);
     });
+  } else {
+    chat.messages = [];
   }
   return chat;
 };

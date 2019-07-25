@@ -129,7 +129,7 @@ module.exports.getRecentMessages = async (chat_id, numberOfMessages) => {
     10}`;
   try {
     const result = await db.query(query, [chat_id]);
-    if (result.rows[0]) {
+    if (result.rows) {
       console.log(result.rows);
       return result.rows;
     }

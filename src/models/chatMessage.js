@@ -19,7 +19,7 @@ module.exports.createMessage = async message => {
   //makeMess.user = message.user; //ws verifies the user, calls the DB, and attaches it to message before it's sent here
 
   //Flag for displaying a default message type in chat
-  makeMess.displayMessage = true;
+  makeMess.display_message = true;
 
   //Get global types from the server
   // const globalTypes = message.user.type;
@@ -57,7 +57,7 @@ module.exports.createRobotMessage = async message => {
   makeMess.id = `mesg-${makeId()}`;
   makeMess.time_stamp = createTimeStamp();
   makeMess.broadcast = message.broadcast || ""; // Flag for determining if message is broadcasted to the room, or just to the user
-  makeMess.displayMessage = true;
+  makeMess.display_message = true;
   makeMess.badges = await this.getBadges(
     [message.type],
     message.server_id,
@@ -83,7 +83,7 @@ module.exports.saveMessage = async getMessage => {
     id,
     time_stamp,
     broadcast,
-    displayMessage,
+    display_message,
     badges,
     type
   } = getMessage;
@@ -110,7 +110,7 @@ module.exports.saveMessage = async getMessage => {
       id,
       time_stamp,
       broadcast,
-      displayMessage,
+      display_message,
       badges,
       type
     ]);
@@ -124,11 +124,15 @@ module.exports.saveMessage = async getMessage => {
 module.exports.getRecentMessages = async (chat_id, numberOfMessages) => {
   const db = require("../services/db");
   //TODO: Maybe don't return messages more than 24 hours old
+  console.log("MESSAGE CHECK 2: ", chat_id, numberOfMessages);
   const query = `SELECT * FROM chat_messages WHERE chat_id = $1 ORDER BY time_stamp DESC LIMIT ${numberOfMessages ||
     10}`;
   try {
     const result = await db.query(query, [chat_id]);
-    if (result.rows[0]) return result.rows;
+    if (result.rows[0]) {
+      console.log(result.rows);
+      return result.rows;
+    }
   } catch (err) {
     console.log(err);
   }

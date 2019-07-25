@@ -15,7 +15,8 @@ export default class Chat extends Component {
   state = {
     storeUsers: [],
     users: [],
-    menu: "Chat"
+    menu: "Chat",
+    chatLoaded: false
   };
 
   componentDidMount() {
@@ -32,6 +33,10 @@ export default class Chat extends Component {
     const { socket } = this.props;
     if (socket && this._isMounted) {
       socket.on(SEND_CHAT, chat => {
+        // const messages = chat.messages;
+        // messages.map(message => {
+        //   chat.messages.push(message);
+        // });
         this.setState({ chatroom: chat });
       });
       socket.on(MESSAGE_RECIEVED, message => {
@@ -57,6 +62,12 @@ export default class Chat extends Component {
       this.setState({ chatroom });
       previousFeedback = fromSendChat.id;
     }
+  };
+
+  handleDisplayMessages = () => {
+    const { users } = this.props;
+
+    return <Messages messages={this.getMessageColors()} users={users} />;
   };
 
   getMessageColors = () => {
@@ -103,10 +114,7 @@ export default class Chat extends Component {
         return (
           <div className="messages-container">
             <div className="chat-background">
-              <Messages
-                messages={chatroom ? this.getMessageColors() : []}
-                users={users}
-              />
+              {this.handleDisplayMessages()}
             </div>
             <SendChat
               onEvent={onEvent}

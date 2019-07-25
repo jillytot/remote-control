@@ -1,9 +1,10 @@
 const { SEND_CHAT } = require("./definitions");
-const { getChat } = require("../models/chatRoom");
+// const { getChat } = require("../models/chatRoom");
+const { loadChat } = require("../controllers/chat");
 
 module.exports = async (ws, chatId) => {
   console.log("GET CHAT Chat Id: ", chatId);
-  ws.emitEvent(SEND_CHAT, await getChat(chatId));
+  ws.emitEvent(SEND_CHAT, await loadChat(chatId));
 
   //Subscribe user to chat
   ws.chat_id = chatId;

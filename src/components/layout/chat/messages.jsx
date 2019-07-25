@@ -22,9 +22,9 @@ export default class Messages extends Component {
 
   displayMessages = messages => {
     //console.log("messages", messages);
-
+    console.log("FROM DISPLAY MESSAGES CHECK: ", messages);
     return messages.map(message => {
-      if (message.displayMessage) {
+      if (message.display_message) {
         return (
           <Message
             message={message}

@@ -41,6 +41,9 @@ module.exports.createMessage = async message => {
   // console.log("Generating Chat Message: ", makeMess);
   makeMess = await getMessageType(makeMess);
   this.sendMessage(makeMess);
+  const save = await this.saveMessage(makeMess);
+  console.log(save);
+  return;
 };
 
 //Like User Message, except for robots
@@ -64,6 +67,72 @@ module.exports.createRobotMessage = async message => {
   // console.log("Generating Robot Chat Message: ", makeMess);
   //makeMess = await getMessageType(makeMess);
   this.sendMessage(makeMess);
+  const save = await this.saveMessage(makeMess);
+  console.log(save);
+  return;
+};
+
+module.exports.saveMessage = async getMessage => {
+  const db = require("../services/db");
+  const {
+    message,
+    sender,
+    sender_id,
+    chat_id,
+    server_id,
+    id,
+    time_stamp,
+    broadcast,
+    displayMessage,
+    badges,
+    type
+  } = getMessage;
+
+  const dbPut = `INSERT INTO chat_messages ( message,
+    sender,
+    sender_id,
+    chat_id,
+    server_id,
+    id,
+    time_stamp,
+    broadcast,
+    display_message,
+    badges,
+    type ) VALUES($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11 ) RETURNING *`;
+  console.log("SAVING MESSAGE...");
+  try {
+    const result = await db.query(dbPut, [
+      message,
+      sender,
+      sender_id,
+      chat_id,
+      server_id,
+      id,
+      time_stamp,
+      broadcast,
+      displayMessage,
+      badges,
+      type
+    ]);
+    if (result.rows[0]) return result.rows[0];
+  } catch (err) {
+    console.log(err);
+  }
+  return null;
+};
+
+module.exports.getRecentMessages = async (chat_id, numberOfMessages) => {
+  const db = require("../services/db");
+  //TODO: Maybe don't return messages more than 24 hours old
+  const query = `SELECT * FROM chat_messages WHERE chat_id = $1 ORDER BY time_stamp DESC LIMIT ${numberOfMessages ||
+    10}`;
+  try {
+    const result = await db.query(query, [chat_id]);
+    if (result.rows[0]) return result.rows;
+  } catch (err) {
+    console.log(err);
+  }
+  return null;
 };
 
 module.exports.sendMessage = message => {

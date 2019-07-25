@@ -75,7 +75,7 @@ export default class Login extends Form {
       .then(res => {
         console.log("Login response: ", res);
         localStorage.setItem("token", res.data.token);
-        this.setState({redirect: true})
+        this.setState({ redirect: true });
       })
       .catch(err => {
         console.log("Login Error: ", err);
@@ -83,18 +83,16 @@ export default class Login extends Form {
   };
 
   render() {
-    return (
-      this.state.redirect ? (
-        <Redirect to="/"></Redirect>
-      ) : (
-        <div className="register-form">
-          <form onSubmit={this.handleSubmit}>
-            {this.renderInput("username", "Username", "text")}
-            {this.renderInput("password", "Password", "password")}
-            {this.renderButton("Submit")}
-          </form>
-        </div>
-      )
+    return this.state.redirect ? (
+      <Redirect to="/" />
+    ) : (
+      <div className="register-form">
+        <form onSubmit={this.handleSubmit}>
+          {this.renderInput("username", "Username", "text")}
+          {this.renderInput("password", "Password", "password")}
+          {this.renderButton("Submit")}
+        </form>
+      </div>
     );
   }
 }

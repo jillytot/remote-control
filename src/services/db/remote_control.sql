@@ -48,26 +48,6 @@ TABLESPACE pg_default;
 ALTER TABLE public.users
     OWNER to postgres;
 
-
-CREATE TABLE public.robot_servers
-(
-    owner_id character varying COLLATE pg_catalog."default",
-    server_id character varying COLLATE pg_catalog."default" NOT NULL,
-    server_name character varying COLLATE pg_catalog."default",
-    created character varying COLLATE pg_catalog."default",
-    settings jsonb,
-    status jsonb,
-    channels jsonb[],
-    CONSTRAINT "robotServers_pkey" PRIMARY KEY (server_id)
-)
-WITH (
-    OIDS = FALSE
-)
-TABLESPACE pg_default;
-
-ALTER TABLE public.robot_servers
-    OWNER to postgres;
-
 CREATE TABLE public.chat_rooms
 (
     name character varying COLLATE pg_catalog."default",
@@ -107,7 +87,7 @@ TABLESPACE pg_default;
 ALTER TABLE public.channels
     OWNER to postgres;
 
-    CREATE TABLE public.robots
+CREATE TABLE public.robots
 (
     name character varying COLLATE pg_catalog."default",
     id character varying COLLATE pg_catalog."default" NOT NULL,
@@ -129,7 +109,7 @@ TABLESPACE pg_default;
 ALTER TABLE public.robots
     OWNER to postgres;
 
-    CREATE TABLE public.controls
+CREATE TABLE public.controls
 (
      id character varying COLLATE pg_catalog."default" NOT NULL,
     channel_id character varying COLLATE pg_catalog."default",
@@ -147,6 +127,7 @@ TABLESPACE pg_default;
 ALTER TABLE public.controls
     OWNER to postgres;
 
+
 CREATE TABLE public.robot_servers
 (
     owner_id character varying COLLATE pg_catalog."default",
@@ -163,10 +144,29 @@ WITH (
 )
 TABLESPACE pg_default;
 
+ALTER TABLE public.robot_servers
+    OWNER to postgres;
 
+
+
+CREATE TABLE public.invites
+(
+    id character varying COLLATE pg_catalog."default" NOT NULL,
+    created_by character varying COLLATE pg_catalog."default",
+    server_id character varying COLLATE pg_catalog."default",
+    created character varying COLLATE pg_catalog."default",
+    expires character varying COLLATE pg_catalog."default" NOT NULL,
+    status character varying COLLATE pg_catalog."default",
+    CONSTRAINT invites_pkey PRIMARY KEY (id)
+)
+WITH (
+    OIDS = FALSE
+)
+TABLESPACE pg_default;
 
 ALTER TABLE public.invites
     OWNER to postgres;
+
 
 CREATE TABLE public.members
 (
@@ -193,4 +193,28 @@ WITH (
 TABLESPACE pg_default;
 
 ALTER TABLE public.members
+    OWNER to postgres;
+
+
+CREATE TABLE public.chat_messages
+(
+    message character varying COLLATE pg_catalog."default",
+    sender character varying COLLATE pg_catalog."default",
+    sender_id character varying COLLATE pg_catalog."default",
+    chat_id character varying COLLATE pg_catalog."default",
+    server_id character varying COLLATE pg_catalog."default",
+    id character varying COLLATE pg_catalog."default" NOT NULL,
+    time_stamp character varying COLLATE pg_catalog."default",
+    broadcast character varying COLLATE pg_catalog."default",
+    display_message boolean,
+    badges character varying[] COLLATE pg_catalog."default",
+    type character varying COLLATE pg_catalog."default",
+    CONSTRAINT chat_messages_pkey PRIMARY KEY (id)
+)
+WITH (
+    OIDS = FALSE
+)
+TABLESPACE pg_default;
+
+ALTER TABLE public.chat_messages
     OWNER to postgres;

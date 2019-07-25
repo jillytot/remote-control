@@ -11,6 +11,7 @@ router.use("/channels", require("./channels"));
 router.use("/controls", require("./controls"));
 router.use("/stats", require("./stats"));
 router.use("/user", require("./user"));
+router.use("/chat", require("./chat"));
 
 //test API
 router.get("/", (req, res) => {

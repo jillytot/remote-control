@@ -54,6 +54,17 @@ export default class Chat extends Component {
     this._isMounted = false;
   }
 
+  removeModerationMessagesOnLoad = messages => {
+    let remove = [];
+    messages.map(message => {
+      if (message.type === "moderation") {
+        //do nothing
+      } else {
+        remove.push(message);
+      }
+    });
+    return remove;
+  };
   chatListener = async () => {
     const { socket } = this.props;
     if (socket && this._isMounted) {
@@ -62,6 +73,7 @@ export default class Chat extends Component {
         // messages.map(message => {
         //   chat.messages.push(message);
         // });
+        chat.messages = this.removeModerationMessagesOnLoad(chat.messages);
         this.setState({ chatroom: chat });
       });
       socket.on(MESSAGE_RECIEVED, message => {

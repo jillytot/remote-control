@@ -43,9 +43,9 @@ const Message = ({ message }) => {
     const { badges } = message;
     if (message && message.type === types.moderation) return <React.Fragment />;
     if (badges && badges.length > 0) {
-      console.log("BADGES GET: ", badges);
+      // console.log("BADGES GET: ", badges);
       return badges.map(badge => {
-        console.log("BADGE GET: ", badge);
+        // console.log("BADGE GET: ", badge);
         if (badge === "staff") {
           // console.log("ADD BADGE!");
           return (

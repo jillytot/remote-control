@@ -68,7 +68,7 @@ export default class SendChat extends Form {
       feedback.id = uuidv4();
 
       onChatFeedback(feedback);
-      console.log(toUser);
+      // console.log(toUser);
     }
 
     if (this.state.coolDown) {
@@ -89,8 +89,8 @@ export default class SendChat extends Form {
       feedback.id = uuidv4();
 
       onChatFeedback(feedback);
-      console.log(toUser);
-      console.log(feedback.id);
+      // console.log(toUser);
+      // console.log(feedback.id);
     }
 
     const { sendChat } = this.state.data;
@@ -127,7 +127,7 @@ export default class SendChat extends Form {
 
   //This should only appear for desktop, no need for mobile
   handleIndicator = () => {
-    console.log(this.props.chatTabbed);
+    // console.log(this.props.chatTabbed);
     if (!this.props.chatTabbed) {
       return (
         <div className="send-chat-options">

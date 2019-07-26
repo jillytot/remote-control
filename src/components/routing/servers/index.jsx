@@ -94,6 +94,7 @@ export default class ServersPage extends Component {
     socket.on("connect", this.socketConnected);
     socket.on("disconnect", this.socketDisconnected);
     socket.on("ROBOT_SERVER_UPDATED", this.getServers);
+
     if (socket.connected) {
       this.setState({ socketConnected: true });
       this.emitAuthentication();
@@ -132,7 +133,7 @@ export default class ServersPage extends Component {
 
   render() {
     let loadingText = null;
-    console.log(this.state.socketConnected);
+    console.log("Socket Connected: ", this.state.socketConnected);
     if (!this.state.socketConnected) {
       loadingText = "Connecting...";
     } else if (!this.state.user) {

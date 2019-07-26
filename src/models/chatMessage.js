@@ -184,3 +184,22 @@ module.exports.getBadges = async (checkRoles, server_id, userId) => {
   }
   return [];
 };
+
+//Update display message for all user messages located on a server
+module.exports.updateDisplayMessage = async ({ sender_id, server_id }) => {
+  const db = require("../services/db");
+  const display_message = false;
+  console.log("Updating Message Status");
+  const query = `UPDATE chat_messages SET display_message = $1 WHERE (sender_id, server_id) = ($2, $3) RETURNING *`;
+  try {
+    const result = await db.query(query, [
+      display_message,
+      sender_id,
+      server_id
+    ]);
+    if (result.rows) return result.rows;
+  } catch (err) {
+    console.log("err");
+  }
+  return null;
+};

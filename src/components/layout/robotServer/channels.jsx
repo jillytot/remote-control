@@ -37,11 +37,9 @@ export default class Channels extends Component {
 
   // not sure if needed, but why not
   componentDidUpdate(prevProps) {
-    console.log("aaaa");
     if (
       prevProps.selectedServer.server_id !== this.props.selectedServer.server_id
     ) {
-      console.log("bbbb");
       this.handleServer(true);
     }
   }
@@ -50,8 +48,8 @@ export default class Channels extends Component {
     console.log("channels mount");
     this._isMounted = true;
     this.channelListener();
-    this.handleServer();
 
+    this.handleServer();
     this.colorCleanup = setInterval(() => {
       const newColors = this.state.userColors;
       let usernamesToKeep = [];
@@ -81,7 +79,7 @@ export default class Channels extends Component {
   handleKeyPress = e => {
     if (e.keyCode === 9) {
       e.preventDefault();
-      console.log(this.state.chatTabbed);
+      // console.log(this.state.chatTabbed);
       this.setChatTabbed(!this.state.chatTabbed);
     }
   };
@@ -120,9 +118,8 @@ export default class Channels extends Component {
     const { selectedServer } = this.props;
 
     if (socket && this._isMounted) {
-      //Currently doesn't handle channels being dynamically updated
       socket.on(SEND_ROBOT_SERVER_INFO, data => {
-        console.log("SEND ROBOT SERVER INFO: ", data);
+        // console.log("SEND ROBOT SERVER INFO: ", data);
         this.setState({
           channels: data.channels,
           users: this.getUserColors(data.users),
@@ -136,12 +133,12 @@ export default class Channels extends Component {
       });
 
       socket.on(CHANNELS_UPDATED, data => {
-        console.log("CHANNELS UPDATED: ", data, selectedServer);
+        // console.log("CHANNELS UPDATED: ", data, selectedServer);
         if (
           this.props.selectedServer &&
           data.server_id === this.props.selectedServer.server_id
         ) {
-          console.log("UPDATING CHANNELS");
+          // console.log("UPDATING CHANNELS");
           this.setState({
             channels: data.channels
           });
@@ -151,9 +148,9 @@ export default class Channels extends Component {
   };
 
   handleServer = resetState => {
-    console.log("handle server");
+    // console.log("handle server");
     if (resetState) this.setState({ channels: null, currentChannel: null });
-    console.log("get channels for", this.props.selectedServer.server_name);
+    // console.log("get channels for", this.props.selectedServer.server_name);
     socket.emit("GET_CHANNELS", {
       user: this.props.user.id,
       server_id: this.props.selectedServer.server_id

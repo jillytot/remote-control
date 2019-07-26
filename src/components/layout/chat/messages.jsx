@@ -22,8 +22,8 @@ export default class Messages extends Component {
 
   displayMessages = messages => {
     //console.log("messages", messages);
-    console.log("FROM DISPLAY MESSAGES CHECK: ", messages);
-    return messages.map(message => {
+    // console.log("FROM DISPLAY MESSAGES CHECK: ", messages);
+    return messages.map((message, index) => {
       if (message.display_message) {
         return (
           <Message
@@ -32,8 +32,9 @@ export default class Messages extends Component {
             color={message.color}
           />
         );
+      } else {
+        return <React.Fragment key={index} />;
       }
-      return <React.Fragment />;
     });
   };
 

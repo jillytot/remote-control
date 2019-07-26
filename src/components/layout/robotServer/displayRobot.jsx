@@ -20,7 +20,7 @@ export default class DisplayRobot extends Component {
   }
 
   socketRobotsHandler = robots => {
-    console.log("GET ROBOTS CHECK: ", robots);
+    // console.log("GET ROBOTS CHECK: ", robots);
     this.setState({ robots: robots });
   };
 
@@ -28,7 +28,7 @@ export default class DisplayRobot extends Component {
     const { robots } = this.state;
     if (robots && robots.length > 0) {
       return robots.map((robot, index) => {
-        console.log(robot.name);
+        // console.log(robot.name);
         return (
           <GetRobotSettings
             robot={robot}
@@ -44,7 +44,7 @@ export default class DisplayRobot extends Component {
 
   handleDisplay = () => {
     const { server, user, channels } = this.props;
-    console.log(this.props);
+    // console.log(this.props);
     if (server && user && user.id === server.owner_id) {
       return (
         <div className="display-robot-container">

@@ -47,7 +47,7 @@ class Form extends Component {
   };
 
   handleChange = ({ currentTarget: input }) => {
-    console.log(input.value);
+    // console.log(input.value);
     const errors = { ...this.state.errors };
     const errorMessage = this.validateProperty(input);
     if (errorMessage) errors[input.name] = errorMessage;
@@ -127,9 +127,9 @@ class Form extends Component {
     );
   }
 
-  handleKeyPress = (e) => {
+  handleKeyPress = e => {
     if (e.keyCode === 13 && e.shiftKey === false) {
-      console.log("ON ENTER", e);
+      // console.log("ON ENTER", e);
       this.handleSubmit(e); //solution 100
     }
   };

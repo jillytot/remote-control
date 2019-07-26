@@ -5,6 +5,7 @@ import Messages from "./messages";
 import SendChat from "./sendChat";
 import "./chat.css";
 import { colors } from "../../../config/colors";
+import socket from "../../socket";
 
 export default class Chat extends Component {
   _isMounted = false;
@@ -23,9 +24,33 @@ export default class Chat extends Component {
     this._isMounted = true;
     this.chatListener();
     this.setState({ users: this.props.users });
+    socket.on("LOCAL_MODERATION", data => {
+      console.log("DING");
+      this.handleLocalChatModeration(data);
+    });
   }
 
+  handleLocalChatModeration = data => {
+    console.log("MODERATION EVENT: ", data);
+    if (data.event === "remove_messages" && this.state.chatroom) {
+      console.log("REMOVING MESSAGES");
+      let { messages } = this.state.chatroom;
+      let remove = [];
+      messages.map(message => {
+        if (message.sender_id === data.user) {
+          message.type = "moderation";
+          message.message = "<... message removed by moderator ...>";
+        }
+        remove.push(message);
+      });
+      let updateChat = this.state.chatroom;
+      updateChat.messages = remove;
+      this.setState({ chatroom: updateChat });
+    }
+  };
+
   componentWillUnmount() {
+    socket.off("LOCAL_MODERATION", this.handleLocalChatModeration);
     this._isMounted = false;
   }
 
@@ -109,7 +134,7 @@ export default class Chat extends Component {
     if (this.state.menu) {
       const { onEvent, user, users, socket } = this.props;
       const { chatroom, menu } = this.state;
-      console.log("Menu", menu);
+      // console.log("Menu", menu);
       if (menu === "Chat") {
         return (
           <div className="messages-container">
@@ -163,3 +188,14 @@ export default class Chat extends Component {
 }
 
 let previousFeedback = "";
+
+// chatroom.messages.map(message => {
+//   if (usernamesToKeep.includes(message.sender) !== true) {
+//     usernamesToKeep.push(message.sender);
+//   }
+// });
+
+// componentWillUnmount() {
+//   clearInterval(this.colorCleanup);
+//   document.removeEventListener("keydown", this.handleKeyPress);
+// }

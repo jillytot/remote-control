@@ -28,7 +28,7 @@ module.exports.localTimeout = async moderate => {
   if (moderate.message["error"] === false) moderate = checkTime(moderate);
   if (moderate.message["error"] === false)
     moderate = await this.handleLocalTimeout(moderate);
-
+  await localMessageRemoval(moderate); //flags messages in DB not to be published to client
   // console.log("MODERATION CHECK: ", moderate);
   return moderate.message;
 };
@@ -240,11 +240,39 @@ const handleError = (message, error) => {
   return message;
 };
 
-const updateUserWS = async user => {
-  const { wss } = require("../services/wss/index");
+const localMessageRemoval = async ({ arg, badUser, moderator, message }) => {
+  //Get Messages from User sent on a server, set display to false for all of them;
+  //Send event to update clients that messages have been removed.
+  const { updateDisplayMessage } = require("../models/chatMessage");
+  const scrubMessages = await updateDisplayMessage({
+    sender_id: badUser.user_id,
+    server_id: badUser.server_id
+  });
+  console.log(scrubMessages);
+  localModerationEvent({
+    server_id: badUser.server_id,
+    event: "remove_messages",
+    user: badUser.user_id
+  });
+
+  return {
+    arg,
+    badUser,
+    moderator,
+    message
+  };
+};
+
+const localModerationEvent = data => {
+  console.log("MODERATION EVENT", data);
+  emitLocalEvent(data.server_id, "LOCAL_MODERATION", data);
+};
+
+const emitLocalEvent = (server_id, event, data) => {
+  const wss = require("../services/wss");
   wss.clients.forEach(ws => {
-    if (user.id === ws.user.id) {
-      console.log(user);
+    if (ws.server_id === server_id) {
+      ws.emitEvent(event, data);
     }
   });
 };

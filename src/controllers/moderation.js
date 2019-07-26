@@ -26,9 +26,11 @@ module.exports.localTimeout = async moderate => {
     moderate = await authCommand(moderate);
   if (moderate.message["error"] === false) moderate = checkTimeout(moderate);
   if (moderate.message["error"] === false) moderate = checkTime(moderate);
-  if (moderate.message["error"] === false)
+  if (moderate.message["error"] === false) {
     moderate = await this.handleLocalTimeout(moderate);
-  await localMessageRemoval(moderate); //flags messages in DB not to be published to client
+    await localMessageRemoval(moderate); //flags messages in DB not to be published to client
+  }
+
   // console.log("MODERATION CHECK: ", moderate);
   return moderate.message;
 };

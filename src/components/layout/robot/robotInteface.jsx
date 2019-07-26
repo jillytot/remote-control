@@ -63,14 +63,14 @@ export default class RobotInterface extends Component {
 
   connectA = () => {
     this.audioPlayer = new window.JSMpeg.Player(
-      `ws://dev.remo.tv:1567/recieve?name=${this.props.channel}-audio`,
+      `ws://dev.remo.tv:1567/receive?name=${this.props.channel}-audio`,
       { video: false, disableWebAssembly: true }
     );
   };
 
   connectV = () => {
     this.videoPlayer = new window.JSMpeg.Player(
-      `ws://dev.remo.tv:1567/recieve?name=${this.props.channel}-video`,
+      `ws://dev.remo.tv:1567/receive?name=${this.props.channel}-video`,
       {
         canvas: this.refs["video-canvas"],
         videoBufferSize: 1 * 1024 * 1024,

@@ -1,7 +1,7 @@
 /* 
 A user can create a robot, 
 this robot can be added to a robot_server
-A robot needs to make a secure connection to the server to recieve input
+A robot needs to make a secure connection to the server to receive input
 Input is managed through a robotInterface
 */
 

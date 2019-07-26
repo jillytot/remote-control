@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { MESSAGE_RECIEVED, SEND_CHAT } from "../../../events/definitions";
+import { MESSAGE_RECEIVED, SEND_CHAT } from "../../../events/definitions";
 import UserList from "./userList.jsx";
 import Messages from "./messages";
 import SendChat from "./sendChat";
@@ -39,7 +39,7 @@ export default class Chat extends Component {
         // });
         this.setState({ chatroom: chat });
       });
-      socket.on(MESSAGE_RECIEVED, message => {
+      socket.on(MESSAGE_RECEIVED, message => {
         if (this.state.chatroom) {
           let { chatroom } = this.state;
           chatroom.messages.push(message);

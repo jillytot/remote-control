@@ -43,7 +43,7 @@ def on_message(ws, message):
                 command = "r"
                 ser.write(command.lower().encode("utf8") + "\r\n")
 
-        elif event == "MESSAGE_RECIEVED":
+        elif event == "MESSAGE_RECEIVED":
             print("Say: " + data["message"])
 
     except Exception as e:

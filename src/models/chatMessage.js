@@ -145,13 +145,13 @@ module.exports.sendMessage = message => {
   //TODO: ensure that chatRoom is provided by /src/events/index and not the message directly from the client
 
   if (message.broadcast === "self") {
-    userModel.emitEvent(message.sender_id, "MESSAGE_RECIEVED", message);
+    userModel.emitEvent(message.sender_id, "MESSAGE_RECEIVED", message);
     return;
   }
 
   let chatRoom = message.chat_id;
   // console.log("Chat Room from SendMessage: ", chatRoom, message);
-  chatRoomModel.emitEvent(chatRoom, "MESSAGE_RECIEVED", message);
+  chatRoomModel.emitEvent(chatRoom, "MESSAGE_RECEIVED", message);
 };
 
 //Definitely needs more work

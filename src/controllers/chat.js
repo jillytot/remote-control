@@ -5,7 +5,7 @@ module.exports.loadChat = async chat_id => {
   let chat = await getChat(chat_id);
   let messages = await getRecentMessages(chat_id, loadMessages);
   messages = messages.reverse();
-  console.log("MESSAGES CHECK: ", messages);
+  // console.log("MESSAGES CHECK: ", messages);
   if (messages) {
     messages.map(message => {
       chat.messages.push(message);

@@ -264,7 +264,7 @@ module.exports.deleteRobotServer = async server_id => {
     const query = "DELETE FROM robot_servers WHERE server_id =$1";
     const result = await db.query(query, [server_id]);
     console.log("Deleted row count: ", result.rowCount);
-    //await this.removeActiveServer(server_id);
+
     await this.updateRobotServer();
     if (result.rowCount > 0) {
       console.log("SUCCESSFULLY DELETED SERVER");

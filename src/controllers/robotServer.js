@@ -32,3 +32,18 @@ module.exports.getActiveRobotsOnServer = async server => {
   );
   //return updateStatus;
 };
+
+module.exports.deleteRobotServer = async (server_id, user_id) => {
+  const {
+    deleteRobotServer,
+    getRobotServer,
+    updateRobotServer
+  } = require("../models/robotServer");
+  // const getServer = await getRobotServer(server_id); //validate server:
+  // if (user_id === getServer.owner_id) {
+  //   //delete!
+  // }
+
+  const remove = await deleteRobotServer(server_id);
+  console.log("DELTING SERVER: ", remove);
+};

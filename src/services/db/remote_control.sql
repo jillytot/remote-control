@@ -180,12 +180,12 @@ CREATE TABLE public.members
     CONSTRAINT member_pkey PRIMARY KEY (user_id, server_id),
     CONSTRAINT server_pkey FOREIGN KEY (server_id)
         REFERENCES public.robot_servers (server_id) MATCH SIMPLE
-        ON UPDATE NO ACTION
-        ON DELETE NO ACTION,
-    CONSTRAINT user_pkey FOREIGN KEY (user_id)
-        REFERENCES public.users (id) MATCH SIMPLE
-        ON UPDATE NO ACTION
-        ON DELETE NO ACTION
+        ON UPDATE CASCADE
+        ON DELETE CASCADE,
+    CONSTRAINT user_pkey FOREIGN KEY (server_id)
+        REFERENCES public.robot_servers (server_id) MATCH SIMPLE
+        ON UPDATE CASCADE
+        ON DELETE CASCADE
 )
 WITH (
     OIDS = FALSE

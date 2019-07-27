@@ -4,7 +4,8 @@ const reCaptchaKey = "6Lfg_KYUAAAAAH1hvQdp-qDOUToVn6FQWFOvbySo";
 
 const ws = "ws://";
 const http = "http://";
-const api = "/api";
+const apiVersion = "/dev";
+const api = `/api${apiVersion}`;
 
 const localHost = "localhost"; //default
 const devServer = "35.185.203.47";

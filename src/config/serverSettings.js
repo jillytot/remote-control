@@ -5,5 +5,6 @@ module.exports = {
   reCaptchaSecretKey: "6Lfg_KYUAAAAAILikAGmfmaR3IvYw3eeucDBp-TU",
   secret: "temp_secret",
   maxTimeout: 15768000, //6 months
-  loadMessages: 25 //number of messages chatroom will get on load
+  loadMessages: 25, //number of messages chatroom will get on load
+  currentAPIVersion: "/dev"
 };

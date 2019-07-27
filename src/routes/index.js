@@ -5,6 +5,6 @@ router.get("/", (req, res) => {
   res.status(200).json({ greeting: "Oh hi there." });
 });
 
-router.use(`/api`, require("./api"));
+router.use(`/api/dev`, require("./api"));
 
 module.exports = router;

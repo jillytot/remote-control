@@ -155,9 +155,6 @@ export default class Channels extends Component {
       user: this.props.user.id,
       server_id: this.props.selectedServer.server_id
     });
-    socket.emit("GET_ROBOTS", {
-      server_id: this.props.selectedServer.server_id
-    });
   };
 
   displayChannels = () => {

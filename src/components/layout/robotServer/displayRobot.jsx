@@ -13,10 +13,19 @@ export default class DisplayRobot extends Component {
 
   componentDidMount() {
     socket.on(GET_ROBOTS, this.socketRobotsHandler);
+    socket.on("connect", this.getRobotsEmit);
+    if (socket.connected) this.getRobotsEmit();
   }
+
+  getRobotsEmit = () => {
+    socket.emit("GET_ROBOTS", {
+      server_id: this.props.server.server_id
+    });
+  };
 
   componentWillUnmount() {
     socket.off(GET_ROBOTS, this.socketRobotsHandler);
+    socket.off("connect", this.getRobotsEmit);
   }
 
   socketRobotsHandler = robots => {

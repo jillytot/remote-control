@@ -242,31 +242,24 @@ const handleError = (message, error) => {
   return message;
 };
 
-const localMessageRemoval = async ({ arg, badUser, moderator, message }) => {
+const localMessageRemoval = async ({ badUser }) => {
   //Get Messages from User sent on a server, set display to false for all of them;
   //Send event to update clients that messages have been removed.
   const { updateDisplayMessage } = require("../models/chatMessage");
-  const scrubMessages = await updateDisplayMessage({
+  await updateDisplayMessage({
     sender_id: badUser.user_id,
     server_id: badUser.server_id
   });
-  console.log(scrubMessages);
+  // console.log(scrubMessages);
   localModerationEvent({
     server_id: badUser.server_id,
     event: "remove_messages",
     user: badUser.user_id
   });
-
-  return {
-    arg,
-    badUser,
-    moderator,
-    message
-  };
+  return;
 };
 
 const localModerationEvent = data => {
-  console.log("MODERATION EVENT", data);
   emitLocalEvent(data.server_id, "LOCAL_MODERATION", data);
 };
 

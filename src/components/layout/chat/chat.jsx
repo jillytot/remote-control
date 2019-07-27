@@ -39,7 +39,7 @@ export default class Chat extends Component {
       messages.map(message => {
         if (message.sender_id === data.user) {
           message.type = "moderation";
-          message.message = "<... message removed by moderator ...>";
+          message.message = " ...message removed...";
         }
         remove.push(message);
       });

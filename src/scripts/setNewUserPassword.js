@@ -5,7 +5,7 @@ const setPassword = async () => {
   let newPassword = process.argv[3];
   console.log(user_id, newPassword);
   const reset = await setNewPassword(user_id, newPassword);
-  console.log(reset);
+  console.log("Set Password Result: ", reset);
   process.exit();
 };
 

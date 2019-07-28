@@ -499,10 +499,7 @@ module.exports.updatePassword = async user => {
   try {
     const insert = `UPDATE users SET password = $1 WHERE id = $2 RETURNING *`;
     const result = await db.query(insert, [password, id]);
-    const print = result.rows[0];
-    console.log("User Status Updated: ", print);
-    this.sendUpdateStatus(this.publicUser(print));
-    return print;
+    if (result.rows[0]) return true;
   } catch (err) {
     console.log(err);
   }

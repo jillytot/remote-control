@@ -8,3 +8,11 @@ module.exports.followedServers = async user => {
   console.log(followed);
   return followed;
 };
+
+module.exports.setNewPassword = async (user_id, password) => {
+  const { hash } = require("../modules/utilities");
+  const { updatePassword } = require("../models/user");
+  password = await hash(password);
+  result = await updatePassword({ id: user_id, password: password });
+  return result;
+};

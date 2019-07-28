@@ -491,3 +491,20 @@ module.exports.getTotalUserCount = async () => {
   }
   return "...";
 };
+
+//UDPATE USER STATUS
+module.exports.updatePassword = async user => {
+  const { id, password } = user;
+  console.log(`Updating Password`);
+  try {
+    const insert = `UPDATE users SET password = $1 WHERE id = $2 RETURNING *`;
+    const result = await db.query(insert, [password, id]);
+    const print = result.rows[0];
+    console.log("User Status Updated: ", print);
+    this.sendUpdateStatus(this.publicUser(print));
+    return print;
+  } catch (err) {
+    console.log(err);
+  }
+  return null;
+};

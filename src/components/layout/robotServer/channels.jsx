@@ -96,7 +96,7 @@ export default class Channels extends Component {
     if (userColors.hasOwnProperty(username)) {
       return userColors[username];
     } else {
-      const newColor = this.generateColor();
+      const newColor = colors[username.charCodeAt(username.length-1) % colors.length];
       newColors[username] = newColor;
       this.setState({ userColors: newColors });
       return newColor;

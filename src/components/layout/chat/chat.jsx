@@ -115,13 +115,12 @@ export default class Chat extends Component {
       const user = users.find(user => {
         return user.username === message.sender;
       });
-      if (user && user.color) {
-        // console.log("Updating message color");
-        return {
-          ...message,
-          color: user.color
-        };
-      }
+
+      // console.log("Updating message color");
+      return {
+        ...message,
+        color: user && user.color ? user.color : colors[message.sender.charCodeAt(message.sender.length-1) % colors.length]
+      };
       return message;
     });
   };

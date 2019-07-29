@@ -12,6 +12,8 @@ import globalModerator from "./img/global_moderator.png";
 import moderator from "./img/moderator.png";
 import owner from "./img/owner.png";
 import robot from "./img/robot.png";
+import browse from "./img/browse.png";
+import addServer from "./img/addServer.png";
 
 const defaultImages = {
   default01: default01,

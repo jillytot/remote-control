@@ -129,6 +129,19 @@ a:active {
 
   height: calc(100vh - 72px);
   overflow-y: auto;
+
+  /* background-color: red; */
+}
+
+@media only screen and (max-device-width: 768px) {
+  .list-channels-container {
+    /* background-color: red; */
+    border-bottom-right-radius: 24px;
+    border-top-right-radius: 24px;
+    position: absolute;
+    left: 90px;
+    z-index: 50;
+  }
 }
 
 .list-channels-container::-webkit-scrollbar-track {
@@ -136,7 +149,7 @@ a:active {
   background-color: #372e50;
 }
 .list-channels-container::-webkit-scrollbar {
-  width: 5px;
+  width: 0px;
   /* background-color: green; */
 }
 .list-channels-container::-webkit-scrollbar-thumb {
@@ -165,6 +178,7 @@ a:active {
   flex-direction: row;
   justify-content: flex-end;
   margin: 5px 5px 5px 0px;
+  padding-right: 12px;
   font-size: 14px;
   cursor: pointer;
   border-radius: 24px;
@@ -180,7 +194,7 @@ a:active {
   cursor: pointer;
   margin: 5px 5px 5px 6px;
   text-align: left;
-  padding-left: 3px;
+  padding-left: 12px;
   /* background-color: purple; */
   display: flex;
   flex-direction: row;
@@ -204,28 +218,39 @@ a:active {
 .server-info-container {
   background-color: rgb(86, 86, 119);
   text-align: left;
-  padding: 5px;
+  padding: 12px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  margin-bottom: 6px;
+}
+
+.spacer {
+  margin-left: 6px;
 }
 
 .display-server-name {
   font-size: 21px;
   font-weight: bold;
-  display: flex;
-  flex-direction: row;
-  justify-content: flex-end;
 }
 
+.users-online-edit-container {
+  display: flex;
+  /* flex-direction: row; */
+  /* background-color: purple; */
+  width: 100%;
+  margin-bottom: 2px;
+}
 .server-settings {
-  font-size: 14px;
+  font-size: 12px;
   font-style: italic;
   display: flex;
   flex-direction: row;
   font-weight: normal;
-  justify-content: flex-end;
-  width: 100%;
   color: rgb(172, 172, 172);
   cursor: pointer;
-  margin-left: 10px;
+  /* background-color: green; */
+  margin-right: 2px;
 }
 
 .server-settings:hover {
@@ -236,12 +261,17 @@ a:active {
   font-size: 12px;
   font-style: italic;
   color: rgb(172, 172, 172);
+  display: flex;
+  flex-direction: row;
+  flex: 1;
+  align-items: center;
+  /* background-color: blue; */
 }
 
 .add-channel {
   font-size: 12px;
   cursor: pointer;
-  margin: 5px 5px 5px 6px;
+  margin: 5px 12px 5px 12px;
   font-style: italic;
   text-align: left;
   padding: 5px;
@@ -253,12 +283,6 @@ a:active {
   border: solid 1px rgb(123, 127, 173);
 }
 
-/* .display-robot-container { */
-/* background-color: blue; */
-/* display: flex;
-  align-items: center; */
-/* } */
-
 .display-robot-header {
   background-color: green;
   font-size: 14px;
@@ -268,6 +292,7 @@ a:active {
   font-style: italic;
   text-align: left;
   padding: 5px;
+
   /* border-radius: 24px; */
   background-color: rgb(86, 86, 119);
 }
@@ -295,7 +320,7 @@ a:active {
   display: flex;
   flex-direction: row;
   height: 18px;
-  margin: 1px 0px 5px 6px;
+  margin: 1px 0px 5px 12px;
 }
 
 .robot-item-container:hover {
@@ -307,10 +332,12 @@ a:active {
   flex-direction: row;
   font-size: 12px;
   margin-bottom: 2px;
-  margin-bottom: 10px;
+  margin-top: 2px;
+  /* margin-bottom: 10px; */
   align-items: center;
   border-radius: 6px;
   background-color: rgb(57, 57, 75);
+  width: 100%;
 }
 
 .follow-icon {

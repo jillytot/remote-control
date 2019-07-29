@@ -173,14 +173,7 @@ export default class DisplayServerDetails extends Component {
     if (channels && channels.length > 0) {
       return (
         <div className="server-info-container">
-          <div className="display-server-name">
-            {server.server_name}
-            {user.id === server.owner_id ? (
-              <div className="server-settings"> {`(edit)`}</div>
-            ) : (
-              <div className="server-settings" />
-            )}
-          </div>
+          <div className="display-server-name">{server.server_name}</div>
           <div className="join-server-container">
             <div
               className={
@@ -198,10 +191,15 @@ export default class DisplayServerDetails extends Component {
 
             <div className="member-count"> {this.handleMemberCount()} </div>
           </div>
-
-          <div className="display-server-info">
-            Users Online:
-            <ActiveUserCount users={users} />
+          <div className="users-online-edit-container">
+            <div className="display-server-info">
+              Users Online: <ActiveUserCount users={users} />
+            </div>
+            {user.id === server.owner_id ? (
+              <div className="server-settings"> {`(edit)`}</div>
+            ) : (
+              <div className="server-settings" />
+            )}
           </div>
         </div>
       );
@@ -215,5 +213,5 @@ export default class DisplayServerDetails extends Component {
 }
 
 const ActiveUserCount = ({ users }) => {
-  return <span> {users.length}</span>;
+  return <span className="spacer"> {users.length}</span>;
 };

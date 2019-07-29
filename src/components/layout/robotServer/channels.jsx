@@ -96,7 +96,7 @@ export default class Channels extends Component {
     if (userColors.hasOwnProperty(username)) {
       return userColors[username];
     } else {
-      const newColor = colors[username.charCodeAt(username.length-1) % colors.length];
+      const newColor = this.generateColor();
       newColors[username] = newColor;
       this.setState({ userColors: newColors });
       return newColor;
@@ -254,6 +254,7 @@ export default class Channels extends Component {
                 setChatTabbed={this.setChatTabbed}
                 channels={this.state.channels}
                 server={selectedServer}
+                getColor={this.getColor}
               />
             )}
           />

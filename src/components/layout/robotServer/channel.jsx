@@ -77,6 +77,7 @@ export default class Channel extends Component {
           users={this.props.users}
           setChatTabbed={this.props.setChatTabbed}
           chatTabbed={this.props.chatTabbed}
+          getColor={this.props.getColor}
         />
       </React.Fragment>
     );

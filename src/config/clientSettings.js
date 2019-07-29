@@ -23,6 +23,7 @@ module.exports = {
   slowMo: 30000, //Message rate limit for when we need to slow things down!
   chatCharMax: 300, //Maximum amount of characters a user can type in the chat box
   buttonRate: 100, //Pulse rate for holding down a button
+  breakPoint: 768, //mobile layout resolution
   reCaptchaSiteKey: reCaptchaKey,
   socketUrl: socketUrl,
   apiUrl: apiUrl,

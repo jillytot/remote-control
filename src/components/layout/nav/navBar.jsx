@@ -5,7 +5,7 @@ import { LOGOUT } from "../../../events/definitions";
 import defaultImages from "../../../imgs/placeholders";
 import { Link, Redirect } from "react-router-dom";
 import socket from "../../socket";
-import { useWindowDimensions } from "../../providers/windowDimensionProvider";
+import GetLayout from "../../modules/getLayout";
 
 export default class NavBar extends Component {
   constructor(props) {
@@ -21,17 +21,37 @@ export default class NavBar extends Component {
     this.setState({ redirect: true });
   };
 
+  renderLogo = () => {
+    return (
+      <GetLayout
+        renderMobile={this.handleLogoMobile}
+        renderDesktop={this.handleLogoDesktop}
+      />
+    );
+  };
+
+  handleLogoDesktop = () => {
+    return (
+      <div className="logo-container">
+        <img className="logo" alt="" src={defaultImages.remoLogo} />
+      </div>
+    );
+  };
+
+  handleLogoMobile = () => {
+    return (
+      <div className="logo-container-mobile">
+        <img className="mobile-logo" alt="" src={defaultImages.appIcon} />
+      </div>
+    );
+  };
+
   render() {
     return this.state.redirect ? (
       <Redirect to="/login" />
     ) : (
       <div className="nav-container">
-        <Link to="/">
-          {" "}
-          <div className="logo-container">
-            <img className="logo" alt="" src={defaultImages.remoLogo} />
-          </div>
-        </Link>
+        <Link to="/"> {this.renderLogo()}</Link>
 
         <div className="user-container">
           <div className="user">
@@ -45,8 +65,3 @@ export default class NavBar extends Component {
     );
   }
 }
-
-const ResponsiveLayout = ({ breakpoint, renderMobile, renderDesktop }) => {
-  const { width } = useWindowDimensions();
-  return width > breakpoint ? renderDesktop() : renderMobile();
-};

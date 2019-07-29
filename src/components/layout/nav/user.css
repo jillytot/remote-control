@@ -16,6 +16,9 @@
   /* width: 200px; */
   height: 28px;
 }
+.mobile-logo {
+  height: 36px;
+}
 
 .nav-container {
   /* position: absolute;
@@ -34,4 +37,10 @@
   margin: 10px;
   /* margin: 4px;
   padding: 2px; */
+}
+
+.logo-container-mobile {
+  display: flex;
+  flex-direction: row;
+  margin: 6px;
 }

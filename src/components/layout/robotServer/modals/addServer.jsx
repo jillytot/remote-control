@@ -1,12 +1,12 @@
 import React from "react";
-import Icon from "../../../common/icon";
-import ICONS from "../../../../icons/icons";
 import "../../../common/overlay.css";
 import "../../../../styles/common.css";
 import Form from "../../../common/form";
+import "../robotServer.css";
 import Joi from "joi-browser";
 import axios from "axios";
 import { apiUrl, addServer } from "../../../../config/clientSettings";
+import defaultImages from "../../../../imgs/placeholders";
 import { Redirect } from "react-router-dom";
 
 export default class AddServer extends React.Component {
@@ -24,14 +24,18 @@ export default class AddServer extends React.Component {
 
   render() {
     return (
-      <div className="display-robot-server-container align-add-server">
+      <div className="display-robot-server-container ">
         <div
-          className="add-server "
+          className=""
           onClick={() => {
             this.props.modal(this.handleModal());
           }}
         >
-          <Icon icon={ICONS.PLUS} className="display-robot-server-img" />
+          <img
+            className="display-robot-server-img"
+            alt="Browse Servers"
+            src={defaultImages.addServer}
+          />
         </div>
         <div className="display-robot-server">add server</div>
       </div>

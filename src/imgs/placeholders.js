@@ -29,7 +29,9 @@ const defaultImages = {
   globalModerator: globalModerator,
   moderator: moderator,
   owner: owner,
-  robot: robot
+  robot: robot,
+  browse: browse,
+  addServer: addServer
 };
 
 export default defaultImages;

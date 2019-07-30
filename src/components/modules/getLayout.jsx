@@ -6,7 +6,7 @@ import { breakPoint } from "../../config/clientSettings";
 const GetLayout = ({ breakpoint, renderMobile, renderDesktop }) => {
   const getBreakPoint = breakpoint || breakPoint;
   const { width } = useWindowDimensions();
-  console.log("Get width: ", width);
+  // console.log("Get width: ", width);
   return width > getBreakPoint ? renderDesktop() : renderMobile();
 };
 export default GetLayout;

@@ -131,7 +131,7 @@ export default class DisplayServerDetails extends Component {
     } else {
       if (this.state.localStatus && this.state.localStatus.member === true) {
         this.setState({
-          hoverText: "Leave Server",
+          hoverText: "Leave",
           icon: <Icon icon={ICONS.UNFOLLOW} color={"#FF0000"} />
         });
       }

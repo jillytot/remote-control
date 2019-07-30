@@ -31,6 +31,7 @@ export default class DisplayServerDetails extends Component {
       this.setState({ memberCount: "..." });
       this.setState({ icon: <React.Fragment /> });
 
+      //Does this ever happen?
       if (this.state.localStatus && this.state.localStatus.member) {
         this.setState({ icon: <Icon icon={ICONS.FOLLOW} color={"#FF0000"} /> });
       } else {
@@ -84,7 +85,10 @@ export default class DisplayServerDetails extends Component {
 
   handleSocketLocalStatus = status => {
     console.log("GET LOCAL STATUS!", status);
-    this.setState({ localStatus: status });
+    this.setState({
+      localStatus: status,
+      icon: <Icon icon={ICONS.FOLLOW} color={status.member ? "#FF0000" : "#FFF"}/>
+    });
   };
 
   handleSocketServerStatus = status => {

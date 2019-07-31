@@ -31,6 +31,8 @@ router.post("/make", auth, async (req, res) => {
       checkForControls.controls
     );
 
+    const { saveButtonInput } = require("../../controllers/controls");
+
     //Check for controls reference to update first,
     //If none exists, then build buttons.
 
@@ -42,6 +44,18 @@ router.post("/make", auth, async (req, res) => {
     response.error = "could not generate controls from input";
   }
   res.send(response);
+});
+
+router.get("/button-input", auth, async (req, res) => {
+  if (req.body.controls_id) {
+    const { getButtonInput } = require("../../controllers/controls");
+    const input = await getButtonInput(req.body.controls_id);
+    res.send(input);
+  }
+  res.send({
+    status: "error!",
+    error: "unable to get button input"
+  });
 });
 
 module.exports = router;

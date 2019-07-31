@@ -7,6 +7,7 @@ import ged from "./imgs/gedyy.png";
 import tgcfabian from "./imgs/tgcfabian.png";
 import boland from "./imgs/boland.png";
 import remoji from "./imgs/remo.png";
+import warren from "./imgs/warren.png";
 
 //Currently, all emotes need to be 56x56 pixels, always 1:1 aspect ratio
 const emotes = {
@@ -18,7 +19,8 @@ const emotes = {
   ged: ged,
   TGCFabian: tgcfabian,
   Boland: boland,
-  remoji: remoji
+  remoji: remoji,
+  warren: warren
 };
 
 export default emotes;

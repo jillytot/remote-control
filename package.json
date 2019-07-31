@@ -17,6 +17,7 @@
     "pg": "^7.10.0",
     "prop-types": "^15.7.2",
     "react": "^16.8.6",
+    "react-copy-to-clipboard": "^5.0.1",
     "react-dom": "^16.8.6",
     "react-google-recaptcha": "^1.0.5",
     "react-router-dom": "^5.0.1",

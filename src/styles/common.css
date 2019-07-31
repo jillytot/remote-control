@@ -17,6 +17,11 @@
   transform: translateY(4px);
 }
 
+.btn-small {
+  border-radius: 6px;
+  font-size: 12px;
+}
+
 .btn-delete {
   background: -webkit-linear-gradient(-45deg, #b31515 0%, #ee3b94 100%);
 }
@@ -161,21 +166,6 @@
   padding: 6px 24px 6px 24px;
   border-radius: 24px;
   margin: 5px;
-}
-
-.copy-to-clipboard {
-  font-size: 11px;
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  /* background-color: red; */
-  margin-right: 25px;
-  color: cyan;
-  cursor: pointer;
-}
-
-.copy-to-clipboard:hover {
-  text-decoration: underline;
 }
 
 .toggle-clipboard-group {

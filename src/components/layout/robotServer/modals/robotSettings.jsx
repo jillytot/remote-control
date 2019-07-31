@@ -5,11 +5,12 @@ import Toggle from "../../../common/toggle";
 import { deleteRobot, robotAPIKey } from "../../../../config/clientSettings";
 
 import axios from "axios";
+import {CopyToClipboard} from 'react-copy-to-clipboard';
 
 export default class RobotSettings extends Component {
   constructor(props) {
     super(props);
-    this.state = { settings: {}, apiToggle: false, apiKey: "" };
+    this.state = { settings: {}, apiToggle: false, apiKey: "", copied: false };
     this.inputRef = React.createRef();
     // this.handleCopy = this.handleCopy.bind(this);
   }
@@ -92,7 +93,10 @@ export default class RobotSettings extends Component {
 
   handleCopy = e => {
     console.log("HANDLE COPY");
-    this.inputRef.current.select();
+    // this.inputRef.current.select();
+    console.log("API key:", this.state.apiKey);
+
+    // this.input.select();
 
     console.log("STEP 2");
     document.execCommand("copy");
@@ -118,10 +122,12 @@ export default class RobotSettings extends Component {
             value={this.state.apiKey}
             readOnly
           />
-          {/* <div className="toggle-clipboard-group">
-            <div className="copy-to-clipboard" onClick={this.handleCopy}>
-              copy to clipboard
-            </div> */}
+          <div className="toggle-clipboard-group">
+            <CopyToClipboard text={this.state.apiKey}
+              onCopy={() => this.setState({copied: true})}>
+              {this.state.copied ? <button className="btn btn-small" title="Click to copy again">Copied OK</button> : <button className="btn btn-small">Copy to clipboard</button>}
+            </CopyToClipboard>
+          </div>
           <Toggle
             toggle={this.state.apiToggle}
             label={"Show API Key"}

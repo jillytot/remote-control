@@ -91,24 +91,6 @@ export default class RobotSettings extends Component {
     this.setState({ apiToggle: toggle });
   };
 
-  handleCopy = e => {
-    console.log("HANDLE COPY");
-    // this.inputRef.current.select();
-    console.log("API key:", this.state.apiKey);
-
-    // this.input.select();
-
-    console.log("STEP 2");
-    document.execCommand("copy");
-    // This is just personal preference.
-    // I prefer to not show the the whole text area selected.
-
-    console.log("STEP 3");
-    e.target.focus();
-    console.log("COPIED");
-    // this.setState({ copySuccess: 'Copied!' });
-  };
-
   render() {
     return (
       <div className="register-form spacer">

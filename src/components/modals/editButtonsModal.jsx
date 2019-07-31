@@ -3,6 +3,7 @@ import "../../styles/common.css";
 import Joi from "joi-browser";
 import { robotAPIKey } from "../../config/clientSettings";
 import Form from "../common/form";
+import "./editButtons.css";
 
 import axios from "axios";
 
@@ -11,8 +12,13 @@ export default class EditButtonsModal extends Form {
     data: {
       submitJSON: ""
     },
+    populate: "",
     errors: {}
   };
+
+  componentDidMount() {
+    this.setState({ populate: JSON.stringify(this.props.controls) });
+  }
 
   setError = error => {
     this.setState({ error });
@@ -75,10 +81,17 @@ export default class EditButtonsModal extends Form {
       <div className="register-form spacer">
         Upload a JSON file to customize your buttons:
         <div> </div>
-        <div className="toggle-group">
-          {this.renderTextArea("submitJSON", "", "JSON")}
-          {this.renderButton("Upload")}
+        <div className="">
+          {this.renderTextArea(
+            "submitJSON",
+            "",
+            "JSON",
+            this.state.populate,
+            30,
+            70
+          )}
         </div>
+        {this.renderButton("Upload")}
       </div>
     );
   }

@@ -26,6 +26,7 @@ export default class EditOptions extends Component {
           <EditButtonsModal
             modal={this.props.modal}
             onCloseModal={this.props.onCloseModal}
+            controls={this.props.controls}
           />
         )
       },

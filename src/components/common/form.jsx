@@ -113,7 +113,7 @@ class Form extends Component {
     );
   }
 
-  renderTextArea(name, label, type) {
+  renderTextArea(name, label, type, populate, rows, cols) {
     const { data, errors } = this.state;
     return (
       <TextArea
@@ -123,6 +123,9 @@ class Form extends Component {
         onChange={this.handleChange}
         error={errors[name]}
         value={data[name]}
+        populate={populate}
+        rows={rows}
+        cols={cols}
       />
     );
   }

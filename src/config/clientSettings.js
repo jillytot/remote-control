@@ -41,5 +41,7 @@ module.exports = {
   robotAPIKey: `${apiUrl}/robot/key`,
   getInvites: `${apiUrl}/robot-server/invites`,
   getStats: `${apiUrl}/stats`,
-  listFollowedServers: `${apiUrl}/user/followed`
+  listFollowedServers: `${apiUrl}/user/followed`,
+  makeButtons: `${apiUrl}/controls/make`,
+  getButtons: `${apiUrl}/controls/get-buttons`
 };

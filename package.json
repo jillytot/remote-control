@@ -26,7 +26,7 @@
     "ws": "^7.0.1"
   },
   "scripts": {
-    "start": "concurrently 'npm run react' 'npm run server'",
+    "start": "concurrently \"npm run react\" \"npm run server\"",
     "react": "react-scripts start",
     "sockets": "nodemon src/services/sockets/sockets.js",
     "server": "nodemon src/services/server/server.js",

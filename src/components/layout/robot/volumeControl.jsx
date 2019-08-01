@@ -1,10 +1,3 @@
-/**
- *   ╔════   Copyright 2019 Peter Maguire
- *  ║ ════╗  Created 01/08/2019
- * ╚════ ║   (remote-control) volumeControl.jsx
- *  ════╝
- */
-
 import React, { Component } from "react";
 import ICONS from "../../../icons/icons";
 import Icon from "../../common/icon";
@@ -29,6 +22,7 @@ export default class VolumeControl extends Component {
     };
 
     toggleVolume = () => {
+        if(!this.props.player)return;
         if(this.props.player.volume > 0){
             this.unmutedVolume = this.props.player.volume;
             this.setVolume(0);
@@ -42,7 +36,7 @@ export default class VolumeControl extends Component {
             <span onClick={this.toggleVolume}>
                 <Icon icon={this.state.icon}/>
             </span>
-            <input type="range" min="0" max="2" step={0.1} orient="vertical" onChange={this.changeVolume} value={this.props.player ? 2-this.props.player.volume : 0}/>
+            <input type="range" disabled={!this.props.player} min="0" max="2" step={0.1} orient="vertical" onChange={this.changeVolume} value={this.props.player ? 2-this.props.player.volume : 0}/>
         </div>
     }
 }

@@ -13,6 +13,7 @@
     background: #6e6e6e;
     border-radius: 100px;
     padding: 5px;
+    opacity: 0.8;
 }
 
 #display-volume-control:hover > input{

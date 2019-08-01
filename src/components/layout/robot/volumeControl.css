@@ -1,0 +1,105 @@
+#display-volume-control input{
+    opacity: 0;
+    -webkit-transform:rotate(90deg);
+    position: absolute;
+    right: -37px;
+    bottom: 10vh;
+}
+
+#display-volume-control {
+    align-self: flex-end;
+    margin-right: 15px;
+    margin-bottom: 18px;
+    background: #6e6e6e;
+    border-radius: 100px;
+    padding: 5px;
+}
+
+#display-volume-control:hover > input{
+    opacity: 1;
+}
+#display-volume-control input[type=range] {
+    -webkit-appearance: none;
+    margin: 0 0;
+    /*Not sure why I have to do this*/
+    background:transparent;
+}
+#display-volume-control input[type=range]:focus {
+    outline: none;
+}
+#display-volume-control input[type=range]::-webkit-slider-runnable-track {
+    width: 100%;
+    height: 16px;
+    cursor: pointer;
+    box-shadow: 1px 1px 1px #000000, 0 0 1px gray(13);
+    background: #6e6e6e;
+    border-radius: 15px 0 0 15px;
+    border: 0 solid #010101;
+}
+#display-volume-control input[type=range]::-webkit-slider-thumb {
+    box-shadow: 1px 1px 1px rgba(0, 0, 0, 0.8), 0 0 1px gray(13, 0.8);
+    border: 2px solid gray(0, 0.57);
+    height: 16px;
+    width: 16px;
+    border-radius: 50px;
+    background: #aaaaaa;
+    cursor: pointer;
+    -webkit-appearance: none;
+    margin-top: 0;
+}
+#display-volume-control input[type=range]:focus::-webkit-slider-runnable-track {
+    background: #7b7b7b;
+}
+#display-volume-control input[type=range]::-moz-range-track {
+    width: 100%;
+    height: 32px;
+    cursor: pointer;
+    box-shadow: 1px 1px 1px #000000, 0 0 1px #0d0d0d;
+    background: #6e6e6e;
+    border-radius: 0;
+    border: 0 solid #010101;
+}
+#display-volume-control input[type=range]::-moz-range-thumb {
+    box-shadow: 1px 1px 1px rgba(0, 0, 0, 0.8), 0 0 1px gray(13, 0.8);
+    border: 1.9px solid rgba(0, 0, 0, 0.57);
+    height: 32px;
+    width: 32px;
+    border-radius: 50px;
+    background: #aaaaaa;
+    cursor: pointer;
+}
+#display-volume-control input[type=range]::-ms-track {
+    width: 100%;
+    height: 32px;
+    cursor: pointer;
+    background: transparent;
+    border-color: transparent;
+    color: transparent;
+}
+#display-volume-control input[type=range]::-ms-fill-lower {
+    background: #616161;
+    border: 0 solid #010101;
+    border-radius: 0;
+    box-shadow: 1px 1px 1px #000000, 0 0 1px #0d0d0d;
+}
+#display-volume-control input[type=range]::-ms-fill-upper {
+    background: #6e6e6e;
+    border: 0 solid #010101;
+    border-radius: 0;
+    box-shadow: 1px 1px 1px #000000, 0 0 1px #0d0d0d;
+}
+#display-volume-control input[type=range]::-ms-thumb {
+    box-shadow: 1px 1px 1px rgba(0, 0, 0, 0.8), 0 0 1px gray(13, 0.8);
+    border: 2px solid gray(0, 0.57);
+    width: 32px;
+    border-radius: 50px;
+    background: #aaaaaa;
+    cursor: pointer;
+    height: 32px;
+}
+#display-volume-control input[type=range]:focus::-ms-fill-lower {
+    background: #6e6e6e;
+}
+#display-volume-control input[type=range]:focus::-ms-fill-upper {
+    background: #7b7b7b;
+}

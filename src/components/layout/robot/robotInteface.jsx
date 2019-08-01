@@ -3,6 +3,7 @@ import { BUTTON_COMMAND } from "../../../events/definitions";
 import { buttonRate } from "../../../config/clientSettings";
 
 import "./robot.css";
+import VolumeControl from "./volumeControl";
 
 export default class RobotInterface extends Component {
   state = {
@@ -267,6 +268,9 @@ export default class RobotInterface extends Component {
           <div className="robot-container">
             <div className="robot-display-container">
               <canvas className="video-canvas" ref="video-canvas" />
+              <div className="display-controls-container">
+                  <VolumeControl player={this.audioPlayer}/>
+              </div>
               <div className="display-info-container">
                 {this.state.displayLog ? (
                   this.renderClickLog()

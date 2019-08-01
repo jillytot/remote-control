@@ -32,6 +32,7 @@ router.post("/make", auth, async (req, res) => {
     );
 
     const { saveButtonInput } = require("../../controllers/controls");
+    await saveButtonInput(setControls.id, req.body.buttons);
 
     //Check for controls reference to update first,
     //If none exists, then build buttons.

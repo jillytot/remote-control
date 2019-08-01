@@ -205,7 +205,7 @@ module.exports.sendUpdatedControls = async (controls_id, channel_id) => {
 
 module.exports.storeButtonInput = async (id, button_input) => {
   const db = require("../services/db");
-  const query = `UPDATE controls SET button_input = $1 WHERE id = $2 RETURNING * LIMIT 1`;
+  const query = `UPDATE controls SET button_input = $1 WHERE id = $2 RETURNING *`;
   try {
     const result = await db.query(query, [button_input, id]);
     if (result.rows[0]) return result.rows[0];
@@ -217,7 +217,7 @@ module.exports.storeButtonInput = async (id, button_input) => {
 
 module.exports.getControlsFromId = async id => {
   const db = require("../services/db");
-  const query = `SELECT * FROM controls WHERE id = $1 RETURNING * LIMIT 1`;
+  const query = `SELECT * FROM controls WHERE id = $1 RETURNING *`;
   try {
     const result = await db.query(query, [id]);
     //console.log(result.rows[0]);

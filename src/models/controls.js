@@ -33,6 +33,7 @@ module.exports.createControls = async controls => {
   makeInterface.buttons = controls.buttons || testControls;
   makeInterface.settings = controls.settings || defaultSettings();
   makeInterface.status = controls.status || defaultStatus();
+  // makeInterface.button_input = controls
 
   //save controls
   console.log("SAVING CONTROLS: ", makeInterface);
@@ -48,10 +49,10 @@ module.exports.createControls = async controls => {
 module.exports.updateControls = async controls => {
   console.log("UPDATING EXISTING CONTROLS: ", controls);
   const db = require("../services/db");
-  const { id, buttons } = controls;
-  const query = `UPDATE controls SET buttons = $1 WHERE id = $2 RETURNING *`;
+  const { id, buttons, button_input } = controls;
+  const query = `UPDATE controls SET (buttons, button_input) = ($1, $2) WHERE id = $3 RETURNING *`;
   try {
-    const result = await db.query(query, [controls.buttons, controls.id]);
+    const result = await db.query(query, [buttons, button_input, id]);
     console.log(result.rows[0]);
     if (result.rows[0]) {
       const details = result.rows[0];
@@ -160,6 +161,7 @@ module.exports.buildButtons = async (buttons, channel_id, controls_id) => {
   let buildControls = {};
   buildControls.channel_id = channel_id;
   buildControls.id = controls_id;
+  buildControls.button_input = buttons;
   //generate json
   if (buttons) {
     buttons.map(button => {
@@ -200,3 +202,28 @@ module.exports.sendUpdatedControls = async (controls_id, channel_id) => {
 //TESTS:
 // this.createControls({ channel_id: "test-2" });
 //this.getControls("cont-8d4c5c3f-df95-4345-beed-9899076fd774");
+
+module.exports.storeButtonInput = async (id, button_input) => {
+  const db = require("../services/db");
+  const query = `UPDATE controls SET button_input = $1 WHERE id = $2 RETURNING *`;
+  try {
+    const result = await db.query(query, [button_input, id]);
+    if (result.rows[0]) return result.rows[0];
+  } catch (err) {
+    console.log(err);
+  }
+  return null;
+};
+
+module.exports.getControlsFromId = async id => {
+  const db = require("../services/db");
+  const query = `SELECT * FROM controls WHERE id = $1 RETURNING *`;
+  try {
+    const result = await db.query(query, [id]);
+    //console.log(result.rows[0]);
+    if (result.rows[0]) return result.rows[0];
+  } catch (err) {
+    console.log(err);
+  }
+  return null;
+};

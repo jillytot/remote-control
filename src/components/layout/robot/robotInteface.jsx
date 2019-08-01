@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import { BUTTON_COMMAND } from "../../../events/definitions";
 import { buttonRate } from "../../../config/clientSettings";
-
+import EditOptions from "./editOptions";
 import "./robot.css";
 import VolumeControl from "./volumeControl";
 
@@ -279,10 +279,17 @@ export default class RobotInterface extends Component {
                 )}
               </div>
             </div>
+
             <div className="robot-controls-container">
               {this.renderButtons()}
               <br />
-              ...
+              <EditOptions
+                server={this.props.server}
+                user={this.props.user}
+                modal={this.props.modal}
+                onCloseModal={this.props.onCloseModal}
+                controls={this.state.controls}
+              />
             </div>
           </div>
         ) : (

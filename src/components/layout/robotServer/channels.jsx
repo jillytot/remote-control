@@ -255,6 +255,8 @@ export default class Channels extends Component {
                 channels={this.state.channels}
                 server={selectedServer}
                 getColor={this.getColor}
+                modal={this.props.modal}
+                onCloseModal={this.props.onCloseModal}
               />
             )}
           />

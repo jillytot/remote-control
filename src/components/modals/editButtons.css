@@ -1,0 +1,16 @@
+.json-input {
+  border-radius: 10px;
+  border: 0px;
+  width: 100%;
+  background-color: rgb(36, 34, 41);
+  resize: none;
+  color: rgb(202, 202, 202);
+  font-size: 14px;
+  padding: 8px;
+  font-family: "Courier New", Courier, monospace;
+  font-weight: bold;
+}
+
+.json-input:focus {
+  outline: 0px;
+}

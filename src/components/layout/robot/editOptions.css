@@ -1,0 +1,16 @@
+.options-container {
+  font-size: 12px;
+  padding: 5px;
+  display: flex;
+  align-content: center;
+  justify-content: center;
+}
+
+.button-edit {
+  display: flex;
+  flex-direction: column;
+  color: rgb(172, 172, 172);
+  cursor: pointer;
+  font-style: italic;
+  /* background-color: blue; */
+}

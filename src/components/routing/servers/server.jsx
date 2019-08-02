@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import { Redirect } from "react-router-dom";
 import Channels from "../../layout/robotServer/channels";
+import RobotServer from "../../layout/robotServer/robotServer";
 
 export default class ServerPage extends Component {
   constructor(props) {
@@ -52,6 +53,7 @@ export default class ServerPage extends Component {
         user={this.props.user}
         selectedServer={this.props.selectedServer}
         modal={this.props.modal}
+        isModalShowing={this.props.isModalShowing}
         onCloseModal={this.props.onCloseModal}
       />
     ) : (

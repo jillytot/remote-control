@@ -72,12 +72,14 @@ export default class Channel extends Component {
           server={this.props.server}
           modal={this.props.modal}
           onCloseModal={this.props.onCloseModal}
+          isModalShowing={this.props.isModalShowing}
         />
         <Chat
           user={this.props.user}
           socket={socket}
           users={this.props.users}
           setChatTabbed={this.props.setChatTabbed}
+          isModalShowing={this.props.isModalShowing}
           chatTabbed={this.props.chatTabbed}
           getColor={this.props.getColor}
         />

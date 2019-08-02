@@ -257,6 +257,7 @@ export default class Channels extends Component {
                 getColor={this.getColor}
                 modal={this.props.modal}
                 onCloseModal={this.props.onCloseModal}
+                isModalShowing={this.props.isModalShowing}
               />
             )}
           />

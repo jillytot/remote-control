@@ -115,7 +115,7 @@ export default class RobotInterface extends Component {
   }
 
   handleKeyDown = e => {
-    if (!this.props.chatTabbed) {
+    if (!this.props.chatTabbed && !this.props.isModalShowing) {
       if (this.currentKey !== e.key) {
         this.setState({ renderCurrentKey: e.key });
         this.currentKey = e.key;

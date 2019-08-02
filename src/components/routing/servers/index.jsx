@@ -194,6 +194,7 @@ export default class ServersPage extends Component {
                   modal={this.setModal}
                   onCloseModal={this.onCloseModal}
                   user={this.state.user}
+                  isModalShowing={this.state.isShowing}
                   robotServers={this.state.robotServers}
                   selectedServer={this.state.selectedServer}
                   setServer={this.setServer}

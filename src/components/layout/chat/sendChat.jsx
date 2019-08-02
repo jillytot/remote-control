@@ -128,7 +128,14 @@ export default class SendChat extends Form {
   //This should only appear for desktop, no need for mobile
   handleIndicator = () => {
     // console.log(this.props.chatTabbed);
-    if (!this.props.chatTabbed) {
+    if(this.props.isModalShowing){
+      return (
+          <div className="send-chat-options">
+            <div className="indicator" />
+            you are inside a modal. close it to regain control
+          </div>
+      );
+    }else if (!this.props.chatTabbed) {
       return (
         <div className="send-chat-options">
           <div className="indicator indicator-active" />

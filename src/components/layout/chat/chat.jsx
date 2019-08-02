@@ -161,6 +161,7 @@ export default class Chat extends Component {
               onChatFeedback={this.handleChatFeedback}
               setChatTabbed={this.props.setChatTabbed}
               chatTabbed={this.props.chatTabbed}
+              isModalShowing={this.props.isModalShowing}
             />
           </div>
         );

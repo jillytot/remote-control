@@ -65,4 +65,5 @@
 .browse-robot-server-container:active {
   background-color: rgb(32, 32, 58);
   cursor: pointer;
+  outline: dashed;
 }

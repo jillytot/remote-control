@@ -92,6 +92,12 @@ a:active {
   cursor: pointer;
 }
 
+.display-robot-server-container:active {
+  background-color: rgb(64, 64, 85);
+
+  cursor: pointer;
+}
+
 .selected-server {
   /* border-left: 6px solid cyan; */
   box-shadow: inset 6px 0 0 0 cyan; /* Border left */

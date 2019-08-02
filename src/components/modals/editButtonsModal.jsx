@@ -131,8 +131,8 @@ export default class EditButtonsModal extends Form {
               70
             )}
           </div>
-          {this.renderButton("Upload")}
           {this.handleSubmitError()}
+          {this.renderButton("Upload")}
         </form>
       </div>
     );

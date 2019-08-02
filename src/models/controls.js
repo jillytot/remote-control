@@ -49,10 +49,10 @@ module.exports.createControls = async controls => {
 module.exports.updateControls = async controls => {
   console.log("UPDATING EXISTING CONTROLS: ", controls);
   const db = require("../services/db");
-  const { buttons, button_input, id } = controls;
-  const query = `UPDATE controls SET (buttons, button_input) = ($1, $2) WHERE id = $3 RETURNING *`;
+  const { buttons, id } = controls;
+  const query = `UPDATE controls SET buttons = $1 WHERE id = $2 RETURNING *`;
   try {
-    const result = await db.query(query, [buttons, button_input, id]);
+    const result = await db.query(query, [buttons, id]);
     // console.log(result.rows[0]);
     if (result.rows[0]) {
       const details = result.rows[0];
@@ -155,7 +155,6 @@ module.exports.validateInput = async input => {
 module.exports.buildButtons = async (buttons, channel_id, controls_id) => {
   let response = {};
   let newButtons = [];
-
   console.log("CONTROL ID CHECK: ", controls_id);
   let buildControls = {};
   buildControls.channel_id = channel_id;
@@ -163,7 +162,6 @@ module.exports.buildButtons = async (buttons, channel_id, controls_id) => {
   //generate json
   if (buttons) {
     console.log("BUTTONS CHECK", buttons);
-    buildControls.button_input = buttons;
     buttons.forEach(button => {
       button.id = `bttn-${makeId()}`;
       newButtons.push(button);
@@ -201,17 +199,17 @@ module.exports.sendUpdatedControls = async (controls_id, channel_id) => {
 // this.createControls({ channel_id: "test-2" });
 //this.getControls("cont-8d4c5c3f-df95-4345-beed-9899076fd774");
 
-module.exports.storeButtonInput = async (id, button_input) => {
-  const db = require("../services/db");
-  const query = `UPDATE controls SET button_input = $1 WHERE id = $2 RETURNING *`;
-  try {
-    const result = await db.query(query, [button_input, id]);
-    if (result.rows[0]) return result.rows[0];
-  } catch (err) {
-    console.log(err);
-  }
-  return null;
-};
+// module.exports.storeButtonInput = async (id, button_input) => {
+//   const db = require("../services/db");
+//   const query = `UPDATE controls SET button_input = $1 WHERE id = $2 RETURNING *`;
+//   try {
+//     const result = await db.query(query, [button_input, id]);
+//     if (result.rows[0]) return result.rows[0];
+//   } catch (err) {
+//     console.log(err);
+//   }
+//   return null;
+// };
 
 module.exports.getControlsFromId = async id => {
   console.log("GET CONTROLS FROM ID: ", id);

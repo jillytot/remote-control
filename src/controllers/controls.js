@@ -16,7 +16,7 @@ module.exports.getButtonInput = async controls_id => {
 module.exports.getButtonInputForChannel = async channel_id => {
   const { getControlsForChannel } = require("../models/controls");
   const controls = await getControlsForChannel(channel_id);
-  if (controls.button_input) return controls.button_input;
+  if (controls.buttons) return controls.buttons;
   return example;
 };
 

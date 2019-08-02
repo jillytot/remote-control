@@ -1,7 +1,7 @@
-import React, { Component } from "react";
+import React from "react";
 import "../../styles/common.css";
 import Joi from "joi-browser";
-import { robotAPIKey } from "../../config/clientSettings";
+import { getButtons, makeButtons } from "../../config/clientSettings";
 import Form from "../common/form";
 import "./editButtons.css";
 
@@ -12,47 +12,90 @@ export default class EditButtonsModal extends Form {
     data: {
       submitJSON: ""
     },
-    populate: "",
-    errors: {}
+    errors: {},
+    error: ""
   };
 
-  componentDidMount() {
-    this.setState({ populate: JSON.stringify(this.props.controls) });
+  async componentDidMount() {
+    await this.handleGetButtons();
   }
 
-  setError = error => {
-    this.setState({ error });
-  };
-
-  doSubmit = () => {
-    console.log("Submit");
-    this.handleSubmit("boop");
-  };
-
-  schema = {
-    submitJSON: Joi.object()
-      .required()
-      .label("submitJSON")
-  };
-
-  handleGetAPIKey = () => {
+  handleGetButtons = async () => {
     const token = localStorage.getItem("token");
-    axios
+    console.log("GET BUTTONS", this.props.channel);
+    console.log(token);
+    await axios
       .post(
-        robotAPIKey,
+        getButtons,
         {
-          robot_id: null
+          channel_id: this.props.channel
         },
         {
           headers: { authorization: `Bearer ${token}` }
         }
       )
       .then(res => {
-        this.setState({ apiKey: res.data.key });
+        console.log(res);
+        this.setState({
+          data: { submitJSON: JSON.stringify(this.handleCleanText(res.data)) }
+        });
       })
       .catch(err => {
-        console.log("Problem Fetching Key", err);
+        console.log(err);
       });
+  };
+
+  handleCleanText = buttons => {
+    let clean = [];
+    buttons.map(button => {
+      delete button.id;
+      clean.push(button);
+    });
+    return clean;
+  };
+
+  setError = error => {
+    this.setState({ error });
+  };
+
+  doSubmit = async () => {
+    try {
+      JSON.parse(this.state.data.submitJSON);
+    } catch (err) {
+      console.log(err);
+      this.setState({ error: "Invalid JSON" });
+      return;
+    }
+
+    const token = localStorage.getItem("token");
+    console.log("GET BUTTONS", this.props.channel);
+    console.log(token);
+    await axios
+      .post(
+        makeButtons,
+        {
+          channel_id: this.props.channel,
+          buttons: JSON.parse(this.state.data.submitJSON)
+        },
+        {
+          headers: { authorization: `Bearer ${token}` }
+        }
+      )
+      .then(res => {
+        console.log(res);
+        if (res.data.error) {
+          console.log("ERROR! ", res.data.error);
+          this.setState({ error: res.data.error });
+        }
+      })
+      .catch(err => {
+        console.log(err);
+      });
+    this.props.onCloseModal();
+  };
+
+  schema = {
+    submitJSON: Joi.string().label("submitJSON")
   };
 
   handleButtonType = label => {
@@ -64,16 +107,12 @@ export default class EditButtonsModal extends Form {
     }
   };
 
-  renderButton = label => {
-    //require validation?
-    return (
-      <button
-        className={this.handleButtonType(label)}
-        onClick={e => this.handleDelete(e)}
-      >
-        {label}
-      </button>
-    );
+  handleSubmitError = () => {
+    const { error } = this.state;
+    if (error === "") {
+      return <React.Fragment />;
+    }
+    return <div className="alert">{this.state.error}</div>;
   };
 
   render() {
@@ -81,17 +120,20 @@ export default class EditButtonsModal extends Form {
       <div className="register-form spacer">
         Upload a JSON file to customize your buttons:
         <div> </div>
-        <div className="">
-          {this.renderTextArea(
-            "submitJSON",
-            "",
-            "JSON",
-            this.state.populate,
-            30,
-            70
-          )}
-        </div>
-        {this.renderButton("Upload")}
+        <form onSubmit={this.handleSubmit}>
+          <div className="">
+            {this.renderTextArea(
+              "submitJSON",
+              "",
+              "JSON",
+              this.state.data.submitJSON,
+              30,
+              70
+            )}
+          </div>
+          {this.renderButton("Upload")}
+          {this.handleSubmitError()}
+        </form>
       </div>
     );
   }

@@ -43,5 +43,5 @@ module.exports = {
   getStats: `${apiUrl}/stats`,
   listFollowedServers: `${apiUrl}/user/followed`,
   makeButtons: `${apiUrl}/controls/make`,
-  getButtons: `${apiUrl}/controls/get-buttons`
+  getButtons: `${apiUrl}/controls/button-input`
 };

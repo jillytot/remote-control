@@ -13,7 +13,15 @@ module.exports.getButtonInput = async controls_id => {
   return example;
 };
 
+module.exports.getButtonInputForChannel = async channel_id => {
+  const { getControlsForChannel } = require("../models/controls");
+  const controls = await getControlsForChannel(channel_id);
+  if (controls.button_input) return controls.button_input;
+  return example;
+};
+
 module.exports.saveButtonInput = async (controls_id, button_input) => {
+  console.log("BUTTON CHECK: ", controls_id, button_input);
   const { storeButtonInput } = require("../models/controls");
   const save = await storeButtonInput(controls_id, button_input);
   console.log("Buttons Saved! ", save);

@@ -49,21 +49,20 @@ module.exports.createControls = async controls => {
 module.exports.updateControls = async controls => {
   console.log("UPDATING EXISTING CONTROLS: ", controls);
   const db = require("../services/db");
-  const { id, buttons, button_input } = controls;
-  const query = `UPDATE controls SET (buttons, button_input) = ($1, $2) WHERE id = $3 RETURNING *`;
+  const { buttons, id } = controls;
+  const query = `UPDATE controls SET buttons = $1 WHERE id = $2 RETURNING *`;
   try {
-    const result = await db.query(query, [buttons, button_input, id]);
-    console.log(result.rows[0]);
+    const result = await db.query(query, [buttons, id]);
+    // console.log(result.rows[0]);
     if (result.rows[0]) {
       const details = result.rows[0];
       this.sendUpdatedControls(details.id, details.channel_id);
       return result.rows[0];
     }
-    return { status: "error!", error: "Problem updating controls" };
   } catch (err) {
     console.log(err);
-    return { status: "error!", error: "Problem updating controls" };
   }
+  return { status: "error!", error: "Problem updating controls" };
 };
 
 module.exports.saveControls = async controls => {
@@ -154,17 +153,16 @@ module.exports.validateInput = async input => {
 //input: { label: "<string>", hot_key: "<string>", command: "<string>"}
 //output: array of button objects w/ id generated per button
 module.exports.buildButtons = async (buttons, channel_id, controls_id) => {
-  const { setControls } = require("./channel");
   let response = {};
   let newButtons = [];
   console.log("CONTROL ID CHECK: ", controls_id);
   let buildControls = {};
   buildControls.channel_id = channel_id;
   buildControls.id = controls_id;
-  buildControls.button_input = buttons;
   //generate json
   if (buttons) {
-    buttons.map(button => {
+    console.log("BUTTONS CHECK", buttons);
+    buttons.forEach(button => {
       button.id = `bttn-${makeId()}`;
       newButtons.push(button);
     });
@@ -172,11 +170,9 @@ module.exports.buildButtons = async (buttons, channel_id, controls_id) => {
   } else {
     return { status: "error!", error: "invalid data to generate buttons" };
   }
+
   buildControls.buttons = newButtons;
   generateControls = await this.updateControls(buildControls);
-  // let set = await setControls(generateControls, {
-  //   channel_id: channel_id
-  // });
   console.log("UPDATE CONTROLS CHECK: ", generateControls);
   if (generateControls) {
     response.status = "success";
@@ -203,11 +199,24 @@ module.exports.sendUpdatedControls = async (controls_id, channel_id) => {
 // this.createControls({ channel_id: "test-2" });
 //this.getControls("cont-8d4c5c3f-df95-4345-beed-9899076fd774");
 
-module.exports.storeButtonInput = async (id, button_input) => {
+// module.exports.storeButtonInput = async (id, button_input) => {
+//   const db = require("../services/db");
+//   const query = `UPDATE controls SET button_input = $1 WHERE id = $2 RETURNING *`;
+//   try {
+//     const result = await db.query(query, [button_input, id]);
+//     if (result.rows[0]) return result.rows[0];
+//   } catch (err) {
+//     console.log(err);
+//   }
+//   return null;
+// };
+
+module.exports.getControlsFromId = async id => {
+  console.log("GET CONTROLS FROM ID: ", id);
   const db = require("../services/db");
-  const query = `UPDATE controls SET button_input = $1 WHERE id = $2 RETURNING *`;
+  const query = `SELECT * FROM controls WHERE id = $1`;
   try {
-    const result = await db.query(query, [button_input, id]);
+    const result = await db.query(query, [id]);
     if (result.rows[0]) return result.rows[0];
   } catch (err) {
     console.log(err);
@@ -215,12 +224,11 @@ module.exports.storeButtonInput = async (id, button_input) => {
   return null;
 };
 
-module.exports.getControlsFromId = async id => {
+module.exports.getControlsForChannel = async channel_id => {
   const db = require("../services/db");
-  const query = `SELECT * FROM controls WHERE id = $1 RETURNING *`;
+  const query = `SELECT * FROM controls WHERE channel_id = $1`;
   try {
-    const result = await db.query(query, [id]);
-    //console.log(result.rows[0]);
+    const result = await db.query(query, [channel_id]);
     if (result.rows[0]) return result.rows[0];
   } catch (err) {
     console.log(err);

@@ -227,7 +227,7 @@ module.exports.checkPassword = async user => {
     const { password, username } = user;
 
     //DB Call
-    const query = `SELECT * FROM users WHERE username = $1 LIMIT 1`;
+    const query = `SELECT * FROM users WHERE LOWER (username) = LOWER ($1) LIMIT 1`;
     const queryResult = await db.query(query, [username]);
     console.log("Query Result: ", queryResult.rows[0]["id"]);
     let checkPassword = await checkHash(

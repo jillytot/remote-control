@@ -269,7 +269,7 @@ export default class RobotInterface extends Component {
             <div className="robot-display-container">
               <canvas className="video-canvas" ref="video-canvas" />
               <div className="display-controls-container">
-                  <VolumeControl player={this.audioPlayer}/>
+                <VolumeControl player={this.audioPlayer} />
               </div>
               <div className="display-info-container">
                 {this.state.displayLog ? (
@@ -288,7 +288,7 @@ export default class RobotInterface extends Component {
                 user={this.props.user}
                 modal={this.props.modal}
                 onCloseModal={this.props.onCloseModal}
-                controls={this.state.controls}
+                channel={this.props.channel}
               />
             </div>
           </div>

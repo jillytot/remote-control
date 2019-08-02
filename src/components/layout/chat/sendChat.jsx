@@ -57,7 +57,8 @@ export default class SendChat extends Form {
       const messageBlank = {
         time_stamp: Date.now(),
         displayMessage: true,
-        type: "moderation"
+        type: "moderation",
+        sender: "System"
       };
       let toUser = "Unable to send chat messages while timed out";
       let feedback = messageBlank;
@@ -78,7 +79,8 @@ export default class SendChat extends Form {
       const messageBlank = {
         time_stamp: Date.now(),
         displayMessage: true,
-        type: "moderation"
+        type: "moderation",
+        sender: "System"
       };
 
       let feedback = messageBlank;
@@ -128,14 +130,14 @@ export default class SendChat extends Form {
   //This should only appear for desktop, no need for mobile
   handleIndicator = () => {
     // console.log(this.props.chatTabbed);
-    if(this.props.isModalShowing){
+    if (this.props.isModalShowing) {
       return (
-          <div className="send-chat-options">
-            <div className="indicator" />
-            you are inside a modal. close it to regain control
-          </div>
+        <div className="send-chat-options">
+          <div className="indicator" />
+          you are inside a modal. close it to regain control
+        </div>
       );
-    }else if (!this.props.chatTabbed) {
+    } else if (!this.props.chatTabbed) {
       return (
         <div className="send-chat-options">
           <div className="indicator indicator-active" />

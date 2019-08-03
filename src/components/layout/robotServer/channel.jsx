@@ -28,24 +28,28 @@ export default class Channel extends Component {
     }
   }
 
-  handleChannel = channelChange => {
+  handleChannel = async channelChange => {
     let found = false;
+    let that = this;
+    await (new Promise(function(fulfill){
+      that.props.channels.map(channel => {
+        if (channel.id === that.props.match.params.id) {
+          that.props.setCurrentChannel(channel.id);
+          found = true;
 
-    this.props.channels.map(channel => {
-      if (channel.id === this.props.match.params.id) {
-        this.props.setCurrentChannel(channel.id);
-        found = true;
+          if (channelChange) {
+            socket.emit("GET_CHAT", channel.chat);
+            socket.emit("GET_CONTROLS", channel.controls);
+            socket.emit("JOIN_CHANNEL", channel.id);
+          }
 
-        if (channelChange) {
-          socket.emit("GET_CHAT", channel.chat);
-          socket.emit("GET_CONTROLS", channel.controls);
-          socket.emit("JOIN_CHANNEL", channel.id);
+          return true;
         }
+        return false;
+      });
+      fulfill();
+    }));
 
-        return true;
-      }
-      return false;
-    });
 
     if (!found) {
       console.log(
@@ -54,7 +58,7 @@ export default class Channel extends Component {
         "in",
         this.props.channels
       );
-      //this.setState({ redirect: true }); todo fix race
+      this.setState({ redirect: true });
     }
   };
 

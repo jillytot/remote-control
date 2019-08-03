@@ -57,7 +57,7 @@ export default class ServerPage extends Component {
         onCloseModal={this.props.onCloseModal}
       />
     ) : (
-      <React.Fragment />
+        <React.Fragment/>
     );
   }
 }

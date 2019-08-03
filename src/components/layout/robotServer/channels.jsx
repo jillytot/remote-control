@@ -12,6 +12,9 @@ import DisplayServerDetails from "./displayServerDetails";
 import socket from "../../socket";
 import { Link, Route, Switch, Redirect } from "react-router-dom";
 import Channel from "./channel";
+import defaultImages from "../../../imgs/placeholders";
+import "./channels.css";
+
 
 //placeholder
 //var chatroom = { messages: [{ sender: "user2" }] }; // (this.state.chatroom)
@@ -328,6 +331,9 @@ class NoChannel extends Component {
   }
 
   render() {
-    return <React.Fragment />;
+    return (<div id="no-channel">
+      <img className="logo" alt="" src={defaultImages.remoGrey} />
+      <div>No Channel Selected</div>
+    </div>);
   }
 }

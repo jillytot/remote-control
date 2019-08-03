@@ -141,8 +141,6 @@ const Message = ({ message }) => {
     if (message.sender === "remo") return "chat-user-name rainbow";
     return "chat-user-name";
   };
-  console.log(message);
-
   return (
     <div>
       <div className={handleMessageType(message)}>

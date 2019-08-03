@@ -15,6 +15,7 @@ import robot from "./img/robot.png";
 import browse from "./img/browse.png";
 import addServer from "./img/addServer.png";
 import appIcon from "./img/remo-app-icon-large.png";
+import remoGrey from "./img/remo-grey.png";
 
 const defaultImages = {
   default01: default01,
@@ -33,7 +34,8 @@ const defaultImages = {
   robot: robot,
   browse: browse,
   addServer: addServer,
-  appIcon: appIcon
+  appIcon: appIcon,
+  remoGrey: remoGrey
 };
 
 export default defaultImages;

@@ -46,11 +46,16 @@ export default class NavBar extends Component {
     );
   };
 
+  handleBurger = () => {
+    return <div className="burger-container"> B </div>;
+  };
+
   render() {
     return this.state.redirect ? (
       <Redirect to="/login" />
     ) : (
       <div className="nav-container">
+        <Link to="/">{<GetLayout renderMobile={this.handleBurger} />}</Link>
         <Link to="/"> {this.renderLogo()}</Link>
 
         <div className="user-container">

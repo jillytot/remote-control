@@ -21,10 +21,6 @@
 }
 
 .nav-container {
-  /* position: absolute;
-  flex-direction: column;
-  left: 0;
-  top: 0; */
   display: flex;
   height: 48px;
   background: -webkit-linear-gradient(-45deg, #19191d 0%, #162755 100%);
@@ -43,4 +39,11 @@
   display: flex;
   flex-direction: row;
   margin: 6px;
+}
+
+.burger-container {
+  display: flex;
+  flex-direction: row;
+  margin: 10px;
+  background-color: red;
 }

@@ -20,7 +20,7 @@ const Message = ({ message }) => {
     filterMessage.split(" ").forEach((word, i) => {
       if (Emotes.hasOwnProperty(word)) {
         filter.push(
-          <span key={`${word}${i}`}>
+          <span key={`${word}${i}`} title={word}>
             <img className="emote" src={Emotes[word]} alt={word} />{" "}
           </span>
         );

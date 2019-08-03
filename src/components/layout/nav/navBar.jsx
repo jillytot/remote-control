@@ -46,8 +46,24 @@ export default class NavBar extends Component {
     );
   };
 
+  renderBurger = () => {
+    return <GetLayout renderMobile={this.handleBurger} />;
+  };
+
   handleBurger = () => {
-    return <div className="burger-container"> B </div>;
+    const { mobileState, showMobileNav } = this.props;
+    // let display = true;
+    // if (showMobileNav) display = false;
+    // console.log("DISPLAY CHECK", display);
+
+    return (
+      <div
+        className="burger-container"
+        onClick={() => mobileState({ showMobileNav: !showMobileNav })}
+      >
+        B
+      </div>
+    );
   };
 
   render() {
@@ -55,7 +71,7 @@ export default class NavBar extends Component {
       <Redirect to="/login" />
     ) : (
       <div className="nav-container">
-        <Link to="/">{<GetLayout renderMobile={this.handleBurger} />}</Link>
+        {this.renderBurger()}
         <Link to="/"> {this.renderLogo()}</Link>
 
         <div className="user-container">

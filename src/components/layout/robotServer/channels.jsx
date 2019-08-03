@@ -14,7 +14,7 @@ import { Link, Route, Switch, Redirect } from "react-router-dom";
 import Channel from "./channel";
 import defaultImages from "../../../imgs/placeholders";
 import "./channels.css";
-
+import GetLayout from "../../modules/getLayout";
 
 //placeholder
 //var chatroom = { messages: [{ sender: "user2" }] }; // (this.state.chatroom)
@@ -207,6 +207,48 @@ export default class Channels extends Component {
     this.setState({ currentChannel: channel });
   };
 
+  handleChannelsPanel = () => {
+    const { user, selectedServer } = this.props;
+    const { users } = this.state;
+
+    return (
+      <div className={this.handleDisplayChannels()}>
+        <DisplayServerDetails
+          server={selectedServer}
+          channels={this.state.channels}
+          user={user}
+          users={users}
+          invites={this.state.invites}
+        />
+        {this.displayChannels()}
+        <AddChannel
+          channels={this.state.channels}
+          server={selectedServer}
+          user={user}
+          modal={this.props.modal}
+          onCloseModal={this.props.onCloseModal}
+        />
+        <DisplayRobot
+          channels={this.state.channels}
+          server={selectedServer}
+          user={user}
+          modal={this.props.modal}
+          onCloseModal={this.props.onCloseModal}
+        />
+      </div>
+    );
+  };
+
+  handleMobilePanel = () => {
+    const { showMobileNav } = this.props;
+    console.log("Show Mobile Nav: ", showMobileNav);
+    if (showMobileNav) {
+      return this.handleChannelsPanel();
+    } else {
+      return <React.Fragment />;
+    }
+  };
+
   render() {
     const { user, selectedServer } = this.props;
     const { users, currentChannel, chatTabbed, channels } = this.state;
@@ -219,30 +261,10 @@ export default class Channels extends Component {
 
     return (
       <React.Fragment>
-        <div className={this.handleDisplayChannels()}>
-          <DisplayServerDetails
-            server={selectedServer}
-            channels={this.state.channels}
-            user={user}
-            users={users}
-            invites={this.state.invites}
-          />
-          {this.displayChannels()}
-          <AddChannel
-            channels={this.state.channels}
-            server={selectedServer}
-            user={user}
-            modal={this.props.modal}
-            onCloseModal={this.props.onCloseModal}
-          />
-          <DisplayRobot
-            channels={this.state.channels}
-            server={selectedServer}
-            user={user}
-            modal={this.props.modal}
-            onCloseModal={this.props.onCloseModal}
-          />
-        </div>
+        <GetLayout
+          renderDesktop={this.handleChannelsPanel}
+          renderMobile={this.handleMobilePanel}
+        />
         <Switch>
           <Route
             path="/:name/:id"
@@ -331,9 +353,11 @@ class NoChannel extends Component {
   }
 
   render() {
-    return (<div id="no-channel">
-      <img className="logo" alt="" src={defaultImages.remoGrey} />
-      <div>No Channel Selected</div>
-    </div>);
+    return (
+      <div id="no-channel">
+        <img className="logo" alt="" src={defaultImages.remoGrey} />
+        <div>No Channel Selected</div>
+      </div>
+    );
   }
 }

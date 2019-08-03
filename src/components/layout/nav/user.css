@@ -43,7 +43,12 @@
 
 .burger-container {
   display: flex;
-  flex-direction: row;
-  margin: 10px;
-  background-color: red;
+  flex-direction: column;
+  margin: 6px 0px 6px 6px;
+  background-color: rgb(47, 57, 66);
+  border-radius: 8px;
+  height: 36px;
+  min-width: 36px;
+  color: white;
+  justify-content: center;
 }

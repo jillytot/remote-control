@@ -26,7 +26,8 @@ export default class ServersPage extends Component {
       user: undefined, // undefined: waiting for gateway, null: gateway said auth no no
       isShowing: false,
       modalContent: [],
-      reload: false
+      reload: false,
+      showMobileNav: true //For handling mobile navigation states
     };
   }
 
@@ -43,6 +44,14 @@ export default class ServersPage extends Component {
         modalContent: []
       });
     }
+  };
+
+  //Mobile Navigation Handler
+  handleMobileFlag = e => {
+    const { showMobileNav } = e;
+    console.log("Mobile Flag Test", e);
+    this.setState({ showMobileNav });
+    return null;
   };
 
   setModal = input => {
@@ -163,7 +172,11 @@ export default class ServersPage extends Component {
             />
           </React.Fragment>
         )}
-        <NavBar user={this.state.user} />
+        <NavBar
+          user={this.state.user}
+          mobileState={this.handleMobileFlag}
+          showMobileNav={this.state.showMobileNav}
+        />
         <div className="server-container">
           <RobotServer
             modal={this.setModal}
@@ -198,6 +211,8 @@ export default class ServersPage extends Component {
                   robotServers={this.state.robotServers}
                   selectedServer={this.state.selectedServer}
                   setServer={this.setServer}
+                  mobileState={this.handleMobileFlag}
+                  showMobileNav={this.state.showMobileNav}
                 />
               )}
             />

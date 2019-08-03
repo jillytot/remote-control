@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import { Redirect } from "react-router-dom";
 import Channels from "../../layout/robotServer/channels";
-import RobotServer from "../../layout/robotServer/robotServer";
+import GetLayout from "../../modules/getLayout";
 
 export default class ServerPage extends Component {
   constructor(props) {
@@ -41,12 +41,14 @@ export default class ServerPage extends Component {
     }
   };
 
-  handleEmits = () => {
-    //socket.emit(GET_CHANNELS, { user: user.id, server_id: server_id });
-    //socket.emit(GET_ROBOTS, { server_id: server_id });
-  };
+  // handleMobileDisplayChannels = () => {
+  //   const { showMobileNav } = this.props;
+  //   console.log("Show Nav Check: ", showMobileNav);
+  //   if (showMobileNav) return this.handleDisplayChannels;
+  //   return <React.Fragment />;
+  // };
 
-  render() {
+  handleDisplayChannels = () => {
     if (this.state.redirect) return <Redirect to="/" />;
     return this.props.selectedServer ? (
       <Channels
@@ -55,9 +57,14 @@ export default class ServerPage extends Component {
         modal={this.props.modal}
         isModalShowing={this.props.isModalShowing}
         onCloseModal={this.props.onCloseModal}
+        showMobileNav={this.props.showMobileNav}
       />
     ) : (
-        <React.Fragment/>
+      <React.Fragment />
     );
+  };
+
+  render() {
+    return <React.Fragment>{this.handleDisplayChannels()}</React.Fragment>;
   }
 }

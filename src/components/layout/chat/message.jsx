@@ -141,12 +141,13 @@ const Message = ({ message }) => {
     if (message.sender === "remo") return "chat-user-name rainbow";
     return "chat-user-name";
   };
+  console.log(message);
 
   return (
     <div>
       <div className={handleMessageType(message)}>
         {handleBadges(message)}
-        <span className={handleSenderColor(message)}>{`${handleMessageSender(
+        <span className={handleSenderColor(message)} title={new Date(parseInt(message.time_stamp)).toLocaleString()}>{`${handleMessageSender(
           message
         )}${message.type === types.self ? "" : ":"}  `}</span>
         <span className="message-spacing">

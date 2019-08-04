@@ -4,6 +4,7 @@ import "./robotServer.css";
 import AddServer from "./modals/addServer";
 import Browse from "../../routing/servers/browse";
 import sortServers from "./sortServers";
+import GetLayout from "../../modules/getLayout";
 
 export default class RobotServer extends Component {
   displayServers = servers => {
@@ -42,18 +43,36 @@ export default class RobotServer extends Component {
     }
   };
 
+  handleDisplayServerPanel = () => {
+    return (
+      <div className="robot-server-container">
+        {this.handleSorting(this.props.robotServers)}
+        <Browse />
+        <AddServer
+          modal={this.props.modal}
+          onCloseModal={this.props.onCloseModal}
+        />
+        ...
+      </div>
+    );
+  };
+
+  handleMobileDisplay = () => {
+    const { showMobileNav } = this.props;
+    if (showMobileNav) {
+      return this.handleDisplayServerPanel();
+    } else {
+      return <React.Fragment />;
+    }
+  };
+
   render() {
     return (
       <React.Fragment>
-        <div className="robot-server-container">
-          {this.handleSorting(this.props.robotServers)}
-          <Browse />
-          <AddServer
-            modal={this.props.modal}
-            onCloseModal={this.props.onCloseModal}
-          />
-          ...
-        </div>
+        <GetLayout
+          renderDesktop={this.handleDisplayServerPanel}
+          renderMobile={this.handleMobileDisplay}
+        />
       </React.Fragment>
     );
   }

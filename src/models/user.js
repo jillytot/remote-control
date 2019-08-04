@@ -256,6 +256,7 @@ module.exports.createAuthToken = user => {
 };
 
 //TOKEN MANAGEMENT
+//used by WS for auth
 module.exports.authUser = async token => {
   let auth = await this.extractToken(token);
   console.log("Extracted Token: ", auth);
@@ -263,20 +264,28 @@ module.exports.authUser = async token => {
   return auth;
 };
 
+//used by API for auth
+module.exports.authUserData = async tokenData => {
+  // const { verifyAuthToken } = require('../models/user');
+  let auth = await this.verifyAuthToken(tokenData);
+  return auth;
+};
+
+//Moving to /src/modules/jwt
 module.exports.extractToken = async token => {
   console.log("Verifying Auth Token");
-  let checkToken = null;
+
   try {
-    return (checkToken = await new Promise((resolve, reject) => {
+    return new Promise((resolve, reject) => {
       jwt.verify(token, tempSecret, "HS256", (err, res) => {
         if (token) console.log("JWT Verified");
         if (err) return reject(err);
         return resolve(res);
       });
-    }));
+    });
   } catch (err) {
     let reason = {
-      error: "problem creating token from user"
+      error: "problem verifying token from user"
     };
     Promise.reject(reason);
     console.log(reason);

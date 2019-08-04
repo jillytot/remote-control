@@ -15,11 +15,9 @@ const robotServerPt = {
 };
 
 //Used to generate / create a new robot server
-module.exports.createRobotServer = async (server, token) => {
-  console.log("About to build server: ", server, token);
+module.exports.createRobotServer = async (server, user) => {
+  console.log("About to build server: ", server, user);
   const { server_name } = server;
-  const getUserId = await extractToken(token);
-  console.log("GET USER ID FROM TOKEN: ", getUserId, getUserId.id);
 
   //check for unique servername
   const checkName = await this.checkServerName(server_name);
@@ -27,7 +25,7 @@ module.exports.createRobotServer = async (server, token) => {
     return { status: "error!", error: "This server name is already taken" };
 
   let buildServer = {};
-  buildServer.owner_id = getUserId.id;
+  buildServer.owner_id = user.id;
   buildServer.server_name = server_name;
   buildServer.server_id = `serv-${makeId()}`; //Note: if server_id === 'remo', then it is refering to the global server
   buildServer.created = createTimeStamp();
@@ -40,7 +38,7 @@ module.exports.createRobotServer = async (server, token) => {
         role: "default",
         members: ["@everyone"]
       },
-      { role: "owner", members: [getUserId.id] }
+      { role: "owner", members: [user.id] }
     ]
   };
 

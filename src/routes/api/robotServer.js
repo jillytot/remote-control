@@ -40,7 +40,7 @@ router.get("/create", (req, res) => {
 });
 
 //generate invite for a server, right now only owner can make this
-router.post("/invite", auth, async (req, res) => {
+router.post("/invite", auth({ user: true }), async (req, res) => {
   let response = {};
   if (req.user && req.body.server_id) {
     let invite = {};
@@ -59,7 +59,7 @@ router.post("/invite", auth, async (req, res) => {
 });
 
 //JOIN SERVER, MAIN METHOD FOR JOINING PUBLICLY LISTED SERVERS
-router.post("/join", auth, async (req, res) => {
+router.post("/join", auth({ user: true }), async (req, res) => {
   const { joinServer } = require("../../controllers/members");
   let response = {};
   if (req.user && req.body.join && req.body.server_id) {
@@ -82,7 +82,7 @@ router.post("/join", auth, async (req, res) => {
 });
 
 //LEAVE SERVER, DOES NOT DELETE USER FROM MEMBERLIST
-router.post("/leave", auth, async (req, res) => {
+router.post("/leave", auth({ user: true }), async (req, res) => {
   const { leaveServer } = require("../../controllers/members");
   let response = {};
   if (req.user && req.body.join && req.body.server_id) {
@@ -104,7 +104,7 @@ router.post("/leave", auth, async (req, res) => {
 });
 
 //THIS WILL COMPLETELY REMOVE A MEMBER FROM A SERVER & CONSEQUENTLY REMOVE ALL THEIR DATA
-router.post("/delete-member", auth, async (req, res) => {
+router.post("/delete-member", auth({ user: true }), async (req, res) => {
   const { deleteMember } = require("../../models/serverMembers");
   let response = {};
   if (req.user && req.body.server_id) {
@@ -124,7 +124,7 @@ router.post("/delete-member", auth, async (req, res) => {
 });
 
 //get list of invites for a specific server, right now only owner can request
-router.get("/invites", auth, async (req, res) => {
+router.get("/invites", auth({ user: true }), async (req, res) => {
   const { getInvitesForServer } = require("../../models/invites");
   if (req.user && req.body.server_id) {
     let getInvites = await getInvitesForServer(req.body.server_id);
@@ -132,8 +132,8 @@ router.get("/invites", auth, async (req, res) => {
   }
 });
 
-router.post("/create", auth, async (req, res) => {
-  console.log("Generating Robot Server ", req.body, req.token);
+router.post("/create", auth({ user: true }), async (req, res) => {
+  console.log("Generating Robot Server ", req.body, req.user);
   const result = Joi.validate({ server_name: req.body.server_name }, schema);
 
   console.log("Joi validation result: ", result);
@@ -141,7 +141,7 @@ router.post("/create", auth, async (req, res) => {
     res.send({ error: `Could not save server: ${req.body.server_name}` });
     return;
   }
-  const buildRobotServer = await createRobotServer(req.body, req.token);
+  const buildRobotServer = await createRobotServer(req.body, req.user);
   res.send(buildRobotServer);
 });
 
@@ -153,7 +153,7 @@ router.get("/delete", async (req, res) => {
   res.send(response);
 });
 
-router.post("/delete", auth, async (req, res) => {
+router.post("/delete", auth({ user: true }), async (req, res) => {
   console.log("API / Robot Server / Delete: ", req.body);
   let response = {};
 

@@ -1,7 +1,7 @@
 const router = require("express").Router();
 const auth = require("../auth");
 
-router.get("/followed", auth, async (req, res) => {
+router.get("/followed", auth({ user: true }), async (req, res) => {
   const { followedServers } = require("../../controllers/user");
   console.log(req.user);
   if (req.user && req.user.id) {

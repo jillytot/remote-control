@@ -155,25 +155,21 @@ module.exports.validateInput = async input => {
 module.exports.buildButtons = async (buttons, channel_id, controls_id) => {
   let response = {};
   let newButtons = [];
-  console.log("CONTROL ID CHECK: ", controls_id);
   let buildControls = {};
   buildControls.channel_id = channel_id;
   buildControls.id = controls_id;
   //generate json
   if (buttons) {
-    console.log("BUTTONS CHECK", buttons);
     buttons.forEach(button => {
       button.id = `bttn-${makeId()}`;
       newButtons.push(button);
     });
-    console.log("Buttons Generated: ", newButtons);
   } else {
     return { status: "error!", error: "invalid data to generate buttons" };
   }
 
   buildControls.buttons = newButtons;
   generateControls = await this.updateControls(buildControls);
-  console.log("UPDATE CONTROLS CHECK: ", generateControls);
   if (generateControls) {
     response.status = "success";
     response.result = generateControls;
@@ -189,27 +185,9 @@ module.exports.sendUpdatedControls = async (controls_id, channel_id) => {
   //channel stores an ID reference for it's current controls
   const channel = require("./channel");
   let sendData = {};
-  // sendData.channel_id = channel_id;
   sendData = await this.getControls(controls_id, channel_id);
-  console.log("SEND UPDATED CONTROLS: ", sendData);
   channel.emitEvent(channel_id, "CONTROLS_UPDATED", sendData);
 };
-
-//TESTS:
-// this.createControls({ channel_id: "test-2" });
-//this.getControls("cont-8d4c5c3f-df95-4345-beed-9899076fd774");
-
-// module.exports.storeButtonInput = async (id, button_input) => {
-//   const db = require("../services/db");
-//   const query = `UPDATE controls SET button_input = $1 WHERE id = $2 RETURNING *`;
-//   try {
-//     const result = await db.query(query, [button_input, id]);
-//     if (result.rows[0]) return result.rows[0];
-//   } catch (err) {
-//     console.log(err);
-//   }
-//   return null;
-// };
 
 module.exports.getControlsFromId = async id => {
   console.log("GET CONTROLS FROM ID: ", id);

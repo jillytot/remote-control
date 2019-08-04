@@ -38,7 +38,7 @@ router.get("/create", async (req, res) => {
   res.send(response);
 });
 
-router.post("/create", auth, async (req, res) => {
+router.post("/create", auth({ user: true }), async (req, res) => {
   let response = {};
   let makeChannel = {};
 
@@ -88,7 +88,7 @@ router.get("/delete", async (req, res) => {
 });
 
 //Delete Channel
-router.post("/delete", auth, async (req, res) => {
+router.post("/delete", auth({ user: true }), async (req, res) => {
   console.log("DELETING CHANNEL: ", req.body.channel_id);
   let response = {};
   if (req.body.channel_id && req.body.server_id && req.user)

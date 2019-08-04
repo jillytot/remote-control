@@ -21,7 +21,7 @@ router.get("/setup", async (req, res) => {
   console.log("Send Robot Object");
 });
 
-router.post("/setup", auth, async (req, res) => {
+router.post("/setup", auth({ user: true }), async (req, res) => {
   console.log(req.body);
   let response = {};
   if (req.body.robot_name && req.body.host_id) {
@@ -51,7 +51,7 @@ router.post("/setup", auth, async (req, res) => {
   return;
 });
 
-router.post("/delete", auth, async (req, res) => {
+router.post("/delete", auth({ user: true }), async (req, res) => {
   console.log(req.body);
   let response = {};
   console.log;
@@ -73,7 +73,7 @@ router.post("/delete", auth, async (req, res) => {
   res.send(response);
 });
 
-router.post("/key", auth, async (req, res) => {
+router.post("/key", auth({ user: true }), async (req, res) => {
   const { createRobotAuth } = require("../../models/robot");
   let response = {};
   if (req.body.robot_id) {

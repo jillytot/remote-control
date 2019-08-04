@@ -88,10 +88,8 @@ export default class Chat extends Component {
   };
 
   handleChatFeedback = fromSendChat => {
-    let push = true;
-    if (previousFeedback === fromSendChat.id) {
-      push = false;
-    }
+    let push = previousFeedback !== fromSendChat.id;
+
     console.log("HANDLE CHAT FEEDBACK", fromSendChat.id);
     let { chatroom } = this.state;
 
@@ -113,16 +111,11 @@ export default class Chat extends Component {
     const { chatroom } = this.state;
     return chatroom.messages.map(message => {
       // console.log(" Message from getMessageColors: ", message);
-      const user = users.find(user => {
-        return user.username === message.sender;
-      });
-
       // console.log("Updating message color");
       return {
         ...message,
         color: this.props.getColor(message.sender || "nobody")
       };
-      return message;
     });
   };
 

@@ -56,7 +56,7 @@ export default class SendChat extends Form {
       keepGoing = false;
       const messageBlank = {
         time_stamp: Date.now(),
-        displayMessage: true,
+        display_message: true,
         type: "moderation",
         sender: "System"
       };
@@ -78,7 +78,7 @@ export default class SendChat extends Form {
         1000} seconds before you can send a new message`;
       const messageBlank = {
         time_stamp: Date.now(),
-        displayMessage: true,
+        display_message: true,
         type: "moderation",
         sender: "System"
       };

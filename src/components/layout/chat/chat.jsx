@@ -6,6 +6,7 @@ import SendChat from "./sendChat";
 import "./chat.css";
 import { colors } from "../../../config/colors";
 import socket from "../../socket";
+import GetLayout from "../../modules/getLayout";
 
 export default class Chat extends Component {
   _isMounted = false;
@@ -173,24 +174,31 @@ export default class Chat extends Component {
     }
   };
 
+  handleDefaultChatDisplay = () => {
+    const { chatroom } = this.state;
+    return (
+      <div className="chat-container">
+        <div className="chat-header-container">
+          <div className="chat-title">
+            {chatroom ? chatroom.name : "Untitled"}
+          </div>
+          <div className="toggle-users">
+            {this.handleMenuItem({ label: "Chat" })} |
+            {this.handleMenuItem({ label: "Users" })}
+          </div>
+        </div>
+        {this.handleReturnOptions()}
+      </div>
+    );
+  };
+
   render() {
     const { chatroom } = this.state;
 
     return (
       <div>
         {chatroom ? (
-          <div className="chat-container">
-            <div className="chat-header-container">
-              <div className="chat-title">
-                {chatroom ? chatroom.name : "Untitled"}
-              </div>
-              <div className="toggle-users">
-                {this.handleMenuItem({ label: "Chat" })} |
-                {this.handleMenuItem({ label: "Users" })}
-              </div>
-            </div>
-            {this.handleReturnOptions()}
-          </div>
+          <GetLayout renderDesktop={this.handleDefaultChatDisplay} />
         ) : (
           <div />
         )}

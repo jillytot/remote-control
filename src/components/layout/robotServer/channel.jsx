@@ -31,7 +31,7 @@ export default class Channel extends Component {
   handleChannel = async channelChange => {
     let found = false;
     let that = this;
-    await (new Promise(function(fulfill){
+    await new Promise(function(fulfill) {
       that.props.channels.map(channel => {
         if (channel.id === that.props.match.params.id) {
           that.props.setCurrentChannel(channel.id);
@@ -48,8 +48,7 @@ export default class Channel extends Component {
         return false;
       });
       fulfill();
-    }));
-
+    });
 
     if (!found) {
       console.log(
@@ -86,6 +85,7 @@ export default class Channel extends Component {
           isModalShowing={this.props.isModalShowing}
           chatTabbed={this.props.chatTabbed}
           getColor={this.props.getColor}
+          showMobileNav={this.props.showMobileNav}
         />
       </React.Fragment>
     );

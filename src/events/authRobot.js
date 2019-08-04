@@ -6,7 +6,7 @@ module.exports = async (ws, data) => {
     //setup private user sub for user events
     ws.robot = getRobot;
 
-    console.log("AUTH ROBOT: ", getRobot);
+    console.log("AUTH ROBOT: ", getRobot.name);
 
     //Confirm Validation:
     ws.emitEvent("ROBOT_VALIDATED", {

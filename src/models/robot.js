@@ -159,7 +159,7 @@ module.exports.extractRobotToken = async token => {
 //used by WS for auth
 module.exports.authRobot = async token => {
   const auth = await this.extractRobotToken(token);
-  console.log("Extracting Robot Token: ", auth);
+  // console.log("Extracting Robot Token: ", auth);
   const robot = await this.verifyRobotToken(auth);
   return robot;
 };

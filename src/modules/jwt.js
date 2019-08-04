@@ -3,7 +3,7 @@ const jwt = require("jsonwebtoken");
 const tempSecret = config.secret;
 
 module.exports.extractToken = async token => {
-  console.log("Verifying Auth Token is this file savedwait what the ", token);
+  //   console.log("Verifying Auth Token is this file savedwait what the ", token);
   let checkToken = null;
   try {
     return (checkToken = await new Promise((resolve, reject) => {
@@ -24,7 +24,7 @@ module.exports.extractToken = async token => {
 };
 
 module.exports.createAuthToken = user => {
-  console.log("Create Auth Token: ", user);
+  //   console.log("Create Auth Token: ", user);
   const { id } = user;
   return jwt.sign({ id: id }, tempSecret, {
     subject: "",

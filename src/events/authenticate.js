@@ -6,7 +6,7 @@ module.exports = async (ws, data) => {
   if (getUser) {
     //setup private user sub for user events
     ws.user = user.publicUser(getUser);
-    console.log("AUTH USER: ", ws.user);
+    console.log("AUTH USER: ", ws.user.username);
 
     //Confirm Validation:
     ws.emitEvent(VALIDATED, {
@@ -15,6 +15,6 @@ module.exports = async (ws, data) => {
       status: getUser.status
     });
   } else {
-    ws.emitEvent(VALIDATED, null) //for frontend to redirect to login
+    ws.emitEvent(VALIDATED, null); //for frontend to redirect to login
   }
 };

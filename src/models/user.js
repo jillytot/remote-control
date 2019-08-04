@@ -295,7 +295,7 @@ module.exports.extractToken = async token => {
 
 module.exports.verifyAuthToken = async token => {
   try {
-    console.log("Check Token: ", token);
+    // console.log("Check Token: ", token);
     if (token && token.id) {
       const query = `SELECT * FROM users WHERE id = $1 LIMIT 1`;
       const result = await db.query(query, [token["id"]]);

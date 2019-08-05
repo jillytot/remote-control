@@ -61,7 +61,9 @@ export default class NavBar extends Component {
         className="burger-container"
         onClick={() => mobileState({ showMobileNav: !showMobileNav })}
       >
-        B
+        <div className="patty" />
+        <div className="patty" />
+        <div className="patty" />
       </div>
     );
   };

@@ -272,12 +272,32 @@ module.exports.authUserData = async tokenData => {
 };
 
 //Moving to /src/modules/jwt
+// module.exports.extractToken = async token => {
+//   //   console.log("Verifying Auth Token is this file savedwait what the ", token);
+//   let checkToken = null;
+//   try {
+//     return (checkToken = await new Promise((resolve, reject) => {
+//       jwt.verify(token, tempSecret, "HS256", (err, res) => {
+//         if (token) console.log("JWT Verified");
+//         if (err) return reject(err);
+//         return resolve(res);
+//       });
+//     }));
+//   } catch (err) {
+//     let reason = {
+//       error: "problem creating token from user"
+//     };
+//     Promise.reject(reason);
+//     console.log(reason);
+//     return null;
+//   }
+// };
+
 module.exports.extractToken = async token => {
   console.log("Verifying Auth Token");
-
   try {
-    return new Promise((resolve, reject) => {
-      jwt.verify(token, tempSecret, "HS256", (err, res) => {
+    return new Promise(async (resolve, reject) => {
+      await jwt.verify(token, tempSecret, "HS256", (err, res) => {
         if (token) console.log("JWT Verified");
         if (err) return reject(err);
         return resolve(res);

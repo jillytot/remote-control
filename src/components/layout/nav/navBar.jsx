@@ -52,10 +52,6 @@ export default class NavBar extends Component {
 
   handleBurger = () => {
     const { mobileState, showMobileNav } = this.props;
-    // let display = true;
-    // if (showMobileNav) display = false;
-    // console.log("DISPLAY CHECK", display);
-
     return (
       <div
         className="burger-container"

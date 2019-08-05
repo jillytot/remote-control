@@ -161,12 +161,24 @@ export default class Channels extends Component {
     });
   };
 
+  handleMobileClick = () => {
+    const { mobileState, showMobileNav } = this.props;
+    if (showMobileNav) {
+      return () => mobileState({ showMobileNav: !showMobileNav });
+    }
+    return null;
+  };
+
   displayChannels = () => {
     const { channels, currentChannel } = this.state;
 
     return channels.map((channel, index) => {
       return (
-        <div className="channel-container" key={index}>
+        <div
+          className="channel-container"
+          onClick={this.handleMobileClick()}
+          key={index}
+        >
           <Link
             className="channel-delink"
             to={`/${this.props.selectedServer.server_name}/${channel.id}`}

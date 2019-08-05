@@ -58,9 +58,17 @@ export default class RobotServer extends Component {
   };
 
   handleMobileDisplay = () => {
-    const { showMobileNav } = this.props;
+    const { mobileState, showMobileNav } = this.props;
     if (showMobileNav) {
-      return this.handleDisplayServerPanel();
+      return (
+        <React.Fragment>
+          {this.handleDisplayServerPanel()}
+          <div
+            className="back-drop-nav"
+            onClick={() => mobileState({ showMobileNav: !showMobileNav })}
+          />
+        </React.Fragment>
+      );
     } else {
       return <React.Fragment />;
     }

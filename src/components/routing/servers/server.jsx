@@ -58,6 +58,7 @@ export default class ServerPage extends Component {
         isModalShowing={this.props.isModalShowing}
         onCloseModal={this.props.onCloseModal}
         showMobileNav={this.props.showMobileNav}
+        mobileState={this.props.mobileState}
       />
     ) : (
       <React.Fragment />

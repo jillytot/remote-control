@@ -139,6 +139,23 @@ a:active {
     left: 90px;
     z-index: 50;
   }
+
+  .robot-server-container {
+    position: absolute;
+    z-index: 51;
+  }
+  /* .channel-container {
+    background-color: red;
+  } */
+}
+
+.back-drop-nav {
+  background-color: rgba(0, 0, 0, 0.42);
+  height: 100%;
+  position: absolute;
+  transition: all 1.3s;
+  width: 100%;
+  z-index: 49;
 }
 
 .list-channels-container::-webkit-scrollbar-track {

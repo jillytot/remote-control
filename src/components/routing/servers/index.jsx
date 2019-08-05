@@ -185,6 +185,7 @@ export default class ServersPage extends Component {
             robotServers={this.state.robotServers}
             selectedServer={this.state.selectedServer}
             followedServers={this.state.followedServers}
+            mobileState={this.handleMobileFlag}
             showMobileNav={this.state.showMobileNav}
           />
           <Switch>

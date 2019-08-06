@@ -214,7 +214,10 @@ export default class Chat extends Component {
     return (
       <div>
         {chatroom ? (
-          <GetLayout renderDesktop={this.handleDefaultChatDisplay} />
+          <GetLayout
+            renderDesktop={this.handleDefaultChatDisplay}
+            renderMobile={this.handleMobile}
+          />
         ) : (
           <div />
         )}

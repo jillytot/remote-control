@@ -5,6 +5,7 @@ import "./chat.css";
 import { MESSAGE_SENT } from "../../../events/definitions";
 import { defaultRate } from "../../../config/clientSettings";
 import uuidv4 from "uuid/v4";
+import GetLayout from "../../modules/getLayout";
 
 export default class SendChat extends Form {
   state = {
@@ -162,25 +163,56 @@ export default class SendChat extends Form {
     this.props.setChatTabbed(false);
   };
 
+  handleDefaultChatForm = () => {
+    return (
+      <div className="send-chat-container">
+        <form
+          onSubmit={this.handleSubmit}
+          onFocus={this.handleFocus}
+          onBlur={this.handleBlur}
+          ref="chatForm"
+        >
+          <div className="input-field-container">
+            {this.renderChatInput("sendChat", "", "chat")}
+            <div className="send-chat-btn">
+              {this.renderButton("Chat", "chat", "chat")}
+            </div>
+          </div>
+        </form>
+      </div>
+    );
+  };
+
+  handleMobile = () => {
+    return (
+      <React.Fragment>
+        <form
+          onSubmit={this.handleSubmit}
+          onFocus={this.handleFocus}
+          onBlur={this.handleBlur}
+          ref="chatForm"
+        />
+      </React.Fragment>
+    );
+  };
+
+  ForwardLayout = React.forwardRef((props, ref) => {
+    return (
+      <GetLayout
+        renderDesktop={this.handleDefaultChatForm}
+        renderMobile={this.handleMobile}
+      >
+        {" "}
+        {props.children}{" "}
+      </GetLayout>
+    );
+  });
+
   render() {
     return (
       <React.Fragment>
-        {this.handleIndicator()}
-        <div className="send-chat-container">
-          <form
-            onSubmit={this.handleSubmit}
-            onFocus={this.handleFocus}
-            onBlur={this.handleBlur}
-            ref="chatForm"
-          >
-            <div className="input-field-container">
-              {this.renderChatInput("sendChat", "", "chat")}
-              <div className="send-chat-btn">
-                {this.renderButton("Chat", "chat", "chat")}
-              </div>
-            </div>
-          </form>
-        </div>
+        <GetLayout renderDesktop={this.handleIndicator} />
+        {this.handleDefaultChatForm()}
       </React.Fragment>
     );
   }

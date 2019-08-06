@@ -76,6 +76,7 @@ export default class Channel extends Component {
           modal={this.props.modal}
           onCloseModal={this.props.onCloseModal}
           isModalShowing={this.props.isModalShowing}
+          showMobileNav={this.props.showMobileNav}
         />
         <Chat
           user={this.props.user}

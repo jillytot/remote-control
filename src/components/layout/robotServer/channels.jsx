@@ -16,8 +16,6 @@ import defaultImages from "../../../imgs/placeholders";
 import "./channels.css";
 import GetLayout from "../../modules/getLayout";
 
-//placeholder
-//var chatroom = { messages: [{ sender: "user2" }] }; // (this.state.chatroom)
 export default class Channels extends Component {
   constructor(props) {
     super(props);
@@ -296,6 +294,7 @@ export default class Channels extends Component {
                 onCloseModal={this.props.onCloseModal}
                 isModalShowing={this.props.isModalShowing}
                 showMobileNav={this.props.showMobileNav}
+                mobileState={this.props.mobileState}
               />
             )}
           />

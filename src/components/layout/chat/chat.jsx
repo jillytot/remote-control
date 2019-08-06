@@ -66,6 +66,7 @@ export default class Chat extends Component {
     });
     return remove;
   };
+
   chatListener = async () => {
     const { socket } = this.props;
     if (socket && this._isMounted) {
@@ -181,6 +182,28 @@ export default class Chat extends Component {
           </div>
         </div>
         {this.handleReturnOptions()}
+      </div>
+    );
+  };
+
+  handleMobile = () => {
+    const { onEvent, user, socket } = this.props;
+    const { chatroom } = this.state;
+    return (
+      <div className="messages-container">
+        <div className="chat-background">{this.handleDisplayMessages()}</div>
+        <SendChat
+          onEvent={onEvent}
+          user={user}
+          socket={socket}
+          chatId={chatroom ? chatroom.id : ""}
+          server_id={chatroom ? chatroom.host_id : ""}
+          onChatFeedback={this.handleChatFeedback}
+          setChatTabbed={this.props.setChatTabbed}
+          chatTabbed={this.props.chatTabbed}
+          isModalShowing={this.props.isModalShowing}
+          showMobileNav={this.props.showMobileNav}
+        />
       </div>
     );
   };

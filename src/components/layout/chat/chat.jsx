@@ -71,11 +71,8 @@ export default class Chat extends Component {
     const { socket } = this.props;
     if (socket && this._isMounted) {
       socket.on(SEND_CHAT, chat => {
-        // const messages = chat.messages;
-        // messages.map(message => {
-        //   chat.messages.push(message);
-        // });
         chat.messages = this.removeModerationMessagesOnLoad(chat.messages);
+        console.log(chat);
         this.setState({ chatroom: chat });
       });
       socket.on(MESSAGE_RECEIVED, message => {
@@ -108,7 +105,6 @@ export default class Chat extends Component {
   };
 
   getMessageColors = () => {
-    const { users } = this.props;
     const { chatroom } = this.state;
     return chatroom.messages.map(message => {
       // console.log(" Message from getMessageColors: ", message);
@@ -140,7 +136,6 @@ export default class Chat extends Component {
     if (this.state.menu) {
       const { onEvent, user, users, socket } = this.props;
       const { chatroom, menu } = this.state;
-      // console.log("Menu", menu);
       if (menu === "Chat") {
         return (
           <div className="messages-container">
@@ -187,23 +182,9 @@ export default class Chat extends Component {
   };
 
   handleMobile = () => {
-    const { onEvent, user, socket } = this.props;
-    const { chatroom } = this.state;
     return (
       <div className="messages-container">
         <div className="chat-background">{this.handleDisplayMessages()}</div>
-        <SendChat
-          onEvent={onEvent}
-          user={user}
-          socket={socket}
-          chatId={chatroom ? chatroom.id : ""}
-          server_id={chatroom ? chatroom.host_id : ""}
-          onChatFeedback={this.handleChatFeedback}
-          setChatTabbed={this.props.setChatTabbed}
-          chatTabbed={this.props.chatTabbed}
-          isModalShowing={this.props.isModalShowing}
-          showMobileNav={this.props.showMobileNav}
-        />
       </div>
     );
   };
@@ -224,6 +205,25 @@ export default class Chat extends Component {
       </div>
     );
   }
+
+  loadSendChat = () => {
+    const { onEvent, user, socket } = this.props;
+    const { chatroom } = this.state;
+    return (
+      <SendChat
+        onEvent={onEvent}
+        user={user}
+        socket={socket}
+        chatId={chatroom ? chatroom.id : ""}
+        server_id={chatroom ? chatroom.host_id : ""}
+        onChatFeedback={this.handleChatFeedback}
+        setChatTabbed={this.props.setChatTabbed}
+        chatTabbed={this.props.chatTabbed}
+        isModalShowing={this.props.isModalShowing}
+        showMobileNav={this.props.showMobileNav}
+      />
+    );
+  };
 }
 
 let previousFeedback = "";

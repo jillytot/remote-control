@@ -8,11 +8,16 @@ import uuidv4 from "uuid/v4";
 import GetLayout from "../../modules/getLayout";
 
 export default class SendChat extends Form {
+  constructor(props) {
+    super(props);
+
+    this.chatForm = React.createRef();
+  }
+
   state = {
     data: { sendChat: "" },
     errors: {},
     user: {},
-    //uuid: 0, //used to generate keys for locally generated messages
     coolDown: false,
     indicator: false
   };
@@ -22,10 +27,11 @@ export default class SendChat extends Form {
   }
 
   componentDidUpdate = () => {
+    console.log(this.refs);
     if (this.props.chatTabbed) {
-      this.refs.chatForm.sendChat.focus();
+      this.chatForm.current.sendChat.focus();
     } else {
-      this.refs.chatForm.sendChat.blur();
+      this.chatForm.current.sendChat.blur();
     }
   };
 
@@ -165,21 +171,24 @@ export default class SendChat extends Form {
 
   handleDefaultChatForm = () => {
     return (
-      <div className="send-chat-container">
-        <form
-          onSubmit={this.handleSubmit}
-          onFocus={this.handleFocus}
-          onBlur={this.handleBlur}
-          ref="chatForm"
-        >
-          <div className="input-field-container">
-            {this.renderChatInput("sendChat", "", "chat")}
-            <div className="send-chat-btn">
-              {this.renderButton("Chat", "chat", "chat")}
+      <React.Fragment>
+        {this.handleIndicator()}
+        <div className="send-chat-container">
+          <form
+            onSubmit={this.handleSubmit}
+            onFocus={this.handleFocus}
+            onBlur={this.handleBlur}
+            ref={this.chatForm}
+          >
+            <div className="input-field-container">
+              {this.renderChatInput("sendChat", "", "chat")}
+              <div className="send-chat-btn">
+                {this.renderButton("Chat", "chat", "chat")}
+              </div>
             </div>
-          </div>
-        </form>
-      </div>
+          </form>
+        </div>
+      </React.Fragment>
     );
   };
 
@@ -190,29 +199,19 @@ export default class SendChat extends Form {
           onSubmit={this.handleSubmit}
           onFocus={this.handleFocus}
           onBlur={this.handleBlur}
-          ref="chatForm"
+          ref={this.chatForm}
         />
       </React.Fragment>
     );
   };
 
-  ForwardLayout = React.forwardRef((props, ref) => {
-    return (
-      <GetLayout
-        renderDesktop={this.handleDefaultChatForm}
-        renderMobile={this.handleMobile}
-      >
-        {" "}
-        {props.children}{" "}
-      </GetLayout>
-    );
-  });
-
   render() {
     return (
       <React.Fragment>
-        <GetLayout renderDesktop={this.handleIndicator} />
-        {this.handleDefaultChatForm()}
+        <GetLayout
+          renderDesktop={this.handleDefaultChatForm}
+          renderMobile={this.handleMobile}
+        />
       </React.Fragment>
     );
   }

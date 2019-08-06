@@ -308,7 +308,7 @@
     height: 224px;
   }
   .chat-message {
-    background-color: rgba(24, 21, 21, 0.726);
+    background-color: rgba(0, 0, 0, 0.726);
     border-radius: 6px;
     margin-top: 3px;
     font-size: 10px;

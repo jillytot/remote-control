@@ -24,6 +24,7 @@ export default class NavBar extends Component {
   renderLogo = () => {
     return (
       <GetLayout
+        renderSize={640}
         renderMobile={this.handleLogoMobile}
         renderDesktop={this.handleLogoDesktop}
       />
@@ -47,7 +48,7 @@ export default class NavBar extends Component {
   };
 
   renderBurger = () => {
-    return <GetLayout renderMobile={this.handleBurger} />;
+    return <GetLayout renderSize={1280} renderMobile={this.handleBurger} />;
   };
 
   handleBurger = () => {

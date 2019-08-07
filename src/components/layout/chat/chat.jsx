@@ -10,9 +10,6 @@ import GetLayout from "../../modules/getLayout";
 
 export default class Chat extends Component {
   _isMounted = false;
-  //This component will rely entirely on props passed into it to build the state.
-  //@param socket { object } is the websocket listener passed in
-  //@param users { object } gets populated when socket receives USERS event
 
   state = {
     storeUsers: [],
@@ -78,7 +75,9 @@ export default class Chat extends Component {
       socket.on(MESSAGE_RECEIVED, message => {
         if (this.state.chatroom) {
           let { chatroom } = this.state;
+          // message.fadeTimer = new setTimer();
           chatroom.messages.push(message);
+          chatroom.lastUpdated = Date.now();
           this.setState({ chatroom });
         }
       });
@@ -223,14 +222,3 @@ export default class Chat extends Component {
 }
 
 let previousFeedback = "";
-
-// chatroom.messages.map(message => {
-//   if (usernamesToKeep.includes(message.sender) !== true) {
-//     usernamesToKeep.push(message.sender);
-//   }
-// });
-
-// componentWillUnmount() {
-//   clearInterval(this.colorCleanup);
-//   document.removeEventListener("keydown", this.handleKeyPress);
-// }

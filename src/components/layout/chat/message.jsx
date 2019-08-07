@@ -3,10 +3,6 @@ import Emotes from "../../../emotes/emotes";
 import defaultImages from "../../../imgs/placeholders";
 
 const Message = ({ message }) => {
-  const [fade, setFade] = useState({
-    fadeOut: false
-  });
-
   const types = {
     default: "",
     moderation: "moderation",

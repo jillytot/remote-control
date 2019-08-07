@@ -78,6 +78,7 @@ export default class RobotServer extends Component {
     return (
       <React.Fragment>
         <GetLayout
+          renderSize={1280}
           renderDesktop={this.handleDisplayServerPanel}
           renderMobile={this.handleMobileDisplay}
         />

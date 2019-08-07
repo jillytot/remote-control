@@ -300,15 +300,15 @@
   }
   .messages-container {
     position: absolute;
-    left: 3px;
-    top: 54px;
+    left: 0px;
+    top: 0px;
     font-size: 10px;
     width: calc(100% - 17px);
   }
 
   .chat-background {
     background-color: transparent;
-    height: 221px;
+    /* height: 221px; */
   }
 
   .chat-message {

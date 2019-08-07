@@ -4,6 +4,8 @@ import { buttonRate } from "../../../config/clientSettings";
 import EditOptions from "./editOptions";
 import "./robot.css";
 import VolumeControl from "./volumeControl";
+import Chat from "../chat/chat";
+import GetLayout from "../../modules/getLayout";
 
 export default class RobotInterface extends Component {
   state = {
@@ -261,6 +263,36 @@ export default class RobotInterface extends Component {
     }
   };
 
+  handleDisplayActivity = () => {
+    console.log(this.refs);
+    return (
+      <div className="display-info-container">
+        {this.state.displayLog ? this.renderClickLog() : <React.Fragment />}
+      </div>
+    );
+  };
+
+  //It makes me nervous to call this again like this, there has to be a better way to handle it
+  handleChat = () => {
+    const canvas = this.refs;
+    console.log(canvas);
+    return (
+      <React.Fragment>
+        <Chat
+          user={this.props.user}
+          socket={this.props.socket}
+          users={this.props.users}
+          setChatTabbed={this.props.setChatTabbed}
+          isModalShowing={this.props.isModalShowing}
+          chatTabbed={this.props.chatTabbed}
+          getColor={this.props.getColor}
+          showMobileNav={this.props.showMobileNav}
+          canvas={canvas}
+        />
+      </React.Fragment>
+    );
+  };
+
   render() {
     return (
       <React.Fragment>
@@ -268,16 +300,18 @@ export default class RobotInterface extends Component {
           <div className="robot-container">
             <div className="robot-display-container">
               <canvas className="video-canvas" ref="video-canvas" />
+              <GetLayout renderMobile={this.handleChat} />
               <div className="display-controls-container">
-                <VolumeControl player={this.audioPlayer} channel={this.props.channel} />
+                <VolumeControl
+                  player={this.audioPlayer}
+                  channel={this.props.channel}
+                />
               </div>
-              <div className="display-info-container">
-                {this.state.displayLog ? (
-                  this.renderClickLog()
-                ) : (
-                  <React.Fragment />
-                )}
-              </div>
+              {this.props.showMobileNav ? (
+                this.handleDisplayActivity()
+              ) : (
+                <React.Fragment />
+              )}
             </div>
 
             <div className="robot-controls-container">

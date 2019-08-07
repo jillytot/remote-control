@@ -3,11 +3,11 @@ import RobotInterface from "../robot/robotInteface";
 import Chat from "../chat/chat";
 import socket from "../../socket";
 import { Redirect } from "react-router-dom";
+import GetLayout from "../../modules/getLayout";
 
 export default class Channel extends Component {
   constructor(props) {
     super(props);
-
     this.state = {
       redirect: false
     };
@@ -42,7 +42,6 @@ export default class Channel extends Component {
             socket.emit("GET_CONTROLS", channel.controls);
             socket.emit("JOIN_CHANNEL", channel.id);
           }
-
           return true;
         }
         return false;
@@ -61,10 +60,20 @@ export default class Channel extends Component {
     }
   };
 
-  render() {
-    if (this.state.redirect)
-      return <Redirect to={`/${this.props.match.params.name}`} />;
+  handleMobile = () => {
+    return this.handleRobotInterface();
+  };
 
+  handleDefault = () => {
+    return (
+      <React.Fragment>
+        {this.handleRobotInterface()}
+        {this.handleChat()}
+      </React.Fragment>
+    );
+  };
+
+  handleRobotInterface = () => {
     return (
       <React.Fragment>
         <RobotInterface
@@ -77,7 +86,18 @@ export default class Channel extends Component {
           onCloseModal={this.props.onCloseModal}
           isModalShowing={this.props.isModalShowing}
           showMobileNav={this.props.showMobileNav}
+          users={this.props.users}
+          setChatTabbed={this.props.setChatTabbed}
+          getColor={this.props.getColor}
         />
+      </React.Fragment>
+    );
+  };
+
+  //Chat will only be handled here in desktop mode, otherwise this component gets called in RobotInterface
+  handleChat = () => {
+    return (
+      <React.Fragment>
         <Chat
           user={this.props.user}
           socket={socket}
@@ -87,6 +107,20 @@ export default class Channel extends Component {
           chatTabbed={this.props.chatTabbed}
           getColor={this.props.getColor}
           showMobileNav={this.props.showMobileNav}
+        />
+      </React.Fragment>
+    );
+  };
+
+  render() {
+    if (this.state.redirect)
+      return <Redirect to={`/${this.props.match.params.name}`} />;
+
+    return (
+      <React.Fragment>
+        <GetLayout
+          renderMobile={this.handleMobile}
+          renderDesktop={this.handleDefault}
         />
       </React.Fragment>
     );

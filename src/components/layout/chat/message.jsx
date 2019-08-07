@@ -142,12 +142,15 @@ const Message = ({ message }) => {
     return "chat-user-name";
   };
   return (
-    <div>
+    <div className="chat-message-container">
       <div className={handleMessageType(message)}>
         {handleBadges(message)}
-        <span className={handleSenderColor(message)} title={new Date(parseInt(message.time_stamp)).toLocaleString()}>{`${handleMessageSender(
-          message
-        )}${message.type === types.self ? "" : ":"}  `}</span>
+        <span
+          className={handleSenderColor(message)}
+          title={new Date(parseInt(message.time_stamp)).toLocaleString()}
+        >{`${handleMessageSender(message)}${
+          message.type === types.self ? "" : ":"
+        }  `}</span>
         <span className="message-spacing">
           {handleEmotes(message.message).map(element => {
             return element;

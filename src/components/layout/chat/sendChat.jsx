@@ -10,7 +10,6 @@ import GetLayout from "../../modules/getLayout";
 export default class SendChat extends Form {
   constructor(props) {
     super(props);
-
     this.chatForm = React.createRef();
   }
 

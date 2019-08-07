@@ -40,11 +40,9 @@ export default class Messages extends Component {
 
   render() {
     return (
-      <React.Fragment>
-        <div ref="container" className="chat-scroll">
-          {this.displayMessages(this.props.messages)}
-        </div>
-      </React.Fragment>
+      <div ref="container" className="chat-scroll">
+        {this.displayMessages(this.props.messages)}
+      </div>
     );
   }
 }

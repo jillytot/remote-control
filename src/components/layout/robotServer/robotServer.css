@@ -130,7 +130,7 @@ a:active {
   /* background-color: red; */
 }
 
-@media screen and (max-width: 768px) {
+@media only screen and (max-width: 1280px) {
   .list-channels-container {
     /* background-color: red; */
     border-bottom-right-radius: 24px;

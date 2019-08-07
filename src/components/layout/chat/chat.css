@@ -294,7 +294,7 @@
   background-color: rgb(0, 218, 0);
 }
 
-@media screen and (max-width: 768px) {
+@media only screen and (max-width: 768px) {
   .chat-container {
     width: 100%;
   }

@@ -101,7 +101,13 @@ export default class Chat extends Component {
   handleDisplayMessages = () => {
     const { users } = this.props;
 
-    return <Messages messages={this.getMessageColors()} users={users} />;
+    return (
+      <Messages
+        messages={this.getMessageColors()}
+        users={users}
+        showMobileNav={this.props.showMobileNav}
+      />
+    );
   };
 
   getMessageColors = () => {
@@ -134,25 +140,15 @@ export default class Chat extends Component {
 
   handleReturnOptions = () => {
     if (this.state.menu) {
-      const { onEvent, user, users, socket } = this.props;
-      const { chatroom, menu } = this.state;
+      const { users } = this.props;
+      const { menu } = this.state;
       if (menu === "Chat") {
         return (
           <div className="messages-container">
             <div className="chat-background">
               {this.handleDisplayMessages()}
             </div>
-            <SendChat
-              onEvent={onEvent}
-              user={user}
-              socket={socket}
-              chatId={chatroom ? chatroom.id : ""}
-              server_id={chatroom ? chatroom.host_id : ""}
-              onChatFeedback={this.handleChatFeedback}
-              setChatTabbed={this.props.setChatTabbed}
-              chatTabbed={this.props.chatTabbed}
-              isModalShowing={this.props.isModalShowing}
-            />
+            {this.loadSendChat()}
           </div>
         );
       }

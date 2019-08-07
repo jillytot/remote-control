@@ -316,12 +316,15 @@
     margin-top: 3px;
     font-size: 12px;
     padding-right: 6px;
+  }
 
-    transition: opacity 3s ease-in-out;
-    -webkit-transition-delay: 3s;
-    -moz-transition-delay: 3s;
-    -o-transition-delay: 3s;
-    transition-delay: 3s;
+  .fade-out {
+    opacity: 0;
+    transition: opacity 1s ease-in-out;
+    -webkit-transition-delay: 1s;
+    -moz-transition-delay: 1s;
+    -o-transition-delay: 1s;
+    transition-delay: 2s;
   }
 
   .message-badge {

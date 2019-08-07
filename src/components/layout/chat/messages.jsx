@@ -21,8 +21,6 @@ export default class Messages extends Component {
   }
 
   displayMessages = messages => {
-    //console.log("messages", messages);
-    // console.log("FROM DISPLAY MESSAGES CHECK: ", messages);
     return messages.map((message, index) => {
       if (message.display_message) {
         return (
@@ -30,6 +28,7 @@ export default class Messages extends Component {
             message={message}
             key={message["id"]}
             color={message.color}
+            showMobileNav={this.props.showMobileNav}
           />
         );
       } else {

@@ -293,6 +293,10 @@ export default class RobotInterface extends Component {
     );
   };
 
+  handleMobileOptionsMenu = () => {
+    return <div className="mobile-options-menu">...</div>;
+  };
+
   render() {
     return (
       <React.Fragment>
@@ -300,20 +304,21 @@ export default class RobotInterface extends Component {
           <div className="robot-container">
             <div className="robot-display-container">
               <canvas className="video-canvas" ref="video-canvas" />
-              <GetLayout renderMobile={this.handleChat} />
+              <GetLayout renderSize={768} renderMobile={this.handleChat} />
               <div className="display-controls-container">
                 <VolumeControl
                   player={this.audioPlayer}
                   channel={this.props.channel}
                 />
               </div>
+
               {this.props.showMobileNav ? (
                 this.handleDisplayActivity()
               ) : (
                 <React.Fragment />
               )}
             </div>
-
+            <GetLayout renderMobile={this.handleMobileOptionsMenu} />
             <div className="robot-controls-container">
               {this.renderButtons()}
               <br />

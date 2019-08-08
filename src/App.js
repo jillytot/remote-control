@@ -3,6 +3,7 @@ import "./App.css";
 import "./styles/common.css";
 import IndexRouter from "./components/routing";
 import WindowDimensionsProvider from "./components/providers/windowDimensionProvider";
+import ChatProvider from "./components/providers/chatProvider";
 
 class App extends Component {
   render() {
@@ -10,7 +11,9 @@ class App extends Component {
       <div>
         <div className="App">
           <WindowDimensionsProvider>
-            <IndexRouter />
+            <ChatProvider>
+              <IndexRouter />
+            </ChatProvider>
           </WindowDimensionsProvider>
         </div>
       </div>

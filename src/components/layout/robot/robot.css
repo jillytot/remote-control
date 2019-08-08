@@ -13,6 +13,12 @@
   align-items: center;
 }
 
+.mobile-options-menu {
+  background-color: red;
+  margin: 5px;
+  margin-top: -5px;
+}
+
 @media screen and (max-width: 1280px) {
   .robot-display-container {
     min-height: 0;

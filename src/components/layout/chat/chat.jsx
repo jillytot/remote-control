@@ -77,7 +77,7 @@ export default class Chat extends Component {
           let { chatroom } = this.state;
           // message.fadeTimer = new setTimer();
           chatroom.messages.push(message);
-          chatroom.lastUpdated = Date.now();
+          // chatroom.lastUpdated = Date.now();
           this.setState({ chatroom });
         }
       });
@@ -112,8 +112,6 @@ export default class Chat extends Component {
   getMessageColors = () => {
     const { chatroom } = this.state;
     return chatroom.messages.map(message => {
-      // console.log(" Message from getMessageColors: ", message);
-      // console.log("Updating message color");
       return {
         ...message,
         color: this.props.getColor(message.sender || "nobody")

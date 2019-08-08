@@ -119,6 +119,7 @@ export default class Channel extends Component {
     return (
       <React.Fragment>
         <GetLayout
+          renderSize={768}
           renderMobile={this.handleMobile}
           renderDesktop={this.handleDefault}
         />

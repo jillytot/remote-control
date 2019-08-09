@@ -168,6 +168,40 @@ export default class SendChat extends Form {
     this.props.setChatTabbed(false);
   };
 
+  mentionsListener = (e) => {
+    return; //Disable the mentions listener for now
+    if(!e.currentTarget.value|| e.currentTarget.value.length === 0)
+      return this.setState({mentionResult: null});
+
+
+    let regexResult = /.*@([A-Za-z0-9]*)$/.exec(e.currentTarget.value);
+    let mentionResult = regexResult ? regexResult[1] : null;
+    let mentionTargets = [];
+    console.log(mentionResult);
+    if(mentionResult != null) {
+      this.props.users.forEach(function (user) {
+        if (user.username.toLowerCase().startsWith(mentionResult.toLowerCase()))
+          mentionTargets.push(user);
+      });
+    }
+
+    this.setState({mentionResult, mentionTargets, chatBox: e.currentTarget}); //Hacky but it's gonna have to do
+  };
+
+  renderChatMentionContainer(){
+    return (<ul id="chat-mention-container">
+      {this.state.mentionTargets && this.state.mentionTargets.map((target)=>
+          <li key={target.username} onClick={()=>this.completeMention(target.username)} className={"chat-mention-item "+this.props.getColor(target.username)}>
+            @{target.username}
+          </li>)}
+    </ul>)
+  };
+
+  completeMention(text){
+    console.log("Complete",text);
+    this.state.chatBox.textContent = `${this.state.chatBox.value.substring(this.state.chatBox.value.lastIndexOf(" "))} @${text}`
+  }
+
   handleDefaultChatForm = () => {
     return (
       <React.Fragment>
@@ -180,7 +214,8 @@ export default class SendChat extends Form {
             ref={this.chatForm}
           >
             <div className="input-field-container">
-              {this.renderChatInput("sendChat", "", "chat")}
+              {this.state.mentionResult != null && this.renderChatMentionContainer()}
+              {this.renderChatInput("sendChat", "", "chat", this.mentionsListener)}
               <div className="send-chat-btn">
                 {this.renderButton("Chat", "chat", "chat")}
               </div>

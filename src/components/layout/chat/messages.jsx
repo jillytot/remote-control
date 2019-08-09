@@ -29,6 +29,9 @@ export default class Messages extends Component {
             key={message["id"]}
             color={message.color}
             showMobileNav={this.props.showMobileNav}
+            users={this.props.users}
+            user={this.props.user}
+            getColor={this.props.getColor}
           />
         );
       } else {

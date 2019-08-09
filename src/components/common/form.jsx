@@ -137,19 +137,20 @@ class Form extends Component {
     }
   };
 
-  renderChatInput(name, label, type, changeHandler) {
-    const {data, errors} = this.state;
-    return (<TextAreaChat
-         type={type}
-         name={name}
-         label={label}
-         onChange={(e)=>{changeHandler && changeHandler(e); this.handleChange(e)}}
-         error={errors[name]}
-         value={data[name]}
-         onKeyDown={this.handleKeyPress}
-     />);
+  renderChatInput(name, label, type) {
+    const { data, errors } = this.state;
+    return (
+      <TextAreaChat
+        type={type}
+        name={name}
+        label={label}
+        onChange={this.handleChange}
+        error={errors[name]}
+        value={data[name]}
+        onKeyDown={e => this.handleKeyPress(e)}
+      />
+    );
   }
-
 }
 
 export default Form;

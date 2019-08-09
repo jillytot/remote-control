@@ -105,8 +105,6 @@ export default class Chat extends Component {
         messages={this.getMessageColors()}
         users={users}
         showMobileNav={this.props.showMobileNav}
-        getColor={this.props.getColor}
-        user={this.props.user}
       />
     );
   };
@@ -130,7 +128,8 @@ export default class Chat extends Component {
     return (
       <span
         className="menu-option"
-        onClick={() => this.handleMenuSelect(option.label)}>
+        onClick={() => this.handleMenuSelect(option.label)}
+      >
         {option.label}
       </span>
     );
@@ -209,13 +208,12 @@ export default class Chat extends Component {
   }
 
   loadSendChat = () => {
-    const { onEvent, user, socket, users } = this.props;
+    const { onEvent, user, socket } = this.props;
     const { chatroom } = this.state;
     return (
       <SendChat
         onEvent={onEvent}
         user={user}
-        users={users}
         socket={socket}
         chatId={chatroom ? chatroom.id : ""}
         server_id={chatroom ? chatroom.host_id : ""}
@@ -224,7 +222,6 @@ export default class Chat extends Component {
         chatTabbed={this.props.chatTabbed}
         isModalShowing={this.props.isModalShowing}
         showMobileNav={this.props.showMobileNav}
-        getColor={this.props.getColor}
       />
     );
   };

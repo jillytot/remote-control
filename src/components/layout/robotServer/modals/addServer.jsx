@@ -105,13 +105,12 @@ class AddServerForm extends Form {
           console.log("ERROR! ", response.data.error);
           this.setState({ error: response.data.error });
         } else {
-          //Redirect to server - need to wait 400ms here otherwise the redirect won't take effect
-          setTimeout(function(t){
-            t.setState({
-              redirect: `/${response.data.server_name}/${response.data.settings.default_channel}`
-            });
-            t.props.onCloseModal();
-          }, 400, this);
+          //Redirect to server.
+          this.setState({
+            redirect: `/${response.data.server_name}/${
+              response.data.settings.default_channel
+            }`
+          });
 
           console.log("redirecting", this.state.redirect);
 
@@ -122,7 +121,7 @@ class AddServerForm extends Form {
         console.log("Add Server Error: ", err);
       });
 
-   // if (this.state.error === "") this.props.onCloseModal({ reload: true });
+    if (this.state.error === "") this.props.onCloseModal({ reload: true });
 
     //Call the server
   };
@@ -131,7 +130,7 @@ class AddServerForm extends Form {
 
   render() {
     return this.state.redirect ? (
-           <Redirect to={this.state.redirect} />
+      <Redirect to={this.state.redirect} />
     ) : (
       <div className="register-form">
         Setup a robot Server:

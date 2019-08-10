@@ -61,7 +61,12 @@ export default class Channel extends Component {
   };
 
   handleMobile = () => {
-    return this.handleRobotInterface();
+    return (
+      <React.Fragment>
+        {this.handleRobotInterface()}
+        {this.handleChat()}
+      </React.Fragment>
+    );
   };
 
   handleDefault = () => {

@@ -6,6 +6,7 @@ import "./robot.css";
 import VolumeControl from "./volumeControl";
 import Chat from "../chat/chat";
 import GetLayout from "../../modules/getLayout";
+import { UseStore } from "../../providers/globalStore";
 
 export default class RobotInterface extends Component {
   state = {
@@ -15,7 +16,8 @@ export default class RobotInterface extends Component {
     clickCounter: 0,
     controlsId: "",
     renderCurrentKey: null,
-    renderPresses: []
+    renderPresses: [],
+    canvasHeight: null
   };
 
   currentKey = null;
@@ -43,6 +45,10 @@ export default class RobotInterface extends Component {
     if (prevProps.channel !== this.props.channel && this.props.channel) {
       this.clearAV();
       this.connectAV();
+    }
+
+    if (this.refs["video-canvas"].clientHeight !== this.state.canvasHeight) {
+      this.updateCanvas();
     }
   }
 
@@ -81,6 +87,14 @@ export default class RobotInterface extends Component {
         disableWebAssembly: true
       }
     );
+  };
+
+  updateCanvas = () => {
+    const height = this.refs["video-canvas"].clientHeight;
+    console.log(height);
+    this.setState({ canvasHeight: height });
+
+    // return <UseStore> {value => this.state.canvasHeight}</UseStore>;
   };
 
   clearA = () => {
@@ -304,7 +318,7 @@ export default class RobotInterface extends Component {
           <div className="robot-container">
             <div className="robot-display-container">
               <canvas className="video-canvas" ref="video-canvas" />
-              <GetLayout renderSize={768} renderMobile={this.handleChat} />
+              <GetLayout renderSize={768} renderMobile={null} />
               <div className="display-controls-container">
                 <VolumeControl
                   player={this.audioPlayer}

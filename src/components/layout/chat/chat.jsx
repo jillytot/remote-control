@@ -175,12 +175,13 @@ export default class Chat extends Component {
   };
 
   handleMobile = () => {
-    let style = "";
-    if (this.props.canvas && this.props.canvas["video-canvas"]) {
-      let setHeight = this.props.canvas["video-canvas"].clientHeight;
-      setHeight = setHeight - 4;
-      style = { height: setHeight };
-    }
+    let style = null;
+    //pull up canvas ref somehow
+    // if (this.props.canvas && this.props.canvas["video-canvas"]) {
+    //   let setHeight = this.props.canvas["video-canvas"].clientHeight;
+    //   setHeight = setHeight - 4;
+    //   style = { height: setHeight };
+    // }
     return (
       <div className="messages-container">
         <div className="chat-background" style={style}>

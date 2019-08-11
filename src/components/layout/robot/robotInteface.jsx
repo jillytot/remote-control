@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React, { Component, useContext } from "react";
 import { BUTTON_COMMAND } from "../../../events/definitions";
 import { buttonRate } from "../../../config/clientSettings";
 import EditOptions from "./editOptions";
@@ -6,7 +6,7 @@ import "./robot.css";
 import VolumeControl from "./volumeControl";
 import Chat from "../chat/chat";
 import GetLayout from "../../modules/getLayout";
-import { UseStore } from "../../providers/globalStore";
+import { GlobalStoreCtx } from "../../providers/globalStore";
 
 export default class RobotInterface extends Component {
   state = {
@@ -93,8 +93,6 @@ export default class RobotInterface extends Component {
     const height = this.refs["video-canvas"].clientHeight;
     console.log(height);
     this.setState({ canvasHeight: height });
-
-    // return <UseStore> {value => this.state.canvasHeight}</UseStore>;
   };
 
   clearA = () => {
@@ -311,6 +309,15 @@ export default class RobotInterface extends Component {
     return <div className="mobile-options-menu">...</div>;
   };
 
+  handleStore = () => {
+    const { canvasHeight } = this.state;
+    return (
+      <GlobalStoreCtx.Consumer>
+        {({ setCanvas }) => setCanvas(canvasHeight)}
+      </GlobalStoreCtx.Consumer>
+    );
+  };
+
   render() {
     return (
       <React.Fragment>
@@ -333,6 +340,7 @@ export default class RobotInterface extends Component {
               )}
             </div>
             <GetLayout renderMobile={this.handleMobileOptionsMenu} />
+            {this.handleStore()}
             <div className="robot-controls-container">
               {this.renderButtons()}
               <br />

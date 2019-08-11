@@ -1,14 +1,20 @@
-import React, { Component, useContext } from "react";
+import React, { Component, createContext } from "react";
 
-const GlobalStoreCtx = React.createContext();
+export const GlobalStoreCtx = createContext();
+
 class GlobalStore extends Component {
   state = {
     canvas: null,
-    setCanvas: ({ value }) => this.setState({ canvas: value })
+    setCanvas: value => this.handleSetCanvas(value)
+  };
+
+  handleSetCanvas = input => {
+    console.log(input);
+    if (input !== this.state.canvas) this.setState({ canvas: input });
   };
 
   render() {
-    console.log(this.state, this.props);
+    console.log("DING: ", this.state, this.props);
 
     return (
       <GlobalStoreCtx.Provider value={this.state}>
@@ -18,4 +24,3 @@ class GlobalStore extends Component {
   }
 }
 export default GlobalStore;
-export const UseStore = () => useContext(GlobalStoreCtx);

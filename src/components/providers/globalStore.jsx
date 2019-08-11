@@ -1,7 +1,6 @@
 import React, { Component, createContext } from "react";
 
 export const GlobalStoreCtx = createContext();
-
 class GlobalStore extends Component {
   state = {
     canvas: null,

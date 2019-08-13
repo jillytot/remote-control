@@ -148,7 +148,8 @@
   padding: 6px 3px 6px 6px;
   display: flex;
   flex-direction: row;
-  align-items: center;
+  align-items: flex-start;
+  width: 100%;
 }
 
 .robot-message {
@@ -317,6 +318,7 @@
     margin-top: 3px;
     font-size: 12px;
     padding-right: 6px;
+    width: auto;
   }
 
   .fade-out {

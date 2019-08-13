@@ -268,7 +268,7 @@ export default class RobotInterface extends Component {
             style={style}
           >
             {button.hot_key ? (
-              <span className={hotKeyStyle}>{button.hot_key} :</span>
+              <span className={hotKeyStyle}>{button.hot_key}</span>
             ) : (
               <React.Fragment />
             )}
@@ -313,7 +313,7 @@ export default class RobotInterface extends Component {
     return <div className="mobile-options-menu">...</div>;
   };
 
-  handleStore = () => {
+  handleCanvasHeight = () => {
     const { canvasHeight } = this.state;
     return (
       <GlobalStoreCtx.Consumer>
@@ -329,7 +329,7 @@ export default class RobotInterface extends Component {
           <div className="robot-container">
             <div className="robot-display-container">
               <canvas className="video-canvas" ref="video-canvas" />
-              <GetLayout renderSize={768} renderMobile={null} />
+
               <div className="display-controls-container">
                 <VolumeControl
                   player={this.audioPlayer}
@@ -337,14 +337,13 @@ export default class RobotInterface extends Component {
                 />
               </div>
 
-              {this.props.showMobileNav ? (
-                this.handleDisplayActivity()
-              ) : (
-                <React.Fragment />
-              )}
+              <GetLayout
+                renderSize={768}
+                renderDesktop={this.handleDisplayActivity}
+              />
             </div>
             <GetLayout renderMobile={this.handleMobileOptionsMenu} />
-            {this.handleStore()}
+            {this.handleCanvasHeight()}
             <div className="robot-controls-container">
               {this.renderButtons()}
               <br />

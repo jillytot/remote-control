@@ -147,7 +147,7 @@ export default class SendChat extends Form {
       return (
         <div className="send-chat-options">
           <div className="indicator indicator-active" />
-          {`Press Tab to chat`}
+          {`Press Tab to chat or click on the chatbox`}
         </div>
       );
     } else {

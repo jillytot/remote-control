@@ -68,7 +68,7 @@
 .hotkey {
   background-color: rgb(73, 83, 131);
   color: rgb(195, 203, 211);
-  padding: 6px;
+  padding: 6px 12px 6px 12px;
   margin-right: 4px;
   margin-left: 6px;
   border-radius: 7px;

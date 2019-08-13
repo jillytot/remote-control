@@ -300,8 +300,8 @@
   }
   .messages-container {
     position: absolute;
-    left: 0px;
-    top: 0px;
+    left: 4px;
+    top: 56px;
     font-size: 10px;
     width: calc(100% - 17px);
   }

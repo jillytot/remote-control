@@ -7,6 +7,7 @@ import "./chat.css";
 import { colors } from "../../../config/colors";
 import socket from "../../socket";
 import GetLayout from "../../modules/getLayout";
+import { GlobalStoreCtx } from "../../providers/globalStore";
 
 export default class Chat extends Component {
   _isMounted = false;
@@ -174,20 +175,27 @@ export default class Chat extends Component {
     );
   };
 
+  //  transform: `translateY(${52}px)`
   handleMobile = () => {
-    let style = null;
-    //pull up canvas ref somehow
-    // if (this.props.canvas && this.props.canvas["video-canvas"]) {
-    //   let setHeight = this.props.canvas["video-canvas"].clientHeight;
-    //   setHeight = setHeight - 4;
-    //   style = { height: setHeight };
-    // }
     return (
-      <div className="messages-container">
-        <div className="chat-background" style={style}>
-          {this.handleDisplayMessages()}
-        </div>
-      </div>
+      <GlobalStoreCtx.Consumer>
+        {({ canvas }) => {
+          //also adjust on chat.css under @media only, then .message-container to edit chat messages layout
+          const adjustCanvas = canvas - 8;
+          return (
+            <div className="messages-container">
+              <div
+                className="chat-background"
+                style={{
+                  height: adjustCanvas
+                }}
+              >
+                {this.handleDisplayMessages()}
+              </div>
+            </div>
+          );
+        }}
+      </GlobalStoreCtx.Consumer>
     );
   };
 

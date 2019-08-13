@@ -47,7 +47,11 @@ export default class RobotInterface extends Component {
       this.connectAV();
     }
 
-    if (this.refs["video-canvas"].clientHeight !== this.state.canvasHeight) {
+    if (
+      this.refs["video-canvas"] &&
+      this.refs["video-canvas"].clientHeight &&
+      this.refs["video-canvas"].clientHeight !== this.state.canvasHeight
+    ) {
       this.updateCanvas();
     }
   }

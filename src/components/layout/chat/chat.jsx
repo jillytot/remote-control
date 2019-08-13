@@ -76,9 +76,7 @@ export default class Chat extends Component {
       socket.on(MESSAGE_RECEIVED, message => {
         if (this.state.chatroom) {
           let { chatroom } = this.state;
-          // message.fadeTimer = new setTimer();
           chatroom.messages.push(message);
-          // chatroom.lastUpdated = Date.now();
           this.setState({ chatroom });
         }
       });
@@ -175,7 +173,6 @@ export default class Chat extends Component {
     );
   };
 
-  //  transform: `translateY(${52}px)`
   handleMobile = () => {
     return (
       <GlobalStoreCtx.Consumer>

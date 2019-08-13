@@ -9,13 +9,12 @@ class GlobalStore extends Component {
 
   handleSetCanvas = input => {
     if (input) {
-      console.log(input);
       if (input !== this.state.canvas) this.setState({ canvas: input });
     }
   };
 
   render() {
-    console.log("DING: ", this.state, this.props);
+    console.log("Global Store -> State: ", this.state, "Props: ", this.props);
 
     return (
       <GlobalStoreCtx.Provider value={this.state}>

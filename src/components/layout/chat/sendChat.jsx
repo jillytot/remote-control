@@ -147,14 +147,14 @@ export default class SendChat extends Form {
       return (
         <div className="send-chat-options">
           <div className="indicator indicator-active" />
-          you are controlling the robot ( --tab to chat )
+          {`Press Tab to chat`}
         </div>
       );
     } else {
       return (
         <div className="send-chat-options">
           <div className="indicator" />
-          chatting ( --tab to control robot, or use mouse )
+          {`Press Tab control the robot, or use the mouse`}
         </div>
       );
     }

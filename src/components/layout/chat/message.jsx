@@ -3,6 +3,12 @@ import Emotes from "../../../emotes/emotes";
 import defaultImages from "../../../imgs/placeholders";
 
 const Message = ({ message }) => {
+  const [fadeout, setFadeout] = useState(setTimeout(() => handleFade(), 1000));
+
+  const handleFade = () => {
+    setFadeout(true);
+  };
+
   const types = {
     default: "",
     moderation: "moderation",
@@ -141,8 +147,14 @@ const Message = ({ message }) => {
     if (message.sender === "remo") return "chat-user-name rainbow";
     return "chat-user-name";
   };
+
+  const handleMessageContainer = () => {
+    if (fadeout === true) return "chat-message-container fade-out";
+    return "chat-message-container";
+  };
+
   return (
-    <div className="chat-message-container">
+    <div className={handleMessageContainer()}>
       <div className={handleMessageType(message)}>
         {handleBadges(message)}
         <span

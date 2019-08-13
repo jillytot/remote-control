@@ -14,9 +14,11 @@
 }
 
 .mobile-options-menu {
-  background-color: red;
+  background-color: rgb(66, 49, 94);
   margin: 5px;
   margin-top: -5px;
+  margin-bottom: -5px;
+  height: 48px;
 }
 
 @media screen and (max-width: 1280px) {

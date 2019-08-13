@@ -189,6 +189,7 @@ export default class Chat extends Component {
               >
                 {this.handleDisplayMessages()}
               </div>
+              {this.loadSendChat()}
             </div>
           );
         }}

@@ -27,9 +27,10 @@ export default class SendChat extends Form {
 
   componentDidUpdate = () => {
     console.log(this.refs);
+
     if (this.props.chatTabbed) {
       this.chatForm.current.sendChat.focus();
-    } else {
+    } else if (this.chatForm) {
       this.chatForm.current.sendChat.blur();
     }
   };
@@ -199,7 +200,14 @@ export default class SendChat extends Form {
           onFocus={this.handleFocus}
           onBlur={this.handleBlur}
           ref={this.chatForm}
-        />
+        >
+          <div className="input-field-container">
+            {this.renderChatInput("sendChat", "", "chat")}
+            <div className="send-chat-btn">
+              {this.renderButton("Chat", "chat", "chat")}
+            </div>
+          </div>
+        </form>
       </React.Fragment>
     );
   };

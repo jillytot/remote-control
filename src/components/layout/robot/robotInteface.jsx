@@ -4,7 +4,6 @@ import { buttonRate } from "../../../config/clientSettings";
 import EditOptions from "./editOptions";
 import "./robot.css";
 import VolumeControl from "./volumeControl";
-import Chat from "../chat/chat";
 import GetLayout from "../../modules/getLayout";
 import { GlobalStoreCtx } from "../../providers/globalStore";
 
@@ -234,6 +233,7 @@ export default class RobotInterface extends Component {
   };
 
   renderButtons = () => {
+    console.log("OPTIONS CHECK: ", this.options);
     if (this.state.controls) {
       return this.state.controls.map(button => {
         let hotKeyStyle = "hotkey";
@@ -288,29 +288,17 @@ export default class RobotInterface extends Component {
     );
   };
 
-  //It makes me nervous to call this again like this, there has to be a better way to handle it
-  handleChat = () => {
-    const canvas = this.refs;
-    console.log(canvas);
-    return (
-      <React.Fragment>
-        <Chat
-          user={this.props.user}
-          socket={this.props.socket}
-          users={this.props.users}
-          setChatTabbed={this.props.setChatTabbed}
-          isModalShowing={this.props.isModalShowing}
-          chatTabbed={this.props.chatTabbed}
-          getColor={this.props.getColor}
-          showMobileNav={this.props.showMobileNav}
-          canvas={canvas}
-        />
-      </React.Fragment>
-    );
-  };
-
   handleMobileOptionsMenu = () => {
-    return <div className="mobile-options-menu">...</div>;
+    return (
+      <div
+        className="mobile-options-menu"
+        ref={options => {
+          this.options = options;
+        }}
+      >
+        ...
+      </div>
+    );
   };
 
   handleCanvasHeight = () => {

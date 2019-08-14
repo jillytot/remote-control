@@ -3,7 +3,7 @@ import Emotes from "../../../emotes/emotes";
 import defaultImages from "../../../imgs/placeholders";
 
 const Message = ({ message }) => {
-  const [fadeout, setFadeout] = useState(setTimeout(() => handleFade(), 1000));
+  const [fadeout, setFadeout] = useState(setTimeout(() => handleFade(), 4000));
 
   const handleFade = () => {
     setFadeout(true);

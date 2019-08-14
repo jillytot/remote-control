@@ -182,9 +182,7 @@ export default class SendChat extends Form {
           >
             <div className="input-field-container">
               {this.renderChatInput("sendChat", "", "chat")}
-              <div className="send-chat-btn">
-                {this.renderButton("Chat", "chat", "chat")}
-              </div>
+              {this.renderButton("Chat", "chat", "chat")}
             </div>
           </form>
         </div>

@@ -252,6 +252,9 @@
 }
 
 .chat-btn {
+  display: flex;
+  flex-direction: row;
+  vertical-align: top;
   border-radius: 0px 10px 10px 0px;
   color: white;
   border: 0px;
@@ -259,6 +262,7 @@
   padding: 7px 14px 7px 14px;
   /* margin: 2px; */
   background: -webkit-linear-gradient(-45deg, #954ed6 0%, #009bee 100%);
+  margin: 0;
 }
 
 .chat-btn:hover {
@@ -327,7 +331,7 @@
     -webkit-transition-delay: 1s;
     -moz-transition-delay: 1s;
     -o-transition-delay: 1s;
-    transition-delay: 2s;
+    transition-delay: 0s;
   }
 
   .message-badge {

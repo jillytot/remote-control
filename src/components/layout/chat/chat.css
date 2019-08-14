@@ -11,9 +11,11 @@
 .chat-container {
   background-color: rgb(22, 19, 32);
   display: flex;
+  flex: 1;
   flex-direction: column;
   height: 100%;
   width: 350px;
+  /* background-color: red; */
 }
 
 .chat-header-container {

@@ -93,7 +93,7 @@ JSMpeg.VideoElement = (function() {
     }
     this.player = new JSMpeg.Player(url, options);
     element.playerInstance = this.player;
-    if (options.poster && !options.autoplay && !this.player.options.streaming) {
+    if (options.poster) {
       options.decodeFirstFrame = false;
       this.poster = new Image();
       this.poster.src = options.poster;
@@ -750,6 +750,10 @@ JSMpeg.Source.WebSocket = (function() {
     this.reconnectTimeoutId = 0;
     this.onEstablishedCallback = options.onSourceEstablished;
     this.onCompletedCallback = options.onSourceCompleted;
+
+    if (options.opacity) {
+      this.options.canvas.style.opacity = 0;
+    }
   };
   WSSource.prototype.connect = function(destination) {
     this.destination = destination;
@@ -773,8 +777,15 @@ JSMpeg.Source.WebSocket = (function() {
   WSSource.prototype.resume = function(secondsHeadroom) {};
   WSSource.prototype.onOpen = function() {
     this.progress = 1;
+    if (this.options.opacity) {
+      this.options.canvas.style.opacity = 1;
+    }
   };
   WSSource.prototype.onClose = function() {
+    if (this.options.opacity) {
+      this.options.canvas.style.opacity = 0;
+    }
+
     if (this.shouldAttemptReconnect) {
       clearTimeout(this.reconnectTimeoutId);
       this.reconnectTimeoutId = setTimeout(

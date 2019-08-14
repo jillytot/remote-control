@@ -1,4 +1,4 @@
-import React, { Component, useContext } from "react";
+import React, { Component } from "react";
 import { BUTTON_COMMAND } from "../../../events/definitions";
 import { buttonRate } from "../../../config/clientSettings";
 import EditOptions from "./editOptions";
@@ -6,6 +6,7 @@ import "./robot.css";
 import VolumeControl from "./volumeControl";
 import GetLayout from "../../modules/getLayout";
 import { GlobalStoreCtx } from "../../providers/globalStore";
+import defaultImages from "../../../imgs/placeholders";
 
 export default class RobotInterface extends Component {
   state = {
@@ -87,7 +88,8 @@ export default class RobotInterface extends Component {
         canvas: this.refs["video-canvas"],
         videoBufferSize: 1 * 1024 * 1024,
         audio: false,
-        disableWebAssembly: true
+        disableWebAssembly: true,
+        opacity: true
       }
     );
   };
@@ -317,7 +319,7 @@ export default class RobotInterface extends Component {
           <div className="robot-container">
             <div className="robot-display-container">
               <canvas className="video-canvas" ref="video-canvas" />
-
+              <img className="video-poster" src={defaultImages.videoImg} />
               <div className="display-controls-container">
                 <VolumeControl
                   player={this.audioPlayer}

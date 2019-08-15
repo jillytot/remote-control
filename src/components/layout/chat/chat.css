@@ -141,6 +141,7 @@
 .chat-message-container {
   display: flex;
   flex-direction: row;
+  z-index: 1;
 }
 
 .chat-message {
@@ -171,13 +172,14 @@
   padding: 0 5px 0 5px;
   font-size: 14px;
   display: flex;
+  z-index: 1;
   flex-direction: column;
   height: inherit;
   /* margin-bottom: 51px; */
 }
 
 .chat-background {
-  height: calc(100vh - 200px);
+  height: calc(100vh - 178px);
   background-color: #221b3a;
 }
 
@@ -360,7 +362,7 @@
   .input-field-container {
     display: flex;
     flex-direction: row;
-    margin-top: 5px;
+    margin-top: 7px;
     padding: 5px;
   }
 

@@ -1,12 +1,10 @@
 import React, { Component } from "react";
 import { Redirect } from "react-router-dom";
 import Channels from "../../layout/robotServer/channels";
-import GetLayout from "../../modules/getLayout";
 
 export default class ServerPage extends Component {
   constructor(props) {
     super(props);
-    console.log("a", this.props);
     this.state = {
       redirect: false
     };
@@ -32,6 +30,8 @@ export default class ServerPage extends Component {
         this.props.setServer(robotServer);
         found = true;
         return true;
+      } else {
+        //request unlisted server
       }
       return false;
     });
@@ -40,13 +40,6 @@ export default class ServerPage extends Component {
       this.setState({ redirect: true });
     }
   };
-
-  // handleMobileDisplayChannels = () => {
-  //   const { showMobileNav } = this.props;
-  //   console.log("Show Nav Check: ", showMobileNav);
-  //   if (showMobileNav) return this.handleDisplayChannels;
-  //   return <React.Fragment />;
-  // };
 
   handleDisplayChannels = () => {
     if (this.state.redirect) return <Redirect to="/" />;

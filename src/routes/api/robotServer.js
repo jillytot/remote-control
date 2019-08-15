@@ -13,7 +13,8 @@ const Joi = require("joi");
 
 //LIST ACTIVE SERVERS
 router.get("/list", async (req, res) => {
-  let display = await getRobotServers();
+  const { getPublicServers } = require("../../controllers/robotServer");
+  let display = await getPublicServers();
   res.send(display);
 });
 
@@ -145,6 +146,16 @@ router.post("/settings/listing", auth({ user: true }), async (req, res) => {
     status: "Error!",
     error: "There was a problem updating server listing"
   });
+});
+
+router.get("/get-server", async (req, res) => {
+  const { getServerByName } = require("../../controllers/robotServer");
+  if (req.body.server_name) {
+    const getServer = await getServerByName(req.body.server_name);
+    if (getServer) res.send(getServer);
+    return;
+  }
+  res.send({ status: "Error!", error: "Unable to find server" });
 });
 
 router.post("/create", auth({ user: true }), async (req, res) => {

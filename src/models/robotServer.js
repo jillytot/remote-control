@@ -256,6 +256,20 @@ module.exports.getRobotServer = async server_id => {
   }
 };
 
+module.exports.getRobotServerFromName = async name => {
+  console.log("CHECK FOR SERVER by name: ", name);
+  const db = require("../services/db");
+  const query = "SELECT * FROM robot_servers WHERE server_name = $1 LIMIT 1";
+  try {
+    const result = await db.query(query, [name]);
+    console.log("RESULT: ", result.rows[0]);
+    if (result.rows[0]) return result.rows[0];
+  } catch (err) {
+    console.log(err);
+  }
+  return null;
+};
+
 //This will permanently remove a robot server from the DB
 module.exports.deleteRobotServer = async server_id => {
   console.log(server_id);

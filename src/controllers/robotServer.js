@@ -65,3 +65,24 @@ module.exports.updateListing = async (server, user_id) => {
   }
   return null;
 };
+
+module.exports.getPublicServers = async () => {
+  const { getRobotServers } = require("../models/robotServer");
+  let getServers = await getRobotServers();
+  let list = [];
+  getServers.forEach(server => {
+    if (server.settings.unlist) {
+      //do nothing
+    } else {
+      list.push(server);
+    }
+  });
+  return list;
+};
+
+module.exports.getServerByName = async name => {
+  const { getRobotServerFromName } = require("../models/robotServer");
+  const getServer = await getRobotServerFromName(name);
+  if (getServer) return getServer;
+  return null;
+};

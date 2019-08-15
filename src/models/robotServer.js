@@ -10,8 +10,7 @@ const robotServerPt = {
   channels: [{ name: "name", id: "channelId" }], //Probably not needed here anymore
   created: "",
   settings: {},
-  status: {},
-  roles: []
+  status: {}
 };
 
 //Used to generate / create a new robot server
@@ -32,6 +31,7 @@ module.exports.createRobotServer = async (server, user) => {
   buildServer.channels = [];
   buildServer.settings = {
     default_channel: "General",
+    unlisted: server.settings.unlisted || false,
     roles: [
       //TODO: Deprecate this structure after finishing up server members / roles / invites structure
       {
@@ -47,6 +47,8 @@ module.exports.createRobotServer = async (server, user) => {
     liveDevices: [],
     count: 1 //Owner is first member
   };
+
+  // "public", "unlisted", "private"
 
   buildServer.channels.push(await this.initChannels(buildServer));
   buildServer.settings.default_channel = buildServer.channels[0].id;

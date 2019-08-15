@@ -98,6 +98,16 @@ export default class ServersPage extends Component {
     return null;
   };
 
+  appendUnlistedServer = server => {
+    console.log("APPEND SERVER: ", server);
+    let updateServers = this.state.robotServers;
+    if (updateServers) {
+      updateServers.push(server);
+    }
+    this.setState({ robotServers: updateServers });
+    return null;
+  };
+
   async componentDidMount() {
     socket.on("VALIDATED", this.setUser);
     socket.on("connect", this.socketConnected);
@@ -215,6 +225,7 @@ export default class ServersPage extends Component {
                   setServer={this.setServer}
                   mobileState={this.handleMobileFlag}
                   showMobileNav={this.state.showMobileNav}
+                  appendServer={server => this.appendUnlistedServer(server)}
                 />
               )}
             />

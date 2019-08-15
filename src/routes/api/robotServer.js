@@ -148,7 +148,7 @@ router.post("/settings/listing", auth({ user: true }), async (req, res) => {
   });
 });
 
-router.get("/get-server", async (req, res) => {
+router.post("/get-server", async (req, res) => {
   const { getServerByName } = require("../../controllers/robotServer");
   if (req.body.server_name) {
     const getServer = await getServerByName(req.body.server_name);

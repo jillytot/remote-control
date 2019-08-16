@@ -115,3 +115,8 @@ module.exports.getArrayDifference = (array1, array2, select) => {
   if (select && select === 2) return onlyInB;
   return onlyInA.concat(onlyInB);
 };
+
+module.exports.err = message => {
+  console.log("Error: ", message);
+  return { status: "Error!", error: message };
+};

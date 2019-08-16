@@ -135,11 +135,10 @@ router.get("/invites", auth({ user: true }), async (req, res) => {
 
 router.post("/settings/listing", auth({ user: true }), async (req, res) => {
   const { updateListing } = require("../../controllers/robotServer");
-  console.log("////SERVER LISTING CHECK/////", req.body);
+
   if (req.body.server.settings) {
-    console.log(req.body.server);
     const update = await updateListing(req.body.server, req.user.id);
-    console.log("SERVER LISTING CHECK 1: ".update);
+
     if (update) res.send(update);
   }
   res.send({

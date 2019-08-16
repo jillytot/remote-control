@@ -1,3 +1,5 @@
+const { err } = require("../modules/utilities");
+
 module.exports.checkForLiveRobots = async () => {
   const { getRobotServers } = require("../models/robotServer");
   const servers = await getRobotServers();
@@ -84,5 +86,5 @@ module.exports.getServerByName = async name => {
   const { getRobotServerFromName } = require("../models/robotServer");
   const getServer = await getRobotServerFromName(name);
   if (getServer) return getServer;
-  return { status: "Error!", error: "This server doesn't exist" };
+  return err("This server doesn't exist");
 };

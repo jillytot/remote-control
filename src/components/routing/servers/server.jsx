@@ -43,10 +43,9 @@ export default class ServerPage extends Component {
         const findServer = await this.handleFindServer(
           this.props.match.params.name
         );
-        console.log("BOOP");
-        console.log(findServer);
+
+        console.log("Find Server Result: ", findServer);
         if (findServer) {
-          console.log("BOOP");
           await this.props.appendServer(findServer);
           this.props.setServer(findServer);
           found = true;
@@ -61,7 +60,7 @@ export default class ServerPage extends Component {
 
   handleFindServer = async server_name => {
     let found = null;
-    const find = await axios
+    await axios
       .post(findServer, { server_name: server_name })
       .then(response => {
         console.log(response);

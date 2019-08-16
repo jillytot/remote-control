@@ -43,15 +43,18 @@ export default class ServerPage extends Component {
         const findServer = await this.handleFindServer(
           this.props.match.params.name
         );
+        console.log("BOOP");
         console.log(findServer);
         if (findServer) {
+          console.log("BOOP");
           await this.props.appendServer(findServer);
           this.props.setServer(findServer);
           found = true;
           return true;
+        } else {
+          console.log("REDIRECT!");
+          this.setState({ redirect: true });
         }
-      } else {
-        this.setState({ redirect: true });
       }
     }
   };
@@ -67,8 +70,8 @@ export default class ServerPage extends Component {
       .catch(err => {
         console.log(err);
       });
-    console.log(find);
-    if (found.server_name) return found;
+    console.log(found);
+    if (found && found.server_name) return found;
     return null;
   };
 

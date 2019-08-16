@@ -84,5 +84,5 @@ module.exports.getServerByName = async name => {
   const { getRobotServerFromName } = require("../models/robotServer");
   const getServer = await getRobotServerFromName(name);
   if (getServer) return getServer;
-  return null;
+  return { status: "Error!", error: "This server doesn't exist" };
 };

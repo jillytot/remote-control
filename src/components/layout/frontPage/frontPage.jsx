@@ -64,6 +64,18 @@ export default class FrontPage extends Component {
             <span className="stat">{registeredDevices}</span>
           </div>
           <div>...</div>
+          <br />
+          <span>
+            Control & share robots online remotely in real time with remo.tv{" "}
+            <br />
+            Please check documenation and links below for more info. <br />
+            More to come!
+          </span>
+          <br />
+          <div>
+            Join Jill's discord:{" "}
+            <a href="https://discord.gg/cczJfYk">https://discord.gg/cczJfYk</a>
+          </div>
           <div>
             Project Github:{" "}
             <a href="https://github.com/jillytot/remote-control">

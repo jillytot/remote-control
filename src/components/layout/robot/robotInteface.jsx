@@ -235,7 +235,7 @@ export default class RobotInterface extends Component {
   };
 
   renderButtons = () => {
-    console.log("OPTIONS CHECK: ", this.options);
+    // console.log("OPTIONS CHECK: ", this.options);
     if (this.state.controls) {
       return this.state.controls.map(button => {
         let hotKeyStyle = "hotkey";
@@ -282,7 +282,7 @@ export default class RobotInterface extends Component {
   };
 
   handleDisplayActivity = () => {
-    console.log(this.refs);
+    // console.log(this.refs);
     return (
       <div className="display-info-container">
         {this.state.displayLog ? this.renderClickLog() : <React.Fragment />}

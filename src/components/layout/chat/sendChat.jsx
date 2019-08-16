@@ -26,7 +26,7 @@ export default class SendChat extends Form {
   }
 
   componentDidUpdate = () => {
-    console.log(this.refs);
+    // console.log(this.refs);
 
     if (this.props.chatTabbed) {
       this.chatForm.current.sendChat.focus();

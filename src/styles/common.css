@@ -122,6 +122,10 @@
   width: 32px;
 }
 
+.critical {
+  background-color: #ff5ca3;
+}
+
 .toggle-off {
   background-color: #949b98;
   font-weight: bold;

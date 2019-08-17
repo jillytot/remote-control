@@ -81,6 +81,7 @@ export default class EditServerForm extends Form {
               toggle={this.state.settings.unlist}
               label={"Unlist this server? "}
               onClick={this.handleToggle}
+              critical={true}
             />
           </div>
           {this.renderButton("Submit", "Submit")}

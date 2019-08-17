@@ -31,7 +31,7 @@ module.exports.createRobotServer = async (server, user) => {
   buildServer.channels = [];
   buildServer.settings = {
     default_channel: "General",
-    unlisted: server.settings.unlisted || false,
+    unlisted: false,
     roles: [
       //TODO: Deprecate this structure after finishing up server members / roles / invites structure
       {
@@ -377,7 +377,7 @@ module.exports.checkServerName = async serverName => {
   const query = `SELECT server_name FROM robot_servers WHERE LOWER(server_name)=LOWER( $1 )`;
   try {
     const result = await db.query(query, [serverName]);
-    console.log(result.rows[0]);
+    // console.log(result.rows[0]);
     if (result.rows[0]) return true;
   } catch (err) {
     console.log(err);
@@ -387,7 +387,7 @@ module.exports.checkServerName = async serverName => {
 
 //takes an array of strings containing server_id's, returns an array of robot_server objects
 module.exports.getServerGroup = async servers => {
-  console.log(servers);
+  // console.log(servers);
   const db = require("../services/db");
   const query = `SELECT * FROM robot_servers WHERE server_id = ANY($1::text[])`;
   try {

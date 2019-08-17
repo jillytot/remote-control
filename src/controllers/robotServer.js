@@ -51,7 +51,7 @@ module.exports.deleteRobotServer = async (server_id, user_id) => {
 };
 
 module.exports.updateListing = async (server, user_id) => {
-  console.log("////CHANGE LISTING CHECK 2 //////", server, user_id);
+  // console.log("////CHANGE LISTING CHECK 2 //////", server, user_id);
   const {
     getRobotServer,
     updateRobotServerSettings
@@ -73,7 +73,7 @@ module.exports.getPublicServers = async () => {
   let getServers = await getRobotServers();
   let list = [];
   getServers.forEach(server => {
-    if (server.settings.unlist && server.settings.unlist === "true") {
+    if (server.settings.unlist === true) {
       //do nothing
     } else {
       list.push(server);

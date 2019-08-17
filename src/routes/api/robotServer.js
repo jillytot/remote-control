@@ -1,7 +1,6 @@
 const router = require("express").Router();
 const {
   createRobotServer,
-  getRobotServers,
   getRobotServer,
   deleteRobotServer,
   updateRobotServer
@@ -137,10 +136,11 @@ router.post("/settings/listing", auth({ user: true }), async (req, res) => {
   const { updateListing } = require("../../controllers/robotServer");
 
   if (req.body.server.settings) {
-    console.log("INPUT CHECK: ", req.body.server);
+    // console.log("INPUT CHECK: ", req.body.server);
     const update = await updateListing(req.body.server, req.user.id);
 
     if (update) res.send(update);
+    return;
   }
   res.send({
     status: "Error!",

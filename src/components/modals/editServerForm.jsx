@@ -27,39 +27,37 @@ export default class EditServerForm extends Form {
     this.setState({ settings: settings });
   };
 
+  listingObject = () => {
+    console.log(this.props.server.server_id);
+    return {
+      server: {
+        server_id: this.props.server.server_id,
+        settings: {
+          unlist: this.state.settings.unlist
+        }
+      }
+    };
+  };
+
   handleListing = async token => {
     //  if (this.state.settings.unlist !== this.state.compareSettings.unlist) {
     console.log("Ding");
     await axios
-      .post(
-        setServerListing,
-        {
-          server: {
-            server_id: this.props.server.sever_id,
-            settings: {
-              unlist: this.state.settings.unlist
-            }
-          }
-        },
-        {
-          headers: { authorization: `Bearer ${token}` }
-        }
-      )
+      .post(setServerListing, this.listingObject(), {
+        headers: { authorization: `Bearer ${token}` }
+      })
       .then(response => {
         console.log("SET LISTING RESPONSE: ", response);
       })
       .catch(err => {
         console.log(err);
       });
-    // return true;
-    //}
-    //  return false;
   };
 
   doSubmit = async () => {
     const token = localStorage.getItem("token");
-    console.log("SUBMITTED: ", this.props);
-    Promise.all([this.handleListing(token)]);
+    console.log("SUBMITTED: ", this.state.settings);
+    await Promise.all([this.handleListing(token)]);
     this.props.onCloseModal();
   };
 

@@ -49,7 +49,7 @@ const defaultSort = robotServers => {
   let live = [];
   let rest = [];
 
-  console.log(robotServers);
+  // console.log(robotServers);
   robotServers = robotServers.sort(compare);
 
   robotServers.map(server => {
@@ -63,7 +63,7 @@ const defaultSort = robotServers => {
   });
 
   const sorted = live.concat(rest);
-  console.log(sorted);
+  // console.log(sorted);
   return sorted;
 };
 

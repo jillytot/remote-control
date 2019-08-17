@@ -137,6 +137,7 @@ router.post("/settings/listing", auth({ user: true }), async (req, res) => {
   const { updateListing } = require("../../controllers/robotServer");
 
   if (req.body.server.settings) {
+    console.log("INPUT CHECK: ", req.body.server);
     const update = await updateListing(req.body.server, req.user.id);
 
     if (update) res.send(update);

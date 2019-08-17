@@ -44,5 +44,6 @@ module.exports = {
   listFollowedServers: `${apiUrl}/user/followed`,
   makeButtons: `${apiUrl}/controls/make`,
   getButtons: `${apiUrl}/controls/button-input`,
-  findServer: `${apiUrl}/robot-server/get-server`
+  findServer: `${apiUrl}/robot-server/get-server`,
+  setServerListing: `${apiUrl}/robot-server/settings/listing`
 };

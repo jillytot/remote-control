@@ -73,7 +73,7 @@ module.exports.getPublicServers = async () => {
   let getServers = await getRobotServers();
   let list = [];
   getServers.forEach(server => {
-    if (server.settings.unlist) {
+    if (server.settings.unlist && server.settings.unlist === "true") {
       //do nothing
     } else {
       list.push(server);

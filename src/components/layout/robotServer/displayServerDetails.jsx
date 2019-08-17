@@ -4,6 +4,8 @@ import ICONS from "../../../icons/icons";
 import axios from "axios";
 import { joinServer, leaveServer } from "../../../config/clientSettings";
 import socket from "../../socket";
+import EditServer from "../../modals/editServer";
+import modal from "../../common/modal";
 
 export default class DisplayServerDetails extends Component {
   state = {
@@ -87,7 +89,9 @@ export default class DisplayServerDetails extends Component {
     console.log("GET LOCAL STATUS!", status);
     this.setState({
       localStatus: status,
-      icon: <Icon icon={ICONS.FOLLOW} color={status.member ? "#FF0000" : "#FFF"}/>
+      icon: (
+        <Icon icon={ICONS.FOLLOW} color={status.member ? "#FF0000" : "#FFF"} />
+      )
     });
   };
 
@@ -172,6 +176,18 @@ export default class DisplayServerDetails extends Component {
     return this.state.icon;
   };
 
+  handleEdit = () => {
+    console.log(this.props);
+    return (
+      <EditServer
+        server={this.props.server}
+        user={this.props.user}
+        modal={this.props.modal}
+        onCloseModal={this.props.onCloseModal}
+      />
+    );
+  };
+
   displayDetails = () => {
     const { server, channels, user, users } = this.props;
     if (channels && channels.length > 0) {
@@ -200,7 +216,7 @@ export default class DisplayServerDetails extends Component {
               Users Online: <ActiveUserCount users={users} />
             </div>
             {user.id === server.owner_id ? (
-              <div className="server-settings"> {`(edit)`}</div>
+              this.handleEdit()
             ) : (
               <div className="server-settings" />
             )}

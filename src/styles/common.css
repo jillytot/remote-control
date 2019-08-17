@@ -183,3 +183,9 @@
   display: flex;
   margin-bottom: 5px;
 }
+
+.info {
+  font-size: 14px;
+  margin: 5px;
+  margin-bottom: 10px;
+}

@@ -41,7 +41,7 @@ export default class RobotServer extends Component {
   };
 
   handleDisplayServerPanel = () => {
-    console.log(this.props.followedServers);
+    // console.log(this.props.followedServers);
     return (
       <div className="robot-server-container">
         {this.handleSorting(this.props.followedServers)}

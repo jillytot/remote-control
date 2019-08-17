@@ -229,6 +229,8 @@ export default class Channels extends Component {
           user={user}
           users={users}
           invites={this.state.invites}
+          modal={this.props.modal}
+          onCloseModal={this.props.onCloseModal}
         />
         {this.displayChannels()}
         <AddChannel

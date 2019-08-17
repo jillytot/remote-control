@@ -21,7 +21,7 @@ export default class ServersPage extends Component {
     this.state = {
       robotServers: undefined,
       selectedServer: undefined,
-      followedServers: [],
+      followedServers: undefined,
       socketConnected: false,
       user: undefined, // undefined: waiting for gateway, null: gateway said auth no no
       isShowing: false,
@@ -85,16 +85,17 @@ export default class ServersPage extends Component {
 
   getFollowedServers = async () => {
     const token = localStorage.getItem("token");
-    try {
-      const response = await axios.get(listFollowedServers, {
+    await axios
+      .get(listFollowedServers, {
         headers: { authorization: `Bearer ${token}` }
+      })
+      .then(response => {
+        this.setState({ followedServers: response.data });
+      })
+      .catch(err => {
+        console.log(err);
+        setTimeout(this.getFollowedServers, 600); //retry
       });
-      console.log(response);
-      this.setState({ followedServers: response.data });
-    } catch (e) {
-      console.error(e);
-      setTimeout(this.getFollowedServers, 600); //retry
-    }
     return null;
   };
 
@@ -157,7 +158,7 @@ export default class ServersPage extends Component {
       loadingText = "Connecting...";
     } else if (!this.state.user) {
       loadingText = "Waiting for User...";
-    } else if (!this.state.robotServers) {
+    } else if (!this.state.robotServers || !this.state.followedServers) {
       loadingText = "Waiting for Robot Servers...";
     }
 

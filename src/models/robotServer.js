@@ -241,13 +241,14 @@ module.exports.getLocalTypes = async (server_id, user_id) => {
 
 //Get all server information from server_id
 module.exports.getRobotServer = async server_id => {
+  console.log("CHECK: ", server_id);
   const db = require("../services/db");
   try {
     const query = "SELECT * FROM robot_servers WHERE server_id = $1 LIMIT 1";
     const result = await db.query(query, [server_id]);
     if (result.rows[0]) {
       const showResult = result.rows[0];
-      console.log(showResult);
+      console.log(showResult.server_name);
       return showResult;
     }
   } catch (err) {
@@ -382,4 +383,18 @@ module.exports.checkServerName = async serverName => {
     console.log(err);
   }
   return false;
+};
+
+//takes an array of strings containing server_id's, returns an array of robot_server objects
+module.exports.getServerGroup = async servers => {
+  console.log(servers);
+  const db = require("../services/db");
+  const query = `SELECT * FROM robot_servers WHERE server_id = ANY($1::text[])`;
+  try {
+    const result = await db.query(query, [servers]);
+    if (result.rows) return result.rows;
+  } catch (err) {
+    console.log(err);
+  }
+  return null;
 };

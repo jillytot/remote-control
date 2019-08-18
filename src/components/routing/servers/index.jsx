@@ -113,7 +113,11 @@ export default class ServersPage extends Component {
     socket.on("VALIDATED", this.setUser);
     socket.on("connect", this.socketConnected);
     socket.on("disconnect", this.socketDisconnected);
-    socket.on("ROBOT_SERVER_UPDATED", this.getServers);
+    socket.on("ROBOT_SERVER_UPDATED", () => {
+      this.getServers();
+      this.getFollowedServers();
+      return null;
+    });
 
     if (socket.connected) {
       this.setState({ socketConnected: true });

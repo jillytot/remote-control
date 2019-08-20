@@ -46,7 +46,7 @@ export default class AddRobotForm extends Form {
 
   render() {
     return (
-      <div className="register-form">
+      <div className="modal">
         Setup a new Robot:
         <form onSubmit={this.handleSubmit}>
           {this.renderInput("robot_name", "Robot Name: ", "text")}

@@ -9,7 +9,12 @@ import axios from "axios";
 export default class RobotSettings extends Component {
   constructor(props) {
     super(props);
-    this.state = { settings: {}, apiToggle: false, apiKey: "", isConfirmingDelete: false };
+    this.state = {
+      settings: {},
+      apiToggle: false,
+      apiKey: "",
+      isConfirmingDelete: false
+    };
     this.inputRef = React.createRef();
     // this.handleCopy = this.handleCopy.bind(this);
   }
@@ -76,10 +81,7 @@ export default class RobotSettings extends Component {
   renderButton = (label, onClick) => {
     //require validation?
     return (
-      <button
-        className={this.handleButtonType(label)}
-        onClick={onClick}
-      >
+      <button className={this.handleButtonType(label)} onClick={onClick}>
         {label}
       </button>
     );
@@ -105,21 +107,23 @@ export default class RobotSettings extends Component {
     // this.setState({ copySuccess: 'Copied!' });
   };
 
-  renderDeleteConfirmation = ()=>{
-    return(
+  renderDeleteConfirmation = () => {
+    return (
+      <div>
+        <h3>Are you sure you want to delete '{this.props.robot.name}'?</h3>
+        <span>Deleted things can't be brought back.</span>
         <div>
-            <h3>Are you sure you want to delete '{this.props.robot.name}'?</h3>
-            <span>Deleted things can't be brought back.</span>
-            <div>
-                {this.renderButton("Delete Robot", this.handleDelete)}{this.renderButton("Cancel", ()=>this.setState({isConfirmingDelete: false}))}
-            </div>
+          {this.renderButton("Delete Robot", this.handleDelete)}
+          {this.renderButton("Cancel", () =>
+            this.setState({ isConfirmingDelete: false })
+          )}
         </div>
+      </div>
     );
-
   };
   render() {
     return (
-      <div className="register-form spacer">
+      <div className="modal">
         Settings for robot: {this.props.robot.name}
         <div> </div>
         <div className="toggle-group">
@@ -141,7 +145,11 @@ export default class RobotSettings extends Component {
           />
           {/* </div> */}
         </div>
-          {!this.state.isConfirmingDelete ? this.renderButton("Delete Robot", ()=>this.setState({isConfirmingDelete: true})) : this.renderDeleteConfirmation()}
+        {!this.state.isConfirmingDelete
+          ? this.renderButton("Delete Robot", () =>
+              this.setState({ isConfirmingDelete: true })
+            )
+          : this.renderDeleteConfirmation()}
       </div>
     );
   }

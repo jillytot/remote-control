@@ -63,7 +63,7 @@ export default class EditServerForm extends Form {
 
   render() {
     return (
-      <div className="register-form">
+      <div className="modal">
         Editing Server:{" "}
         <span className="register-form-emphasis">
           {this.props.server.server_name}

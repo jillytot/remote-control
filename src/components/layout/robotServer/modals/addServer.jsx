@@ -132,7 +132,7 @@ class AddServerForm extends Form {
     return this.state.redirect ? (
       <Redirect to={this.state.redirect} />
     ) : (
-      <div className="register-form">
+      <div className="modal">
         Setup a robot Server:
         {this.handleSubmitError()}
         <form onSubmit={this.handleSubmit}>

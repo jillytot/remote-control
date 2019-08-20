@@ -59,7 +59,7 @@ export default class AddChannelForm extends Form {
 
   render() {
     return (
-      <div className="register-form">
+      <div className="modal">
         Create a Channel:
         <form onSubmit={this.handleSubmit}>
           {this.renderInput("channel_name", "Channel Name: ", "text")}

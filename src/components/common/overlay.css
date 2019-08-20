@@ -101,12 +101,31 @@
   font-weight: bold;
 }
 
+.modal-scroll {
+  overflow-y: auto;
+  /* overflow-y: overlay; */
+  position: relative;
+  height: 100%;
+}
+
+.modal-scroll::-webkit-scrollbar-track {
+  box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
+  background-color: #372e50;
+}
+.modal-scroll::-webkit-scrollbar {
+  width: 5px;
+  /* background-color: green; */
+}
+.modal-scroll::-webkit-scrollbar-thumb {
+  background-color: #484d79;
+}
+
 @media only screen and (max-width: 768px) {
   .modal-wrapper {
     width: auto;
     margin: 5px;
     height: 100%;
-    background-color: red;
+
     max-height: calc(100% - 10px);
   }
 

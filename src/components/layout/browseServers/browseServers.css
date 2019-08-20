@@ -57,3 +57,10 @@
   background-color: rgb(42, 42, 68);
   cursor: pointer;
 }
+
+@media only screen and (max-width: 1280px) {
+  .browse-servers-container {
+    height: auto;
+    width: auto;
+  }
+}

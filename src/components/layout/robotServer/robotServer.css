@@ -405,12 +405,12 @@ a:active {
 
 .hidden-clipboard {
   border: none;
-  height: 0px;
-  left: 0px;
+  height: 1px;
+  left: -1000px;
   margin: 0;
   opacity: 0;
   padding: 0;
   position: fixed;
-  top: 0px;
-  width: 0px;
+  top: -1000px;
+  width: 1px;
 }

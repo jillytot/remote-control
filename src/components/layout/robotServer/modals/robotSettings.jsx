@@ -128,14 +128,17 @@ export default class RobotSettings extends Component {
             type={this.state.apiToggle ? "form" : "password"}
             value={this.state.apiKey}
             readOnly
-            ref={this.setInputRef}
           />
           <div className="toggle-clipboard-group">
-            {this.state.apiToggle ? (
-              <div className="copy-to-clipboard" onClick={this.handleCopy}>
-                copy to clipboard
-              </div>
-            ) : null}
+            <textarea
+              aria-hidden="true"
+              className="hidden-clipboard"
+              ref={this.setInputRef}
+              value={this.state.apiKey}
+            />
+            <div className="copy-to-clipboard" onClick={this.handleCopy}>
+              copy to clipboard
+            </div>
             <Toggle
               toggle={this.state.apiToggle}
               label={"Show API Key"}

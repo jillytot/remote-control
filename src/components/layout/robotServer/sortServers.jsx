@@ -45,23 +45,25 @@ const sortAll = (robotServers, followedServers) => {
   return sorted;
 };
 
-const defaultSort = (robotServers, followedServers) => {
+const defaultSort = robotServers => {
   let live = [];
   let rest = [];
 
+  // console.log(robotServers);
   robotServers = robotServers.sort(compare);
 
   robotServers.map(server => {
     if (server.status.liveDevices && server.status.liveDevices.length > 0) {
-      server.followed = false;
+      // server.followed = false;
       live.push(server);
     } else {
-      server.followed = false;
+      // server.followed = false;
       rest.push(server);
     }
   });
 
   const sorted = live.concat(rest);
+  // console.log(sorted);
   return sorted;
 };
 

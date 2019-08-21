@@ -1,38 +1,29 @@
 .robot-container {
   background-color: rgb(35, 35, 51);
-}
-
-.robot-display-container {
-  background-color: rgb(0, 0, 0);
-  min-height: 432px;
-  min-width: 600px;
-  margin: 5px;
-  position: relative;
   display: flex;
-  justify-content: center;
-  align-items: center;
+  flex-direction: column;
+  flex: 2;
 }
 
 .mobile-options-menu {
   background-color: rgb(66, 49, 94);
   margin: 5px;
   margin-top: -5px;
-  margin-bottom: -5px;
-  height: 48px;
-}
-
-@media screen and (max-width: 1280px) {
-  .robot-display-container {
-    min-height: 0;
-    min-width: 0;
-    width: calc(100% - 10px);
-  }
+  margin-bottom: 0px;
+  position: relative;
+  min-height: 52px;
+  max-height: 52px;
 }
 
 .robot-controls-container {
   background-color: rgb(28, 23, 34);
-  margin: 5px;
+  margin-left: 5px;
+  margin-right: 5px;
   padding: 10px;
+  margin-top: 0px;
+  /* background-color: red; */
+  position: relative;
+  /* margin-top: 53px; */
 }
 
 .robtn {
@@ -90,12 +81,8 @@
   left: 0;
   top: 0;
   bottom: 0;
-  /* background-color: red; */
   align-items: flex-start;
   padding: 5px;
-  /* align-self: bottom; */
-
-  /* text-align: left; */
 }
 
 .display-info {
@@ -106,12 +93,32 @@
   z-index: 10;
 }
 
+.robot-display-container {
+  margin: 5px;
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  /* background-color: black; */
+}
+
 .video-canvas {
   display: flex;
-  background-color: rgb(15, 15, 15);
+  width: calc(100%);
+  min-height: 56.25%; /* 16:9 aspect ratio lock */
   top: 0;
   bottom: 0;
-  max-width: 100%;
+  z-index: 1;
+}
+
+.video-poster {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  width: 100%;
+  z-index: 0;
 }
 
 .display-controls-container {
@@ -121,4 +128,21 @@
   height: 30%;
   align-self: flex-end;
   flex-direction: row-reverse;
+  z-index: 1;
+
+  /* background-color: red; */
+}
+
+@media screen and (max-width: 1280px) {
+  .robot-display-container {
+    width: calc(100% - 10px);
+  }
+}
+
+@media screen and (max-width: 768px) {
+  .robot-controls-container {
+    /* background-color: red; */
+    /* height: auto; */
+    margin-top: 0px;
+  }
 }

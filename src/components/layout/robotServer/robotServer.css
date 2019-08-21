@@ -101,8 +101,9 @@ a:active {
 .robot-server-container {
   background-color: rgb(57, 57, 75);
   min-width: 90px;
+  max-width: 90px;
   /* padding-top: 8px; */
-  height: calc(100vh - 72px);
+  height: calc(100vh - 48px);
   overflow-y: auto;
 
   /* background-color: red; */
@@ -124,7 +125,7 @@ a:active {
   background-color: rgb(70, 70, 99);
   min-width: 200px;
 
-  height: calc(100vh - 72px);
+  height: calc(100vh - 48px);
   overflow-y: auto;
 
   /* background-color: red; */
@@ -144,14 +145,11 @@ a:active {
     position: absolute;
     z-index: 51;
   }
-  /* .channel-container {
-    background-color: red;
-  } */
 }
 
 .back-drop-nav {
   background-color: rgba(0, 0, 0, 0.42);
-  height: 100%;
+  height: calc(100% - 48px);
   position: absolute;
   transition: all 1.3s;
   width: 100%;
@@ -226,7 +224,7 @@ a:active {
 
 .server-channel-container {
   display: flex;
-  height: calc(100vh - 72px);
+  height: calc(100vh - 48px);
 }
 
 .server-info-container {

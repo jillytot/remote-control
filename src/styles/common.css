@@ -100,13 +100,6 @@
   /* justify-items: center;   */
 }
 
-.modal {
-  padding: 24px;
-  border-radius: 24px;
-
-  background: -webkit-linear-gradient(-45deg, #954ed6 0%, #009bee 100%);
-}
-
 .toggle-label {
   margin-right: 5px;
   font-size: 11px;
@@ -120,6 +113,10 @@
   padding: 4px;
   margin-left: 4px;
   width: 32px;
+}
+
+.critical {
+  background-color: #ff5ca3;
 }
 
 .toggle-off {
@@ -182,4 +179,10 @@
   /* background-color: green; */
   display: flex;
   margin-bottom: 5px;
+}
+
+.info {
+  font-size: 14px;
+  margin: 5px;
+  margin-bottom: 10px;
 }

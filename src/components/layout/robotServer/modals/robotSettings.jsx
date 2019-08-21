@@ -118,7 +118,7 @@ export default class RobotSettings extends Component {
   };
   render() {
     return (
-      <div className="register-form spacer">
+      <div className="modal">
         Settings for robot: {this.props.robot.name}
         <div> </div>
         <div className="toggle-group">

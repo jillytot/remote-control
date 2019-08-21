@@ -117,8 +117,8 @@ export default class EditButtonsModal extends Form {
 
   render() {
     return (
-      <div className="register-form spacer">
-        Upload a JSON file to customize your buttons:
+      <div className="modal">
+        Edit the JSON file to customize your buttons:
         <div> </div>
         <form onSubmit={this.handleSubmit}>
           <div className="">

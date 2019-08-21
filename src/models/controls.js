@@ -8,6 +8,7 @@ const { makeId, createTimeStamp } = require("../modules/utilities");
 
 //TEMPORARY VALUES JUST TO ENSURE VALIDATION:
 testControls = [
+  { label: "stop", command: "stop", access: "owner" },
   { label: "forward", hot_key: "w", command: "f", id: "1" },
   { label: "back", hot_key: "s", command: "b", id: "2" },
   { label: "left", hot_key: "a", command: "l", id: "4" },
@@ -147,36 +148,6 @@ module.exports.validateInput = async input => {
   if (validate) response.validated = true;
   if (!validate) response.validated = false;
   console.log("Validation Result: ", response.validated);
-  return response;
-};
-
-//input: { label: "<string>", hot_key: "<string>", command: "<string>"}
-//output: array of button objects w/ id generated per button
-module.exports.buildButtons = async (buttons, channel_id, controls_id) => {
-  let response = {};
-  let newButtons = [];
-  let buildControls = {};
-  buildControls.channel_id = channel_id;
-  buildControls.id = controls_id;
-  //generate json
-  if (buttons) {
-    buttons.forEach(button => {
-      button.id = `bttn-${makeId()}`;
-      newButtons.push(button);
-    });
-  } else {
-    return { status: "error!", error: "invalid data to generate buttons" };
-  }
-
-  buildControls.buttons = newButtons;
-  generateControls = await this.updateControls(buildControls);
-  if (generateControls) {
-    response.status = "success";
-    response.result = generateControls;
-    return response;
-  }
-  response.status = "error";
-  response.error = "problem build buttons (controls.js/buildButtons)";
   return response;
 };
 

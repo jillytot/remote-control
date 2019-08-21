@@ -11,7 +11,7 @@ const localHost = "localhost"; //default
 const devServer = "35.185.203.47";
 
 //If you want to run just the frontend, change this to "devServer";
-const host = devServer;
+const host = localHost;
 //Then you can run "npm run react" to start.
 
 const apiUrl = `${http}${host}:${serverPort}${api}`;
@@ -43,5 +43,7 @@ module.exports = {
   getStats: `${apiUrl}/stats`,
   listFollowedServers: `${apiUrl}/user/followed`,
   makeButtons: `${apiUrl}/controls/make`,
-  getButtons: `${apiUrl}/controls/button-input`
+  getButtons: `${apiUrl}/controls/button-input`,
+  findServer: `${apiUrl}/robot-server/get-server`,
+  setServerListing: `${apiUrl}/robot-server/settings/listing`
 };

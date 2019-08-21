@@ -33,7 +33,7 @@ export default class EditChannelForm extends Form {
 
   render() {
     return (
-      <div className="register-form">
+      <div className="modal">
         Editing Channel:{" "}
         <span className="register-form-emphasis">
           {this.props.channel.name}

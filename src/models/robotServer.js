@@ -10,8 +10,7 @@ const robotServerPt = {
   channels: [{ name: "name", id: "channelId" }], //Probably not needed here anymore
   created: "",
   settings: {},
-  status: {},
-  roles: []
+  status: {}
 };
 
 //Used to generate / create a new robot server
@@ -32,6 +31,7 @@ module.exports.createRobotServer = async (server, user) => {
   buildServer.channels = [];
   buildServer.settings = {
     default_channel: "General",
+    unlisted: false,
     roles: [
       //TODO: Deprecate this structure after finishing up server members / roles / invites structure
       {
@@ -47,6 +47,8 @@ module.exports.createRobotServer = async (server, user) => {
     liveDevices: [],
     count: 1 //Owner is first member
   };
+
+  // "public", "unlisted", "private"
 
   buildServer.channels.push(await this.initChannels(buildServer));
   buildServer.settings.default_channel = buildServer.channels[0].id;
@@ -239,19 +241,34 @@ module.exports.getLocalTypes = async (server_id, user_id) => {
 
 //Get all server information from server_id
 module.exports.getRobotServer = async server_id => {
+  console.log("CHECK: ", server_id);
   const db = require("../services/db");
   try {
     const query = "SELECT * FROM robot_servers WHERE server_id = $1 LIMIT 1";
     const result = await db.query(query, [server_id]);
     if (result.rows[0]) {
       const showResult = result.rows[0];
-      console.log(showResult);
+      console.log(showResult.server_name);
       return showResult;
     }
   } catch (err) {
     console.log(err);
     return null;
   }
+};
+
+module.exports.getRobotServerFromName = async name => {
+  console.log("CHECK FOR SERVER by name: ", name);
+  const db = require("../services/db");
+  const query = "SELECT * FROM robot_servers WHERE server_name = $1 LIMIT 1";
+  try {
+    const result = await db.query(query, [name]);
+    console.log("RESULT: ", result.rows[0]);
+    if (result.rows[0]) return result.rows[0];
+  } catch (err) {
+    console.log(err);
+  }
+  return null;
 };
 
 //This will permanently remove a robot server from the DB
@@ -360,10 +377,24 @@ module.exports.checkServerName = async serverName => {
   const query = `SELECT server_name FROM robot_servers WHERE LOWER(server_name)=LOWER( $1 )`;
   try {
     const result = await db.query(query, [serverName]);
-    console.log(result.rows[0]);
+    // console.log(result.rows[0]);
     if (result.rows[0]) return true;
   } catch (err) {
     console.log(err);
   }
   return false;
+};
+
+//takes an array of strings containing server_id's, returns an array of robot_server objects
+module.exports.getServerGroup = async servers => {
+  // console.log(servers);
+  const db = require("../services/db");
+  const query = `SELECT * FROM robot_servers WHERE server_id = ANY($1::text[])`;
+  try {
+    const result = await db.query(query, [servers]);
+    if (result.rows) return result.rows;
+  } catch (err) {
+    console.log(err);
+  }
+  return null;
 };

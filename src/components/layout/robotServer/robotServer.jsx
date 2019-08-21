@@ -25,10 +25,7 @@ export default class RobotServer extends Component {
   };
 
   handleSorting = servers => {
-    const { robotServers, followedServers } = this.props;
-
-    //const sorted = followedLive.concat(followed, live, rest);
-    const sorted = sortServers(robotServers, followedServers);
+    const sorted = sortServers(servers, [], "default");
     return this.displayServers(sorted);
   };
 
@@ -44,9 +41,10 @@ export default class RobotServer extends Component {
   };
 
   handleDisplayServerPanel = () => {
+    // console.log(this.props.followedServers);
     return (
       <div className="robot-server-container">
-        {this.handleSorting(this.props.robotServers)}
+        {this.handleSorting(this.props.followedServers)}
         <Browse />
         <AddServer
           modal={this.props.modal}

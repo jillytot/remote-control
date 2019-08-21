@@ -1,12 +1,12 @@
 import React, { Component } from "react";
 import { Redirect } from "react-router-dom";
 import Channels from "../../layout/robotServer/channels";
-import GetLayout from "../../modules/getLayout";
+import axios from "axios";
+import { findServer } from "../../../config/clientSettings";
 
 export default class ServerPage extends Component {
   constructor(props) {
     super(props);
-    console.log("a", this.props);
     this.state = {
       redirect: false
     };
@@ -25,7 +25,7 @@ export default class ServerPage extends Component {
     }
   }
 
-  handleSelectedServer = () => {
+  handleSelectedServer = async () => {
     let found = false;
     this.props.robotServers.map(robotServer => {
       if (robotServer.server_name === this.props.match.params.name) {
@@ -36,17 +36,43 @@ export default class ServerPage extends Component {
       return false;
     });
 
+    //If no server is find, check to see if the server is unlisted.
     if (!found) {
-      this.setState({ redirect: true });
+      if (this.props.match.params.name) {
+        console.log("FIND SERVER: ", this.props.match.params.name);
+        const findServer = await this.handleFindServer(
+          this.props.match.params.name
+        );
+
+        console.log("Find Server Result: ", findServer);
+        if (findServer) {
+          await this.props.appendServer(findServer);
+          this.props.setServer(findServer);
+          found = true;
+          return true;
+        } else {
+          console.log("REDIRECT!");
+          this.setState({ redirect: true });
+        }
+      }
     }
   };
 
-  // handleMobileDisplayChannels = () => {
-  //   const { showMobileNav } = this.props;
-  //   console.log("Show Nav Check: ", showMobileNav);
-  //   if (showMobileNav) return this.handleDisplayChannels;
-  //   return <React.Fragment />;
-  // };
+  handleFindServer = async server_name => {
+    let found = null;
+    await axios
+      .post(findServer, { server_name: server_name })
+      .then(response => {
+        console.log(response);
+        found = response.data;
+      })
+      .catch(err => {
+        console.log(err);
+      });
+    console.log(found);
+    if (found && found.server_name) return found;
+    return null;
+  };
 
   handleDisplayChannels = () => {
     if (this.state.redirect) return <Redirect to="/" />;

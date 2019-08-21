@@ -13,7 +13,7 @@ router.post("/make", auth({ robot: true, user: true }), async (req, res) => {
     getServerIdFromChannelId,
     getChannel
   } = require("../../models/channel");
-  const { buildButtons } = require("../../models/controls");
+  const { buildButtons } = require("../../controllers/controls");
   const { getRobotServer } = require("../../models/robotServer");
 
   let checkUser = await getServerIdFromChannelId(req.body.channel_id);

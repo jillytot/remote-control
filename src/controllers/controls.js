@@ -37,8 +37,10 @@ module.exports.buildButtons = async (buttons, channel_id, controls_id) => {
     if (buttons) {
       buttons.forEach(button => {
         let newButton = {};
-        //only save valid key / value pairs
         newButton.id = `bttn-${makeId()}`;
+
+        //only save valid key / value pairs
+
         //required:
         if (button.label) {
           newButton.label = button.label;
@@ -46,6 +48,13 @@ module.exports.buildButtons = async (buttons, channel_id, controls_id) => {
           //Dont publish invalid button
           return;
         }
+
+        if (button.break) {
+          newButton.break = button.break;
+          newButtons.push(newButton);
+          return;
+        }
+
         if (button.command) {
           newButton.command = button.command;
         } else {

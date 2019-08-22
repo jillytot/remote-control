@@ -7,6 +7,7 @@ import VolumeControl from "./volumeControl";
 import GetLayout from "../../modules/getLayout";
 import { GlobalStoreCtx } from "../../providers/globalStore";
 import defaultImages from "../../../imgs/placeholders";
+import RenderButtons from "./renderButtons";
 
 export default class RobotInterface extends Component {
   state = {
@@ -235,50 +236,17 @@ export default class RobotInterface extends Component {
   };
 
   renderButtons = () => {
-    // console.log("OPTIONS CHECK: ", this.options);
-    if (this.state.controls) {
-      return this.state.controls.map(button => {
-        let hotKeyStyle = "hotkey";
-        let style = {};
-        if (button.hot_key === this.state.renderCurrentKey) {
-          style = {
-            boxShadow: "inset 0 0 0 2px rgb(5, 214, 186)",
-            transform: "translateY(4px)",
-            WebkitTransform: "translateY(4px)"
-          }; // noice!
-        }
-        this.state.renderPresses.map(press => {
-          if (press && press.button.id === button.id) {
-            style.backgroundColor = "rgb(64, 76, 131)";
-            hotKeyStyle = "hotkey hotkey-highlight";
-          }
-          return null;
-        });
-
-        return (
-          <button
-            className={button.hot_key ? "robtn robtn-hot-key" : "robtn"}
-            key={button.id}
-            onClick={() =>
-              this.handleClick({
-                user: this.props.user,
-                controls_id: this.state.controlsId,
-                socket: this.props.socket,
-                button: button
-              })
-            }
-            style={style}
-          >
-            {button.hot_key ? (
-              <span className={hotKeyStyle}>{button.hot_key}</span>
-            ) : (
-              <React.Fragment />
-            )}
-            {button.label}
-          </button>
-        );
-      });
-    }
+    return (
+      <RenderButtons
+        controls={this.state.controls}
+        renderPresses={this.state.renderPresses}
+        renderCurrentKey={this.state.renderCurrentKey}
+        onClick={e => this.handleClick(e)}
+        user={this.props.user}
+        controls_id={this.state.controlsId}
+        socket={this.props.socket}
+      />
+    );
   };
 
   handleDisplayActivity = () => {

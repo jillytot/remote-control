@@ -1,0 +1,90 @@
+import React, { Component } from "react";
+import "./robot.css";
+
+export default class RenderButtons extends Component {
+  //render a single button
+  handleButton = ({ aButton, style, hotKeyStyle }) => {
+    const { onClick, user, controls_id, socket } = this.props;
+    const hotKeyRender = "robtn";
+    if (aButton && aButton.hot_key && aButton.key)
+      hotKeyRender = "robtn robtn-hot-key";
+    return (
+      <button
+        className={hotKeyRender}
+        key={aButton.id}
+        onClick={() =>
+          onClick({
+            user: user,
+            controls_id: controls_id,
+            socket: socket,
+            button: aButton
+          })
+        }
+        style={style}
+      >
+        {aButton.hot_key ? (
+          <span className={hotKeyStyle}>{aButton.hot_key}</span>
+        ) : (
+          <React.Fragment />
+        )}
+        {aButton.label}
+      </button>
+    );
+  };
+
+  handleButtons = () => {
+    const {
+      controls,
+      hotKeyStyle,
+      renderPresses,
+      renderCurrentKey
+    } = this.props;
+
+    if (controls) {
+      return controls.map(aButton => {
+        console.log("A BUTTON: ", aButton);
+        let hotKeyStyle = "hotkey";
+        let style = {};
+        if (aButton.hot_key === renderCurrentKey) {
+          style = {
+            boxShadow: "inset 0 0 0 2px rgb(5, 214, 186)",
+            transform: "translateY(4px)",
+            WebkitTransform: "translateY(4px)"
+          }; // noice!
+        }
+        renderPresses.map(press => {
+          if (press && press.button.id === aButton.id) {
+            style.backgroundColor = "rgb(64, 76, 131)";
+            hotKeyStyle = "hotkey hotkey-highlight";
+          }
+          return null;
+        });
+        if (aButton.break) {
+          console.log("Break!!!!!");
+        }
+        if (aButton.break) return this.handleBreak(aButton);
+        return this.handleButton({ aButton, style, hotKeyStyle });
+      });
+    }
+  };
+
+  handleBreak = breakPoint => {
+    let renderBreak = null;
+    console.log("Break: ", breakPoint);
+    if (breakPoint.label !== "") {
+      //return label header
+      renderBreak = <div className="label">{breakPoint.label}</div>;
+    }
+
+    return (
+      <React.Fragment>
+        <br />
+        {renderBreak}
+      </React.Fragment>
+    );
+  };
+
+  render() {
+    return <React.Fragment>{this.handleButtons()}</React.Fragment>;
+  }
+}

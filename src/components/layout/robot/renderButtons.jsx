@@ -41,7 +41,7 @@ export default class RenderButtons extends Component {
     } = this.props;
 
     if (controls) {
-      return controls.map(aButton => {
+      return controls.map((aButton, index) => {
         console.log("A BUTTON: ", aButton);
         let hotKeyStyle = "hotkey";
         let style = {};
@@ -62,23 +62,34 @@ export default class RenderButtons extends Component {
         if (aButton.break) {
           console.log("Break!!!!!");
         }
-        if (aButton.break) return this.handleBreak(aButton);
+        if (aButton.break) return this.handleBreak(aButton, index);
         return this.handleButton({ aButton, style, hotKeyStyle });
       });
     }
   };
 
-  handleBreak = breakPoint => {
+  handleBreakPointStyle = index => {
+    console.log("Checking Breakpoint Index: ", index);
+    if (index === 0) return "label label-top";
+    return "label";
+  };
+  handleBreak = (breakPoint, index) => {
     let renderBreak = null;
     console.log("Break: ", breakPoint);
     if (breakPoint.label !== "") {
       //return label header
-      renderBreak = <div className="label">{breakPoint.label}</div>;
+      renderBreak = (
+        <div className="label-container">
+          <div className={this.handleBreakPointStyle(index)}>
+            {breakPoint.label}
+          </div>
+        </div>
+      );
     }
 
     return (
       <React.Fragment>
-        <br />
+        {index === 0 ? <React.Fragment /> : <br />}
         {renderBreak}
       </React.Fragment>
     );

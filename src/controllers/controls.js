@@ -42,7 +42,7 @@ module.exports.buildButtons = async (buttons, channel_id, controls_id) => {
         //only save valid key / value pairs
 
         //required:
-        if (button.label) {
+        if (button.label || button.label === "") {
           newButton.label = button.label;
         } else {
           //Dont publish invalid button

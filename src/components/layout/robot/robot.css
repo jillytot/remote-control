@@ -136,18 +136,26 @@
 /* .label-container {
   background-color: purple;
 } */
+
 .label {
   background-color: rgb(40, 31, 51);
+  background: -webkit-linear-gradient(
+    0deg,
+    rgb(28, 23, 34),
+    rgb(40, 31, 51),
+    rgb(28, 23, 34)
+  );
   color: rgb(175, 175, 175);
   /* display: inline-block; */
   justify-content: center;
   /* width: auto; */
   margin-top: 10px;
-  /* margin-bottom: 5px; */
+  margin-bottom: 5px;
   font-size: 14px;
   font-weight: bold;
-  margin-left: -5px;
-  margin-right: -5px;
+  /* margin-left: -5px;
+  margin-right: -5px; */
+
   padding-top: 5px;
   padding-bottom: 5px;
   padding-right: 10px;
@@ -155,8 +163,23 @@
   /* border-radius: 24px; */
 }
 
+.rainbow {
+  background: -webkit-linear-gradient(
+    0deg,
+    #b251eb,
+    #ff5ca3,
+    #ffa557,
+    #f7ff66,
+    #7cff1e,
+    #00dfd3,
+    #1f93ff
+  );
+  background-clip: text;
+  color: transparent;
+}
+
 .label-top {
-  margin-top: -5px;
+  margin-top: 0px;
 }
 
 @media screen and (max-width: 1280px) {

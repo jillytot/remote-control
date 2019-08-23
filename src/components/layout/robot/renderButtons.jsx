@@ -5,7 +5,7 @@ export default class RenderButtons extends Component {
   //render a single button
   handleButton = ({ aButton, style, hotKeyStyle }) => {
     const { onClick, user, controls_id, socket } = this.props;
-    const hotKeyRender = "robtn";
+    const hotKeyRender = this.handleButtonStyle(aButton);
     if (aButton && aButton.hot_key && aButton.key)
       hotKeyRender = "robtn robtn-hot-key";
     return (
@@ -32,6 +32,16 @@ export default class RenderButtons extends Component {
     );
   };
 
+  handleButtonStyle = aButton => {
+    if (aButton.access && aButton.access === "owner") return "robtn-admin";
+    return "robtn";
+  };
+
+  handleHotKeyStyle = aButton => {
+    if (aButton.access && aButton.access === "owner") return "hotkey-admin";
+    return "hotkey";
+  };
+
   handleButtons = () => {
     const {
       controls,
@@ -43,7 +53,7 @@ export default class RenderButtons extends Component {
     if (controls) {
       return controls.map((aButton, index) => {
         console.log("A BUTTON: ", aButton);
-        let hotKeyStyle = "hotkey";
+        let hotKeyStyle = this.handleHotKeyStyle(aButton);
         let style = {};
         if (aButton.hot_key === renderCurrentKey) {
           style = {

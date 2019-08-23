@@ -1,4 +1,5 @@
 const router = require("express").Router();
+const { jsonError } = require("../../modules/logging");
 const auth = require("../auth");
 // then to use that it would be like router.post('/test', auth({robot: true, user: true}), (req, res ) => { ... })
 
@@ -48,10 +49,7 @@ router.post(
       res.send(input);
       return;
     }
-    res.send({
-      status: "error!",
-      error: "unable to get button input"
-    });
+    res.send(jsonError("Unable to get button input!"));
   }
 );
 

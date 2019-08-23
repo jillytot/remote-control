@@ -89,3 +89,40 @@ module.exports.buildButtons = async (buttons, channel_id, controls_id) => {
   response.error = "problem build buttons (controls.js/buildButtons)";
   return response;
 };
+
+module.exports.getControlsFromId = async (channel_id, user) => {
+  const { getControlsForChannel } = require("../models/controls");
+  const { getServerIdFromChannelId } = require("../models/channel");
+  const { getRobotServer } = require("../models/robotServer");
+  let controls = await getControlsForChannel(channel_id);
+
+  let sendButtons = [];
+  if (controls && controls.buttons) {
+    const { buttons } = controls;
+    const testy = async button => {
+      if (button.access && button.access === "owner") {
+        //A VERY TEMPORARY SOLUTION!!!!
+        const getServerId = await getServerIdFromChannelId(channel_id); //might want to move these out of map
+        const getServer = await getRobotServer(getServerId.result);
+        if (getServer.owner_id === user.id) {
+          console.log(
+            "!\n!\nSEND ADMIN COMMAND///////////////////////: ",
+            user.username,
+            button.label
+          );
+          return button;
+        }
+      } else if (!button.access) return button;
+    };
+
+    sendButtons = await Promise.all(buttons.map(button => testy(button)));
+    sendButtons = sendButtons.filter(button => button != undefined);
+    //await Promise.all(testy);
+  }
+  if (controls.buttons && sendButtons) {
+    controls.buttons = sendButtons;
+  } else {
+    // console.log("\n?\n!\n?\n!");
+  }
+  return controls;
+};

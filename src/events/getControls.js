@@ -7,7 +7,7 @@ module.exports = async (ws, controls_id) => {
   if (controls_id) {
     const controls = await getControls(controls_id);
     ws.emitEvent(
-      "CONTROLS_UPDATED",
+      "GET_USER_CONTROLS",
       await getControlsFromId(controls.channel_id, ws.user)
     );
     //Subscribe user to controls

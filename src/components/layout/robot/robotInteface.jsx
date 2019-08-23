@@ -168,14 +168,19 @@ export default class RobotInterface extends Component {
       this.handleLoggingClicks(command);
       this.handleRenderPresses(command);
     });
-    socket.on("CONTROLS_UPDATED", getControlData => {
-      console.log("CONTROLS UPDATED: ", getControlData);
+    socket.on("GET_USER_CONTROLS", getControlData => {
+      console.log("GET_USER_CONTROLS: ", getControlData);
       if (getControlData && getControlData.buttons.length > 0)
         this.setState({
           controls: getControlData.buttons,
           controlsId: getControlData.id
         });
       this.setupKeyMap(getControlData.buttons);
+    });
+    socket.on("CONTROLS_UPDATED", () => {
+      if (this.state.controlsId)
+        //TODO: MAKE THIS AN API REQUEST INSTEAD
+        socket.emit("GET_CONTROLS", this.state.controlsId);
     });
   };
 

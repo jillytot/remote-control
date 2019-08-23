@@ -155,9 +155,8 @@ module.exports.sendUpdatedControls = async (controls_id, channel_id) => {
   //send current controls for current channel to the client
   //channel stores an ID reference for it's current controls
   const channel = require("./channel");
-  let sendData = {};
-  sendData = await this.getControls(controls_id, channel_id);
-  channel.emitEvent(channel_id, "CONTROLS_UPDATED", sendData);
+  // sendData = await this.getControls(controls_id, channel_id);
+  channel.emitEvent(channel_id, "CONTROLS_UPDATED");
 };
 
 module.exports.getControlsFromId = async id => {

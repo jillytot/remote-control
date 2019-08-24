@@ -1,7 +1,8 @@
 import React from "react";
 import "../../styles/common.css";
 
-const Input = ({ name, label, error, type, ref, ...rest }) => {
+const Input = React.forwardRef((props, ref) => {
+  const { name, label, error, type, ...rest } = props;
   console.log("Input Props: ", type, ref);
 
   return (
@@ -25,6 +26,6 @@ const Input = ({ name, label, error, type, ref, ...rest }) => {
       </div>
     </React.Fragment>
   );
-};
+});
 
 export default Input;

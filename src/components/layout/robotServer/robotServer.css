@@ -400,3 +400,15 @@ a:active {
   display: flex;
   flex: 1;
 }
+
+.hidden-clipboard {
+  border: none;
+  height: 1px;
+  left: -1000px;
+  margin: 0;
+  opacity: 0;
+  padding: 0;
+  position: fixed;
+  top: -1000px;
+  width: 1px;
+}

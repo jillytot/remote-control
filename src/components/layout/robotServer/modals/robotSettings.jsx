@@ -15,8 +15,18 @@ export default class RobotSettings extends Component {
       apiKey: "",
       isConfirmingDelete: false
     };
-    this.inputRef = React.createRef();
-    // this.handleCopy = this.handleCopy.bind(this);
+    this.inputRef = null;
+
+    this.setInputRef = element => {
+      this.inputRef = element;
+    };
+
+    this.handleCopy = () => {
+      if (this.inputRef) {
+        this.inputRef.select();
+        document.execCommand("copy");
+      }
+    };
   }
 
   componentDidMount() {
@@ -92,21 +102,6 @@ export default class RobotSettings extends Component {
     this.setState({ apiToggle: toggle });
   };
 
-  handleCopy = e => {
-    console.log("HANDLE COPY");
-    this.inputRef.current.select();
-
-    console.log("STEP 2");
-    document.execCommand("copy");
-    // This is just personal preference.
-    // I prefer to not show the the whole text area selected.
-
-    console.log("STEP 3");
-    e.target.focus();
-    console.log("COPIED");
-    // this.setState({ copySuccess: 'Copied!' });
-  };
-
   renderDeleteConfirmation = () => {
     return (
       <div>
@@ -134,16 +129,22 @@ export default class RobotSettings extends Component {
             value={this.state.apiKey}
             readOnly
           />
-          {/* <div className="toggle-clipboard-group">
+          <div className="toggle-clipboard-group">
+            <textarea
+              aria-hidden="true"
+              className="hidden-clipboard"
+              ref={this.setInputRef}
+              value={this.state.apiKey}
+            />
             <div className="copy-to-clipboard" onClick={this.handleCopy}>
               copy to clipboard
-            </div> */}
-          <Toggle
-            toggle={this.state.apiToggle}
-            label={"Show API Key"}
-            onClick={this.handleToggle}
-          />
-          {/* </div> */}
+            </div>
+            <Toggle
+              toggle={this.state.apiToggle}
+              label={"Show API Key"}
+              onClick={this.handleToggle}
+            />
+          </div>
         </div>
         {!this.state.isConfirmingDelete
           ? this.renderButton("Delete Robot", () =>

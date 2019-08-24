@@ -62,7 +62,7 @@ export default class DisplayServerDetails extends Component {
   }
 
   handleGetServerStatus = () => {
-    console.log("GET SERVER STATUS CHECK");
+    // console.log("GET SERVER STATUS CHECK");
     socket.emit("GET_SERVER_STATUS", {
       server_id: this.props.server.server_id
     });
@@ -86,7 +86,7 @@ export default class DisplayServerDetails extends Component {
   };
 
   handleSocketLocalStatus = status => {
-    console.log("GET LOCAL STATUS!", status);
+    // console.log("GET LOCAL STATUS!", status);
     this.setState({
       localStatus: status,
       icon: (
@@ -101,7 +101,7 @@ export default class DisplayServerDetails extends Component {
 
   handleJoinClick = () => {
     const { server, invites } = this.props;
-    console.log("CHECK INVITES: ", invites);
+    // console.log("CHECK INVITES: ", invites);
     const token = localStorage.getItem("token");
 
     if (this.props.server.owner_id === this.props.user.id) return; //Cannot join or leave server as it's owner
@@ -177,7 +177,7 @@ export default class DisplayServerDetails extends Component {
   };
 
   handleEdit = () => {
-    console.log(this.props);
+    // console.log(this.props);
     return (
       <EditServer
         server={this.props.server}

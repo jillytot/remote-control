@@ -41,7 +41,7 @@ export default class Channels extends Component {
     if (
       prevProps.selectedServer.server_id !== this.props.selectedServer.server_id
     ) {
-      console.log("SELECTED SERVER: ", this.props.selectedServer);
+      //console.log("SELECTED SERVER: ", this.props.selectedServer);
       this.handleServer(true);
     }
   }

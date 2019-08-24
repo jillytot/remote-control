@@ -97,7 +97,7 @@ export default class RobotInterface extends Component {
 
   updateCanvas = () => {
     const height = this.refs["video-canvas"].clientHeight;
-    console.log(height);
+    //console.log(height);
     this.setState({ canvasHeight: height });
   };
 
@@ -169,7 +169,7 @@ export default class RobotInterface extends Component {
       this.handleRenderPresses(command);
     });
     socket.on("GET_USER_CONTROLS", getControlData => {
-      console.log("GET_USER_CONTROLS: ", getControlData);
+      //console.log("GET_USER_CONTROLS: ", getControlData);
       if (getControlData && getControlData.buttons.length > 0)
         this.setState({
           controls: getControlData.buttons,

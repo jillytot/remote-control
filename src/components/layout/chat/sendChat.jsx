@@ -111,11 +111,11 @@ export default class SendChat extends Form {
         chatId: chatId,
         server_id: server_id
       });
-      console.log(
-        `SEND TO CHAT, user: ${user.username} userId ${
-          user.id
-        } message ${sendChat} chatId ${chatId}`
-      );
+      // console.log(
+      //   `SEND TO CHAT, user: ${user.username} userId ${
+      //     user.id
+      //   } message ${sendChat} chatId ${chatId}`
+      // );
 
       this.startTimer();
     } else {

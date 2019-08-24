@@ -52,7 +52,7 @@ export default class RenderButtons extends Component {
 
     if (controls) {
       return controls.map((aButton, index) => {
-        console.log("A BUTTON: ", aButton);
+        //console.log("A BUTTON: ", aButton);
         let hotKeyStyle = this.handleHotKeyStyle(aButton);
         let style = {};
         if (aButton.hot_key === renderCurrentKey) {
@@ -75,7 +75,7 @@ export default class RenderButtons extends Component {
           return null;
         });
         if (aButton.break) {
-          console.log("Break!!!!!");
+          //console.log("Break!!!!!"); is this saved?
         }
         if (aButton.break) return this.handleBreak(aButton, index);
         return this.handleButton({ aButton, style, hotKeyStyle });
@@ -84,13 +84,13 @@ export default class RenderButtons extends Component {
   };
 
   handleBreakPointStyle = index => {
-    console.log("Checking Breakpoint Index: ", index);
+    //console.log("Checking Breakpoint Index: ", index);
     if (index === 0) return "label label-top";
     return "label";
   };
   handleBreak = (breakPoint, index) => {
     let renderBreak = null;
-    console.log("Break: ", breakPoint);
+    //console.log("Break: ", breakPoint);
     if (breakPoint.label !== "") {
       //return label header
       renderBreak = (

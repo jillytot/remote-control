@@ -64,8 +64,13 @@ export default class RenderButtons extends Component {
         }
         renderPresses.map(press => {
           if (press && press.button.id === aButton.id) {
-            style.backgroundColor = "rgb(64, 76, 131)";
-            hotKeyStyle = "hotkey hotkey-highlight";
+            if (press.button.access && press.button.access === "owner") {
+              style.backgroundColor = "#e44884";
+              hotKeyStyle = "hotkey hotkey-admin-highlight";
+            } else {
+              style.backgroundColor = "rgb(64, 76, 131)";
+              hotKeyStyle = "hotkey hotkey-highlight";
+            }
           }
           return null;
         });

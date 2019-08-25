@@ -310,7 +310,7 @@
   .messages-container {
     position: absolute;
     left: 4px;
-    top: 56px;
+    top: 8px;
     font-size: 10px;
     width: calc(100% - 17px);
   }

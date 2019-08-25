@@ -2,6 +2,10 @@
   overflow-y: auto;
   position: relative;
   height: auto;
+  width: auto;
+  display: flex;
+  flex-direction: column;
+  flex: 2;
   /* padding: 5px; */
   /* background-color: blue;
   border: solid 5px purple; */

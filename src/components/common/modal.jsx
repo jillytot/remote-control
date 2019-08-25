@@ -8,15 +8,10 @@ import "./overlay.css";
   */
 
 export default class Modal extends Component {
-  constructor(props) {
-    super(props);
-    this.scrollDown = this.scrollDown.bind(this);
-  }
-
-  scrollDown() {
+  scrollDown = () => {
     const { container } = this.refs;
     container.scrollTop = container.scrollHeight;
-  }
+  };
 
   displayContent = getContent => {
     const { contents } = this.props;

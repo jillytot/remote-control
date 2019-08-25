@@ -1,0 +1,26 @@
+.scroll-box {
+  overflow-y: auto;
+  position: relative;
+  height: auto;
+  /* padding: 5px; */
+  /* background-color: blue;
+  border: solid 5px purple; */
+}
+
+.scroll-box::-webkit-scrollbar-track {
+  box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
+  background-color: #372e50;
+}
+.scroll-box::-webkit-scrollbar {
+  width: 0px;
+  /* background-color: green; */
+}
+.scroll-box::-webkit-scrollbar-thumb {
+  background-color: #484d79;
+}
+
+/* .scroll-container {
+  padding: 5px;
+  position: relative;
+  height: auto;
+} */

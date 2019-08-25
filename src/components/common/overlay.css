@@ -133,12 +133,4 @@
     width: 100%;
     min-height: calc(100vh - 100px);
   }
-
-  .modal-footer {
-    /* border-radius: 0; */
-  }
-
-  .modal-header {
-    /* border-radius: 0px; */
-  }
 }

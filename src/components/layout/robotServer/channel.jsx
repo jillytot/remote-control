@@ -4,6 +4,7 @@ import Chat from "../chat/chat";
 import socket from "../../socket";
 import { Redirect } from "react-router-dom";
 import GetLayout from "../../modules/getLayout";
+import "../../common/scroll.css";
 
 export default class Channel extends Component {
   constructor(props) {
@@ -63,8 +64,15 @@ export default class Channel extends Component {
   handleMobile = () => {
     return (
       <React.Fragment>
-        {this.handleRobotInterface()}
-        {this.handleChat()}
+        <div
+          className="scroll-box"
+          ref={container => {
+            this.container = container;
+          }}
+        >
+          {this.handleRobotInterface()}
+          {this.handleChat()}
+        </div>
       </React.Fragment>
     );
   };
@@ -72,7 +80,14 @@ export default class Channel extends Component {
   handleDefault = () => {
     return (
       <React.Fragment>
-        {this.handleRobotInterface()}
+        <div
+          className="scroll-box"
+          ref={container => {
+            this.container = container;
+          }}
+        >
+          {this.handleRobotInterface()}
+        </div>
         {this.handleChat()}
       </React.Fragment>
     );

@@ -4,7 +4,7 @@
   height: auto;
   width: auto;
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
   flex: 2;
   /* padding: 5px; */
   /* background-color: blue;

@@ -14,7 +14,7 @@ class GlobalStore extends Component {
   };
 
   render() {
-    console.log("Global Store -> State: ", this.state, "Props: ", this.props);
+    // console.log("Global Store -> State: ", this.state, "Props: ", this.props);
 
     return (
       <GlobalStoreCtx.Provider value={this.state}>

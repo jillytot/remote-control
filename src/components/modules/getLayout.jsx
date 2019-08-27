@@ -11,7 +11,7 @@ const GetLayout = ({ renderSize, renderMobile, renderDesktop }) => {
   const desktop = renderDesktop || fragment;
   const getBreakPoint = renderSize || breakPoint;
   const { width } = useWindowDimensions();
-  console.log("Get width: ", width);
+  // console.log("Get width: ", width);
 
   return width > getBreakPoint ? desktop() : mobile();
 };

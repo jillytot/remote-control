@@ -3,14 +3,15 @@ import RobotInterface from "../robot/robotInteface";
 import Chat from "../chat/chat";
 import socket from "../../socket";
 import { Redirect } from "react-router-dom";
-import GetLayout from "../../modules/getLayout";
 import "../../common/scroll.css";
+import { WindowDimensionsCtx } from "../../providers/windowDimensionProvider";
 
 export default class Channel extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      redirect: false
+      redirect: false,
+      width: null
     };
   }
 
@@ -28,6 +29,17 @@ export default class Channel extends Component {
       this.handleChannel(channelChange);
     }
   }
+
+  handleLayout = () => {
+    return (
+      <WindowDimensionsCtx.Consumer>
+        {({ width }) => {
+          if (width !== this.state.width) this.setState({ width: width });
+          return null;
+        }}
+      </WindowDimensionsCtx.Consumer>
+    );
+  };
 
   handleChannel = async channelChange => {
     let found = false;
@@ -87,8 +99,8 @@ export default class Channel extends Component {
           }}
         >
           {this.handleRobotInterface()}
+          {this.handleChat()}
         </div>
-        {this.handleChat()}
       </React.Fragment>
     );
   };
@@ -138,11 +150,8 @@ export default class Channel extends Component {
 
     return (
       <React.Fragment>
-        <GetLayout
-          renderSize={768}
-          renderMobile={this.handleMobile}
-          renderDesktop={this.handleDefault}
-        />
+        {this.handleLayout()}
+        {this.state.width >= 768 ? this.handleDefault() : this.handleMobile()}
       </React.Fragment>
     );
   }

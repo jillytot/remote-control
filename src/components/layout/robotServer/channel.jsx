@@ -99,8 +99,8 @@ export default class Channel extends Component {
           }}
         >
           {this.handleRobotInterface()}
-          {this.handleChat()}
         </div>
+        {this.handleChat()}
       </React.Fragment>
     );
   };

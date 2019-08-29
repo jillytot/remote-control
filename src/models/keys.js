@@ -1,7 +1,7 @@
 module.exports.saveKey = async getKey => {
   const db = require("../services/db");
   const { key_id, created, expires, ref, expired } = getKey;
-  const save = `INSERT INTO generated_keys (key_id, created, expires, ref, expired ) VALUES ( $1, $2, $3, $4, $5) RETURNING key`;
+  const save = `INSERT INTO generated_keys (key_id, created, expires, ref, expired ) VALUES ( $1, $2, $3, $4, $5) RETURNING key_id`;
   try {
     const result = await db.query(save, [
       key_id,

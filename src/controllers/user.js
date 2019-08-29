@@ -1,3 +1,5 @@
+const { err } = require("../modules/utilities");
+
 module.exports.followedServers = async user => {
   const { getFollowedServers } = require("../models/serverMembers");
   const { getServerGroup } = require("../models/robotServer");
@@ -20,16 +22,30 @@ module.exports.setNewPassword = async (user_id, password) => {
   return result;
 };
 
-module.exports.passwordResetKey = (user, setExpire) => {
+const passwordResetKey = (user, setExpire) => {
   const { makeId, createTimeStamp } = require("../modules/utilities");
   const { passResetExpires } = require("../config/serverSettings");
-  const handleExpire = setExpire;
+  let expire = false;
+  const handleExpire = setExpire => {
+    expire = setExpire;
+  };
   return {
     key_id: `rset-${makeId()}`,
     created: createTimeStamp(),
     expires: passResetExpires,
     ref: user.id,
-    expire: handleExpire() || false,
+    expire: expire,
     setExpiration: setExpire => handleExpire(setExpire)
   };
+};
+
+module.exports.resetPassword = async user => {
+  const { saveKey } = require("../models/keys");
+  if (user) {
+    const makeKey = await passwordResetKey(user);
+    const save = await saveKey(makeKey);
+    console.log("Key Result: ", save);
+    return save;
+  }
+  return err("Unable to generate key.");
 };

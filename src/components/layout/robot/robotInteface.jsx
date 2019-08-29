@@ -8,6 +8,7 @@ import GetLayout from "../../modules/getLayout";
 import { GlobalStoreCtx } from "../../providers/globalStore";
 import defaultImages from "../../../imgs/placeholders";
 import RenderButtons from "./renderButtons";
+import socket from "../../socket";
 
 export default class RobotInterface extends Component {
   state = {
@@ -36,7 +37,7 @@ export default class RobotInterface extends Component {
       this.handleClick({
         user: this.props.user,
         controls_id: this.state.controlsId,
-        socket: this.props.socket,
+        socket: socket,
         button: button
       });
     }
@@ -47,7 +48,6 @@ export default class RobotInterface extends Component {
       this.clearAV();
       this.connectAV();
     }
-
     if (
       this.refs["video-canvas"] &&
       this.refs["video-canvas"].clientHeight &&
@@ -55,7 +55,26 @@ export default class RobotInterface extends Component {
     ) {
       this.updateCanvas();
     }
+
+    //handle channel change / channels list change and no controls id
+    if (
+      this.props.channel !== prevProps.channel ||
+      this.props.channels.length !== prevProps.channels.length
+    ) {
+      this.emitGetControls();
+    }
   }
+
+  emitGetControls = () => {
+    console.log("EMIT GET CONTROLS");
+    const channel = this.props.channels.find(
+      chan => chan.id === this.props.channel
+    );
+
+    if (channel) {
+      socket.emit("GET_CONTROLS", channel.controls);
+    }
+  };
 
   connectAV() {
     if (this.props.channel) {
@@ -64,15 +83,33 @@ export default class RobotInterface extends Component {
     }
   }
 
-  componentDidMount() {
+  onMount = () => {
+    console.log("MOUNTING ROBOT INTERFACE ", this.props.display);
+    socket.on("GET_USER_CONTROLS", this.onGetControls);
+    socket.on(BUTTON_COMMAND, this.onButtonCommand);
+    socket.on("CONTROLS_UPDATED", this.onControlsUpdated);
     if (this.state.controls.length === 0)
       this.setState({ controls: testButtons });
     this.setupKeyMap(testButtons);
-    this.commandListener();
+
     document.addEventListener("keydown", this.handleKeyDown);
     document.addEventListener("keyup", this.handleKeyUp);
     document.addEventListener("blur", this.handleBlur);
     this.sendInterval = setInterval(this.sendCurrentKey, buttonRate);
+    console.log(
+      "INTERFACE PROPS OnMount : ",
+      this.props.channel,
+      this.props,
+      this.state.controls,
+      this.state.controlsId
+    );
+
+    this.connectAV();
+    this.emitGetControls();
+  };
+
+  async componentDidMount() {
+    this.onMount();
   }
 
   connectA = () => {
@@ -97,7 +134,6 @@ export default class RobotInterface extends Component {
 
   updateCanvas = () => {
     const height = this.refs["video-canvas"].clientHeight;
-    //console.log(height);
     this.setState({ canvasHeight: height });
   };
 
@@ -131,7 +167,12 @@ export default class RobotInterface extends Component {
     document.removeEventListener("keydown", this.handleKeyDown);
     document.removeEventListener("keyup", this.handleKeyUp);
     document.removeEventListener("blur", this.handleBlur);
+    socket.off(BUTTON_COMMAND, this.onButtonCommand);
+    socket.off("GET_USER_CONTROLS", this.onGetControls);
+    socket.off("CONTROLS_UPDATED", this.onControlsUpdated);
+
     clearInterval(this.sendInterval);
+    console.log("Robot Interface Unmounted");
   }
 
   handleKeyDown = e => {
@@ -161,31 +202,31 @@ export default class RobotInterface extends Component {
     this.keyMap = keyMap;
   };
 
-  commandListener = () => {
-    const { socket } = this.props;
-    socket.on(BUTTON_COMMAND, command => {
-      //console.log("Button Command Listener", command);
-      this.handleLoggingClicks(command);
-      this.handleRenderPresses(command);
-    });
-    socket.on("GET_USER_CONTROLS", getControlData => {
-      //console.log("GET_USER_CONTROLS: ", getControlData);
-      if (getControlData && getControlData.buttons.length > 0)
-        this.setState({
-          controls: getControlData.buttons,
-          controlsId: getControlData.id
-        });
+  onButtonCommand = command => {
+    this.handleLoggingClicks(command);
+    this.handleRenderPresses(command);
+  };
+
+  onGetControls = getControlData => {
+    if (getControlData && getControlData.buttons.length > 0) {
+      this.setState({
+        controls: getControlData.buttons,
+        controlsId: getControlData.id
+      });
       this.setupKeyMap(getControlData.buttons);
-    });
-    socket.on("CONTROLS_UPDATED", () => {
-      if (this.state.controlsId)
-        //TODO: MAKE THIS AN API REQUEST INSTEAD
-        socket.emit("GET_CONTROLS", this.state.controlsId);
-    });
+    }
+  };
+
+  onControlsUpdated = () => {
+    if (
+      this.state.controlsId ||
+      (this.props.channelInfo && this.props.channelInfo.controls)
+    )
+      socket.emit("GET_CONTROLS", this.state.controlsId);
   };
 
   handleClick = click => {
-    const { socket } = this.props;
+    console.log("CONTROLS ID: ", this.state.controlsId);
     socket.emit(BUTTON_COMMAND, {
       user: click.user,
       button: click.button,
@@ -249,7 +290,7 @@ export default class RobotInterface extends Component {
         onClick={e => this.handleClick(e)}
         user={this.props.user}
         controls_id={this.state.controlsId}
-        socket={this.props.socket}
+        socket={socket}
       />
     );
   };

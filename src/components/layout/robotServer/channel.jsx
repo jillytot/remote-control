@@ -11,7 +11,8 @@ export default class Channel extends Component {
     super(props);
     this.state = {
       redirect: false,
-      width: null
+      width: null,
+      channelInfo: {}
     };
   }
 
@@ -41,18 +42,24 @@ export default class Channel extends Component {
     );
   };
 
+  setChannel = channel => {
+    if (channel) this.setState({ channelInfo: channel });
+  };
+
   handleChannel = async channelChange => {
     let found = false;
     let that = this;
+
     await new Promise(function(fulfill) {
       that.props.channels.map(channel => {
+        that.setChannel(channel);
         if (channel.id === that.props.match.params.id) {
           that.props.setCurrentChannel(channel.id);
           found = true;
 
           if (channelChange) {
-            socket.emit("GET_CHAT", channel.chat);
-            socket.emit("GET_CONTROLS", channel.controls);
+            //socket.emit("GET_CHAT", channel.chat);
+            console.log("cont1567", that.props.channels);
             socket.emit("JOIN_CHANNEL", channel.id);
           }
           return true;
@@ -82,8 +89,8 @@ export default class Channel extends Component {
             this.container = container;
           }}
         >
-          {this.handleRobotInterface()}
-          {this.handleChat()}
+          {this.handleRobotInterface({ display: "mobile" })}
+          {this.handleChat({ display: "mobile" })}
         </div>
       </React.Fragment>
     );
@@ -98,19 +105,20 @@ export default class Channel extends Component {
             this.container = container;
           }}
         >
-          {this.handleRobotInterface()}
+          {this.handleRobotInterface({ display: "destkop" })}
         </div>
-        {this.handleChat()}
+        {this.handleChat({ display: "desktop" })}
       </React.Fragment>
     );
   };
 
-  handleRobotInterface = () => {
+  handleRobotInterface = ({ display }) => {
     return (
       <React.Fragment>
         <RobotInterface
           user={this.props.user}
           socket={socket}
+          channels={this.props.channels}
           channel={this.props.currentChannel}
           chatTabbed={this.props.chatTabbed}
           server={this.props.server}
@@ -121,24 +129,28 @@ export default class Channel extends Component {
           users={this.props.users}
           setChatTabbed={this.props.setChatTabbed}
           getColor={this.props.getColor}
+          display={display}
         />
       </React.Fragment>
     );
   };
 
   //Chat will only be handled here in desktop mode, otherwise this component gets called in RobotInterface
-  handleChat = () => {
+  handleChat = ({ display }) => {
     return (
       <React.Fragment>
         <Chat
           user={this.props.user}
           socket={socket}
           users={this.props.users}
+          channels={this.props.channels}
+          channel={this.props.currentChannel}
           setChatTabbed={this.props.setChatTabbed}
           isModalShowing={this.props.isModalShowing}
           chatTabbed={this.props.chatTabbed}
           getColor={this.props.getColor}
           showMobileNav={this.props.showMobileNav}
+          display={display}
         />
       </React.Fragment>
     );
@@ -151,7 +163,7 @@ export default class Channel extends Component {
     return (
       <React.Fragment>
         {this.handleLayout()}
-        {this.state.width >= 768 ? this.handleDefault() : this.handleMobile()}
+        {this.state.width > 768 ? this.handleDefault() : this.handleMobile()}
       </React.Fragment>
     );
   }

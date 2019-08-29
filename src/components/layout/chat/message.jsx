@@ -1,9 +1,16 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Emotes from "../../../emotes/emotes";
 import defaultImages from "../../../imgs/placeholders";
 
 const Message = ({ message }) => {
-  const [fadeout, setFadeout] = useState(setTimeout(() => handleFade(), 4000));
+  const [fadeout, setFadeout] = useState(false); //what the
+  const fadeTimeout = setTimeout(() => handleFade(), 4000);
+
+  useEffect(() => {
+    return () => {
+      clearTimeout(fadeTimeout);
+    };
+  });
 
   const handleFade = () => {
     setFadeout(true);

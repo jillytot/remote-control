@@ -19,20 +19,46 @@ export default class Chat extends Component {
     chatLoaded: false
   };
 
-  componentDidMount() {
+  onMount = () => {
+    console.log("chat did mount");
     this._isMounted = true;
-    this.chatListener();
     this.setState({ users: this.props.users });
-    socket.on("LOCAL_MODERATION", data => {
-      console.log("DING");
-      this.handleLocalChatModeration(data);
-    });
+    socket.on("LOCAL_MODERATION", this.handleLocalChatModeration);
+    socket.on(SEND_CHAT, this.onSendChat);
+    socket.on(MESSAGE_RECEIVED, this.onMessageRecieved);
+    this.emitGetChat();
+  };
+
+  componentDidMount() {
+    this.onMount();
   }
 
+  componentDidUpdate(prevProps) {
+    if (
+      (this.props.channel &&
+        !this.state.chatroom &&
+        this.props.channel !== prevProps.channel) ||
+      this.props.channels.length !== prevProps.channels.length
+    ) {
+      this.emitGetChat();
+    }
+  }
+
+  emitGetChat = () => {
+    console.log("EMIT GET CHAT");
+    const channel = this.props.channels.find(
+      chan => chan.id === this.props.channel
+    );
+
+    if (channel) {
+      socket.emit("GET_CHAT", channel.chat);
+    }
+  };
+
   handleLocalChatModeration = data => {
-    console.log("MODERATION EVENT: ", data);
+    // console.log("MODERATION EVENT: ", data);
     if (data.event === "remove_messages" && this.state.chatroom) {
-      console.log("REMOVING MESSAGES");
+      // console.log("REMOVING MESSAGES");
       let { messages } = this.state.chatroom;
       let remove = [];
       messages.map(message => {
@@ -49,7 +75,10 @@ export default class Chat extends Component {
   };
 
   componentWillUnmount() {
+    // console.log("chat did unmount");
     socket.off("LOCAL_MODERATION", this.handleLocalChatModeration);
+    socket.off(SEND_CHAT, this.onSendChat);
+    socket.off(MESSAGE_RECEIVED, this.onMessageRecieved);
     this._isMounted = false;
   }
 
@@ -65,28 +94,24 @@ export default class Chat extends Component {
     return remove;
   };
 
-  chatListener = async () => {
-    const { socket } = this.props;
-    if (socket && this._isMounted) {
-      socket.on(SEND_CHAT, chat => {
-        chat.messages = this.removeModerationMessagesOnLoad(chat.messages);
-        console.log(chat);
-        this.setState({ chatroom: chat });
-      });
-      socket.on(MESSAGE_RECEIVED, message => {
-        if (this.state.chatroom) {
-          let { chatroom } = this.state;
-          chatroom.messages.push(message);
-          this.setState({ chatroom });
-        }
-      });
+  onSendChat = chat => {
+    chat.messages = this.removeModerationMessagesOnLoad(chat.messages);
+    console.log(chat);
+    this.setState({ chatroom: chat });
+  };
+
+  onMessageRecieved = message => {
+    if (this.state.chatroom) {
+      let { chatroom } = this.state;
+      chatroom.messages.push(message);
+      this.setState({ chatroom });
     }
   };
 
   handleChatFeedback = fromSendChat => {
     let push = previousFeedback !== fromSendChat.id;
 
-    console.log("HANDLE CHAT FEEDBACK", fromSendChat.id);
+    // console.log("HANDLE CHAT FEEDBACK", fromSendChat.id);
     let { chatroom } = this.state;
 
     if (push) {
@@ -119,7 +144,7 @@ export default class Chat extends Component {
   };
 
   handleMenuSelect = selected => {
-    console.log(selected);
+    // console.log(selected);
     this.setState({ menu: selected });
   };
 

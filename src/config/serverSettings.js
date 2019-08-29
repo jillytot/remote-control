@@ -6,5 +6,6 @@ module.exports = {
   secret: "temp_secret",
   maxTimeout: 15768000, //6 months
   loadMessages: 25, //number of messages chatroom will get on load
-  currentAPIVersion: "/dev"
+  currentAPIVersion: "/dev",
+  passResetExpires: Date.now() + 72000000 //about a day
 };

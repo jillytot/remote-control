@@ -218,3 +218,20 @@ TABLESPACE pg_default;
 
 ALTER TABLE public.chat_messages
     OWNER to postgres;
+
+    CREATE TABLE public.generated_keys
+(
+    key_id character varying COLLATE pg_catalog."default" NOT NULL,
+    created character varying COLLATE pg_catalog."default",
+    expires character varying COLLATE pg_catalog."default",
+    ref character varying COLLATE pg_catalog."default",
+    expired character varying COLLATE pg_catalog."default",
+    CONSTRAINT generated_keys_pkey PRIMARY KEY (key_id)
+)
+WITH (
+    OIDS = FALSE
+)
+TABLESPACE pg_default;
+
+ALTER TABLE public.generated_keys
+    OWNER to postgres;

@@ -19,3 +19,17 @@ module.exports.setNewPassword = async (user_id, password) => {
   result = await updatePassword({ id: user_id, password: password });
   return result;
 };
+
+module.exports.passwordResetKey = (user, setExpire) => {
+  const { makeId, createTimeStamp } = require("../modules/utilities");
+  const { passResetExpires } = require("../config/serverSettings");
+  const handleExpire = setExpire;
+  return {
+    key_id: `rset-${makeId()}`,
+    created: createTimeStamp(),
+    expires: passResetExpires,
+    ref: user.id,
+    expire: handleExpire() || false,
+    setExpiration: setExpire => handleExpire(setExpire)
+  };
+};

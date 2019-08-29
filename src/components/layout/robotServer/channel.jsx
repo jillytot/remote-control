@@ -59,7 +59,7 @@ export default class Channel extends Component {
 
           if (channelChange) {
             //socket.emit("GET_CHAT", channel.chat);
-            console.log("cont1567", that.props.channels);
+            // console.log("cont1567", that.props.channels);
             socket.emit("JOIN_CHANNEL", channel.id);
           }
           return true;
@@ -89,8 +89,8 @@ export default class Channel extends Component {
             this.container = container;
           }}
         >
-          {this.handleRobotInterface({ display: "mobile" })}
-          {this.handleChat({ display: "mobile" })}
+          {this.handleRobotInterface()}
+          {this.handleChat()}
         </div>
       </React.Fragment>
     );
@@ -105,14 +105,14 @@ export default class Channel extends Component {
             this.container = container;
           }}
         >
-          {this.handleRobotInterface({ display: "destkop" })}
+          {this.handleRobotInterface()}
         </div>
-        {this.handleChat({ display: "desktop" })}
+        {this.handleChat()}
       </React.Fragment>
     );
   };
 
-  handleRobotInterface = ({ display }) => {
+  handleRobotInterface = () => {
     return (
       <React.Fragment>
         <RobotInterface
@@ -129,14 +129,13 @@ export default class Channel extends Component {
           users={this.props.users}
           setChatTabbed={this.props.setChatTabbed}
           getColor={this.props.getColor}
-          display={display}
         />
       </React.Fragment>
     );
   };
 
   //Chat will only be handled here in desktop mode, otherwise this component gets called in RobotInterface
-  handleChat = ({ display }) => {
+  handleChat = () => {
     return (
       <React.Fragment>
         <Chat
@@ -150,7 +149,6 @@ export default class Channel extends Component {
           chatTabbed={this.props.chatTabbed}
           getColor={this.props.getColor}
           showMobileNav={this.props.showMobileNav}
-          display={display}
         />
       </React.Fragment>
     );

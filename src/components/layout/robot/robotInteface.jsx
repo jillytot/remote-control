@@ -66,7 +66,7 @@ export default class RobotInterface extends Component {
   }
 
   emitGetControls = () => {
-    console.log("EMIT GET CONTROLS");
+    // console.log("EMIT GET CONTROLS");
     const channel = this.props.channels.find(
       chan => chan.id === this.props.channel
     );
@@ -84,26 +84,16 @@ export default class RobotInterface extends Component {
   }
 
   onMount = () => {
-    console.log("MOUNTING ROBOT INTERFACE ", this.props.display);
     socket.on("GET_USER_CONTROLS", this.onGetControls);
     socket.on(BUTTON_COMMAND, this.onButtonCommand);
     socket.on("CONTROLS_UPDATED", this.onControlsUpdated);
     if (this.state.controls.length === 0)
       this.setState({ controls: testButtons });
     this.setupKeyMap(testButtons);
-
     document.addEventListener("keydown", this.handleKeyDown);
     document.addEventListener("keyup", this.handleKeyUp);
     document.addEventListener("blur", this.handleBlur);
     this.sendInterval = setInterval(this.sendCurrentKey, buttonRate);
-    console.log(
-      "INTERFACE PROPS OnMount : ",
-      this.props.channel,
-      this.props,
-      this.state.controls,
-      this.state.controlsId
-    );
-
     this.connectAV();
     this.emitGetControls();
   };
@@ -172,7 +162,7 @@ export default class RobotInterface extends Component {
     socket.off("CONTROLS_UPDATED", this.onControlsUpdated);
 
     clearInterval(this.sendInterval);
-    console.log("Robot Interface Unmounted");
+    // console.log("Robot Interface Unmounted");
   }
 
   handleKeyDown = e => {
@@ -226,7 +216,7 @@ export default class RobotInterface extends Component {
   };
 
   handleClick = click => {
-    console.log("CONTROLS ID: ", this.state.controlsId);
+    // console.log("CONTROLS ID: ", this.state.controlsId);
     socket.emit(BUTTON_COMMAND, {
       user: click.user,
       button: click.button,

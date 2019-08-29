@@ -20,7 +20,7 @@ export default class Chat extends Component {
   };
 
   onMount = () => {
-    console.log("chat did mount");
+    // console.log("chat did mount");
     this._isMounted = true;
     this.setState({ users: this.props.users });
     socket.on("LOCAL_MODERATION", this.handleLocalChatModeration);
@@ -45,7 +45,7 @@ export default class Chat extends Component {
   }
 
   emitGetChat = () => {
-    console.log("EMIT GET CHAT");
+    // console.log("EMIT GET CHAT");
     const channel = this.props.channels.find(
       chan => chan.id === this.props.channel
     );
@@ -96,7 +96,7 @@ export default class Chat extends Component {
 
   onSendChat = chat => {
     chat.messages = this.removeModerationMessagesOnLoad(chat.messages);
-    console.log(chat);
+    // console.log(chat);
     this.setState({ chatroom: chat });
   };
 

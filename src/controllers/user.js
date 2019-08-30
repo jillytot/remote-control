@@ -39,7 +39,7 @@ const passwordResetKey = (user, setExpire) => {
   };
 };
 
-module.exports.resetPassword = async user => {
+module.exports.generateResetKey = async user => {
   const { saveKey } = require("../models/keys");
   if (user) {
     const makeKey = await passwordResetKey(user);
@@ -48,4 +48,25 @@ module.exports.resetPassword = async user => {
     return save;
   }
   return err("Unable to generate key.");
+};
+
+module.exports.useResetKey = async (user, key, pass) => {
+  const { updatePassword } = require("../models/user");
+  const { getKey, updateKey } = require("../models/keys");
+  user.passsword = pass;
+  const checkExpired = await getKey(key);
+  if (checkExpired.expired === true) {
+    return err(
+      "This key is no longer valid, please request a new password reset"
+    );
+  }
+  const useKey = await updateKey({
+    user_id: user.id,
+    key_id: key.key_id,
+    expired: true
+  });
+  if (!useKey) return err("There was a problem finding the specified key");
+  const reset = await updatePassword(user);
+  if (!reset) return err("Could not reset password");
+  return reset;
 };

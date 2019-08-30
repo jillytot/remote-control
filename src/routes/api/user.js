@@ -14,15 +14,21 @@ router.get("/followed", auth({ user: true }), async (req, res) => {
   return;
 });
 
-router.post("/reset-password", auth({ user: true }), async (req, res) => {
-  const { resetPassword } = require("../../controllers/user");
+router.post("/get-password-reset", auth({ user: true }), async (req, res) => {
+  const { generateResetKey } = require("../../controllers/user");
   if (req.user && req.user.id) {
     console.log(`Reset Password for: ${req.user.username}`);
-    const reset = await resetPassword(req.user);
+    const reset = await generateResetKey(req.user);
     res.send(reset);
     return;
   }
   res.send(err("There was a problem generating a reset key through the API"));
+});
+
+router.post("/password-reset", auth({ user: true }), async (req, res) => {
+  if (req.user && req.user.id && req.body.key_id) {
+    console.log(`Resetting Password for ${req.user.username}`);
+  }
 });
 
 module.exports = router;

@@ -85,17 +85,20 @@ export default class ServersPage extends Component {
 
   getFollowedServers = async () => {
     const token = localStorage.getItem("token");
-    await axios
-      .get(listFollowedServers, {
-        headers: { authorization: `Bearer ${token}` }
-      })
-      .then(response => {
-        this.setState({ followedServers: response.data });
-      })
-      .catch(err => {
-        console.log(err);
-        setTimeout(this.getFollowedServers, 600); //retry
-      });
+    if (token) {
+      await axios
+        .get(listFollowedServers, {
+          headers: { authorization: `Bearer ${token}` }
+        })
+        .then(response => {
+          this.setState({ followedServers: response.data });
+        })
+        .catch(err => {
+          console.log(err);
+          setTimeout(this.getFollowedServers, 600); //retry
+        });
+    }
+
     return null;
   };
 
@@ -139,7 +142,10 @@ export default class ServersPage extends Component {
   }
 
   emitAuthentication = () => {
-    socket.emit("AUTHENTICATE", { token: localStorage.getItem("token") });
+    const token = localStorage.getItem("token");
+    if (token) {
+      socket.emit("AUTHENTICATE", { token: localStorage.getItem("token") });
+    }
   };
 
   setUser = user => {

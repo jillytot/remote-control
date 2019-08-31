@@ -7,5 +7,5 @@ module.exports = {
   maxTimeout: 15768000, //6 months
   loadMessages: 25, //number of messages chatroom will get on load
   currentAPIVersion: "/dev",
-  passResetExpires: Date.now() + 72000000 //about a day
+  passResetExpires: Date.now() + 900000 //about 15 minutes
 };

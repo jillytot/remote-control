@@ -70,9 +70,7 @@ module.exports.createUser = async user => {
   user.settings = settingsPt;
   user.session = "";
   console.log(
-    `${user.username} also saved will be saved,  status set: ${
-      user.status
-    } intialized settings: ${user.settings}`
+    `${user.username} also saved will be saved,  status set: ${user.status} intialized settings: ${user.settings}`
   );
 
   console.log("Generating User: ", user);
@@ -102,20 +100,15 @@ module.exports.createUser = async user => {
 
 //Is this an actual user that currently exists?
 module.exports.validateUser = async input => {
-  console.log("Get User: ", input);
   if (input && input.username) {
-    console.log("Get user based on username");
     const check = await this.checkUsername(input.username);
-    console.log("VALIDATE ? ", check);
     return check;
   } //get based on username
   if (input && input.id) {
-    console.log("Get user based on userId");
     const check = await this.checkUserId(input.id);
-    console.log("VALIDATE ? ", check);
     return check;
   } //get based on userId
-  console.log("VALIDATION ERROR");
+  console.log("VALIDATION ERROR: ", input);
   return null;
 };
 
@@ -140,7 +133,7 @@ module.exports.getIdFromUsername = async username => {
     const query = `SELECT * FROM users WHERE LOWER (username) = LOWER ( $1 );`;
     try {
       const check = await db.query(query, [username]);
-      console.log(check.rows[0]);
+      // console.log(check.rows[0]);
       if (check.rows[0]) return check.rows[0].id;
     } catch (err) {
       console.log(err);
@@ -154,7 +147,7 @@ module.exports.getInfoFromUsername = async username => {
     const query = `SELECT * FROM users WHERE LOWER (username) = LOWER ( $1 );`;
     try {
       const check = await db.query(query, [username]);
-      console.log(check.rows[0]);
+      // console.log(check.rows[0]);
       if (check.rows[0]) return check.rows[0];
     } catch (err) {
       console.log(err);
@@ -246,7 +239,7 @@ module.exports.checkPassword = async user => {
 };
 
 module.exports.createAuthToken = user => {
-  console.log("Create Auth Token: ", user);
+  console.log("Create Auth Token: ", user.username);
   const { id } = user;
   return jwt.sign({ id: id }, tempSecret, {
     subject: "",
@@ -293,26 +286,6 @@ module.exports.extractToken = async token => {
   }
 };
 
-// module.exports.extractToken = async token => {
-//   console.log("Verifying Auth Token");
-//   try {
-//     return new Promise(async (resolve, reject) => {
-//       await jwt.verify(token, tempSecret, "HS256", (err, res) => {
-//         if (token) console.log("JWT Verified");
-//         if (err) return reject(err);
-//         return resolve(res);
-//       });
-//     });
-//   } catch (err) {
-//     let reason = {
-//       error: "problem verifying token from user"
-//     };
-//     Promise.reject(reason);
-//     console.log(reason);
-//     return null;
-//   }
-// };
-
 module.exports.verifyAuthToken = async token => {
   try {
     // console.log("Check Token: ", token);
@@ -320,7 +293,7 @@ module.exports.verifyAuthToken = async token => {
       const query = `SELECT * FROM users WHERE id = $1 LIMIT 1`;
       const result = await db.query(query, [token["id"]]);
       console.log("Get user from DB: ", result.rows[0].username);
-      return await result.rows[0];
+      return result.rows[0];
     }
   } catch (err) {
     console.log(err);

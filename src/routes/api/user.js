@@ -4,7 +4,7 @@ const { err } = require("../../modules/utilities");
 
 router.get("/followed", auth({ user: true }), async (req, res) => {
   const { followedServers } = require("../../controllers/user");
-  console.log(req.user);
+  console.log("Checking Followed Servers: ", req.user.username);
   if (req.user && req.user.id) {
     const followed = await followedServers(req.user);
     res.send(followed);
@@ -14,8 +14,10 @@ router.get("/followed", auth({ user: true }), async (req, res) => {
   return;
 });
 
+//Will need to get user email, and this probably shouldn't need auth
 router.post("/get-password-reset", auth({ user: true }), async (req, res) => {
   const { generateResetKey } = require("../../controllers/user");
+  //req.body.email || req.body.username
   if (req.user && req.user.id) {
     console.log(`Reset Password for: ${req.user.username}`);
     const reset = await generateResetKey(req.user);
@@ -25,10 +27,22 @@ router.post("/get-password-reset", auth({ user: true }), async (req, res) => {
   res.send(err("There was a problem generating a reset key through the API"));
 });
 
-router.post("/password-reset", auth({ user: true }), async (req, res) => {
+router.post("/password-update", auth({ user: true }), async (req, res) => {
   if (req.user && req.user.id && req.body.key_id) {
     console.log(`Resetting Password for ${req.user.username}`);
   }
+});
+
+router.post("password-reset", async (req, res) => {
+  const { useResetKey } = require("../../controllers/user");
+  if (req.body && req.body.key_id && req.body.password) {
+    const reset = await useResetKey(req.body.key_id, req.body.password);
+    if (reset) {
+      res.send(reset);
+      return;
+    }
+  }
+  res.send(err("There was a problem with resetting your password"));
 });
 
 module.exports = router;

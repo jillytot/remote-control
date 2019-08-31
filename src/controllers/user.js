@@ -50,23 +50,27 @@ module.exports.generateResetKey = async user => {
   return err("Unable to generate key.");
 };
 
-module.exports.useResetKey = async (user, key, pass) => {
+module.exports.useResetKey = async (key, pass) => {
   const { updatePassword } = require("../models/user");
   const { getKey, updateKey } = require("../models/keys");
+  const { getUserInfoFromId } = require("../models/user");
   user.passsword = pass;
   const checkExpired = await getKey(key);
-  if (checkExpired.expired === true) {
+  if (checkExpired.expired === true || expires > Date.now()) {
     return err(
       "This key is no longer valid, please request a new password reset"
     );
   }
-  const useKey = await updateKey({
-    user_id: user.id,
-    key_id: key.key_id,
-    expired: true
-  });
-  if (!useKey) return err("There was a problem finding the specified key");
-  const reset = await updatePassword(user);
+  const getUser = await getUserInfoFromId(checkExpired.ref);
+  if (!getUser) return null;
+  const reset = await updatePassword(getUser);
+  if (reset) {
+    const useKey = await updateKey({
+      key_id: key.key_id,
+      expired: true
+    });
+    if (!useKey) return err("There was a problem finding the specified key");
+  }
   if (!reset) return err("Could not reset password");
   return reset;
 };

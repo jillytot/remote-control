@@ -27,16 +27,15 @@ router.post("/get-password-reset", auth({ user: true }), async (req, res) => {
   res.send(err("There was a problem generating a reset key through the API"));
 });
 
-router.post("/password-update", auth({ user: true }), async (req, res) => {
-  if (req.user && req.user.id && req.body.key_id) {
-    console.log(`Resetting Password for ${req.user.username}`);
-  }
-});
-
-router.post("password-reset", async (req, res) => {
+router.post("/password-reset", async (req, res) => {
+  console.log("PASSWORD RESET");
   const { useResetKey } = require("../../controllers/user");
   if (req.body && req.body.key_id && req.body.password) {
-    const reset = await useResetKey(req.body.key_id, req.body.password);
+    // console.log("PASSWORD RESET CHECK: ", req.body);
+    const reset = await useResetKey({
+      key_id: req.body.key_id,
+      password: req.body.password
+    });
     if (reset) {
       res.send(reset);
       return;

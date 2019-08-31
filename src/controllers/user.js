@@ -26,7 +26,7 @@ const passwordResetKey = (user, setExpire) => {
   const { makeId, createTimeStamp } = require("../modules/utilities");
   const { passResetExpires } = require("../config/serverSettings");
   let expire = false;
-  const handleExpire = setExpire => {
+  const handleExpire = () => {
     expire = setExpire;
   };
   return {
@@ -35,7 +35,7 @@ const passwordResetKey = (user, setExpire) => {
     expires: passResetExpires,
     ref: user.id,
     expire: expire,
-    setExpiration: setExpire => handleExpire(setExpire)
+    setExpiration: value => handleExpire(value)
   };
 };
 
@@ -44,33 +44,33 @@ module.exports.generateResetKey = async user => {
   if (user) {
     const makeKey = await passwordResetKey(user);
     const save = await saveKey(makeKey);
-    console.log("Key Result: ", save);
     return save;
   }
   return err("Unable to generate key.");
 };
 
-module.exports.useResetKey = async (key, pass) => {
-  const { updatePassword } = require("../models/user");
+module.exports.useResetKey = async ({ key_id, password }) => {
+  console.log("RESET KEY CONTROLLER: ", key_id, password);
   const { getKey, updateKey } = require("../models/keys");
   const { getUserInfoFromId } = require("../models/user");
-  user.passsword = pass;
-  const checkExpired = await getKey(key);
-  if (checkExpired.expired === true || expires > Date.now()) {
+  const { expired, expires, ref } = await getKey({ key_id });
+  console.log("GET KEY: ", expired, expires, Date.now());
+  if (expired === true || expired === "true" || expires <= Date.now()) {
     return err(
       "This key is no longer valid, please request a new password reset"
     );
   }
-  const getUser = await getUserInfoFromId(checkExpired.ref);
+  let getUser = await getUserInfoFromId(ref);
   if (!getUser) return null;
-  const reset = await updatePassword(getUser);
+  const reset = await this.setNewPassword(getUser.id, password);
   if (reset) {
     const useKey = await updateKey({
-      key_id: key.key_id,
+      key_id: key_id,
+      ref: getUser.id,
       expired: true
     });
-    if (!useKey) return err("There was a problem finding the specified key");
+    if (!useKey) return err("There was a problem updating your key");
   }
   if (!reset) return err("Could not reset password");
-  return reset;
+  return { sucess: true, status: "password updated successfully" };
 };

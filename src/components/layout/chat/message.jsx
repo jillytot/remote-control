@@ -22,7 +22,6 @@ const Message = ({ message }) => {
 
   const handleEmotes = filterMessage => {
     let filter = [];
-
     filterMessage.split(" ").forEach((word, i) => {
       if (Emotes.hasOwnProperty(word)) {
         filter.push(

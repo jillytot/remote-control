@@ -109,7 +109,7 @@ async function announce(server, channel) {
     );
 
   if (channel.id === "chan-5376b814-1908-45d1-bb5e-790a1d05c1b1") {
-    embed.setFooter("LED bot sucks!");
+    embed.setFooter("LED bot is awesome!");
   } else {
     const randomFooter =
       randomFooters[Math.floor(Math.random() * randomFooters.length)];

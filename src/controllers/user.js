@@ -57,7 +57,7 @@ module.exports.useResetKey = async ({ key_id, password }) => {
   console.log("GET KEY: ", expired, expires, Date.now());
   if (expired === true || expired === "true" || expires <= Date.now()) {
     return err(
-      "This key is no longer valid, please request a new password reset"
+      "This key is not valid, either it doesn't exist, or it could have expired. Please request a new password reset"
     );
   }
   let getUser = await getUserInfoFromId(ref);

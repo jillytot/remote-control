@@ -3,6 +3,7 @@ import Form from "../../common/form";
 import axios from "axios";
 import Joi from "joi-browser";
 import { Redirect } from "react-router-dom";
+import { validateResetKey } from "../../../config/clientSettings";
 import "../login/login.css";
 
 export default class Recovery extends Form {
@@ -10,7 +11,43 @@ export default class Recovery extends Form {
     data: { password: "", confirm: "" },
     errors: {},
     error: "",
-    redirect: false
+    redirect: false,
+    key: null,
+    validated: null
+  };
+
+  async componentDidMount() {
+    await this.handleGetUrl(); //get url
+    await this.handleValidateKey();
+    //check if url is a valid key
+    //if no, then return invalid page
+    //else allow password reset
+    console.log(this.state.key);
+  }
+
+  handleValidateKey = async () => {
+    await axios
+      .post(validateResetKey, {
+        key_id: this.state.key
+      })
+      .then(response => {
+        console.log(response);
+        if (response.data.error) this.setState({ validated: false });
+        if (response.data.key_id) this.setState({ validated: true });
+      })
+      .catch(err => {
+        console.log(err);
+      });
+
+    return null;
+  };
+
+  handleGetUrl = () => {
+    const name = this.props.match.params.name;
+    const path = this.props.location.pathname;
+    const key = path.substr(name.length + 2);
+    if (key !== "") this.setState({ key: key });
+    return key;
   };
 
   schema = {
@@ -45,10 +82,8 @@ export default class Recovery extends Form {
     return null;
   };
 
-  render() {
-    return this.state.redirect ? (
-      <Redirect to="/"></Redirect>
-    ) : (
+  handleValidKey = () => {
+    return (
       <div className="register-form">
         Change Password:
         {this.handleSubmitError()}
@@ -58,6 +93,26 @@ export default class Recovery extends Form {
           {this.renderButton("Submit")}
         </form>
       </div>
+    );
+  };
+
+  handleInvalidKey = () => {
+    return (
+      <div className="register-form">
+        This key is not valid, either it doesn't exist, or it could have
+        expired. Please request a new password reset
+      </div>
+    );
+  };
+
+  render() {
+    console.log(this.props);
+    return this.state.redirect ? (
+      <Redirect to="/"></Redirect>
+    ) : this.state.validated ? (
+      this.handleValidKey()
+    ) : (
+      this.handleInvalidKey()
     );
   }
 }

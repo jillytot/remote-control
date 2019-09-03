@@ -45,5 +45,6 @@ module.exports = {
   makeButtons: `${apiUrl}/controls/make`,
   getButtons: `${apiUrl}/controls/button-input`,
   findServer: `${apiUrl}/robot-server/get-server`,
-  setServerListing: `${apiUrl}/robot-server/settings/listing`
+  setServerListing: `${apiUrl}/robot-server/settings/listing`,
+  validateResetKey: `${apiUrl}/user/validate-key`
 };

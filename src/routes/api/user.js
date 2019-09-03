@@ -44,4 +44,16 @@ router.post("/password-reset", async (req, res) => {
   res.send(err("There was a problem with resetting your password"));
 });
 
+router.post("/validate-key", async (req, res) => {
+  let response = {};
+  if (req.body.key_id) {
+    console.log("validate pasword reset key: ", req.body.key_id);
+    response.key_id = req.body.key_id;
+  } else {
+    response.error =
+      "This key is not valid, either it doesn't exist, or it could have expired. Please request a new password reset";
+  }
+  res.send(response);
+});
+
 module.exports = router;

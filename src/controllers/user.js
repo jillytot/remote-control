@@ -49,6 +49,13 @@ module.exports.generateResetKey = async user => {
   return err("Unable to generate key.");
 };
 
+module.exports.validateResetKey = async ({ key_id }) => {
+  const { getKey } = require("../models/keys");
+  const validate = await getKey({ key_id: key_id });
+  if (validate) return validate;
+  return err("Invalid Key");
+};
+
 module.exports.useResetKey = async ({ key_id, password }) => {
   console.log("RESET KEY CONTROLLER: ", key_id, password);
   const { getKey, updateKey } = require("../models/keys");

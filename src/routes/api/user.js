@@ -45,10 +45,12 @@ router.post("/password-reset", async (req, res) => {
 });
 
 router.post("/validate-key", async (req, res) => {
+  const { validateResetKey } = require("../../controllers/user");
   let response = {};
   if (req.body.key_id) {
     console.log("validate pasword reset key: ", req.body.key_id);
-    response.key_id = req.body.key_id;
+    const check = await validateResetKey({ key_id: req.body.key_id });
+    response = check;
   } else {
     response.error =
       "This key is not valid, either it doesn't exist, or it could have expired. Please request a new password reset";

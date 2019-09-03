@@ -1,5 +1,5 @@
 import React from "react";
-import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
+import { BrowserRouter as Route, Switch } from "react-router-dom";
 
 import Recovery from "../layout/recovery/recovery";
 
@@ -12,9 +12,19 @@ const RecoveryPage = () => {
           return <Recovery {...props} />;
         }}
       />
-      <Route path="/" render={props => <Recovery />} />
+      <Route
+        path="/"
+        exact
+        Component={props => {
+          return <ResetPage />;
+        }}
+      />
     </Switch>
   );
 };
 
 export default RecoveryPage;
+
+const ResetPage = () => {
+  return <div className="register-form">RESET!</div>;
+};

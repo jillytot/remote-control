@@ -44,6 +44,7 @@ router.post("/password-reset", async (req, res) => {
   res.send(err("There was a problem with resetting your password"));
 });
 
+//TODO: Throttle random URL checking to mine potential keys from DB
 router.post("/validate-key", async (req, res) => {
   const { validateResetKey } = require("../../controllers/user");
   let response = {};

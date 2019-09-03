@@ -59,7 +59,11 @@ module.exports.validateResetKey = async ({ key_id }) => {
 module.exports.useResetKey = async ({ key_id, password }) => {
   console.log("RESET KEY CONTROLLER: ", key_id, password);
   const { getKey, updateKey } = require("../models/keys");
-  const { getUserInfoFromId } = require("../models/user");
+  const {
+    getUserInfoFromId,
+    checkPassword,
+    createAuthToken
+  } = require("../models/user");
   const { expired, expires, ref } = await getKey({ key_id });
   console.log("GET KEY: ", expired, expires, Date.now());
   if (expired === true || expired === "true" || expires <= Date.now()) {
@@ -79,5 +83,6 @@ module.exports.useResetKey = async ({ key_id, password }) => {
     if (!useKey) return err("There was a problem updating your key");
   }
   if (!reset) return err("Could not reset password");
-  return { sucess: true, status: "password updated successfully" };
+  const token = await createAuthToken(getUser);
+  return { token: token };
 };

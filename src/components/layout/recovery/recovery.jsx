@@ -3,7 +3,10 @@ import Form from "../../common/form";
 import axios from "axios";
 import Joi from "joi-browser";
 import { Redirect } from "react-router-dom";
-import { validateResetKey } from "../../../config/clientSettings";
+import {
+  validateResetKey,
+  passwordReset
+} from "../../../config/clientSettings";
 import "../login/login.css";
 
 export default class Recovery extends Form {
@@ -15,6 +18,8 @@ export default class Recovery extends Form {
     key: null,
     validated: null
   };
+
+  //TODO: Confirm reset, and redirect in 5 seconds / display redirect link
 
   async componentDidMount() {
     await this.handleGetUrl(); //get url
@@ -37,6 +42,30 @@ export default class Recovery extends Form {
       })
       .catch(err => {
         console.log(err);
+      });
+
+    return null;
+  };
+
+  handlePasswordReset = async () => {
+    await axios
+      .post(passwordReset, {
+        key_id: this.state.key,
+        password: this.state.data.password
+      })
+      .then(response => {
+        console.log(response);
+        if (response.data.token) {
+          localStorage.setItem("token", response.data.token);
+          this.setState({ redirect: true });
+        } else {
+          this.setState({
+            error: response.data.error
+          });
+        }
+      })
+      .catch(error => {
+        console.log(error);
       });
 
     return null;
@@ -78,7 +107,7 @@ export default class Recovery extends Form {
       this.setState({ error: "Passwords do not match!" });
       return;
     }
-
+    await this.handlePasswordReset();
     return null;
   };
 

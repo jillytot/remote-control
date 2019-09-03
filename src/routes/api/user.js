@@ -36,6 +36,7 @@ router.post("/password-reset", async (req, res) => {
       key_id: req.body.key_id,
       password: req.body.password
     });
+
     if (reset) {
       res.send(reset);
       return;

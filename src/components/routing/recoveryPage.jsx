@@ -16,7 +16,7 @@ const RecoveryPage = () => {
         path="/"
         exact
         Component={props => {
-          return <ResetPage />;
+          return <ResetPage {...props} />;
         }}
       />
     </Switch>

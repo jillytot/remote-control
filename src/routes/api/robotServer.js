@@ -9,6 +9,7 @@ const {
 const { checkTypes } = require("../../models/user");
 const auth = require("../auth");
 const Joi = require("joi");
+const { jsonError } = require("../../modules/logging");
 
 //LIST ACTIVE SERVERS
 router.get("/list", async (req, res) => {
@@ -146,6 +147,17 @@ router.post("/settings/listing", auth({ user: true }), async (req, res) => {
     status: "Error!",
     error: "There was a problem updating server listing"
   });
+});
+
+router.post("/settings/private", auth({ user: true }), async (req, res) => {
+  const { setPrivate } = require("../../controllers/robotServer");
+  if (req.body.server.settings && req.body.server.settings.private) {
+    console.log("SETTING SERVER PRIVACY!", req.body);
+    const update = await setPrivate(req.body.server, req.user.id);
+    if (update) res.send(update);
+    return;
+  }
+  res.end(jsonError("Unable to update server settings"));
 });
 
 router.post("/get-server", async (req, res) => {

@@ -68,6 +68,23 @@ module.exports.updateListing = async (server, user_id) => {
   return null;
 };
 
+module.exports.setPrivate = async (server, user_id) => {
+  const {
+    getRobotServer,
+    updateRobotServerSettings
+  } = require("../models/robotServer");
+  let getServer = await getRobotServer(server.server_id);
+  if (getServer.owner_id === user_id) {
+    getServer.settings.private = server.settings.private;
+    const updateSettings = await updateRobotServerSettings(
+      getServer.server_id,
+      getServer.settings
+    );
+    if (updateSettings) return updateSettings.settings;
+  }
+  return null;
+};
+
 module.exports.getPublicServers = async () => {
   const { getRobotServers } = require("../models/robotServer");
   let getServers = await getRobotServers();

@@ -59,9 +59,18 @@ export default class ServerPage extends Component {
   };
 
   handleFindServer = async server_name => {
+    const token = localStorage.getItem("token");
     let found = null;
     await axios
-      .post(findServer, { server_name: server_name })
+      .post(
+        findServer,
+        {
+          server_name: server_name
+        },
+        {
+          headers: { authorization: `Bearer ${token}` }
+        }
+      )
       .then(response => {
         console.log(response);
         found = response.data;

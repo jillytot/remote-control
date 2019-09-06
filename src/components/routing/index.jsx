@@ -14,7 +14,7 @@ export default class IndexRouter extends Component {
     return (
       <Router>
         <Switch>
-          <Route component={LoginPage} exact path="/login" />
+          <Route component={LoginPage} path="/login" />
           <Route component={RecoveryPage} path="/recovery" />
           <Route component={ServersPage} path="/" />
         </Switch>

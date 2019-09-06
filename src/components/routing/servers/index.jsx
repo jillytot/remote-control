@@ -27,7 +27,8 @@ export default class ServersPage extends Component {
       isShowing: false,
       modalContent: [],
       reload: false,
-      showMobileNav: true //For handling mobile navigation states
+      showMobileNav: true, //For handling mobile navigation states
+      getLogin: false
     };
   }
 
@@ -145,7 +146,9 @@ export default class ServersPage extends Component {
     const token = localStorage.getItem("token");
     if (token) {
       socket.emit("AUTHENTICATE", { token: localStorage.getItem("token") });
+      return;
     }
+    this.setState({ getLogin: true });
   };
 
   setUser = user => {
@@ -172,7 +175,8 @@ export default class ServersPage extends Component {
       loadingText = "Waiting for Robot Servers...";
     }
 
-    if (this.state.user === null) return <Redirect to="/login" />;
+    if (this.state.user === null || this.state.getLogin === true)
+      return <Redirect to="/login" />;
 
     return loadingText ? (
       <div className="ConnectingOverlay">

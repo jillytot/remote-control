@@ -15,6 +15,7 @@ module.exports.createMessage = async message => {
   makeMess.id = `mesg-${makeId()}`;
   makeMess.time_stamp = createTimeStamp();
   makeMess.broadcast = message.broadcast || ""; // Flag for determining if message is broadcasted to the room, or just to the user
+  makeMess.channel_id = message.channel_id || "";
 
   //makeMess.user = message.user; //ws verifies the user, calls the DB, and attaches it to message before it's sent here
 
@@ -57,6 +58,7 @@ module.exports.createRobotMessage = async message => {
   makeMess.id = `mesg-${makeId()}`;
   makeMess.time_stamp = createTimeStamp();
   makeMess.broadcast = message.broadcast || ""; // Flag for determining if message is broadcasted to the room, or just to the user
+  makeMess.channel_id = message.channel_id || "";
   makeMess.display_message = true;
   makeMess.badges = await this.getBadges(
     [message.type],
@@ -85,7 +87,8 @@ module.exports.saveMessage = async getMessage => {
     broadcast,
     display_message,
     badges,
-    type
+    type,
+    channel_id
   } = getMessage;
 
   const dbPut = `INSERT INTO chat_messages ( message,
@@ -98,7 +101,7 @@ module.exports.saveMessage = async getMessage => {
     broadcast,
     display_message,
     badges,
-    type ) VALUES($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11 ) RETURNING *`;
+    type, channel_id ) VALUES($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12 ) RETURNING *`;
   console.log("SAVING MESSAGE...");
   try {
     const result = await db.query(dbPut, [
@@ -112,7 +115,8 @@ module.exports.saveMessage = async getMessage => {
       broadcast,
       display_message,
       badges,
-      type
+      type,
+      channel_id
     ]);
     if (result.rows[0]) return result.rows[0];
   } catch (err) {

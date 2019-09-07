@@ -57,7 +57,14 @@ export default class SendChat extends Form {
 
   doSubmit = () => {
     let keepGoing = true;
-    const { user, socket, chatId, server_id, onChatFeedback } = this.props;
+    const {
+      user,
+      socket,
+      chatId,
+      server_id,
+      onChatFeedback,
+      channel
+    } = this.props;
 
     if (user.status && user.status.timeout) {
       keepGoing = false;
@@ -109,13 +116,12 @@ export default class SendChat extends Form {
         userId: user.id,
         message: sendChat,
         chatId: chatId,
-        server_id: server_id
+        server_id: server_id,
+        channel_id: channel
       });
-      // console.log(
-      //   `SEND TO CHAT, user: ${user.username} userId ${
-      //     user.id
-      //   } message ${sendChat} chatId ${chatId}`
-      // );
+      console.log(
+        `SEND TO CHAT, user: ${user.username} userId ${user.id} message ${sendChat} chatId ${chatId}, channelId ${channel}`
+      );
 
       this.startTimer();
     } else {

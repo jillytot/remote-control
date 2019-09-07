@@ -254,6 +254,7 @@ export default class Chat extends Component {
         chatTabbed={this.props.chatTabbed}
         isModalShowing={this.props.isModalShowing}
         showMobileNav={this.props.showMobileNav}
+        channel={this.props.channel}
       />
     );
   };

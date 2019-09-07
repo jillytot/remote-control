@@ -20,6 +20,7 @@ export default class DisplayServerDetails extends Component {
   componentWillUnmount() {
     socket.off("SEND_LOCAL_STATUS", this.handleSocketLocalStatus);
     socket.off("SERVER_STATUS", this.handleSocketServerStatus);
+    socket.off("MODERATION_EVENT", this.handleModerationEvent);
   }
 
   componentDidUpdate(prevProps) {
@@ -45,6 +46,7 @@ export default class DisplayServerDetails extends Component {
   async componentDidMount() {
     socket.on("SEND_LOCAL_STATUS", this.handleSocketLocalStatus);
     socket.on("SERVER_STATUS", this.handleSocketServerStatus);
+    socket.on("MODERATION_EVENT", this.handleModerationEvent);
     this.setState({ currentStatus: this.props.server.server_id });
     this.initSocket();
 
@@ -60,6 +62,20 @@ export default class DisplayServerDetails extends Component {
         icon: <Icon icon={ICONS.FOLLOW} color={"#FF0000"} />
       });
   }
+
+  handleModerationEvent = e => {
+    console.log("HANDLE MODERATION EVENT: ", e);
+    if (e.event === "kicked" && e.server_id)
+      this.handleBeingKicked(e.server_id);
+  };
+
+  handleBeingKicked = async server_id => {
+    console.log("CHECK KICKED: ", server_id, this.props.server.server_id);
+    if (server_id === this.props.server.server_id) {
+      console.log("YOU DONE GOT KICKED!");
+      window.location.reload();
+    }
+  };
 
   handleGetServerStatus = () => {
     // console.log("GET SERVER STATUS CHECK");

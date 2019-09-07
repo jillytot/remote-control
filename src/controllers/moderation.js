@@ -50,6 +50,7 @@ module.exports.localUnTimeout = async moderate => {
 };
 
 module.exports.kickMember = async moderate => {
+  const { emitEvent } = require("../models/user");
   console.log("KICK MEMBER!");
   moderate.error = false;
   moderate = parseInput(moderate);
@@ -58,6 +59,10 @@ module.exports.kickMember = async moderate => {
     moderate = await authCommand(moderate);
   if (moderate.message["error"] === false)
     moderate = await doKickMember(moderate);
+  emitEvent(moderate.badUser.user_id, "MODERATION_EVENT", {
+    event: "kicked",
+    server: moderate.message.server_id
+  });
   await localMessageRemoval(moderate);
   console.log("KICK MEMBER CHECK: ", moderate.badUser.username);
   return moderate.message;
@@ -197,7 +202,6 @@ const checkTimeout = ({ arg, badUser, moderator, message }) => {
     );
     return { arg, badUser, moderator, message };
   }
-
   return { arg, badUser, moderator, message };
 };
 

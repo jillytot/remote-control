@@ -237,7 +237,7 @@ export default class ServersPage extends Component {
                   isModalShowing={this.state.isShowing}
                   robotServers={this.state.robotServers}
                   selectedServer={this.state.selectedServer}
-                  setServer={this.setServer}
+                  setServer={server => this.setServer(server)}
                   mobileState={this.handleMobileFlag}
                   showMobileNav={this.state.showMobileNav}
                   appendServer={server => this.appendUnlistedServer(server)}

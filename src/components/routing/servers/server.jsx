@@ -3,6 +3,7 @@ import { Redirect } from "react-router-dom";
 import Channels from "../../layout/robotServer/channels";
 import axios from "axios";
 import { findServer } from "../../../config/clientSettings";
+import "../../layout/frontPage/frontPage.css";
 
 export default class ServerPage extends Component {
   constructor(props) {
@@ -94,9 +95,23 @@ export default class ServerPage extends Component {
         onCloseModal={this.props.onCloseModal}
         showMobileNav={this.props.showMobileNav}
         mobileState={this.props.mobileState}
+        setServer={this.props.setServer}
       />
     ) : (
-      <React.Fragment />
+      <React.Fragment>
+        {" "}
+        <div className="front-page-container">
+          <div className="front-page-text">
+            <div>No Server Selected.</div>
+            <br />
+            <div>This could be because: </div>
+            <div>This server does not exist </div>
+            <div>This server has been set to private </div>
+            <div>You have been kicked, or banned </div>
+            <div>or... something broke.</div>
+          </div>
+        </div>
+      </React.Fragment>
     );
   };
 

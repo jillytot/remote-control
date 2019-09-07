@@ -73,7 +73,8 @@ export default class DisplayServerDetails extends Component {
     console.log("CHECK KICKED: ", server_id, this.props.server.server_id);
     if (server_id === this.props.server.server_id) {
       console.log("YOU DONE GOT KICKED!");
-      window.location.reload();
+      //window.location.reload();
+      this.props.setServer(null);
     }
   };
 

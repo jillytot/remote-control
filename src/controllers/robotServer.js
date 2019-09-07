@@ -122,6 +122,6 @@ const checkMembership = async (server, user) => {
     server_id: server.server_id
   });
   console.log(check);
-  if (check.settings.member === true) return server;
+  if (check.status.member === true) return server;
   return err("You are not a member of this server.");
 };

@@ -49,6 +49,40 @@ module.exports.localUnTimeout = async moderate => {
   return moderate.message;
 };
 
+module.exports.kickMember = async moderate => {
+  console.log("KICK MEMBER!");
+  moderate.error = false;
+  moderate = parseInput(moderate);
+  moderate = await getMembers(moderate);
+  if (moderate.message["error"] === false)
+    moderate = await authCommand(moderate);
+  if (moderate.message["error"] === false)
+    moderate = await doKickMember(moderate);
+  await localMessageRemoval(moderate);
+  console.log("KICK MEMBER CHECK: ", moderate.badUser.username);
+  return moderate.message;
+};
+
+const doKickMember = async moderate => {
+  const { leaveServer } = require("../controllers/members");
+  let { badUser } = moderate;
+  const name = badUser.username;
+  //const { updateMemberStatus } = require("../models/serverMembers");
+
+  //const update = await updateMemberStatus(badUser);
+  badUser = await leaveServer(badUser);
+  if (badUser) {
+    moderate.badUser = badUser;
+    moderate.message.message = `User ${name} has been kicked from this server. `;
+    return moderate;
+  }
+  moderate.message = handleError(
+    moderate.message.message,
+    "Unable to remove user from server, double check you have the right user."
+  );
+  return moderate;
+};
+
 const checkForTimeouts = ({ arg, badUser, moderator, message }) => {
   if (badUser["status"].timeout === false) {
     message = handleError(message, "This user is not currently in timeout.");
@@ -175,9 +209,7 @@ module.exports.handleLocalUnTimeout = async ({
 }) => {
   const removeTimeout = await clearLocalTimeout(badUser);
   if (removeTimeout) {
-    message.message = `User ${
-      badUser.username
-    }, your timeout status has been removed for this server.`;
+    message.message = `User ${badUser.username}, your timeout status has been removed for this server.`;
   } else {
     message = handleError(message, "Unable to clear timeout for user");
   }

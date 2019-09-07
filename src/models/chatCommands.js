@@ -22,6 +22,7 @@ module.exports.getMessageType = async message => {
 
 //commands for managing the site through chat
 siteCommands = async message => {
+  const { kickMember } = require("../controllers/moderation");
   let updateCommand = message;
   let scrubCommand = message.message
     .substr(1)
@@ -39,6 +40,7 @@ siteCommands = async message => {
 
   if (scrubCommand === "timeout") message = await localTimeout(message);
   if (scrubCommand === "untimeout") message = await localUnTimeout(message);
+  if (scrubCommand === "kick") message = await kickMember(message);
 
   if (scrubCommand === "mod") message.type = "moderation";
   if (scrubCommand === "unmod") message.type = "moderation";
@@ -191,9 +193,7 @@ module.exports.handleGlobalTimeout = async ({
     if (unTimeout) {
       actOnUser = thisUser;
       console.log("Chat Commands : handleUntimeout : thisUser: ", thisUser);
-      message.message = `User ${
-        actOnUser.username
-      } your timeout status has been removed`;
+      message.message = `User ${actOnUser.username} your timeout status has been removed`;
 
       console.log("MESSAGE FROM GLOBAL UNTIMEOUT: ", message.message);
       // const { sendGlobalTimeout } = require("./robotServer");

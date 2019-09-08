@@ -2,14 +2,14 @@ import React from "react";
 import Form from "../common/form";
 import Toggle from "../common/toggle";
 import axios from "axios";
-import { setServerListing } from "../../config/clientSettings";
+import { updateSettings } from "../../config/clientSettings";
 
 export default class EditServerForm extends Form {
   state = {
     data: {},
     errors: {},
-    settings: { unlist: null },
-    compareSettings: { unlist: null },
+    settings: { unlist: null, private: null },
+    compareSettings: { unlist: null, private: null },
     error: ""
   };
   schema = {};
@@ -21,29 +21,40 @@ export default class EditServerForm extends Form {
     });
   }
 
-  handleToggle = () => {
+  handleUnlistToggle = () => {
     let { settings } = this.state;
+    console.log("CHANGE SETTINGS BEFORE: ", settings);
     settings.unlist = !settings.unlist;
     this.setState({ settings: settings });
+    console.log("CHANGE SETTINGS AFTER: ", settings);
   };
 
-  listingObject = () => {
+  handlePrivateToggle = () => {
+    let { settings } = this.state;
+    console.log("CHANGE SETTINGS BEFORE: ", settings);
+    settings.private = !settings.private;
+    this.setState({ settings: settings });
+    console.log("CHANGE SETTINGS AFTER: ", settings);
+  };
+
+  settingsObject = () => {
     console.log(this.props.server.server_id);
     return {
       server: {
         server_id: this.props.server.server_id,
         settings: {
-          unlist: this.state.settings.unlist
+          unlist: this.state.settings.unlist,
+          private: this.state.settings.private
         }
       }
     };
   };
 
-  handleListing = async token => {
+  handleUpdateSettings = async token => {
     //  if (this.state.settings.unlist !== this.state.compareSettings.unlist) {
     console.log("Ding");
     await axios
-      .post(setServerListing, this.listingObject(), {
+      .post(updateSettings, this.settingsObject(), {
         headers: { authorization: `Bearer ${token}` }
       })
       .then(response => {
@@ -57,7 +68,7 @@ export default class EditServerForm extends Form {
   doSubmit = async () => {
     const token = localStorage.getItem("token");
     console.log("SUBMITTED: ", this.state.settings);
-    await Promise.all([this.handleListing(token)]);
+    await this.handleUpdateSettings(token);
     this.props.onCloseModal();
   };
 
@@ -80,7 +91,21 @@ export default class EditServerForm extends Form {
             <Toggle
               toggle={this.state.settings.unlist}
               label={"Unlist this server? "}
-              onClick={this.handleToggle}
+              onClick={this.handleUnlistToggle}
+              critical={true}
+            />
+          </div>
+          <br />
+          Private Listing
+          <div className="toggle-group">
+            <span className="info">
+              {" "}
+              Only server members can access a private server{" "}
+            </span>
+            <Toggle
+              toggle={this.state.settings.private}
+              label={"Set server to private? "}
+              onClick={this.handlePrivateToggle}
               critical={true}
             />
           </div>

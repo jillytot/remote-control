@@ -1,6 +1,6 @@
 const printErrors = true;
 
-module.exports.jsonError = (error, data, { print }) => {
+module.exports.jsonError = (error, data, print) => {
   if (printErrors || print) {
     if (data) {
       console.log("error: ", error, "data: ", data);

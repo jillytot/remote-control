@@ -46,6 +46,8 @@ module.exports = {
   getButtons: `${apiUrl}/controls/button-input`,
   findServer: `${apiUrl}/robot-server/get-server`,
   setServerListing: `${apiUrl}/robot-server/settings/listing`,
+  setServerPrivate: `${apiUrl}/robot-server/settings/private`,
+  updateSettings: `${apiUrl}/robot-server/settings/update`,
   validateResetKey: `${apiUrl}/user/validate-key`,
   passwordReset: `${apiUrl}/user/password-reset`
 };

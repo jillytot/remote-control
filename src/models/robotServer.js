@@ -147,7 +147,7 @@ module.exports.getActiveServer = server_id => {
   let pickServer = activeServers.filter(
     server => server.server_id === server_id
   );
-  console.log("Pick Active Robot Server: ", pickServer);
+  // console.log("Pick Active Robot Server: ", pickServer);
   return pickServer[0];
 };
 
@@ -214,7 +214,7 @@ module.exports.sendGlobalTimeout = (server_id, badUser) => {
 };
 
 module.exports.sendRobotServerStatus = (server_id, status) => {
-  console.log("SEND ROBOT STATUS CHECK: ", server_id, status);
+  // console.log("SEND ROBOT STATUS CHECK: ", server_id, status);
   this.emitEvent(server_id, "SERVER_STATUS", status);
 };
 
@@ -235,7 +235,7 @@ module.exports.getLocalTypes = async (server_id, user_id) => {
     });
   });
 
-  console.log("SENDING LOCAL TYPES: ", localTypes);
+  // console.log("SENDING LOCAL TYPES: ", localTypes);
   return localTypes;
 };
 
@@ -263,7 +263,7 @@ module.exports.getRobotServerFromName = async name => {
   const query = "SELECT * FROM robot_servers WHERE server_name = $1 LIMIT 1";
   try {
     const result = await db.query(query, [name]);
-    console.log("RESULT: ", result.rows[0]);
+    // console.log("RESULT: ", result.rows[0]);
     if (result.rows[0]) return result.rows[0];
   } catch (err) {
     console.log(err);
@@ -342,7 +342,7 @@ module.exports.updateRobotServerSettings = async (server_id, settings) => {
     const result = await db.query(update, [settings, server_id]);
     if (result.rows[0]) {
       const sendResult = result.rows[0];
-      console.log("Robot Server Updated: ", sendResult);
+      // console.log("Robot Server Updated: ", sendResult);
       return sendResult;
       //Server Status Update will need to get sent.
     }

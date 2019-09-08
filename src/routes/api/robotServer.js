@@ -133,31 +133,15 @@ router.get("/invites", auth({ user: true }), async (req, res) => {
   }
 });
 
-router.post("/settings/listing", auth({ user: true }), async (req, res) => {
-  const { updateListing } = require("../../controllers/robotServer");
-
+router.post("/settings/update", auth({ user: true }), async (req, res) => {
+  // return res.json(req.body);
+  const { updateSettings } = require("../../controllers/robotServer");
   if (req.body.server.settings) {
-    // console.log("INPUT CHECK: ", req.body.server);
-    const update = await updateListing(req.body.server, req.user.id);
-
+    const update = await updateSettings(req.body.server, req.user.id);
     if (update) res.send(update);
     return;
   }
-  res.send({
-    status: "Error!",
-    error: "There was a problem updating server listing"
-  });
-});
-
-router.post("/settings/private", auth({ user: true }), async (req, res) => {
-  const { setPrivate } = require("../../controllers/robotServer");
-  if (req.body.server.settings && req.body.server.settings.private) {
-    // console.log("SETTING SERVER PRIVACY!", req.body);
-    const update = await setPrivate(req.body.server, req.user.id);
-    if (update) res.send(update);
-    return;
-  }
-  res.end(jsonError("Unable to update server settings"));
+  res.send(jsonError("Unable to update server settings"));
 });
 
 router.post("/get-server", auth({ user: true }), async (req, res) => {

@@ -209,6 +209,7 @@ CREATE TABLE public.chat_messages
     display_message boolean,
     badges character varying[] COLLATE pg_catalog."default",
     type character varying COLLATE pg_catalog."default",
+    channel_id character varying COLLATE pg_catalog."default",
     CONSTRAINT chat_messages_pkey PRIMARY KEY (id)
 )
 WITH (

@@ -105,11 +105,11 @@ module.exports.getControlsFromId = async (channel_id, user) => {
         const getServerId = await getServerIdFromChannelId(channel_id); //might want to move these out of map
         const getServer = await getRobotServer(getServerId.result);
         if (getServer.owner_id === user.id) {
-          console.log(
-            "!\n!\nSEND ADMIN COMMAND///////////////////////: ",
-            user.username,
-            button.label
-          );
+          // console.log(
+          //   "!\n!\nSEND ADMIN COMMAND///////////////////////: ",
+          //   user.username,
+          //   button.label
+          // );
           return button;
         }
       } else if (!button.access) return button;

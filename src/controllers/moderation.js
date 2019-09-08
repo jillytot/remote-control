@@ -57,14 +57,15 @@ module.exports.kickMember = async moderate => {
   moderate = await getMembers(moderate);
   if (moderate.message["error"] === false)
     moderate = await authCommand(moderate);
-  if (moderate.message["error"] === false)
+  if (moderate.message["error"] === false) {
     moderate = await doKickMember(moderate);
-  emitEvent(moderate.badUser.user_id, "MODERATION_EVENT", {
-    event: "kicked",
-    server_id: moderate.message.server_id
-  });
-  await localMessageRemoval(moderate);
-  console.log("KICK MEMBER CHECK: ", moderate.badUser.username);
+    emitEvent(moderate.badUser.user_id, "MODERATION_EVENT", {
+      event: "kicked",
+      server_id: moderate.message.server_id
+    });
+    await localMessageRemoval(moderate);
+    console.log("KICK MEMBER CHECK: ", moderate.badUser.username);
+  }
   return moderate.message;
 };
 

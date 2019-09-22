@@ -123,3 +123,18 @@ module.exports.updateMemberCount = async robotServer => {
     sendRobotServerStatus(server_id, robotServer.status);
   }
 };
+
+module.exports.makeInvite = async (user, server) => {
+  //authorize invite
+  const { server_id } = server;
+  const { getRobotServer } = require("../models/robotServer");
+  const { generateInvite } = require("../models/invites");
+  const checkServer = await getRobotServer(server_id);
+
+  //temporary until i make role based auth system
+  if (checkServer.owner_id === user.id) {
+    const invite = generateInvite({ user, checkServer });
+    return invite;
+  }
+  return null;
+};

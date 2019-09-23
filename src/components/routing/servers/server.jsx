@@ -30,6 +30,7 @@ export default class ServerPage extends Component {
     let found = false;
     this.props.robotServers.map(robotServer => {
       if (robotServer.server_name === this.props.match.params.name) {
+        console.log("SELECTED ROBOT SERVER: ", robotServer);
         this.props.setServer(robotServer);
         found = true;
         return true;

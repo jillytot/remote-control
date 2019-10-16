@@ -21,7 +21,9 @@ const auth = options => {
             req.user = await authUserData(tokenData);
           } else if (type === "rbot" && options.robot) {
             //e you need t
+
             req.robot = await authRobotData(tokenData);
+            // console.log("AUTH ROBOT: ", req.robot, req.body);
           }
         }
       } else {

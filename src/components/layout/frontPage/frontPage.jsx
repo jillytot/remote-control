@@ -88,6 +88,12 @@ export default class FrontPage extends Component {
               https://github.com/remotv/controller
             </a>{" "}
           </div>
+          <div>
+            Support Jill and Remo on her Patreon Page:{" "}
+            <a href="https://www.patreon.com/letsjill">
+              https://www.patreon.com/letsjill
+            </a>{" "}
+          </div>
         </div>
       </div>
     );

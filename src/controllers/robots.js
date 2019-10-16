@@ -39,6 +39,7 @@ const updateRobotStatus = async robotsToUpdate => {
   await robotsToUpdate.forEach(async robot => {
     robot.status.heartBeat = createTimeStamp();
     await updateRobotStatus(robot.id, robot.status);
+    // console.log("ROBOT CHECK: //////////////////", robot);
   });
   return;
 };

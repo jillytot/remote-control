@@ -42,17 +42,14 @@ router.get("/create", (req, res) => {
 
 //generate invite for a server, right now only owner can make this
 router.post("/invite", auth({ user: true }), async (req, res) => {
-  let response = {};
   if (req.user && req.body.server_id) {
-    let invite = {};
-    invite.user = req.user;
-    if (req.body.expires) invite.expires = req.body.expires;
-    const { getRobotServer } = require("../../models/robotServer");
-    const { generateInvite } = require("../../models/invites");
-    invite.server = await getRobotServer(req.body.server_id);
-    const makeInvite = await generateInvite(invite);
-    response.invite = makeInvite;
-    res.send(response);
+    const { makeInvite } = require("../../controllers/members");
+    const generate = await makeInvite({
+      user: req.user,
+      server_id: req.body.server_id,
+      expires: req.body.expires || null
+    });
+    res.send(generate);
     return;
   }
   (response.status = "error"), (response.error = "Unable to generate invite");

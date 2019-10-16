@@ -95,7 +95,7 @@ export default class Signup extends Form {
       .then(response => {
         console.log(response);
         localStorage.setItem("token", response.data.token);
-        this.setState({redirect: true})
+        this.setState({ redirect: true });
       })
       .catch(function(error) {
         console.log(error);
@@ -111,28 +111,27 @@ export default class Signup extends Form {
   };
 
   render() {
-    return (
-      this.state.redirect ? (
-        <Redirect to="/"></Redirect>
-      ) : (
-        <div className="register-form">
-          Please do not use actual passwords or emails for this build.
-          {this.handleSubmitError()}
-          <form onSubmit={this.handleSubmit}>
-            {this.renderInput("username", "Username", "text")}
-            {this.renderInput("password", "Password", "password")}
-            {this.renderInput("confirm", "Confirm Password", "password")}
-            {this.renderInput("email", "Email", "email")}
-            <ReCAPTCHA
-              sitekey={reCaptchaSiteKey}
-              ref={this.recaptchaRef}
-              onChange={this.handleCaptcha} // this parameter is required.
-              // theme="dark"   // Did you know captcha has a dark theme?
-            />
-            {this.renderButton("Submit")}
-          </form>
-        </div>
-      )
+    return this.state.redirect ? (
+      <Redirect to="/"></Redirect>
+    ) : (
+      <div className="register-form">
+        This is an early development build for remo.tv, please create an account
+        or login below.
+        {this.handleSubmitError()}
+        <form onSubmit={this.handleSubmit}>
+          {this.renderInput("username", "Username", "text")}
+          {this.renderInput("password", "Password", "password")}
+          {this.renderInput("confirm", "Confirm Password", "password")}
+          {this.renderInput("email", "Email", "email")}
+          <ReCAPTCHA
+            sitekey={reCaptchaSiteKey}
+            ref={this.recaptchaRef}
+            onChange={this.handleCaptcha} // this parameter is required.
+            // theme="dark"   // Did you know captcha has a dark theme?
+          />
+          {this.renderButton("Submit")}
+        </form>
+      </div>
     );
   }
 }

@@ -103,15 +103,17 @@ export default class RobotInterface extends Component {
   }
 
   connectA = () => {
+    const protocol = window.location.protocol === "https:" ? "wss://" : "ws://";
     this.audioPlayer = new window.JSMpeg.Player(
-      `ws://dev.remo.tv:1567/receive?name=${this.props.channel}-audio`,
+      `${protocol}dev.remo.tv:1567/receive?name=${this.props.channel}-audio`,
       { video: false, disableWebAssembly: true }
     );
   };
 
   connectV = () => {
+    const protocol = window.location.protocol === "https:" ? "wss://" : "ws://";
     this.videoPlayer = new window.JSMpeg.Player(
-      `ws://dev.remo.tv:1567/receive?name=${this.props.channel}-video`,
+      `${protocol}dev.remo.tv:1567/receive?name=${this.props.channel}-video`,
       {
         canvas: this.refs["video-canvas"],
         videoBufferSize: 1 * 1024 * 1024,

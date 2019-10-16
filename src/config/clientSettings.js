@@ -2,8 +2,13 @@ const { serverPort } = require("./serverSettings");
 
 const reCaptchaKey = "6Lfg_KYUAAAAAH1hvQdp-qDOUToVn6FQWFOvbySo";
 
-const ws = "ws://";
-const http = "http://";
+let http = "http://";
+let ws = "ws://";
+if (window.location.protocol == 'https:'){
+  ws = "wss://";
+  http = "https://";
+}
+
 const apiVersion = "/dev";
 const api = `/api${apiVersion}`;
 

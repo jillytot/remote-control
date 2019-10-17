@@ -7,3 +7,20 @@
   justify-content: center;
   flex-direction: column;
 }
+
+.intro {
+  border-radius: 12px;
+  margin-bottom: 24px;
+  margin-top: 24px;
+  background: rgb(25, 25, 36);
+}
+
+.landing-page {
+  padding: 24px;
+  font-size: 15px;
+}
+
+.landing-logo {
+  height: 50%;
+  width: 50%;
+}

@@ -114,9 +114,7 @@ export default class Signup extends Form {
     return this.state.redirect ? (
       <Redirect to="/"></Redirect>
     ) : (
-      <div className="register-form">
-        This is an early development build for remo.tv, please create an account
-        or login below.
+      <div className="register-form intro ">
         {this.handleSubmitError()}
         <form onSubmit={this.handleSubmit}>
           {this.renderInput("username", "Username", "text")}

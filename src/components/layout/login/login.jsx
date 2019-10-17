@@ -86,7 +86,7 @@ export default class Login extends Form {
     return this.state.redirect ? (
       <Redirect to="/" />
     ) : (
-      <div className="register-form">
+      <div className="register-form intro">
         <form onSubmit={this.handleSubmit}>
           {this.renderInput("username", "Username", "text")}
           {this.renderInput("password", "Password", "password")}

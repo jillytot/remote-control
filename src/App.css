@@ -1,5 +1,4 @@
 .App {
-  background-color: #282c34;
   color: white;
   font-size: 20px;
   font-family: sans-serif;
@@ -7,6 +6,10 @@
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
   height: 100vh;
+}
+
+body {
+  background: #282c34;
 }
 
 .App-link {

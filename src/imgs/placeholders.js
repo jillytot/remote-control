@@ -17,6 +17,7 @@ import addServer from "./img/addServer.png";
 import appIcon from "./img/remo-app-icon-large.png";
 import remoGrey from "./img/remo-grey.png";
 import videoImg from "./img/remo-video-bg.png";
+import remoSplash from "./img/remoSplash.png";
 
 const defaultImages = {
   default01: default01,
@@ -37,7 +38,8 @@ const defaultImages = {
   addServer: addServer,
   appIcon: appIcon,
   remoGrey: remoGrey,
-  videoImg: videoImg
+  videoImg: videoImg,
+  remoSplash: remoSplash
 };
 
 export default defaultImages;

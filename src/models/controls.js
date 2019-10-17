@@ -63,6 +63,7 @@ module.exports.updateControls = async controls => {
   } catch (err) {
     console.log(err);
   }
+  console.log("ERROR UPDATING EXISTING CONTROLS FOR", id, "UPDATE MET NO ROWS?");
   return { status: "error!", error: "Problem updating controls" };
 };
 

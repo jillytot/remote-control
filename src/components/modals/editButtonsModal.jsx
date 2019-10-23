@@ -69,7 +69,7 @@ export default class EditButtonsModal extends Form {
 
     const token = localStorage.getItem("token");
     console.log("GET BUTTONS", this.props.channel);
-    console.log(token);
+    // console.log(token);
     await axios
       .post(
         makeButtons,

@@ -74,7 +74,7 @@ module.exports.createChannel = async data => {
   makeChannel.controls = makeControls.id;
   // makeChannel.controls = checkChannelElement("");
   console.log("Generating Channel: ", makeChannel);
-  this.saveChannel(makeChannel);
+  await this.saveChannel(makeChannel);
   // pushToActiveChannels(makeChannel);
 
   return makeChannel;
@@ -180,7 +180,7 @@ module.exports.deleteChannel = async (channel_id, server_id) => {
     response.status = "success!";
     response.result = result.rows[0];
     await tempEnsureDefaultChannel(server_id, channel_id);
-    this.updateServerChannels(server_id);
+    await this.updateServerChannels(server_id);
     return response;
     //}
   } catch (err) {

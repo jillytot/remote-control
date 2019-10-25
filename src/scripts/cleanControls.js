@@ -35,12 +35,29 @@ const handleProblemChannels = async problems => {
   return false;
 };
 
+const cleanControls = async controls => {
+  const { removeControls } = require("../models/controls");
+  console.log("Cleaning Controls");
+  const badId = "chan";
+  const clean = await controls.map(async item => {
+    const check = item.id.slice(0, 4);
+
+    if (check === badId) {
+      console.log(item.id);
+      await removeControls(item);
+    }
+  });
+  await Promise.all(clean);
+  return clean;
+};
+
 //Triage channels with unassigned channel controls
 const findControls = async dirtyChannels => {
   const { getAllControls, removeControls } = require("../models/controls");
   let problemChannels = [];
-  const controls = await getAllControls();
+  let controls = await getAllControls();
   console.log("Getting Controls: ", controls.length);
+  controls = await cleanControls(controls);
 
   const promises = dirtyChannels.map(async dirty => {
     let getDupes = await controls.filter(ui => ui.channel_id === dirty.id);

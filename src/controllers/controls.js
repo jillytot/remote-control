@@ -1,12 +1,15 @@
 //default example for controls
-const example = [
-  { break: "line", label: "movement" },
-  { label: "example", command: "stop", access: "owner" },
-  { label: "forward", hot_key: "w", command: "f" },
-  { label: "back", hot_key: "s", command: "b" },
-  { label: "left", hot_key: "a", command: "l" },
-  { label: "right", hot_key: "d", command: "r" }
-];
+module.exports.exampleControls = () => {
+  return [
+    { break: "line", label: "movement" },
+    { label: "forward", hot_key: "w", command: "f" },
+    { label: "back", hot_key: "s", command: "b" },
+    { label: "left", hot_key: "a", command: "l" },
+    { label: "right", hot_key: "d", command: "r" },
+    // { break: "line"} for some reason causes weirdness with admin commands
+    { label: "example admin command", command: "example", access: "owner" }
+  ];
+};
 
 module.exports.getButtonInputForChannel = async channel_id => {
   const { getChannel } = require("../models/channel");
@@ -16,7 +19,7 @@ module.exports.getButtonInputForChannel = async channel_id => {
   const channel = await getChannel(channel_id);
   const controls = await getControlsFromId(channel.controls);
   if (controls.buttons) return controls.buttons; //only send valid key / value pairs
-  return example;
+  return this.exampleControls;
 };
 
 //input: { label: "<string>", hot_key: "<string>", command: "<string>"}

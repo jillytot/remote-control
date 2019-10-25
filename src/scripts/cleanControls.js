@@ -7,25 +7,52 @@
 const clean = async () => {
   let cleanUp = await dirtyChannels();
   cleanUp = await findControls(cleanUp);
-
-  console.log("Cleanup Result: ", cleanUp);
+  cleanUp = await handleProblemChannels(cleanUp);
+  if (cleanUp === true) {
+    console.log("Channel Cleanup Successful!");
+  } else {
+    console.log("Channel Cleanup incomplete");
+  }
+  //console.log("Cleanup Result: ", cleanUp);
   process.exit(1);
 };
 
+//If no controls have even been generated for a channel, add them here.
+const handleProblemChannels = async problems => {
+  const { createControls } = require("../models/channel");
+  let fixed = 0;
+  const total = problems.length;
+  const promises = problems.map(async problem => {
+    const fix = await createControls(problem);
+    if (fix) fixed += 1;
+  });
+  await Promise.all(promises);
+  console.log(`${fixed} out of ${total} problem channels fixed...`);
+  if (fixed === total) return true;
+  return false;
+};
+
+//Triage channels with unassigned channel controls
 const findControls = async dirtyChannels => {
-  const { getAllControls } = require("../models/controls");
+  const { getAllControls, removeControls } = require("../models/controls");
   let problemChannels = [];
   const controls = await getAllControls();
   console.log("Getting Controls: ", controls.length);
 
   const promises = dirtyChannels.map(async dirty => {
-    console.log("Checking Dirty Channel: ", dirty.name);
     let getDupes = await controls.filter(ui => ui.channel_id === dirty.id);
     console.log("Entries found for channel: ", dirty.name, getDupes.length);
-    if (getDupes.length === 0) {
-      problemChannels.push(dirty);
-    } else {
-      //assign the most recently created dupe channel
+    if (getDupes.length < 1) problemChannels.push(dirty);
+    if (getDupes.length === 1) assignControls(dirty, dupe);
+    if (getDupes.length > 1) {
+      getDupes = await getDupes.sort(compare);
+      getDupes.forEach(async (dupe, index) => {
+        if (index === 0) {
+          await assignControls(dirty, dupe);
+        } else {
+          await removeControls(dupe);
+        }
+      });
     }
   });
 
@@ -33,6 +60,7 @@ const findControls = async dirtyChannels => {
   return problemChannels;
 };
 
+//assign controls to a channel
 const assignControls = async (channel, ui) => {
   const { setControls } = require("../models/channel");
   console.log("Assigning Controls to Channels");
@@ -41,6 +69,7 @@ const assignControls = async (channel, ui) => {
   return assign;
 };
 
+//identify channels without controls assigned
 const dirtyChannels = async () => {
   const { getAllChannels } = require("../models/channel");
   const channels = await getAllChannels();
@@ -60,11 +89,6 @@ const dirtyChannels = async () => {
   );
 
   return dirtyChannels;
-};
-
-const organizeDupes = async dupes => {
-  const sortDupes = await dupes.sort(compare);
-  return sortDupes[0];
 };
 
 const compare = async (a, b) => {

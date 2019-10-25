@@ -5,15 +5,9 @@ Multiple channels on a robot_server can load the same control set & feed it to d
 Right now this only covers buttons, will will eventually include other types of input
 */
 const { makeId, createTimeStamp } = require("../modules/utilities");
-
+const { exampleControls } = require("../controllers/controls");
 //TEMPORARY VALUES JUST TO ENSURE VALIDATION:
-testControls = [
-  { label: "stop", command: "stop", access: "owner" },
-  { label: "forward", hot_key: "w", command: "f", id: "1" },
-  { label: "back", hot_key: "s", command: "b", id: "2" },
-  { label: "left", hot_key: "a", command: "l", id: "4" },
-  { label: "right", hot_key: "d", command: "r", id: "3" }
-];
+testControls = exampleControls();
 
 const defaultStatus = () => {
   return {

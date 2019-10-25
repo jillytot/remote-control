@@ -240,7 +240,7 @@ module.exports.setControls = async controlData => {
   } catch (err) {
     response.status = "error";
     response.error = "could not set controls for channel";
-    console.log(err);
+    console.log(err.detail);
   }
 };
 

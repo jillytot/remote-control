@@ -19,11 +19,14 @@ const clean = async () => {
 
 //If no controls have even been generated for a channel, add them here.
 const handleProblemChannels = async problems => {
-  const { createControls } = require("../models/channel");
+  const { createControls } = require("../models/controls");
   let fixed = 0;
   const total = problems.length;
   const promises = problems.map(async problem => {
-    const fix = await createControls(problem);
+    console.log(`Make Controls For: ${problem.id}`);
+    let fix = await createControls({ channel_id: problem.id });
+    fix = await assignControls(problem, fix);
+    console.log(`Create Controls Result:  ${problem.id}`);
     if (fix) fixed += 1;
   });
   await Promise.all(promises);
@@ -43,7 +46,7 @@ const findControls = async dirtyChannels => {
     let getDupes = await controls.filter(ui => ui.channel_id === dirty.id);
     console.log("Entries found for channel: ", dirty.name, getDupes.length);
     if (getDupes.length < 1) problemChannels.push(dirty);
-    if (getDupes.length === 1) assignControls(dirty, dupe);
+    if (getDupes.length === 1) assignControls(dirty, getDupes[0]);
     if (getDupes.length > 1) {
       getDupes = await getDupes.sort(compare);
       getDupes.forEach(async (dupe, index) => {
@@ -63,7 +66,7 @@ const findControls = async dirtyChannels => {
 //assign controls to a channel
 const assignControls = async (channel, ui) => {
   const { setControls } = require("../models/channel");
-  console.log("Assigning Controls to Channels");
+  console.log(`Set controls for channel: ${channel.id} controls: ${ui.id}`);
   const assign = await setControls({ id: ui.id, channel_id: channel.id });
   console.log("Setting Controls for Channel", assign.name, assign.controls);
   return assign;

@@ -63,7 +63,11 @@ module.exports.updateControls = async controls => {
   } catch (err) {
     console.log(err);
   }
-  console.log("ERROR UPDATING EXISTING CONTROLS FOR", id, "UPDATE MET NO ROWS?");
+  console.log(
+    "ERROR UPDATING EXISTING CONTROLS FOR",
+    id,
+    "UPDATE MET NO ROWS?"
+  );
   return { status: "error!", error: "Problem updating controls" };
 };
 
@@ -179,6 +183,39 @@ module.exports.getControlsForChannel = async channel_id => {
   try {
     const result = await db.query(query, [channel_id]);
     if (result.rows[0]) return result.rows[0];
+  } catch (err) {
+    console.log(err);
+  }
+  return null;
+};
+
+module.exports.removeControls = async controls => {
+  const db = require("../services/db");
+  const { id } = controls;
+  console.log("Removing Controls Test 0: ", id);
+  const query = `DELETE FROM controls WHERE id = $1`;
+  try {
+    const result = await db.query(query, [id]);
+    console.log("test 1");
+    if (result.rows[0]) {
+      console.log("test 2");
+      return "test 3";
+    }
+  } catch (err) {
+    console.log("test 4");
+    console.log(err);
+  }
+
+  console.log("test 5");
+  return null;
+};
+
+module.exports.getAllControls = async () => {
+  const db = require("../services/db");
+  const query = `SELECT * FROM controls`;
+  try {
+    const result = await db.query(query);
+    if (result.rows[0]) return result.rows;
   } catch (err) {
     console.log(err);
   }

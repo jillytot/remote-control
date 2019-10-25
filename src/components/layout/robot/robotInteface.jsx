@@ -72,7 +72,7 @@ export default class RobotInterface extends Component {
     );
 
     if (channel) {
-      socket.emit("GET_CONTROLS", channel.controls);
+      socket.emit("GET_CONTROLS", channel);
     }
   };
 
@@ -102,7 +102,8 @@ export default class RobotInterface extends Component {
     this.onMount();
   }
 
-  connectA = () => { //need to add client options for video relay
+  connectA = () => {
+    //need to add client options for video relay
     const protocol = window.location.protocol === "https:" ? "wss://" : "ws://";
     this.audioPlayer = new window.JSMpeg.Player(
       `${protocol}remo.tv/receive?name=${this.props.channel}-audio`,
@@ -210,11 +211,8 @@ export default class RobotInterface extends Component {
   };
 
   onControlsUpdated = () => {
-    if (
-      this.state.controlsId ||
-      (this.props.channelInfo && this.props.channelInfo.controls)
-    )
-      socket.emit("GET_CONTROLS", this.state.controlsId);
+    if (this.props.channelInfo && this.props.channelInfo.controls)
+      socket.emit("GET_CONTROLS", this.props.channelInfo);
   };
 
   handleClick = click => {

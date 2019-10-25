@@ -267,5 +267,17 @@ module.exports.getChannel = async channel_id => {
   }
 };
 
+module.exports.getAllChannels = async () => {
+  const db = require("../services/db");
+  const query = `SELECT * FROM channels`;
+  try {
+    const result = await db.query(query);
+    if (result.rows[0]) return result.rows;
+  } catch (err) {
+    console.log(err);
+  }
+  return null;
+};
+
 //tests
 //console.log(this.getChannel("chan-02063c30-01b8-4d6c-9712-0fa646bcc942"));

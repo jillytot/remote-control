@@ -24,7 +24,7 @@ module.exports.setNewPassword = async (user_id, password) => {
 
 const passwordResetKey = (user, setExpire) => {
   const { makeId, createTimeStamp } = require("../modules/utilities");
-  const { passResetExpires } = require("../config/serverSettings");
+  const { passResetExpires } = require("../config/serverSettings"); //TODO: Config Date.now() will be based of when the program starts needs changed.
   let expire = false;
   const handleExpire = () => {
     expire = setExpire;
@@ -32,17 +32,17 @@ const passwordResetKey = (user, setExpire) => {
   return {
     key_id: `rset-${makeId()}`,
     created: createTimeStamp(),
-    expires: passResetExpires,
+    expires: passResetExpires || setExpire,
     ref: user.id,
     expire: expire,
     setExpiration: value => handleExpire(value)
   };
 };
 
-module.exports.generateResetKey = async user => {
+module.exports.generateResetKey = async (user, setExpire) => {
   const { saveKey } = require("../models/keys");
   if (user) {
-    const makeKey = await passwordResetKey(user);
+    const makeKey = await passwordResetKey(user, setExpire);
     const save = await saveKey(makeKey);
     return save;
   }

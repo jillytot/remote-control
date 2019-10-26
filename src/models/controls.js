@@ -186,21 +186,17 @@ module.exports.getControlsForChannel = async channel_id => {
 module.exports.removeControls = async controls => {
   const db = require("../services/db");
   const { id } = controls;
-  console.log("Removing Controls Test 0: ", id);
+  // console.log("Removing Controls Test 0: ", id);
   const query = `DELETE FROM controls WHERE id = $1`;
   try {
     const result = await db.query(query, [id]);
-    console.log("test 1");
     if (result.rows[0]) {
-      console.log("test 2");
-      return "test 3";
+      return true;
     }
   } catch (err) {
-    console.log("test 4");
     console.log(err);
   }
 
-  console.log("test 5");
   return null;
 };
 

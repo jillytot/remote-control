@@ -388,4 +388,4 @@ export default class RobotInterface extends Component {
   }
 }
 
-const testButtons = [{ break: "line", label: "no controls available" }];
+const testButtons = [{ break: "line", label: "", id: "1" }];

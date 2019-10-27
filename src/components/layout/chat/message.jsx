@@ -143,8 +143,18 @@ const Message = ({ message }) => {
   };
 
   const handleSenderColor = message => {
-    if (message.sender === "remo") return "chat-user-name rainbow";
-    return "chat-user-name";
+    let color = "chat-user-name";
+    //if (message.sender === "remo") return "chat-user-name rainbow";
+    //another temporary solution:
+    rainbowForLifeNames.map(name => {
+      console.log("Mapping Names");
+      if (message.sender === name) {
+        console.log(`Found Match: ${name}`);
+        color = "chat-user-name rainbow";
+        return;
+      }
+    });
+    return color;
   };
 
   const handleMessageContainer = () => {
@@ -173,3 +183,24 @@ const Message = ({ message }) => {
 };
 
 export default Message;
+
+const rainbowForLifeNames = [
+  "Admanta",
+  "TGCFabian",
+  "onlybrezel",
+  "robosim",
+  "backslashkieran",
+  "mikey",
+  "skeet",
+  "andrak",
+  "xyamom",
+  "RoyE",
+  "bruh116",
+  "Boland",
+  "chad",
+  "gcurtis79",
+  "neviklink",
+  "cheshy",
+  "BunkyFakerino",
+  "remo"
+];

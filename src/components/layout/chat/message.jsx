@@ -202,5 +202,10 @@ const rainbowForLifeNames = [
   "neviklink",
   "cheshy",
   "BunkyFakerino",
-  "Remo"
+  "Remo",
+  "ReconDelta090",
+  "Peter",
+  "hgriswold89",
+  "sybergoosejr",
+  "Nocturnal"
 ];

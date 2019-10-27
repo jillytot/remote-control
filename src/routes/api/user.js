@@ -20,7 +20,7 @@ router.post("/get-password-reset", auth({ user: true }), async (req, res) => {
   //req.body.email || req.body.username
   if (req.user && req.user.id) {
     console.log(`Reset Password for: ${req.user.username}`);
-    const reset = await generateResetKey(req.user);
+    const reset = await generateResetKey(req.user, req.body.expires);
     res.send(reset);
     return;
   }

@@ -1,13 +1,18 @@
 //default example for controls
 module.exports.exampleControls = () => {
   return [
-    { break: "line", label: "movement" },
-    { label: "forward", hot_key: "w", command: "f" },
-    { label: "back", hot_key: "s", command: "b" },
-    { label: "left", hot_key: "a", command: "l" },
-    { label: "right", hot_key: "d", command: "r" },
-    // { break: "line"} for some reason causes weirdness with admin commands
-    { label: "example admin command", command: "example", access: "owner" }
+    { break: "line", label: "movement", id: "1" },
+    { label: "forward", hot_key: "w", command: "f", id: "2" },
+    { label: "back", hot_key: "s", command: "b", id: "3" },
+    { label: "left", hot_key: "a", command: "l", id: "4" },
+    { label: "right", hot_key: "d", command: "r", id: "5" },
+    { break: "line", label: "", id: "6" },
+    {
+      label: "example admin command",
+      command: "example",
+      access: "owner",
+      id: "7"
+    }
   ];
 };
 
@@ -20,6 +25,10 @@ module.exports.getButtonInputForChannel = async channel_id => {
   const controls = await getControlsFromId(channel.controls);
   if (controls.buttons) return controls.buttons; //only send valid key / value pairs
   return this.exampleControls;
+};
+
+module.exports.getButtonInputForUser = async (user, channel_id) => {
+  return await this.getControlsFromId(channel_id, user);
 };
 
 //input: { label: "<string>", hot_key: "<string>", command: "<string>"}
@@ -107,7 +116,7 @@ module.exports.getControlsFromId = async (channel_id, user) => {
     const getServerId = await getServerIdFromChannelId(channel_id);
     const getServer = await getRobotServer(getServerId.result);
     const testy = async button => {
-      if (button.access && button.access === "owner") {
+      if (user && button.access && button.access === "owner") {
         //A VERY TEMPORARY SOLUTION!!!!
 
         if (getServer.owner_id === user.id) {

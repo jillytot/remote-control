@@ -55,5 +55,6 @@ module.exports = {
   setServerPrivate: `${apiUrl}/robot-server/settings/private`,
   updateSettings: `${apiUrl}/robot-server/settings/update`,
   validateResetKey: `${apiUrl}/user/validate-key`,
-  passwordReset: `${apiUrl}/user/password-reset`
+  passwordReset: `${apiUrl}/user/password-reset`,
+  getControls: `${apiUrl}/controls/get-controls`
 };

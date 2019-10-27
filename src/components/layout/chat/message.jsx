@@ -147,9 +147,9 @@ const Message = ({ message }) => {
     //if (message.sender === "remo") return "chat-user-name rainbow";
     //another temporary solution:
     rainbowForLifeNames.map(name => {
-      console.log("Mapping Names");
+      //console.log("Mapping Names");
       if (message.sender === name) {
-        console.log(`Found Match: ${name}`);
+        //console.log(`Found Match: ${name}`);
         color = "chat-user-name rainbow";
         return;
       }

@@ -1,9 +1,12 @@
 import React, { useState } from "react";
 import Emotes from "../../../emotes/emotes";
 import defaultImages from "../../../imgs/placeholders";
+import { mobileMessageFadeOut } from "../../../config/clientSettings";
 
 const Message = ({ message }) => {
-  const [fadeout, setFadeout] = useState(setTimeout(() => handleFade(), 4000));
+  const [fadeout, setFadeout] = useState(
+    setTimeout(() => handleFade(), mobileMessageFadeOut)
+  );
 
   const handleFade = () => {
     setFadeout(true);

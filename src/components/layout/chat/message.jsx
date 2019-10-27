@@ -148,7 +148,7 @@ const Message = ({ message }) => {
     //another temporary solution:
     rainbowForLifeNames.map(name => {
       //console.log("Mapping Names");
-      if (message.sender === name) {
+      if (message.sender.toLowerCase() === name.toLowerCase()) {
         //console.log(`Found Match: ${name}`);
         color = "chat-user-name rainbow";
         return;
@@ -202,5 +202,5 @@ const rainbowForLifeNames = [
   "neviklink",
   "cheshy",
   "BunkyFakerino",
-  "remo"
+  "Remo"
 ];

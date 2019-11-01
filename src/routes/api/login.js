@@ -1,5 +1,4 @@
 const router = require("express").Router();
-const user = require("../../models/user");
 const { jsonError } = require("../../modules/logging");
 
 router.get("/", async (req, res) => {

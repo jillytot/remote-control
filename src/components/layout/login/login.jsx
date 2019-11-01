@@ -43,7 +43,6 @@ export default class Login extends Form {
 
   setUser = ({ user, isUser }) => {
     if (isUser === true) {
-      console.log("watwatwatwatwatawtawtwat");
       this.setError("User name taken.");
       this.setState({ isUser: false });
       this.validate();

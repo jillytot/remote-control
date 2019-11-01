@@ -32,6 +32,10 @@ export default class LoginPage extends Component {
           <div className="">
             Questions, Comments, or Issues? contact jill@remo.tv
           </div>
+          <div>
+            Or join our discord ( and get faster response ):{" "}
+            <a href="https://discord.gg/cczJfYk">https://discord.gg/cczJfYk</a>
+          </div>
         </div>
       </React.Fragment>
     );

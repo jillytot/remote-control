@@ -31,8 +31,7 @@ module.exports.buildButtons = async (buttons, channel_id, controls_id) => {
   let buildControls = {};
   buildControls.channel_id = channel_id;
   buildControls.id = controls_id;
-
-  // console.log("BUILD BUTTONS /////////// ", buttons);
+  //generate json
 
   try {
     if (buttons) {
@@ -46,7 +45,7 @@ module.exports.buildButtons = async (buttons, channel_id, controls_id) => {
         if (button.label || button.label === "") {
           newButton.label = button.label;
         } else {
-          console.log("INVALID BUTTON: ", button);
+          //Dont publish invalid button
           return;
         }
 
@@ -59,13 +58,14 @@ module.exports.buildButtons = async (buttons, channel_id, controls_id) => {
         if (button.command) {
           newButton.command = button.command;
         } else {
-          console.log("INVALID BUTTON: ", button);
+          //Dont publish invalid button
           return;
         }
 
         //optional
         if (button.hot_key) newButton.hot_key = button.hot_key;
         if (button.access) newButton.access = button.access;
+
         newButtons.push(newButton);
       });
     } else {
@@ -78,13 +78,10 @@ module.exports.buildButtons = async (buttons, channel_id, controls_id) => {
     };
   }
 
-  // console.log("CHECK NEW BUTTONS: ", newButtons);
-
   buildControls.buttons = newButtons;
   generateControls = await updateControls(buildControls);
   if (generateControls) {
     response.status = "success";
-    console.log("GENERATED CONTROLS: ", generateControls);
     response.result = generateControls;
     return response;
   }
@@ -98,18 +95,21 @@ module.exports.getControlsFromId = async (channel_id, user) => {
   const { getServerIdFromChannelId } = require("../models/channel");
   const { getRobotServer } = require("../models/robotServer");
   let controls = await getControlsForChannel(channel_id);
-  console.log("GETTING CONTROLS FOR CHANNEL: ", controls);
 
   let sendButtons = [];
-  const getServerId = await getServerIdFromChannelId(channel_id); //might want to move these out of map
-  const getServer = await getRobotServer(getServerId.result);
-
   if (controls && controls.buttons) {
     const { buttons } = controls;
     const testy = async button => {
       if (button.access && button.access === "owner") {
         //A VERY TEMPORARY SOLUTION!!!!
+        const getServerId = await getServerIdFromChannelId(channel_id); //might want to move these out of map
+        const getServer = await getRobotServer(getServerId.result);
         if (getServer.owner_id === user.id) {
+          // console.log(
+          //   "!\n!\nSEND ADMIN COMMAND///////////////////////: ",
+          //   user.username,
+          //   button.label
+          // );
           return button;
         }
       } else if (!button.access) return button;
@@ -117,12 +117,12 @@ module.exports.getControlsFromId = async (channel_id, user) => {
 
     sendButtons = await Promise.all(buttons.map(button => testy(button)));
     sendButtons = sendButtons.filter(button => button != undefined);
+    //await Promise.all(testy);
   }
-
   if (controls.buttons && sendButtons) {
     controls.buttons = sendButtons;
   } else {
-    console.log("ERROR getting controls from ID");
+    // console.log("\n?\n!\n?\n!");
   }
   return controls;
 };

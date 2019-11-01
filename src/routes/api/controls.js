@@ -28,8 +28,8 @@ router.post("/make", auth({ robot: true, user: true }), async (req, res) => {
       checkForControls.controls
     );
 
-    response = setControls;
-    response.status = "Success";
+    response.status = "success";
+    response.result = setControls;
   } else {
     response.status = "error!";
     response.error = "could not generate controls from input";

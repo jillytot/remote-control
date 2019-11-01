@@ -59,8 +59,10 @@ export default class EditButtonsModal extends Form {
   };
 
   doSubmit = async () => {
+    let make = [];
     try {
-      JSON.parse(this.state.data.submitJSON);
+      make = JSON.parse(this.state.data.submitJSON);
+      if (make.length < 1) make = [{ break: "line", label: "", id: "1" }];
     } catch (err) {
       console.log(err);
       this.setState({ error: "Invalid JSON" });
@@ -75,7 +77,7 @@ export default class EditButtonsModal extends Form {
         makeButtons,
         {
           channel_id: this.props.channel,
-          buttons: JSON.parse(this.state.data.submitJSON)
+          buttons: make
         },
         {
           headers: { authorization: `Bearer ${token}` }

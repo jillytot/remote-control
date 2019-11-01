@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { BUTTON_COMMAND } from "../../../events/definitions";
-import { buttonRate } from "../../../config/clientSettings";
+import { buttonRate, getControls } from "../../../config/clientSettings";
 import EditOptions from "./editOptions";
 import "./robot.css";
 import VolumeControl from "./volumeControl";
@@ -9,6 +9,7 @@ import { GlobalStoreCtx } from "../../providers/globalStore";
 import defaultImages from "../../../imgs/placeholders";
 import RenderButtons from "./renderButtons";
 import socket from "../../socket";
+import axios from "axios";
 
 export default class RobotInterface extends Component {
   state = {
@@ -66,13 +67,13 @@ export default class RobotInterface extends Component {
   }
 
   emitGetControls = () => {
-    // console.log("EMIT GET CONTROLS");
+    console.log("EMIT GET CONTROLS");
     const channel = this.props.channels.find(
       chan => chan.id === this.props.channel
     );
 
     if (channel) {
-      socket.emit("GET_CONTROLS", channel.controls);
+      socket.emit("GET_CONTROLS", channel);
     }
   };
 
@@ -102,7 +103,8 @@ export default class RobotInterface extends Component {
     this.onMount();
   }
 
-  connectA = () => { //need to add client options for video relay
+  connectA = () => {
+    //need to add client options for video relay
     const protocol = window.location.protocol === "https:" ? "wss://" : "ws://";
     this.audioPlayer = new window.JSMpeg.Player(
       `${protocol}remo.tv/receive?name=${this.props.channel}-audio`,
@@ -200,6 +202,7 @@ export default class RobotInterface extends Component {
   };
 
   onGetControls = getControlData => {
+    console.log("OnGetControls: ", getControlData);
     if (getControlData && getControlData.buttons.length > 0) {
       this.setState({
         controls: getControlData.buttons,
@@ -210,11 +213,36 @@ export default class RobotInterface extends Component {
   };
 
   onControlsUpdated = () => {
-    if (
-      this.state.controlsId ||
-      (this.props.channelInfo && this.props.channelInfo.controls)
-    )
-      socket.emit("GET_CONTROLS", this.state.controlsId);
+    if (this.props.channelInfo && this.props.channelInfo.controls) {
+      socket.emit("GET_CONTROLS", this.props.channelInfo);
+    } else {
+      this.handleGetControls();
+    }
+  };
+
+  //Uses an API call to get controls for specific user.
+  handleGetControls = async () => {
+    const token = localStorage.getItem("token");
+    console.log("Get Controls for User", this.props.channel);
+    console.log(token);
+    await axios
+      .post(
+        getControls,
+        {
+          channel_id: this.props.channel
+        },
+        {
+          headers: { authorization: `Bearer ${token}` }
+        }
+      )
+      .then(res => {
+        console.log(res);
+        this.onGetControls(res.data);
+      })
+      .catch(err => {
+        console.log(err);
+      });
+    return null;
   };
 
   handleClick = click => {
@@ -360,9 +388,4 @@ export default class RobotInterface extends Component {
   }
 }
 
-const testButtons = [
-  { label: "forward", hot_key: "w", id: "1" },
-  { label: "back", hot_key: "s", id: "2" },
-  { label: "left", hot_key: "a", id: "4" },
-  { label: "right", hot_key: "d", id: "3" }
-];
+const testButtons = [{ break: "line", label: "", id: "1" }];

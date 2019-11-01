@@ -29,6 +29,9 @@ export default class LoginPage extends Component {
           <Signup />
           ... or login ...
           <Login />
+          <div className="">
+            Questions, Comments, or Issues? contact jill@remo.tv
+          </div>
         </div>
       </React.Fragment>
     );

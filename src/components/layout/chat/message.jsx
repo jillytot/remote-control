@@ -1,9 +1,12 @@
 import React, { useState } from "react";
 import Emotes from "../../../emotes/emotes";
 import defaultImages from "../../../imgs/placeholders";
+import { mobileMessageFadeOut } from "../../../config/clientSettings";
 
 const Message = ({ message }) => {
-  const [fadeout, setFadeout] = useState(setTimeout(() => handleFade(), 4000));
+  const [fadeout, setFadeout] = useState(
+    setTimeout(() => handleFade(), mobileMessageFadeOut)
+  );
 
   const handleFade = () => {
     setFadeout(true);
@@ -143,8 +146,18 @@ const Message = ({ message }) => {
   };
 
   const handleSenderColor = message => {
-    if (message.sender === "remo") return "chat-user-name rainbow";
-    return "chat-user-name";
+    let color = "chat-user-name";
+    //if (message.sender === "remo") return "chat-user-name rainbow";
+    //another temporary solution:
+    rainbowForLifeNames.map(name => {
+      //console.log("Mapping Names");
+      if (message.sender.toLowerCase() === name.toLowerCase()) {
+        //console.log(`Found Match: ${name}`);
+        color = "chat-user-name rainbow";
+        return;
+      }
+    });
+    return color;
   };
 
   const handleMessageContainer = () => {
@@ -173,3 +186,30 @@ const Message = ({ message }) => {
 };
 
 export default Message;
+
+const rainbowForLifeNames = [
+  "Admanta",
+  "TGCFabian",
+  "onlybrezel",
+  "robosim",
+  "backslashkieran",
+  "mikey",
+  "skeet",
+  "andrak",
+  "xyamom",
+  "RoyE",
+  "bruh116",
+  "Boland",
+  "chad",
+  "gcurtis79",
+  "neviklink",
+  "cheshy",
+  "BunkyFakerino",
+  "Remo",
+  "ReconDelta090",
+  "Peter",
+  "hgriswold89",
+  "sybergoosejr",
+  "Nocturnal",
+  "Hopper"
+];

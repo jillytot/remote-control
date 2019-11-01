@@ -63,6 +63,7 @@ export default class RenderButtons extends Component {
           }; // noice!
         }
         renderPresses.map(press => {
+          console.log(aButton.id);
           if (press && press.button.id === aButton.id) {
             if (press.button.access && press.button.access === "owner") {
               style.backgroundColor = "#e44884";

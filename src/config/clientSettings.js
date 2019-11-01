@@ -4,7 +4,7 @@ const reCaptchaKey = "6Lfg_KYUAAAAAH1hvQdp-qDOUToVn6FQWFOvbySo";
 
 let http = "http://";
 let ws = "ws://";
-if (window.location.protocol == 'https:'){
+if (window.location.protocol == "https:") {
   ws = "wss://";
   http = "https://";
 }
@@ -29,6 +29,7 @@ module.exports = {
   chatCharMax: 300, //Maximum amount of characters a user can type in the chat box
   buttonRate: 100, //Pulse rate for holding down a button
   breakPoint: 768, //mobile layout resolution
+  mobileMessageFadeOut: 5000, //how long do mobile messages display in chat before they fade out
   reCaptchaSiteKey: reCaptchaKey,
   socketUrl: socketUrl,
   apiUrl: apiUrl,
@@ -54,5 +55,6 @@ module.exports = {
   setServerPrivate: `${apiUrl}/robot-server/settings/private`,
   updateSettings: `${apiUrl}/robot-server/settings/update`,
   validateResetKey: `${apiUrl}/user/validate-key`,
-  passwordReset: `${apiUrl}/user/password-reset`
+  passwordReset: `${apiUrl}/user/password-reset`,
+  getControls: `${apiUrl}/controls/get-controls`
 };

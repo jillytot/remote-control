@@ -58,8 +58,6 @@ export default class Channel extends Component {
           found = true;
 
           if (channelChange) {
-            //socket.emit("GET_CHAT", channel.chat);
-            // console.log("cont1567", that.props.channels);
             socket.emit("JOIN_CHANNEL", channel.id);
           }
           return true;

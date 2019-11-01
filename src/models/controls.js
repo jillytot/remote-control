@@ -5,15 +5,9 @@ Multiple channels on a robot_server can load the same control set & feed it to d
 Right now this only covers buttons, will will eventually include other types of input
 */
 const { makeId, createTimeStamp } = require("../modules/utilities");
-
+const { exampleControls } = require("../controllers/controls");
 //TEMPORARY VALUES JUST TO ENSURE VALIDATION:
-testControls = [
-  { label: "stop", command: "stop", access: "owner" },
-  { label: "forward", hot_key: "w", command: "f", id: "1" },
-  { label: "back", hot_key: "s", command: "b", id: "2" },
-  { label: "left", hot_key: "a", command: "l", id: "4" },
-  { label: "right", hot_key: "d", command: "r", id: "3" }
-];
+testControls = exampleControls();
 
 const defaultStatus = () => {
   return {
@@ -63,7 +57,11 @@ module.exports.updateControls = async controls => {
   } catch (err) {
     console.log(err);
   }
-  console.log("ERROR UPDATING EXISTING CONTROLS FOR", id, "UPDATE MET NO ROWS?");
+  console.log(
+    "ERROR UPDATING EXISTING CONTROLS FOR",
+    id,
+    "UPDATE MET NO ROWS?"
+  );
   return { status: "error!", error: "Problem updating controls" };
 };
 
@@ -179,6 +177,35 @@ module.exports.getControlsForChannel = async channel_id => {
   try {
     const result = await db.query(query, [channel_id]);
     if (result.rows[0]) return result.rows[0];
+  } catch (err) {
+    console.log(err);
+  }
+  return null;
+};
+
+module.exports.removeControls = async controls => {
+  const db = require("../services/db");
+  const { id } = controls;
+  // console.log("Removing Controls Test 0: ", id);
+  const query = `DELETE FROM controls WHERE id = $1`;
+  try {
+    const result = await db.query(query, [id]);
+    if (result.rows[0]) {
+      return true;
+    }
+  } catch (err) {
+    console.log(err);
+  }
+
+  return null;
+};
+
+module.exports.getAllControls = async () => {
+  const db = require("../services/db");
+  const query = `SELECT * FROM controls`;
+  try {
+    const result = await db.query(query);
+    if (result.rows[0]) return result.rows;
   } catch (err) {
     console.log(err);
   }

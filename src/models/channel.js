@@ -240,7 +240,7 @@ module.exports.setControls = async controlData => {
   } catch (err) {
     response.status = "error";
     response.error = "could not set controls for channel";
-    console.log(err);
+    console.log(err.detail);
   }
 };
 
@@ -265,6 +265,18 @@ module.exports.getChannel = async channel_id => {
   } catch (err) {
     console.log(err);
   }
+};
+
+module.exports.getAllChannels = async () => {
+  const db = require("../services/db");
+  const query = `SELECT * FROM channels`;
+  try {
+    const result = await db.query(query);
+    if (result.rows[0]) return result.rows;
+  } catch (err) {
+    console.log(err);
+  }
+  return null;
 };
 
 //tests

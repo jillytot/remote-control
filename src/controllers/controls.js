@@ -1,24 +1,34 @@
 //default example for controls
-const example = [
-  { label: "stop", command: "stop", access: "owner" },
-  { label: "forward", hot_key: "w", command: "f" },
-  { label: "back", hot_key: "s", command: "b" },
-  { label: "left", hot_key: "a", command: "l" },
-  { label: "right", hot_key: "d", command: "r" }
-];
-
-module.exports.getButtonInput = async controls_id => {
-  const { getControlsFromId } = require("../models/controls");
-  const controls = await getControlsFromId(controls_id);
-  if (controls.button_input) return controls.button_input;
-  return example;
+module.exports.exampleControls = () => {
+  return [
+    { break: "line", label: "movement", id: "1" },
+    { label: "forward", hot_key: "w", command: "f", id: "2" },
+    { label: "back", hot_key: "s", command: "b", id: "3" },
+    { label: "left", hot_key: "a", command: "l", id: "4" },
+    { label: "right", hot_key: "d", command: "r", id: "5" },
+    { break: "line", label: "", id: "6" },
+    {
+      label: "example admin command",
+      command: "example",
+      access: "owner",
+      id: "7"
+    }
+  ];
 };
 
 module.exports.getButtonInputForChannel = async channel_id => {
-  const { getControlsForChannel } = require("../models/controls");
-  const controls = await getControlsForChannel(channel_id);
+  const { getChannel } = require("../models/channel");
+  const { getControlsFromId } = require("../models/controls");
+
+  // const { getControlsForChannel } = require("../models/controls");
+  const channel = await getChannel(channel_id);
+  const controls = await getControlsFromId(channel.controls);
   if (controls.buttons) return controls.buttons; //only send valid key / value pairs
-  return example;
+  return this.exampleControls;
+};
+
+module.exports.getButtonInputForUser = async (user, channel_id) => {
+  return await this.getControlsFromId(channel_id, user);
 };
 
 //input: { label: "<string>", hot_key: "<string>", command: "<string>"}
@@ -91,25 +101,25 @@ module.exports.buildButtons = async (buttons, channel_id, controls_id) => {
 };
 
 module.exports.getControlsFromId = async (channel_id, user) => {
-  const { getControlsForChannel } = require("../models/controls");
   const { getServerIdFromChannelId } = require("../models/channel");
   const { getRobotServer } = require("../models/robotServer");
-  let controls = await getControlsForChannel(channel_id);
+
+  const { getChannel } = require("../models/channel");
+  const { getControlsFromId } = require("../models/controls");
+
+  let controls = await getChannel(channel_id);
+  controls = await getControlsFromId(controls.controls);
 
   let sendButtons = [];
   if (controls && controls.buttons) {
     const { buttons } = controls;
+    const getServerId = await getServerIdFromChannelId(channel_id);
+    const getServer = await getRobotServer(getServerId.result);
     const testy = async button => {
-      if (button.access && button.access === "owner") {
+      if (user && button.access && button.access === "owner") {
         //A VERY TEMPORARY SOLUTION!!!!
-        const getServerId = await getServerIdFromChannelId(channel_id); //might want to move these out of map
-        const getServer = await getRobotServer(getServerId.result);
+
         if (getServer.owner_id === user.id) {
-          // console.log(
-          //   "!\n!\nSEND ADMIN COMMAND///////////////////////: ",
-          //   user.username,
-          //   button.label
-          // );
           return button;
         }
       } else if (!button.access) return button;

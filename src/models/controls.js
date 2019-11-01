@@ -54,7 +54,7 @@ module.exports.updateControls = async controls => {
   console.log("UPDATING EXISTING CONTROLS: ", controls);
   const db = require("../services/db");
   const { buttons, id } = controls;
-  const query = `UPDATE controls SET buttons = $1 WHERE id = $2 RETURNING *`; //guess controls for that channel have been deleted so cant update need to insert again where the NO ROWS?
+  const query = `UPDATE controls SET buttons = $1 WHERE id = $2 RETURNING *`;
   try {
     const result = await db.query(query, [buttons, id]);
     if (result.rows[0]) {
@@ -193,22 +193,13 @@ module.exports.getControlsForChannel = async channel_id => {
 
 module.exports.removeControls = async controls => {
   const db = require("../services/db");
-  const { id } = controls;
-  console.log("Removing Controls Test 0: ", id);
-  const query = `DELETE FROM controls WHERE id = $1`;
+  const query = `DELETE * FROM controls WHERE id = $1`;
   try {
     const result = await db.query(query, [id]);
-    console.log("test 1");
-    if (result.rows[0]) {
-      console.log("test 2");
-      return "test 3";
-    }
+    if (result.rows[0]) return result.rows[0];
   } catch (err) {
-    console.log("test 4");
     console.log(err);
   }
-
-  console.log("test 5");
   return null;
 };
 

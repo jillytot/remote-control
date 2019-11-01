@@ -15,17 +15,14 @@ module.exports.getButtonInput = async controls_id => {
 };
 
 module.exports.getButtonInputForChannel = async channel_id => {
-  const { getChannel } = require("../models/channel");
-  const { getControlsFromId } = require("../models/controls");
-  //const { getControlsForChannel } = require("../models/controls"); //get controls id from the models/channel instead
-  const channel = await getChannel(channel_id);
-  const controls = await getControlsFromId(channel.controls);
-  console.log("////////CONTROLS: ", channel.controls, controls);
+  const { getControlsForChannel } = require("../models/controls");
+  const controls = await getControlsForChannel(channel_id);
   if (controls.buttons) return controls.buttons; //only send valid key / value pairs
   return example;
 };
 
-//Get the controls_id required from the channel object, as we are updating the controls currently assigned to the channel
+//input: { label: "<string>", hot_key: "<string>", command: "<string>"}
+//output: array of button objects w/ id generated per button
 module.exports.buildButtons = async (buttons, channel_id, controls_id) => {
   const { updateControls } = require("../models/controls");
   const { makeId } = require("../modules/utilities");

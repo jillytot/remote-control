@@ -1,16 +1,14 @@
-// const { getControls } = require("../models/controls");
+const { getControls } = require("../models/controls");
 const { getControlsFromId } = require("../controllers/controls");
-const { getChannel } = require("../models/controls");
 
-module.exports = async (ws, channel_id) => {
-  console.log("SUBBING USER TO CONTROLS, Controls Id: ", channel_id);
+module.exports = async (ws, controls_id) => {
+  console.log("SUBBING USER TO CONTROLS, Controls Id: ", controls_id);
 
-  if (channel_id) {
-    // const controls = await getControls(controls_id);
-    const controls = await getChannel(channel_id);
+  if (controls_id) {
+    const controls = await getControls(controls_id);
     ws.emitEvent(
       "GET_USER_CONTROLS",
-      await getControlsFromId(controls.controls, ws.user)
+      await getControlsFromId(controls.channel_id, ws.user)
     );
     //Subscribe user to controls
     ws.controls_id = controls_id;

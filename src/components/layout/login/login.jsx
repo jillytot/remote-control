@@ -12,7 +12,8 @@ export default class Login extends Form {
     data: { username: "", password: "" },
     errors: {},
     isUser: null,
-    redirect: false
+    redirect: false,
+    error: ""
   };
 
   async componentDidMount() {
@@ -41,8 +42,8 @@ export default class Login extends Form {
   };
 
   setUser = ({ user, isUser }) => {
-    // console.log("Is User?: ", isUser);
     if (isUser === true) {
+      console.log("watwatwatwatwatawtawtwat");
       this.setError("User name taken.");
       this.setState({ isUser: false });
       this.validate();
@@ -52,15 +53,14 @@ export default class Login extends Form {
     }
   };
 
-  handleFeedback = () => {
-    const { isUser } = this.state;
-    return isUser === false
-      ? "Username taken, please try another."
-      : "Username";
+  setError = error => {
+    console.log(error);
+    this.setState({ error: error });
   };
 
-  setError = error => {
-    this.setState({ errors: error });
+  setErrors = errors => {
+    console.log(errors);
+    this.setState({ errors: errors });
   };
 
   doSubmit = async () => {
@@ -73,13 +73,26 @@ export default class Login extends Form {
         password: data.password
       })
       .then(res => {
-        console.log("Login response: ", res);
-        localStorage.setItem("token", res.data.token);
-        this.setState({ redirect: true });
+        if (res.data.error) {
+          console.log(res.data.error);
+          this.setState({ error: res.data.error });
+        }
+        if (res.data.token) {
+          localStorage.setItem("token", res.data.token);
+          this.setState({ redirect: true });
+        }
       })
       .catch(err => {
         console.log("Login Error: ", err);
       });
+  };
+
+  handleSubmitError = () => {
+    const { error } = this.state;
+    if (error === "") {
+      return <React.Fragment />;
+    }
+    return <div className="alert">{this.state.error}</div>;
   };
 
   render() {
@@ -87,6 +100,7 @@ export default class Login extends Form {
       <Redirect to="/" />
     ) : (
       <div className="register-form intro">
+        {this.handleSubmitError()}
         <form onSubmit={this.handleSubmit}>
           {this.renderInput("username", "Username", "text")}
           {this.renderInput("password", "Password", "password")}

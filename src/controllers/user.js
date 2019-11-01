@@ -82,3 +82,10 @@ module.exports.useResetKey = async ({ key_id, password }) => {
   const token = await createAuthToken(getUser);
   return { token: token };
 };
+
+module.exports.checkUsername = async name => {
+  const { checkUsername } = require("../models/user");
+  const check = await checkUsername(name);
+  if (check) return check;
+  return null;
+};

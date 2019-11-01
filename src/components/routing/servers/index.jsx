@@ -75,7 +75,6 @@ export default class ServersPage extends Component {
   getServers = async () => {
     try {
       const response = await axios.get(listRobotServers);
-      //console.log(response);
       this.setState({ robotServers: response.data });
     } catch (e) {
       console.error(e);
@@ -98,6 +97,8 @@ export default class ServersPage extends Component {
           console.log(err);
           setTimeout(this.getFollowedServers, 600); //retry
         });
+    } else {
+      console.log("Unable to get token for user ( getFolllowedServers ) ");
     }
 
     return null;
@@ -147,6 +148,8 @@ export default class ServersPage extends Component {
     if (token) {
       socket.emit("AUTHENTICATE", { token: localStorage.getItem("token") });
       return;
+    } else {
+      console.log("Unable to get token for user ( emitAuthentication )");
     }
     this.setState({ getLogin: true });
   };

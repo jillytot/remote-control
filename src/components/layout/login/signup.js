@@ -93,9 +93,16 @@ export default class Signup extends Form {
         response: captcha
       })
       .then(response => {
-        console.log(response);
-        localStorage.setItem("token", response.data.token);
-        this.setState({ redirect: true });
+        console.log(response.data);
+        if (response.data.error) {
+          // console.log(response.data.error);
+          this.setState({ error: response.data.error });
+        }
+
+        if (response.data.token) {
+          localStorage.setItem("token", response.data.token);
+          this.setState({ redirect: true });
+        }
       })
       .catch(function(error) {
         console.log(error);

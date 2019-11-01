@@ -27,12 +27,12 @@ const passwordResetKey = (user, setExpire) => {
   const { passResetExpires } = require("../config/serverSettings"); //TODO: Config Date.now() will be based of when the program starts needs changed.
   let expire = false;
   const handleExpire = () => {
-    expire = setExpire;
+    expire = setExpire || passResetExpires;
   };
   return {
     key_id: `rset-${makeId()}`,
     created: createTimeStamp(),
-    expires: passResetExpires || setExpire,
+    expires: setExpire || passResetExpires,
     ref: user.id,
     expire: expire,
     setExpiration: value => handleExpire(value)

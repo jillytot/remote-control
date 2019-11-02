@@ -147,12 +147,8 @@ const Message = ({ message }) => {
 
   const handleSenderColor = message => {
     let color = "chat-user-name";
-    //if (message.sender === "remo") return "chat-user-name rainbow";
-    //another temporary solution:
     rainbowForLifeNames.map(name => {
-      //console.log("Mapping Names");
       if (message.sender.toLowerCase() === name.toLowerCase()) {
-        //console.log(`Found Match: ${name}`);
         color = "chat-user-name rainbow";
         return;
       }

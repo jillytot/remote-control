@@ -10,6 +10,13 @@ const {
 const config = require("../config/serverSettings");
 const tempSecret = config.secret;
 const { logger } = require("../modules/logging");
+const log = message => {
+  logger({
+    level: "debug",
+    source: "models/user.js",
+    message: message
+  });
+};
 
 const { ACTIVE_USERS_UPDATED } = require("../events/definitions");
 
@@ -32,7 +39,7 @@ module.exports.emitEvent = (user_id, event, data) => {
   const wss = require("../services/wss");
   wss.clients.forEach(ws => {
     if (ws.user && ws.user.id === user_id) {
-      console.log("USER EVENT: ", event, data);
+      log("USER EVENT: ", event, data);
       ws.emitEvent(event, data);
     }
   });
@@ -42,23 +49,23 @@ module.exports.createUser = async user => {
   let response = {};
   //ALWAYS SAVE EMAIL AS LOWERCASE!!!!!
   const email = user.email.toLowerCase();
-  console.log("check email to lowercase ", email);
+  log("check email to lowercase ", email);
 
   //Does this username or email exist?
   let checkUser = user.username.toLowerCase();
   let result = await this.checkUsername(checkUser);
-  console.log("CHECK USER RESULT: ", result);
+  log("CHECK USER RESULT: ", result);
   let emailResult = await this.checkEmail(user);
-  console.log("CHECK EMAIL RESULT: ", emailResult);
+  log("CHECK EMAIL RESULT: ", emailResult);
   if (result === true) {
     response.error = `This username is already in use, you must provide a unique username.`;
-    console.log(response.error);
+    log(response.error);
     return response;
   }
 
   if (emailResult === true) {
     response.error = `This email already belongs to a different acccount. You must provide an email that hasn't already been used. `;
-    console.log(response.error);
+    log(response.error);
     return response;
   }
 
@@ -70,11 +77,11 @@ module.exports.createUser = async user => {
   user.status = statusPt;
   user.settings = settingsPt;
   user.session = "";
-  console.log(
+  log(
     `${user.username} also saved will be saved,  status set: ${user.status} intialized settings: ${user.settings}`
   );
 
-  console.log("Generating User: ", user);
+  log("Generating User: ", user);
 
   const { username, id, password, created, status, settings, session } = user;
   const dbPut = `INSERT INTO users (username, id, password, email, created, status, settings, session) VALUES( $1, $2, $3, $4, $5, $6, $7, $8 ) RETURNING *`;
@@ -94,9 +101,14 @@ module.exports.createUser = async user => {
 
     return { status: "Account successfully created", token: token };
   } catch (err) {
-    console.log(err.stack);
+    logger({
+      level: "error",
+      message: err.stack,
+      color: "red",
+      source: "models/user.js"
+    });
   }
-  console.log("New User Generated: ", this.publicUser(user));
+  log("New User Generated: ", this.publicUser(user));
 };
 
 //Is this an actual user that currently exists?
@@ -109,7 +121,7 @@ module.exports.validateUser = async input => {
     const check = await this.checkUserId(input.id);
     return check;
   } //get based on userId
-  console.log("VALIDATION ERROR: ", input);
+  log("VALIDATION ERROR: ", input);
   return null;
 };
 
@@ -124,7 +136,12 @@ module.exports.checkUserId = async user => {
       return true;
     }
   } catch (err) {
-    console.log(err);
+    logger({
+      level: "error",
+      message: err,
+      color: "red",
+      source: "models/user.js"
+    });
     return true;
   }
 };
@@ -134,10 +151,15 @@ module.exports.getIdFromUsername = async username => {
     const query = `SELECT * FROM users WHERE LOWER (username) = LOWER ( $1 );`;
     try {
       const check = await db.query(query, [username]);
-      // console.log(check.rows[0]);
+      // log(check.rows[0]);
       if (check.rows[0]) return check.rows[0].id;
     } catch (err) {
-      console.log(err);
+      logger({
+        level: "error",
+        message: err,
+        color: "red",
+        source: "models/user.js"
+      });
     }
   }
   return null;
@@ -148,10 +170,15 @@ module.exports.getInfoFromUsername = async username => {
     const query = `SELECT * FROM users WHERE LOWER (username) = LOWER ( $1 );`;
     try {
       const check = await db.query(query, [username]);
-      // console.log(check.rows[0]);
+      // log(check.rows[0]);
       if (check.rows[0]) return check.rows[0];
     } catch (err) {
-      console.log(err);
+      logger({
+        level: "error",
+        message: err,
+        color: "red",
+        source: "models/user.js"
+      });
     }
   }
   return null;
@@ -160,14 +187,19 @@ module.exports.getInfoFromUsername = async username => {
 module.exports.getUserInfoFromId = async userId => {
   if (userId) {
     try {
-      console.log("Get username from Id: ", userId);
+      log("Get username from Id: ", userId);
       const query = `SELECT * FROM users WHERE id = $1 LIMIT 1;`;
       const check = await db.query(query, [userId]);
       const getInfo = this.publicUser(check.rows[0]);
-      //console.log(getInfo);
+      //log(getInfo);
       return getInfo;
     } catch (err) {
-      console.log(err);
+      logger({
+        level: "error",
+        message: err,
+        color: "red",
+        source: "models/user.js"
+      });
     }
   }
   return null;
@@ -182,7 +214,7 @@ Gedyy: in pgadmin query tool
 
 //Check for duplicate usernames
 module.exports.checkUsername = async user => {
-  console.log(user);
+  log(user);
   let check_username = "";
   if (user) {
     if (user.username) {
@@ -191,10 +223,10 @@ module.exports.checkUsername = async user => {
       check_username = user;
     }
 
-    console.log("CHECK USERNAME", check_username);
+    log("CHECK USERNAME", check_username);
     const checkName = `SELECT COUNT(*) FROM users WHERE LOWER (username) = LOWER ( $1 ) LIMIT 1`;
     const checkRes = await db.query(checkName, [check_username]);
-    console.log(checkRes.rows[0]);
+    log(checkRes.rows[0]);
     if (checkRes.rows[0].count > 0) return true;
     return false;
   }
@@ -206,7 +238,7 @@ module.exports.checkEmail = async user => {
   const { email } = user;
   const checkName = `SELECT COUNT(*) FROM users WHERE email = $1 LIMIT 1`;
   const checkRes = await db.query(checkName, [email]);
-  //console.log(checkRes.rows[0].count);
+  //log(checkRes.rows[0].count);
   if (checkRes.rows[0].count > 0) {
     return true;
   } else {
@@ -215,7 +247,7 @@ module.exports.checkEmail = async user => {
 };
 
 module.exports.checkPassword = async user => {
-  console.log("Password Check: ", user.username);
+  log("Password Check: ", user.username);
 
   try {
     const { password, username } = user;
@@ -223,7 +255,7 @@ module.exports.checkPassword = async user => {
     //DB Call
     const query = `SELECT * FROM users WHERE LOWER (username) = LOWER ($1) LIMIT 1`;
     const queryResult = await db.query(query, [username]);
-    console.log("Query Result: ", queryResult.rows[0]["id"]);
+    log("Query Result: ", queryResult.rows[0]["id"]);
     let checkPassword = await checkHash(
       password,
       queryResult.rows[0]["password"]
@@ -235,12 +267,17 @@ module.exports.checkPassword = async user => {
     };
     return verify;
   } catch (err) {
-    console.log("Password Error: ", err);
+    logger({
+      level: "error",
+      message: `Password Error: ${err}`,
+      color: "red",
+      source: "models/user.js"
+    });
   }
 };
 
 module.exports.createAuthToken = user => {
-  console.log("Create Auth Token: ", user.username);
+  log("Create Auth Token: ", user.username);
   const { id } = user;
   return jwt.sign({ id: id }, tempSecret, {
     subject: "",
@@ -252,7 +289,7 @@ module.exports.createAuthToken = user => {
 //used by WS for auth
 module.exports.authUser = async token => {
   let auth = await this.extractToken(token);
-  console.log("Extracted Token: ", auth);
+  log("Extracted Token: ", auth);
   auth = await this.verifyAuthToken(auth);
   return auth;
 };
@@ -266,12 +303,12 @@ module.exports.authUserData = async tokenData => {
 
 // Moving to /src/modules/jwt
 module.exports.extractToken = async token => {
-  //   console.log("Verifying Auth Token is this file savedwait what the ", token);
+  //   log("Verifying Auth Token is this file savedwait what the ", token);
   let checkToken = null;
   try {
     return (checkToken = await new Promise((resolve, reject) => {
       jwt.verify(token, tempSecret, "HS256", (err, res) => {
-        if (token) console.log("JWT Verified");
+        if (token) log("JWT Verified");
         if (err) return reject(err);
         return resolve(res);
       });
@@ -281,27 +318,32 @@ module.exports.extractToken = async token => {
       error: "problem creating token from user"
     };
     Promise.reject(reason);
-    console.log(reason);
+    log(reason);
     return null;
   }
 };
 
 module.exports.verifyAuthToken = async token => {
   try {
-    // console.log("Check Token: ", token);
+    // log("Check Token: ", token);
     if (token && token.id) {
       const query = `SELECT * FROM users WHERE id = $1 LIMIT 1`;
       const result = await db.query(query, [token["id"]]);
-      console.log("Get user from DB: ", result.rows[0].username);
+      log(`Get user from DB: ${result.rows[0].username}`);
       return result.rows[0];
     }
   } catch (err) {
-    console.log(err);
+    logger({
+      level: "error",
+      message: err,
+      color: "red",
+      source: "models/user.js"
+    });
   }
   let reason = {
     error: "cannot resolve user data from token"
   };
-  console.log(reason);
+  log(reason);
   Promise.reject(reason);
   return null;
 };
@@ -330,13 +372,7 @@ module.exports.sendActiveUsers = async robot_server => {
         }
       }
     });
-    console.log("Active Users Updated: ", users);
-    logger({
-      level: "info",
-      source: "models/user.js",
-      message: `Active Users Updated: ${users}`,
-      color: "blue"
-    });
+    log(`Active Users Updated: ${users}`);
     robotServer.emitEvent(robot_server, ACTIVE_USERS_UPDATED, users);
     return resolve(users);
   });
@@ -360,29 +396,39 @@ module.exports.userTypes = [
 ];
 
 module.exports.addUserTypes = async (userId, types) => {
-  console.log(`adding types: ${types} to ${userId}`);
+  log(`adding types: ${types} to ${userId}`);
   try {
     const insert = `UPDATE users SET type = $1 WHERE id = $2 RETURNING *`;
     const result = await db.query(insert, [types, userId]);
     return result.rows[0];
   } catch (err) {
-    console.log(err);
+    logger({
+      level: "error",
+      message: err,
+      color: "red",
+      source: "models/user.js"
+    });
   }
 };
 
 //UDPATE USER STATUS
 module.exports.updateStatus = async user => {
   const { status } = user;
-  console.log(`Updating global status for ${user.username}`);
+  log(`Updating global status for ${user.username}`);
   try {
     const insert = `UPDATE users SET status = $1 WHERE id = $2 RETURNING *`;
     const result = await db.query(insert, [status, user.id]);
     const print = result.rows[0];
-    console.log("User Status Updated: ", print);
+    log("User Status Updated: ", print);
     this.sendUpdateStatus(this.publicUser(print));
     return print;
   } catch (err) {
-    console.log(err);
+    logger({
+      level: "error",
+      message: err,
+      color: "red",
+      source: "models/user.js"
+    });
   }
 };
 
@@ -395,36 +441,29 @@ timeout b excludes the remainder of timeout a, so timeout b = 20, and it's added
 */
 
 module.exports.timeoutUser = async (user, time, server_id) => {
-  console.log("TIMEOUT USER: ", user, time);
+  log("TIMEOUT USER: ", user, time);
   if (user && time) {
     let { status } = user;
     status.timeout = true;
     if (status.expireTimeout && status.expireTimeout > Date.now()) {
       const addRemainder = status.expireTimeout - (time + Date.now());
-      console.log(
-        "User is already timed out, checking for remainder: ",
-        addRemainder
-      );
+      log("User is already timed out, checking for remainder: ", addRemainder);
       if (addRemainder <= 0) return status;
       time = addRemainder;
     }
     status.expireTimeout = Date.now() + time;
-    console.log(
-      "TIMEOUT STATUS CHECK: ",
-      status,
-      status.expireTimeout - Date.now()
-    );
+    log("TIMEOUT STATUS CHECK: ", status, status.expireTimeout - Date.now());
     user.status = status;
     let checkUpdatedStatus = await this.updateStatus(user);
     createTimer(time, this.unTimeoutUser, user);
     return checkUpdatedStatus;
   }
-  console.log("Timout Error");
+  log("Timout Error");
   return null;
 };
 
 module.exports.unTimeoutUser = async user => {
-  console.log("END TIMEOUT FOR USER: ", user);
+  log("END TIMEOUT FOR USER: ", user);
   if (user) {
     let { status } = user;
     if (status.expireTimeout && Date.now() >= status.expireTimeout) {
@@ -433,10 +472,10 @@ module.exports.unTimeoutUser = async user => {
       await this.updateStatus(user);
       return true;
     }
-    console.log(`${user.username} is already timed out`);
+    log(`${user.username} is already timed out`);
     return false;
   }
-  console.log("Timout Error");
+  log("Timout Error");
   return null;
 };
 
@@ -445,7 +484,7 @@ module.exports.clearGlobalTimeout = async user => {
     user.status.expireTimeout = 0;
     user.status.timeout = false;
     const clearUser = await this.updateStatus(user);
-    console.log("Clear User: ", clearUser);
+    log("Clear User: ", clearUser);
     if (clearUser) return true;
   }
   return false;
@@ -470,7 +509,7 @@ module.exports.checkTypes = async (user, typesToCheck) => {
   let validate = false;
   let checkUser = await this.getUserInfoFromId(user.id);
   if (checkUser && checkUser.type) {
-    console.log("CHECKING USER TYPES: ", checkUser, typesToCheck);
+    log("CHECKING USER TYPES: ", checkUser, typesToCheck);
     const check = checkUser.type.map(type => {
       return typesToCheck.includes(type);
     });
@@ -482,7 +521,7 @@ module.exports.checkTypes = async (user, typesToCheck) => {
 //This probably shouldn't even need to be called ever
 module.exports.getGlobalTypes = async user_id => {
   const sendTypes = await this.getUserInfoFromId(user_id);
-  console.log(sendTypes);
+  log(sendTypes);
   return sendTypes.type;
 };
 
@@ -491,10 +530,15 @@ module.exports.getTotalUserCount = async () => {
   const count = `SELECT COUNT(*) FROM users`;
   try {
     const result = await db.query(count);
-    // console.log("GET TOTAL USER COUNT: ", result);
+    // log("GET TOTAL USER COUNT: ", result);
     if (result) return result.rows[0].count;
   } catch (err) {
-    console.log(err);
+    logger({
+      level: "error",
+      message: err,
+      color: "red",
+      source: "models/user.js"
+    });
   }
   return "...";
 };
@@ -502,13 +546,18 @@ module.exports.getTotalUserCount = async () => {
 //UDPATE USER STATUS
 module.exports.updatePassword = async user => {
   const { id, password } = user;
-  console.log(`Updating Password`);
+  log(`Updating Password`);
   try {
     const insert = `UPDATE users SET password = $1 WHERE id = $2 RETURNING *`;
     const result = await db.query(insert, [password, id]);
     if (result.rows[0]) return true;
   } catch (err) {
-    console.log(err);
+    logger({
+      level: "error",
+      message: err,
+      color: "red",
+      source: "models/user.js"
+    });
   }
   return null;
 };

@@ -170,7 +170,7 @@ module.exports.getRobotServerCount = async () => {
   const count = `SELECT COUNT(*) FROM robot_servers`;
   try {
     const result = await db.query(count);
-    // console.log("GET ACTIVE SERVER COUNT: ", result);
+    // log("Get Active Server Count", result.rows.length);
     if (result) return result.rows[0].count;
   } catch (err) {
     console.log(err);

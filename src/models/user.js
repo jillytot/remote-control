@@ -9,6 +9,7 @@ const {
 } = require("../modules/utilities");
 const config = require("../config/serverSettings");
 const tempSecret = config.secret;
+const { logger } = require("../modules/logging");
 
 const { ACTIVE_USERS_UPDATED } = require("../events/definitions");
 
@@ -329,9 +330,14 @@ module.exports.sendActiveUsers = async robot_server => {
         }
       }
     });
-
+    console.log("Active Users Updated: ", users);
+    logger({
+      level: "info",
+      source: "models/user.js",
+      message: `Active Users Updated: ${users}`,
+      color: "blue"
+    });
     robotServer.emitEvent(robot_server, ACTIVE_USERS_UPDATED, users);
-    console.log("Send ACtive Users:", users);
     return resolve(users);
   });
 };

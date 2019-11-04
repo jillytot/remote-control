@@ -1,8 +1,20 @@
 const { getControls } = require("../models/controls");
 const { getControlsFromId } = require("../controllers/controls");
+const { logger } = require("../modules/logging");
+const log = message => {
+  return {
+    level: "debug",
+    source: "events/getControls.js",
+    message: message
+  };
+};
 
 module.exports = async (ws, channel) => {
-  console.log("SUBBING USER TO CONTROLS, Channel's Controls: ", channel);
+  logger({
+    level: "debug",
+    source: "events/getControls.js",
+    message: `SUBBING USER TO CONTROLS: ${channel.id}`
+  });
 
   if (channel && channel.controls) {
     const controls = await getControls(channel.controls);
@@ -13,16 +25,12 @@ module.exports = async (ws, channel) => {
     //Subscribe user to controls
     ws.controls_id = channel.controls;
     if (ws.user) {
-      console.log(
-        `Subbing user: ${ws.user.username} to controls: ${channel.controls}`
-      );
+      log(`Subbing user: ${ws.user.username} to controls: ${channel.controls}`);
     } else if (ws.robot) {
-      console.log(
-        `Subbing robot: ${ws.robot.id} to controls: ${channel.controls}`
-      );
+      log(`Subbing robot: ${ws.robot.id} to controls: ${channel.controls}`);
     }
   } else {
-    console.log(
+    log(
       `NO CONTROLS IDENTIFIED FOR CHANNEL ${channel.name}, creating new controls!`
     );
   }

@@ -4,7 +4,7 @@ const { sendActiveUsers } = require("../models/user");
 const { getInvitesForServer } = require("../models/invites");
 
 module.exports = async (ws, data) => {
-  console.log("GET CHAT ROOMS: ", data);
+  // console.log("GET CHAT ROOMS: ", data);
   ws.server_id = data.server_id;
 
   const sendInfo = {

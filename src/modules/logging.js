@@ -2,20 +2,18 @@ const printErrors = true; //only applies to json
 const printLog = true;
 
 module.exports.logger = data => {
-  let level = data.level || "default";
-  const source = data.source || "";
-  const message = data.message || data;
-  const color = data.color || "blue";
-
-  console.log("something", "something else");
-
-  if (printLog)
+  if (printLog) {
+    let level = data.level || "default";
+    const source = data.source || "";
+    const message = data.message || data;
+    const color = data.color || "blue";
     console.log(
       pickLevel(level),
       yellow(source),
       "\n",
       pickColor(color, message)
     );
+  }
   return;
 };
 

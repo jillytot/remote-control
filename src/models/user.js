@@ -243,7 +243,6 @@ module.exports.createAuthToken = user => {
   const { id } = user;
   return jwt.sign({ id: id }, tempSecret, {
     subject: "",
-    expiresIn: "30d",
     algorithm: "HS256"
   });
 };

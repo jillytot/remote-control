@@ -56,5 +56,6 @@ module.exports = {
   updateSettings: `${apiUrl}/robot-server/settings/update`,
   validateResetKey: `${apiUrl}/user/validate-key`,
   passwordReset: `${apiUrl}/user/password-reset`,
-  getControls: `${apiUrl}/controls/get-controls`
+  getControls: `${apiUrl}/controls/get-controls`,
+  validateInviteKey: ``
 };

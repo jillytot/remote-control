@@ -3,7 +3,7 @@ const printLog = true;
 
 module.exports.logger = data => {
   if (printLog) {
-    let level = data.level || "default";
+    let level = data.level || "info";
     const source = data.source || "";
     const message = data.message || data;
     const color = data.color || "blue";
@@ -33,9 +33,9 @@ module.exports.jsonError = (error, data, print) => {
 };
 
 const pickLevel = level => {
-  if (level === "info") return green("info:");
-  if (level === "debug" || level === "default") return purple("debug:");
-  if (level === "error") return red("error:");
+  if (level === "info") return green("INFO:");
+  if (level === "debug" || level === "default") return purple("DEBUG:");
+  if (level === "error") return red("ERROR:");
   if (level === "") return level;
 };
 
@@ -51,9 +51,9 @@ const pickColor = (color, message) => {
 
 //4 for underline, 7 for italic, 1 for bold
 const red = message => `\u001b[1;31m ${message}`;
-const green = message => `\u001b[1;32m ${message}`;
-const yellow = message => `\u001b[1;33m ${message}`;
+const green = message => `\u001b[0;32m ${message}`;
+const yellow = message => `\u001b[0;33m ${message}`;
 const blue = message => `\u001b[0;34m ${message}`;
-const purple = message => `\u001b[1;35m ${message}`;
-const cyan = message => `\u001b[1;36m ${message}`;
+const purple = message => `\u001b[0;35m ${message}`;
+const cyan = message => `\u001b[0;36m ${message}`;
 const white = message => `\u001b[0;15m ${message}`;

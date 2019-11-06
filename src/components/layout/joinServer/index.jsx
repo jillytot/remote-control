@@ -12,7 +12,7 @@ import "../login/login.css";
 export default class Join extends Form {
   state = {
     data: {
-      key: ""
+      invite: ""
     },
     errors: {},
     error: "",
@@ -21,10 +21,27 @@ export default class Join extends Form {
   };
 
   schema = {
-    key: Joi.string()
+    invite: Joi.string()
       .required()
       .min(5)
       .label("Key ID")
+  };
+
+  handleValidateInvite = async () => {
+    const { invite } = this.state.data;
+    console.log("INVITE CHECK: ", invite);
+    await axios
+      .post(validateInviteKey, {
+        invite: invite
+      })
+      .then(response => {
+        console.log(response);
+        if (response.data.error) this.setState({ validated: false });
+      })
+      .catch(error => {
+        console.log(error);
+      });
+    return null;
   };
 
   setError = error => {
@@ -40,8 +57,12 @@ export default class Join extends Form {
   };
 
   doSubmit = async () => {
-    const { key } = this.state.data;
-    if (key === "") this.setState({ error: "Please enter a valid invite key" });
+    const { invite } = this.state.data;
+    if (!invite) {
+      this.setError("Please enter a valid key.");
+      return;
+    }
+    await this.handleValidateInvite();
     return null;
   };
 
@@ -51,7 +72,7 @@ export default class Join extends Form {
         To join a server, enter a valid invite key below:
         {this.handleSubmitError()}
         <form onSubmit={this.handleSubmit}>
-          {this.renderInput("key", "Key ID", "key")}
+          {this.renderInput("invite", "Key ID", "invite")}
           {this.renderButton("Submit")}
         </form>
       </div>

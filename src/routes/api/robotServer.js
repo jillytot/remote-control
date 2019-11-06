@@ -9,7 +9,7 @@ const {
 const { checkTypes } = require("../../models/user");
 const auth = require("../auth");
 const Joi = require("joi");
-const { jsonError } = require("../../modules/logging");
+const { jsonError, logger } = require("../../modules/logging");
 
 //LIST ACTIVE SERVERS
 router.get("/list", async (req, res) => {
@@ -79,12 +79,16 @@ router.post("/join", auth({ user: true }), async (req, res) => {
   res.send(response);
 });
 
-router.post("/validate-invite", auth({ user: true }), async (req, res) => {
+//First step for joining a private remo server
+router.post("/validate-invite", async (req, res) => {
   const { validateServerInvite } = require("../../controllers/members");
   if (req.body.invite) {
+    logger(req.body.invite);
     const validate = await validateServerInvite(req.body.invite);
-    if (validate) res.send(validate);
-    return;
+    if (validate) {
+      res.send(validate);
+      return;
+    }
   }
   return jsonError("This invite either doesn't exist, or is invalid");
 });

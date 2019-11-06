@@ -57,5 +57,6 @@ module.exports = {
   validateResetKey: `${apiUrl}/user/validate-key`,
   passwordReset: `${apiUrl}/user/password-reset`,
   getControls: `${apiUrl}/controls/get-controls`,
-  validateInviteKey: ``
+  validateInviteKey: `${apiUrl}/robot-server/validate-invite`,
+  disableInvite: `${apiUrl}/robot-server/deactivate-invite`
 };

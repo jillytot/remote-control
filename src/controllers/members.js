@@ -1,4 +1,4 @@
-const { logger } = require("../modules/logging");
+const { logger, jsonError } = require("../modules/logging");
 
 const log = message => {
   logger({
@@ -109,14 +109,21 @@ module.exports.validateServerInvite = async invite_id => {
   log(`Validate Invite for Server: ${invite_id}`);
   const { getInviteById } = require("../models/invites");
   const invite = await getInviteById(invite_id);
-
   //Check status:
-  if (invite !== "active") return null;
+  if (invite.error) {
+    log(`Invite validation Error for invite id: ${invite_id}`);
+    return null;
+  }
+  if (invite.status !== "active") {
+    log(`Invite no longer active: ${invite.id}`);
+    return null;
+  }
   if (invite.expires && invite.expires <= Date.now()) {
-    log(`Invite ${invite_id} has expired`);
+    log(`Invite ${invite_id} has expired, deactivating Invite`);
     await this.deactivateInvite(invite);
     return null;
   }
+  log(`Invite Validated ${invite_id}`);
   return invite;
 };
 

@@ -1,3 +1,13 @@
+const { logger } = require("../modules/logging");
+
+const log = message => {
+  logger({
+    level: "debug",
+    source: "controllers/members",
+    message: message
+  });
+};
+
 module.exports.joinServer = async member => {
   const {
     updateMemberInvites,
@@ -80,6 +90,7 @@ const isOwner = member => {
   member.user_id;
 };
 
+//Checks to make sure this particular invite is valid.
 module.exports.validateInvite = async invite => {
   console.log("Validating Invite", invite);
   const { getInvitesForServer } = require("../models/invites");
@@ -91,6 +102,38 @@ module.exports.validateInvite = async invite => {
     }
   });
   return validate;
+};
+
+//Look for invite ID match, return information for server
+module.exports.validateServerInvite = async invite_id => {
+  log(`Validate Invite for Server: ${invite_id}`);
+  const { getInviteById } = require("../models/invites");
+  const invite = await getInviteById(invite_id);
+
+  //Check status:
+  if (invite !== "active") return null;
+  if (invite.expires && invite.expires <= Date.now()) {
+    log(`Invite ${invite_id} has expired`);
+    await this.deactivateInvite(invite);
+    return null;
+  }
+  return invite;
+};
+
+module.exports.getInviteInfoFromId = async invite_id => {
+  const { getInviteById } = require("../models/invites");
+  const invite = await getInviteById(invite_id);
+  return invite;
+};
+
+module.exports.deactivateInvite = async invite => {
+  const { updateInviteStatus } = require("../models/invites");
+  if (invite && invite.id) {
+    invite.status = "inactive";
+    const update = await updateInviteStatus(invite);
+    if (!update.error) return update;
+  }
+  return null;
 };
 
 module.exports.getMemberCount = async server_id => {

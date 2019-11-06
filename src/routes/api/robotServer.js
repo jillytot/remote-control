@@ -79,6 +79,35 @@ router.post("/join", auth({ user: true }), async (req, res) => {
   res.send(response);
 });
 
+router.post("/validate-invite", auth({ user: true }), async (req, res) => {
+  const { validateServerInvite } = require("../../controllers/members");
+  if (req.body.invite) {
+    const validate = await validateServerInvite(req.body.invite);
+    if (validate) res.send(validate);
+    return;
+  }
+  return jsonError("This invite either doesn't exist, or is invalid");
+});
+
+router.post("/deactivate-invite", auth({ user: true }), async (req, res) => {
+  const {
+    deactivateInvite,
+    getInviteInfoFromId
+  } = require("../../controllers/members");
+  if (req.body.id) {
+    //get invite info
+    const invite = await getInviteInfoFromId(req.body.id);
+    if (req.user.id === invite.created_by) {
+      const disable = await deactivateInvite(invite);
+      res.send(disable);
+      return;
+    }
+    //TODO: Check User Role on Server to auth deactivation
+  }
+  res.send(jsonError("Unable to update Invite"));
+  return;
+});
+
 //LEAVE SERVER, DOES NOT DELETE USER FROM MEMBERLIST
 router.post("/leave", auth({ user: true }), async (req, res) => {
   const { leaveServer } = require("../../controllers/members");

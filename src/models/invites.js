@@ -1,4 +1,12 @@
 //Manage invites for users
+const { logger, jsonError } = require("../modules/logging");
+const log = message => {
+  logger({
+    level: "debug",
+    source: "models/invites",
+    message: message
+  });
+};
 
 const invitePt = {
   server_id: "serverId",
@@ -87,7 +95,7 @@ module.exports.getInviteById = async id => {
   const query = `SELECT * FROM invites WHERE id = $1 LIMIT 1`;
   try {
     const result = await db.query(query, [id]);
-    if (result.rows[0].count > 0) {
+    if (result.rows[0]) {
       console.log(result.rows[0]);
       return result.rows[0];
     }
@@ -131,3 +139,21 @@ module.exports.initDefaultInvites = async () => {
 };
 
 //invite validation: make sure this user can generate this invite
+
+module.exports.updateInviteStatus = async invite => {
+  const db = require("../services/db");
+  const { id, status } = invite;
+  log(`Updating Invite ${id} status to ${status}`);
+  const query = `UPDATE invites SET status = $1 WHERE id = $2 RETURNING *`;
+  try {
+    const result = await db.query(query, [status, id]);
+    if (result.rows[0]) return result.rows[0];
+  } catch (err) {
+    logger({
+      level: "error",
+      source: "models/invites",
+      message: err
+    });
+  }
+  return jsonError("Unable to update status for invite");
+};

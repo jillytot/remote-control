@@ -20,9 +20,19 @@ const testChannel = "chan-1b727055-c814-4239-95f4-0d6a69ec6b72";
 const testRobot = "rbot-9ae3d965-c0ed-4300-b16f-f184f8b7af61";
 const testName = "remo";
 
+const testInvite = {
+  id: "join-a2500ebe-4d75-4bb5-9a54-75e2da282668",
+  created_by: "user-2791c4f8-8b0b-40c5-8f21-709217321a6c",
+  server_id: "serv-cf6dea8c-3b97-4145-adce-c43ae53ecca8",
+  created: "1572911931458",
+  expires: "",
+  status: "inactive"
+};
+
 const test = async () => {
   try {
-    await test__checkServerName();
+    await test__updateInviteStatus();
+    // await test__checkServerName();
     // await test__deleteChannel();
     // await test__getRobotFromId();
     // await test__getChannels();
@@ -36,6 +46,12 @@ const test = async () => {
   }
 
   process.exit(0);
+};
+
+const test__updateInviteStatus = async () => {
+  const { updateInviteStatus } = require("../models/invites");
+  const result = await updateInviteStatus(testInvite);
+  console.log(result);
 };
 
 const test__checkServerName = async () => {

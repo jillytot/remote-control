@@ -1,4 +1,5 @@
 const { err } = require("../modules/utilities");
+const { jsonError } = require("../modules/logging");
 
 module.exports.checkForLiveRobots = async () => {
   const { getRobotServers } = require("../models/robotServer");
@@ -109,4 +110,31 @@ const checkMembership = async (server, user) => {
   // console.log(check);
   if (check.status.member === true) return server;
   return err("You are not a member of this server.");
+};
+
+//For displaying public server information relating to a server.
+module.exports.getPublicServerInfo = async server => {
+  const { getPublicUserFromId } = require("../controllers/user");
+  const user = await getPublicUserFromId(server.owner_id);
+  const publicInfo = {
+    server_name: server.server_name,
+    server_id: server.server_id,
+    created: server.created,
+    owner_id: server.owner_id,
+    owner_name: user.username,
+    default_channel: server.default_channel,
+    members: server.status.count,
+    public: server.status.public,
+    live_devices: server.status.liveDevices
+  };
+  return publicInfo;
+};
+
+module.exports.getServerById = async server_id => {
+  const { getRobotServer } = require("../models/robotServer");
+  const server = await getRobotServer(server_id);
+  if (server) {
+    return server;
+  }
+  return jsonError("Unable to get requested server information");
 };

@@ -1,4 +1,5 @@
 const { err } = require("../modules/utilities");
+const { jsonError } = require("../modules/logging");
 
 module.exports.followedServers = async user => {
   const { getFollowedServers } = require("../models/serverMembers");
@@ -88,4 +89,11 @@ module.exports.checkUsername = async name => {
   const check = await checkUsername(name);
   if (check) return check;
   return null;
+};
+
+module.exports.getPublicUserFromId = async user_id => {
+  const { getUserInfoFromId } = require("../models/user");
+  const user = await getUserInfoFromId(user_id);
+  if (user) return user;
+  return jsonError("Unable to get user information");
 };

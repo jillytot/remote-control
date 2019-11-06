@@ -82,15 +82,28 @@ router.post("/join", auth({ user: true }), async (req, res) => {
 //First step for joining a private remo server
 router.post("/validate-invite", async (req, res) => {
   const { validateServerInvite } = require("../../controllers/members");
+  const {
+    getServerById,
+    getPublicServerInfo
+  } = require("../../controllers/robotServer");
+  const { getPublicUserFromId } = require("../../controllers/user");
+
   if (req.body.invite) {
     logger(req.body.invite);
-    const validate = await validateServerInvite(req.body.invite);
-    if (validate) {
-      res.send(validate);
+    const invite = await validateServerInvite(req.body.invite);
+
+    if (invite && !invite.error) {
+      //get server info:
+      let server = await getServerById(invite.server_id);
+      if (server) server = await getPublicServerInfo(server);
+      let invited_by = await getPublicUserFromId(invite.created_by);
+      res.send({ invite, server, invited_by });
       return;
     }
   }
-  return jsonError("This invite either doesn't exist, or is invalid");
+  console.log("BOOP");
+  res.send(jsonError("This invite either doesn't exist, or is invalid"));
+  return;
 });
 
 router.post("/deactivate-invite", auth({ user: true }), async (req, res) => {

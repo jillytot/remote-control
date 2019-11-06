@@ -2,9 +2,10 @@ import React from "react";
 import Form from "../../common/form";
 import axios from "axios";
 import Joi from "joi-browser";
-import { Redirect } from "react-router-dom";
+import { Link, Redirect } from "react-router-dom";
 import { validateInviteKey, joinServer } from "../../../config/clientSettings";
-import "../login/login.css";
+import "./join.css";
+import defaultImages from "../../../imgs/placeholders";
 
 //Mode A: Enter a key to join a server
 //Mode B: Join server through URL invite link
@@ -14,6 +15,7 @@ export default class Join extends Form {
     data: {
       invite: ""
     },
+    response_data: {},
     errors: {},
     error: "",
     validated: null,
@@ -35,13 +37,21 @@ export default class Join extends Form {
         invite: invite
       })
       .then(response => {
-        console.log(response);
-        if (response.data.error) this.setState({ validated: false });
+        if (response.data.error) {
+          this.setState({ validated: false });
+          this.setError(response.data.error);
+          return null;
+        }
+        this.setState({ response_data: response.data, validated: true });
       })
       .catch(error => {
         console.log(error);
       });
     return null;
+  };
+
+  handleValidResponse = () => {
+    return <div>Ok!</div>;
   };
 
   setError = error => {
@@ -66,16 +76,38 @@ export default class Join extends Form {
     return null;
   };
 
-  render() {
+  handleLoadSubmit = () => {
     return (
-      <div className="register-form">
+      <React.Fragment>
         To join a server, enter a valid invite key below:
         {this.handleSubmitError()}
         <form onSubmit={this.handleSubmit}>
           {this.renderInput("invite", "Key ID", "invite")}
           {this.renderButton("Submit")}
         </form>
+      </React.Fragment>
+    );
+  };
+
+  renderLogo = () => {
+    return (
+      <div className="logo-container">
+        <img className="logo" alt="" src={defaultImages.remoLogo} />
       </div>
+    );
+  };
+
+  render() {
+    const { validated } = this.state;
+    return (
+      <React.Fragment>
+        <div className="nav-container">
+          <Link to="/"> {this.renderLogo()}</Link>
+        </div>
+        <div className="register-form make-window">
+          {validated ? this.handleValidResponse() : this.handleLoadSubmit()}
+        </div>
+      </React.Fragment>
     );
   }
 }

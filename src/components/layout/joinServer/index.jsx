@@ -29,6 +29,14 @@ export default class Join extends Form {
       .label("Key ID")
   };
 
+  renderServerImage = () => {
+    return (
+      <div className="server-img-container">
+        <img className="server-img" alt="" src={defaultImages.default01} />
+      </div>
+    );
+  };
+
   handleValidateInvite = async () => {
     const { invite } = this.state.data;
     console.log("INVITE CHECK: ", invite);
@@ -50,8 +58,48 @@ export default class Join extends Form {
     return null;
   };
 
+  //TODO: Make this server info card a reusable component
   handleValidResponse = () => {
-    return <div>Ok!</div>;
+    const { server, invite, invited_by } = this.state.response_data;
+    const date = new Date(parseInt(server.created));
+    console.log(server.created, date);
+    return (
+      <React.Fragment>
+        <div>{invited_by.username} has invited you to join this server. </div>
+        <div className="server-info-card">
+          {this.renderServerImage()}
+          <div className="details-container">
+            <div className="details larger">
+              <span className="key-name">Server Name: </span>
+              {server.server_name}
+            </div>
+            <div className="details">
+              <span className="key-name">Owner: </span>
+              {server.owner_name}
+            </div>
+            <div className="details">
+              <span className="key-name">Created: </span> {date.toDateString()}
+            </div>
+            <div className="details">
+              {" "}
+              <span className="key-name">Members: </span>
+              {server.members}
+            </div>
+            <div className="details">
+              <span className="key-name">Live Devices: </span>
+              {server.live_devices.length}
+            </div>
+          </div>
+        </div>
+        <form onSubmit={this.handleSubmit}>
+          {this.renderButton("Oh GOD YES!")}
+        </form>
+      </React.Fragment>
+    );
+  };
+
+  handleJoin = () => {
+    console.log("BOOM!");
   };
 
   setError = error => {
@@ -72,7 +120,7 @@ export default class Join extends Form {
       this.setError("Please enter a valid key.");
       return;
     }
-    await this.handleValidateInvite();
+    this.state.validated ? this.handleJoin() : this.handleValidateInvite();
     return null;
   };
 

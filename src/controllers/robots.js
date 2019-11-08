@@ -28,7 +28,7 @@ const getLiveRobots = async () => {
 
 const checkInterval = async () => {
   const { createSimpleTimer } = require("../modules/utilities");
-  const { liveStatusInterval } = require("../config/serverSettings");
+  const { liveStatusInterval } = require("../config/server");
   await createSimpleTimer(liveStatusInterval, this.robotStatus);
   return;
 };

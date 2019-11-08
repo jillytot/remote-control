@@ -2,7 +2,7 @@ import React from "react";
 import Form from "../../../common/form";
 import Joi from "joi-browser";
 import axios from "axios";
-import { apiUrl, addChannel } from "../../../../config/clientSettings";
+import { apiUrl, addChannel } from "../../../../config/client";
 
 export default class AddChannelForm extends Form {
   state = {

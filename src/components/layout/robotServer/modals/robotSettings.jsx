@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import "../../../../styles/common.css";
 import Input from "../../../common/input";
 import Toggle from "../../../common/toggle";
-import { deleteRobot, robotAPIKey } from "../../../../config/clientSettings";
+import { deleteRobot, robotAPIKey } from "../../../../config/client";
 
 import axios from "axios";
 

@@ -4,7 +4,7 @@ import Form from "../../common/form";
 import Joi from "joi-browser";
 import "./login.css";
 import axios from "axios";
-import { apiUrl, reCaptchaSiteKey } from "../../../config/clientSettings";
+import { apiUrl, reCaptchaSiteKey } from "../../../config/client";
 import ReCAPTCHA from "react-google-recaptcha";
 import { Redirect } from "react-router-dom";
 

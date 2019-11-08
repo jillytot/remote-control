@@ -2,7 +2,7 @@ import React from "react";
 import Form from "../../../common/form";
 // import Joi from "joi-browser";
 import axios from "axios";
-import { deleteChannel } from "../../../../config/clientSettings";
+import { deleteChannel } from "../../../../config/client";
 
 export default class EditChannelForm extends Form {
   state = { data: {}, errors: {} };

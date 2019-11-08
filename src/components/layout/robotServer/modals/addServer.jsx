@@ -5,7 +5,7 @@ import Form from "../../../common/form";
 import "../robotServer.css";
 import Joi from "joi-browser";
 import axios from "axios";
-import { apiUrl, addServer } from "../../../../config/clientSettings";
+import { apiUrl, addServer } from "../../../../config/client";
 import defaultImages from "../../../../imgs/placeholders";
 import { Redirect } from "react-router-dom";
 

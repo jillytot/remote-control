@@ -6,7 +6,7 @@ import { Redirect } from "react-router-dom";
 import {
   validateResetKey,
   passwordReset
-} from "../../../config/clientSettings";
+} from "../../../config/client";
 import "../login/login.css";
 
 export default class Recovery extends Form {

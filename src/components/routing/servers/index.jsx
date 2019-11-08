@@ -8,7 +8,7 @@ import ServerPage from "./server";
 import {
   listRobotServers,
   listFollowedServers
-} from "../../../config/clientSettings";
+} from "../../../config/client";
 import axios from "axios";
 import Modal from "../../common/modal";
 import "../../common/overlay.css";

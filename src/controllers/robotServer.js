@@ -13,7 +13,7 @@ module.exports.checkForLiveRobots = async () => {
 module.exports.getActiveRobotsOnServer = async server => {
   const { getRobotsFromServerId } = require("../models/robot");
   const { createTimeStamp } = require("../modules/utilities");
-  const { liveStatusInterval } = require("../config/serverSettings");
+  const { liveStatusInterval } = require("../config/server");
   const { updateRobotServerStatus } = require("../models/robotServer");
   const robots = await getRobotsFromServerId(server.server_id);
   let liveDevices = [];

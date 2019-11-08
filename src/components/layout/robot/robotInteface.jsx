@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { BUTTON_COMMAND } from "../../../events/definitions";
-import { buttonRate, getControls } from "../../../config/clientSettings";
+import { buttonRate, getControls } from "../../../config/client";
 import EditOptions from "./editOptions";
 import "./robot.css";
 import VolumeControl from "./volumeControl";

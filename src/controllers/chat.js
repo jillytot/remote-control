@@ -1,6 +1,6 @@
 module.exports.loadChat = async chat_id => {
   const { getRecentMessages } = require("../models/chatMessage");
-  const { loadMessages } = require("../config/serverSettings");
+  const { loadMessages } = require("../config/server");
   const { getChat } = require("../models/chatRoom");
   let chat = await getChat(chat_id);
   let messages = await getRecentMessages(chat_id, loadMessages);

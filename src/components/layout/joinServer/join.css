@@ -52,3 +52,8 @@
   /* background-color: green; */
   text-align: left;
 }
+
+a {
+  color: rgb(106, 171, 255);
+  font-size: 14px;
+}

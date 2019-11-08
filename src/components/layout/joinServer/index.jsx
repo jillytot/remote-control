@@ -142,11 +142,19 @@ export default class Join extends Form {
           </div>
         </div>
         <form onSubmit={this.handleSubmit}>
-          {token
-            ? this.renderButton("Oh GOD YES!")
-            : this.renderButton("Sign Up to Join Remo")}
+          {token ? this.renderButton("Oh GOD YES!") : this.handleSignUp()}
         </form>
       </React.Fragment>
+    );
+  };
+
+  handleSignUp = () => {
+    return (
+      <div className="">
+        <a href="https://remo.tv">
+          Please SignUp or Login to Remo in order to activate this invite.{" "}
+        </a>
+      </div>
     );
   };
 

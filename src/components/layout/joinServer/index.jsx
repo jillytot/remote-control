@@ -109,6 +109,7 @@ export default class Join extends Form {
   //TODO: Make this server info card a reusable component
   handleValidResponse = () => {
     const { server, invited_by } = this.state.response_data;
+    const token = localStorage.getItem("token");
     console.log("Logging Props: ", this.props);
     const date = new Date(parseInt(server.created));
     //  console.log(server.created, date);
@@ -141,7 +142,9 @@ export default class Join extends Form {
           </div>
         </div>
         <form onSubmit={this.handleSubmit}>
-          {this.renderButton("Oh GOD YES!")}
+          {token
+            ? this.renderButton("Oh GOD YES!")
+            : this.renderButton("Sign Up to Join Remo")}
         </form>
       </React.Fragment>
     );

@@ -151,7 +151,7 @@ export default class Join extends Form {
   handleSignUp = () => {
     return (
       <div className="">
-        <a href="https://remo.tv">
+        <a href="/">
           Please SignUp or Login to Remo in order to activate this invite.{" "}
         </a>
       </div>

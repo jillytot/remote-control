@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import { Redirect } from "react-router-dom";
 import Channels from "../../layout/robotServer/channels";
 import axios from "axios";
-import { findServer } from "../../../config/clientSettings";
+import { findServer } from "../../../config/client";
 import "../../layout/frontPage/frontPage.css";
 
 export default class ServerPage extends Component {

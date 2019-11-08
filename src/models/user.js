@@ -7,7 +7,7 @@ const {
   createTimeStamp,
   createTimer
 } = require("../modules/utilities");
-const config = require("../config/serverSettings");
+const config = require("../config/server");
 const tempSecret = config.secret;
 
 const { ACTIVE_USERS_UPDATED } = require("../events/definitions");

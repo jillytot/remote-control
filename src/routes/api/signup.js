@@ -1,7 +1,7 @@
 const axios = require("axios");
 const router = require("express").Router();
 const user = require("../../models/user");
-const serverSettings = require("../../config/serverSettings");
+const serverSettings = require("../../config/server");
 
 router.post("/", async (req, res) => {
   // post request

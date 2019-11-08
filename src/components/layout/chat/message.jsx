@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import Emotes from "../../../emotes/emotes";
 import defaultImages from "../../../imgs/placeholders";
-import { mobileMessageFadeOut } from "../../../config/clientSettings";
+import { mobileMessageFadeOut } from "../../../config/client";
 
 const Message = ({ message }) => {
   const [fadeout, setFadeout] = useState(

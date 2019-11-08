@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import "./frontPage.css";
 import axios from "axios";
-import { getStats } from "../../../config/clientSettings";
+import { getStats } from "../../../config/client";
 
 /*
 Other fun stats to display: 

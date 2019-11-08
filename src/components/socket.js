@@ -1,5 +1,5 @@
 import WebsocketClient from './websocketClient';
-import { socketUrl } from "../config/clientSettings";
+import { socketUrl } from "../config/client";
 
 const socket = new WebsocketClient()
 socket.open(socketUrl)

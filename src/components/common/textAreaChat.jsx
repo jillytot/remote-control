@@ -1,7 +1,7 @@
 import React from "react";
 import "../../styles/common.css";
 import "../layout/chat/chat.css";
-import { chatCharMax } from "../../config/clientSettings";
+import { chatCharMax } from "../../config/client";
 
 const TextAreaChat = ({
   name,

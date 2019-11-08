@@ -39,7 +39,7 @@ export default class Join extends Form {
 
   handleValidateInvite = async () => {
     const { invite } = this.state.data;
-    console.log("INVITE CHECK: ", invite);
+    //  console.log("INVITE CHECK: ", invite);
     await axios
       .post(validateInviteKey, {
         invite: invite
@@ -60,9 +60,9 @@ export default class Join extends Form {
 
   //TODO: Make this server info card a reusable component
   handleValidResponse = () => {
-    const { server, invite, invited_by } = this.state.response_data;
+    const { server, invited_by } = this.state.response_data;
     const date = new Date(parseInt(server.created));
-    console.log(server.created, date);
+    //  console.log(server.created, date);
     return (
       <React.Fragment>
         <div>{invited_by.username} has invited you to join this server. </div>

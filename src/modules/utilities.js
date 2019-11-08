@@ -120,3 +120,16 @@ module.exports.err = message => {
   console.log("Error: ", message);
   return { status: "Error!", error: message };
 };
+
+module.exports.makeUrl = () => {
+  const url =
+    Math.random()
+      .toString(36)
+      .substring(2, 15) +
+    Math.random()
+      .toString(36)
+      .substring(2, 15);
+  return url;
+};
+
+console.log(this.makeUrl());

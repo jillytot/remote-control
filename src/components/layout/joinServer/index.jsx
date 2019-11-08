@@ -2,7 +2,7 @@ import React from "react";
 import Form from "../../common/form";
 import axios from "axios";
 import Joi from "joi-browser";
-import { Link, Redirect, Switch, Route, Router } from "react-router-dom";
+import { Link, Redirect } from "react-router-dom";
 import { validateInviteKey, joinServer } from "../../../config/clientSettings";
 import "./join.css";
 import defaultImages from "../../../imgs/placeholders";
@@ -78,9 +78,38 @@ export default class Join extends Form {
     return null;
   };
 
+  handleJoin = async () => {
+    console.log("Joining Server");
+    const { validated } = this.state;
+    const { server } = this.state.response_data;
+    const { invite } = this.state.data;
+    const token = localStorage.getItem("token");
+    if (token && validated) {
+      axios
+        .post(
+          joinServer,
+          {
+            server_id: server.server_id,
+            join: invite
+          },
+          { headers: { authorization: `Bearer ${token}` } }
+        )
+        .then(result => {
+          //  if (result.data.status.member) this.handleGetLocalStatus();
+          console.log(result);
+        })
+        .catch(err => {
+          console.log(err);
+        });
+    } else {
+      console.log("PLEASE SIGN UP FOR AN ACCOUNT");
+    }
+  };
+
   //TODO: Make this server info card a reusable component
   handleValidResponse = () => {
     const { server, invited_by } = this.state.response_data;
+    console.log("Logging Props: ", this.props);
     const date = new Date(parseInt(server.created));
     //  console.log(server.created, date);
     return (
@@ -116,10 +145,6 @@ export default class Join extends Form {
         </form>
       </React.Fragment>
     );
-  };
-
-  handleJoin = () => {
-    console.log("BOOM!");
   };
 
   setError = error => {

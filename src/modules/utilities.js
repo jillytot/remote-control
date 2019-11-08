@@ -131,5 +131,3 @@ module.exports.makeUrl = () => {
       .substring(2, 15);
   return url;
 };
-
-console.log(this.makeUrl());

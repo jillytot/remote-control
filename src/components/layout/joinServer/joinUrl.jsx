@@ -2,7 +2,7 @@ import React from "react";
 import Form from "../../common/form";
 import axios from "axios";
 import Joi from "joi-browser";
-import { Link, Redirect, Switch, Route, Router } from "react-router-dom";
+import { Link, Redirect } from "react-router-dom";
 import { validateInviteKey, joinServer } from "../../../config/clientSettings";
 import "./join.css";
 import defaultImages from "../../../imgs/placeholders";
@@ -10,40 +10,7 @@ import defaultImages from "../../../imgs/placeholders";
 //Mode A: Enter a key to join a server
 //Mode B: Join server through URL invite link
 
-export default class Join extends Form {
-  state = {
-    data: {
-      invite: ""
-    },
-    response_data: {},
-    errors: {},
-    error: "",
-    validated: null,
-    redirect: false
-  };
-
-  schema = {
-    invite: Joi.string()
-      .required()
-      .min(5)
-      .label("Key ID")
-  };
-
-  componentDidMount() {
-    this.handleJoinURL();
-  }
-
-  handleJoinURL = () => {
-    const path = this.props.location.pathname;
-    const invite = path.substr(6);
-    console.log("Get Key from URL: ", invite);
-    if (invite) {
-      this.setState({ data: { invite: invite } });
-      this.handleValidateInvite(invite);
-    }
-    return null;
-  };
-
+export default class JoinURL extends Form {
   renderServerImage = () => {
     return (
       <div className="server-img-container">
@@ -52,35 +19,13 @@ export default class Join extends Form {
     );
   };
 
-  handleValidateInvite = async url => {
-    let invite = "";
-    if (url && !this.state.error) {
-      invite = url;
-    } else {
-      invite = this.state.data.invite;
-    }
-    console.log("INVITE CHECK: ", invite, this.state);
-    await axios
-      .post(validateInviteKey, {
-        invite: invite
-      })
-      .then(response => {
-        if (response.data.error) {
-          this.setState({ validated: false });
-          this.setError(response.data.error);
-          return null;
-        }
-        this.setState({ response_data: response.data, validated: true });
-      })
-      .catch(error => {
-        console.log(error);
-      });
-    return null;
+  handleJoin = () => {
+    console.log("BOOM!");
   };
 
   //TODO: Make this server info card a reusable component
   handleValidResponse = () => {
-    const { server, invited_by } = this.state.response_data;
+    const { server, invited_by } = this.props.response_data;
     const date = new Date(parseInt(server.created));
     //  console.log(server.created, date);
     return (
@@ -118,10 +63,6 @@ export default class Join extends Form {
     );
   };
 
-  handleJoin = () => {
-    console.log("BOOM!");
-  };
-
   setError = error => {
     this.setState({ error: error });
   };
@@ -135,26 +76,8 @@ export default class Join extends Form {
   };
 
   doSubmit = async () => {
-    const { invite } = this.state.data;
-    if (!invite) {
-      this.setError("Please enter a valid key.");
-      return;
-    }
-    this.state.validated ? this.handleJoin() : this.handleValidateInvite();
+    this.handleJoin();
     return null;
-  };
-
-  handleLoadSubmit = () => {
-    return (
-      <React.Fragment>
-        To join a server, enter a valid invite key below:
-        {this.handleSubmitError()}
-        <form onSubmit={this.handleSubmit}>
-          {this.renderInput("invite", "Key ID", "invite")}
-          {this.renderButton("Submit")}
-        </form>
-      </React.Fragment>
-    );
   };
 
   renderLogo = () => {
@@ -166,14 +89,13 @@ export default class Join extends Form {
   };
 
   render() {
-    const { validated } = this.state;
     return (
       <React.Fragment>
         <div className="nav-container">
           <Link to="/"> {this.renderLogo()}</Link>
         </div>
         <div className="register-form make-window">
-          {validated ? this.handleValidResponse() : this.handleLoadSubmit()}
+          {this.handleValidResponse()}
         </div>
       </React.Fragment>
     );

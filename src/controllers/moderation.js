@@ -109,7 +109,7 @@ const authCommand = async ({ arg, badUser, moderator, message }) => {
 
 const checkTime = ({ arg, badUser, moderator, message }) => {
   // console.log("Check timeout time: ", arg);
-  const { maxTimeout } = require("../config/serverSettings");
+  const { maxTimeout } = require("../config/server");
   let time = parseInt(arg);
   if (!Number.isInteger(time)) {
     message.message = "Integer Required for Timeout";

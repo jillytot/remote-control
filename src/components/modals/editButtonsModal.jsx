@@ -1,7 +1,7 @@
 import React from "react";
 import "../../styles/common.css";
 import Joi from "joi-browser";
-import { getButtons, makeButtons } from "../../config/clientSettings";
+import { getButtons, makeButtons } from "../../config/client";
 import Form from "../common/form";
 import "./editButtons.css";
 

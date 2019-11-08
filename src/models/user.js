@@ -7,7 +7,7 @@ const {
   createTimeStamp,
   createTimer
 } = require("../modules/utilities");
-const config = require("../config/serverSettings");
+const config = require("../config/server");
 const tempSecret = config.secret;
 
 const { ACTIVE_USERS_UPDATED } = require("../events/definitions");
@@ -243,7 +243,6 @@ module.exports.createAuthToken = user => {
   const { id } = user;
   return jwt.sign({ id: id }, tempSecret, {
     subject: "",
-    expiresIn: "30d",
     algorithm: "HS256"
   });
 };

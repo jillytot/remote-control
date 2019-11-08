@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import Emotes from "../../../emotes/emotes";
 import defaultImages from "../../../imgs/placeholders";
-import { mobileMessageFadeOut } from "../../../config/clientSettings";
+import { mobileMessageFadeOut } from "../../../config/client";
 
 const Message = ({ message }) => {
   const [fadeout, setFadeout] = useState(
@@ -147,12 +147,8 @@ const Message = ({ message }) => {
 
   const handleSenderColor = message => {
     let color = "chat-user-name";
-    //if (message.sender === "remo") return "chat-user-name rainbow";
-    //another temporary solution:
     rainbowForLifeNames.map(name => {
-      //console.log("Mapping Names");
       if (message.sender.toLowerCase() === name.toLowerCase()) {
-        //console.log(`Found Match: ${name}`);
         color = "chat-user-name rainbow";
         return;
       }

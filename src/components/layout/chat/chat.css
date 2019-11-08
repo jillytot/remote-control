@@ -163,10 +163,17 @@
   margin-bottom: 1px;
   text-align: left;
   padding: 6px 3px 6px 6px;
-  display: flex;
-  flex-direction: row;
+  display: block;
+  /* flex-direction: row; */
   align-items: flex-start;
+  /* flex-wrap: wrap; */
+  word-wrap: break-word;
   width: 100%;
+}
+
+.message-spacing {
+  /* margin-left: 3px; */
+  line-height: 18px;
 }
 
 .robot-message {
@@ -200,8 +207,8 @@
 .message-badge {
   height: 18px;
   margin-right: 3px;
-  display: flex;
-  /* background-color: red; */
+  margin-bottom: -4px;
+  /* display: block; */
 }
 
 .chat-user-name {
@@ -247,11 +254,6 @@
   display: flex;
   flex-direction: row;
   vertical-align: top;
-  /* background-color: blue; */
-}
-
-.message-spacing {
-  margin-left: 3px;
   /* background-color: blue; */
 }
 

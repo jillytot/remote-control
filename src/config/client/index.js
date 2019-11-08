@@ -1,28 +1,9 @@
-const { serverPort } = require("./serverSettings");
+const overrides = require("./overides");
 
-const reCaptchaKey = "6Lfg_KYUAAAAAH1hvQdp-qDOUToVn6FQWFOvbySo";
+const apiUrl = `http://localhost:3231/api/dev` || overrides.apiUrl;
+const socketUrl = `ws://localhost:3231` || overrides.socketUrl;
 
-let http = "http://";
-let ws = "ws://";
-if (window.location.protocol == "https:") {
-  ws = "wss://";
-  http = "https://";
-}
-
-const apiVersion = "/dev";
-const api = `/api${apiVersion}`;
-
-const localHost = "localhost"; //default
-const devServer = "35.185.203.47";
-
-//If you want to run just the frontend, change this to "devServer";
-const host = localHost;
-//Then you can run "npm run react" to start.
-
-const apiUrl = `${http}${host}:${serverPort}${api}`;
-const socketUrl = `${ws}${host}:${serverPort}`;
-
-module.exports = {
+const defaults = {
   defaultRate: 1000, //Message rate limit for most people
   minRate: 250, //Message rate limit for admins / server owners etc..
   slowMo: 30000, //Message rate limit for when we need to slow things down!
@@ -30,7 +11,7 @@ module.exports = {
   buttonRate: 100, //Pulse rate for holding down a button
   breakPoint: 768, //mobile layout resolution
   mobileMessageFadeOut: 5000, //how long do mobile messages display in chat before they fade out
-  reCaptchaSiteKey: reCaptchaKey,
+  reCaptchaSiteKey: "6Lfg_KYUAAAAAH1hvQdp-qDOUToVn6FQWFOvbySo",
   socketUrl: socketUrl,
   apiUrl: apiUrl,
   apiAuth: `${apiUrl}/auth`,
@@ -58,3 +39,5 @@ module.exports = {
   passwordReset: `${apiUrl}/user/password-reset`,
   getControls: `${apiUrl}/controls/get-controls`
 };
+
+module.exports = Object.assign({}, defaults, overrides);

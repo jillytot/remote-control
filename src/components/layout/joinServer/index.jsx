@@ -3,7 +3,7 @@ import Form from "../../common/form";
 import axios from "axios";
 import Joi from "joi-browser";
 import { Link, Redirect } from "react-router-dom";
-import { validateInviteKey, joinServer } from "../../../config/clientSettings";
+import { validateInviteKey, joinServer } from "../../../config/client";
 import "./join.css";
 import defaultImages from "../../../imgs/placeholders";
 

@@ -1,9 +1,9 @@
 const events = {}; //event: func
 
 // message structure {e: event name, d: data}
-module.exports.handleConnection = ws => {
+module.exports.handleConnection = (ws, req) => {
   ws.isAlive = true;
-  ws.ip = ws.upgradeReq.headers["x-real-ip"];
+  ws.ip = req.headers["x-real-ip"];
   ws.on("pong", () => {
     ws.isAlive = true;
   });

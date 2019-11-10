@@ -1,3 +1,12 @@
+const { logger } = require("../modules/logging");
+const log = message => {
+  logger({
+    level: "debug",
+    source: "controllers/controls.js",
+    message: message
+  });
+};
+
 //default example for controls
 module.exports.exampleControls = () => {
   return [
@@ -20,7 +29,6 @@ module.exports.getButtonInputForChannel = async channel_id => {
   const { getChannel } = require("../models/channel");
   const { getControlsFromId } = require("../models/controls");
 
-  // const { getControlsForChannel } = require("../models/controls");
   const channel = await getChannel(channel_id);
   const controls = await getControlsFromId(channel.controls);
   if (controls.buttons) return controls.buttons; //only send valid key / value pairs
@@ -103,10 +111,10 @@ module.exports.buildButtons = async (buttons, channel_id, controls_id) => {
 module.exports.getControlsFromId = async (channel_id, user) => {
   const { getServerIdFromChannelId } = require("../models/channel");
   const { getRobotServer } = require("../models/robotServer");
-
   const { getChannel } = require("../models/channel");
   const { getControlsFromId } = require("../models/controls");
 
+  log(`Get Controls from ID: ${channel_id}, ${user.username}`);
   let controls = await getChannel(channel_id);
   controls = await getControlsFromId(controls.controls);
 
@@ -132,7 +140,11 @@ module.exports.getControlsFromId = async (channel_id, user) => {
   if (controls.buttons && sendButtons) {
     controls.buttons = sendButtons;
   } else {
-    // console.log("\n?\n!\n?\n!");
+    logger({
+      level: "error",
+      source: "controllers/controls.js",
+      message: "Unable to Fetch Controls"
+    });
   }
   return controls;
 };

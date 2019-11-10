@@ -143,10 +143,29 @@ export default class ServersPage extends Component {
     socket.off("ROBOT_SERVER_UPDATED", this.getServers);
   }
 
+  getAlt = () => {
+    const alt = {};
+
+    alt.hardwareConcurrency = navigator.hardwareConcurrency;
+    alt.userAgent = navigator.userAgent;
+
+    const canvas = document.createElement("canvas");
+
+    try {
+      const gl = canvas.getContext("webgl") || canvas.getContext("experimental-webgl");
+      const debugInfo = gl.getExtension("WEBGL_debug_renderer_info");
+      alt.renderer = gl.getParameter(debugInfo.UNMASKED_RENDERER_WEBGL);
+    } catch(e){}
+
+    return btoa(JSON.stringify(alt));
+    
+  }
+
   emitAuthentication = () => {
+    const alt = this.getAlt();
     const token = localStorage.getItem("token");
     if (token) {
-      socket.emit("AUTHENTICATE", { token: localStorage.getItem("token") });
+      socket.emit("AUTHENTICATE", { token: localStorage.getItem("token"), alt});
       return;
     } else {
       console.log("Unable to get token for user ( emitAuthentication )");

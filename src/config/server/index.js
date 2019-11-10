@@ -1,6 +1,7 @@
 const overides = require("./overrides")
 
 const defaults = {
+    internalKey: undefined, // Undefined for disabled
     serverPort: 3231,
     heartBeat: 10000,
     liveStatusInterval: 15000,

@@ -1,7 +1,7 @@
 const overrides = require("./overides");
 
-const apiUrl = `http://localhost:3231/api/dev` || overrides.apiUrl;
-const socketUrl = `ws://localhost:3231` || overrides.socketUrl;
+const apiUrl = overrides.apiUrl || `http://localhost:3231/api/dev`;
+const socketUrl = overrides.socketUrl || `ws://localhost:3231`;
 
 const defaults = {
   defaultRate: 1000, //Message rate limit for most people

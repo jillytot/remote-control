@@ -15,7 +15,7 @@ module.exports = async (ws, data) => {
     }
 
     wss.clients.forEach(ws => {
-      if (wss.internalBannedIps.includes(ws.ip) || wss.internalBannedUsernames.includes(ws.user.username)){
+      if (wss.internalBannedIps.includes(ws.ip) || (ws.user && wss.internalBannedUsernames.includes(ws.user.username))){
         ws.emitEvent('ALERT', 'You have been banned from remo.tv');
         ws.terminate();
       }

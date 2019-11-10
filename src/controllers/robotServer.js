@@ -125,7 +125,8 @@ module.exports.getPublicServerInfo = async server => {
     default_channel: server.default_channel,
     members: server.status.count,
     public: server.status.public,
-    live_devices: server.status.liveDevices
+    live_devices: server.status.liveDevices,
+    default_channel: server.settings.default_channel
   };
   return publicInfo;
 };

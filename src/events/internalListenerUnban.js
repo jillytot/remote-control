@@ -1,6 +1,6 @@
-const wss = require("../services/wss");
-
 module.exports = async (ws, data) => {
+  const wss = require("../services/wss");
+   
   if (ws.internalListener){
     if (data.ip){
       if (wss.internalBannedIps.includes(data.ip)){

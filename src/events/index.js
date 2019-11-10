@@ -3,6 +3,7 @@ const events = {}; //event: func
 // message structure {e: event name, d: data}
 module.exports.handleConnection = ws => {
   ws.isAlive = true;
+  ws.ip = ws.upgradeReq.headers["x-real-ip"];
   ws.on("pong", () => {
     ws.isAlive = true;
   });
@@ -60,4 +61,8 @@ registerEvent("BUTTON_COMMAND", require("./buttonCommand"));
 registerEvent("GET_CONTROLS", require("./getControls"));
 registerEvent("GET_LOCAL_STATUS", require("./getLocalStatus"));
 registerEvent("GET_SERVER_STATUS", require("./getServerStatus"));
+
+registerEvent("INTERNAL_LISTENER_AUTHENTICATE", require("./internalListenerAuth"));
+registerEvent("INTERNAL_LISTENER_BAN", require("./internalListenerBan"));
+registerEvent("INTERNAL_LISTENER_UNBAN", require("./internalListenerUnban"));
 //have to register them all with there definitions here

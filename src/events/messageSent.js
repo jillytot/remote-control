@@ -1,5 +1,6 @@
 const { createMessage } = require("../models/chatMessage");
 const { getMember } = require("../models/serverMembers");
+const wss = require("../services/wss");
 
 module.exports = async (ws, message) => {
   console.log("Message Received: ", ws.user, message);
@@ -16,6 +17,7 @@ module.exports = async (ws, message) => {
   });
   if (!checkStatus.status.timeout && !getLocalStatus.status.timeout) {
     createMessage(message);
+    wss.emitInternalEvent('chatMessage', {ip: ws.ip, ...message})
     return;
   }
   message.message = "You are in timeout, and cannot send anymore messages";

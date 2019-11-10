@@ -14,7 +14,7 @@ module.exports = async (ws, data) => {
 
     if (internalUsernameBanned || internalIpBanned){
       ws.emitEvent('ALERT', 'You have been banned from remo.tv');
-      ws.terminate();
+      ws.close(1000);
     } else {
       ws.emitEvent(VALIDATED, {
         username: getUser.username,

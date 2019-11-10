@@ -1,8 +1,8 @@
 const { VALIDATED } = require("./definitions");
 const user = require("../models/user");
-const wss = require("../services/wss");
 
 module.exports = async (ws, data) => {
+  const wss = require("../services/wss");
   const getUser = await user.authUser(data.token);
   if (getUser) {
     //setup private user sub for user events

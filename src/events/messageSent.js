@@ -1,8 +1,8 @@
 const { createMessage } = require("../models/chatMessage");
 const { getMember } = require("../models/serverMembers");
-const wss = require("../services/wss");
 
 module.exports = async (ws, message) => {
+  const wss = require("../services/wss");
   console.log("Message Received: ", ws.user, message);
   if (ws.user && ws.user.type) message.userType = ws.user.type;
 

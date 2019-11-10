@@ -4,6 +4,9 @@ const events = require("../../events");
 
 const wss = new WebSocket.Server({ server: http });
 
+wss.internalBannedUsernames = [];
+wss.internalBannedIps = [];
+
 wss.on("connection", events.handleConnection);
 
 wss.emitInternalEvent = (event, data) => {
@@ -19,8 +22,5 @@ wss.emitEvent = (event, data) => {
     ws.emitEvent(event, data);
   });
 };
-
-wss.internalBannedUsernames = [];
-wss.internalBannedIps = [];
 
 module.exports = wss;

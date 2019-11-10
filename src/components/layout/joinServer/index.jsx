@@ -19,7 +19,8 @@ export default class Join extends Form {
     errors: {},
     error: "",
     validated: null,
-    redirect: false
+    redirect: false,
+    redirectURL: "/"
   };
 
   schema = {
@@ -95,8 +96,12 @@ export default class Join extends Form {
           { headers: { authorization: `Bearer ${token}` } }
         )
         .then(result => {
-          //  if (result.data.status.member) this.handleGetLocalStatus();
-          console.log(result);
+          if (result.data.status.member) {
+            this.setState({
+              redirect: true,
+              redirectURL: `/${server.server_name}/${server.default_channel}`
+            });
+          }
         })
         .catch(err => {
           console.log(err);
@@ -203,12 +208,14 @@ export default class Join extends Form {
 
   render() {
     const { validated } = this.state;
-    return (
+    return this.state.redirect ? (
+      <Redirect to={this.state.redirectURL}></Redirect>
+    ) : (
       <React.Fragment>
         <div className="nav-container">
           <Link to="/"> {this.renderLogo()}</Link>
         </div>
-        <div className="register-form make-window">
+        <div className="invite-card make-window">
           {validated ? this.handleValidResponse() : this.handleLoadSubmit()}
         </div>
       </React.Fragment>

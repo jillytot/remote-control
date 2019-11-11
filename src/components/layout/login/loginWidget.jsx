@@ -16,17 +16,26 @@ export default class LoginWidget extends Component {
   };
 
   handleSelect = () => {
+    const { display } = this.state;
     return (
       <div className="select-container">
         <div
-          className="select-option"
+          className={
+            display === "signup"
+              ? "select-option selected-option"
+              : "select-option"
+          }
           onClick={() => this.handleClick("signup")}
         >
           - SignUp
         </div>
         <div className="spacer">or</div>
         <div
-          className="select-option"
+          className={
+            display === "login"
+              ? "select-option selected-option"
+              : "select-option"
+          }
           onClick={() => this.handleClick("login")}
         >
           Login -

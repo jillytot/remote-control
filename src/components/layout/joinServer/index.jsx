@@ -6,6 +6,7 @@ import { Link, Redirect } from "react-router-dom";
 import { validateInviteKey, joinServer } from "../../../config/client";
 import "./join.css";
 import defaultImages from "../../../imgs/placeholders";
+import LoginWidget from "../login/loginWidget";
 
 //Mode A: Enter a key to join a server
 //Mode B: Join server through URL invite link
@@ -154,11 +155,11 @@ export default class Join extends Form {
   };
 
   handleSignUp = () => {
+    const path = this.props.location.pathname;
     return (
       <div className="">
-        <a href="/">
-          Please SignUp or Login to Remo in order to activate this invite.{" "}
-        </a>
+        Please sign-up in order to join this server:
+        <LoginWidget redirectURL={path} submitText="Continue" />
       </div>
     );
   };

@@ -15,7 +15,9 @@ export default class Signup extends Form {
     isUser: null,
     error: "",
     captcha: "",
-    redirect: false
+    redirect: false,
+    redirectURL: "/",
+    submitText: "Submit"
   };
 
   schema = {
@@ -51,7 +53,19 @@ export default class Signup extends Form {
       .catch(function(error) {
         console.log(error);
       });
+
+    this.setRedirect();
   }
+
+  setRedirect = () => {
+    if (this.props.redirectURL) {
+      this.setState({ redirectURL: this.props.redirectURL });
+    }
+
+    if (this.props.submitText) {
+      this.setState({ submitText: this.props.submitText });
+    }
+  };
 
   setUser = ({ user, isUser }) => {
     // console.log("Is User?: ", isUser);
@@ -118,8 +132,9 @@ export default class Signup extends Form {
   };
 
   render() {
+    const { redirectURL, submitText } = this.state;
     return this.state.redirect ? (
-      <Redirect to="/"></Redirect>
+      <Redirect to={redirectURL}></Redirect>
     ) : (
       <div className="register-form intro ">
         {this.handleSubmitError()}
@@ -132,9 +147,9 @@ export default class Signup extends Form {
             sitekey={reCaptchaSiteKey}
             ref={this.recaptchaRef}
             onChange={this.handleCaptcha} // this parameter is required.
-            // theme="dark"   // Did you know captcha has a dark theme?
+            //theme="dark" // Did you know captcha has a dark theme?
           />
-          {this.renderButton("Submit")}
+          {this.renderButton(submitText)}
         </form>
       </div>
     );

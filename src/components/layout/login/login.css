@@ -24,3 +24,23 @@
   height: 50%;
   width: 50%;
 }
+
+.select-container {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  margin-top: 12px;
+  margin-bottom: -12px;
+}
+
+.select-option {
+  cursor: pointer;
+  color: #d64eb8;
+}
+
+.widget-container {
+  border-radius: 24px;
+  padding: 12px;
+  background: rgb(25, 25, 36);
+  margin-top: 12px;
+}

@@ -3,7 +3,7 @@ const { logger, jsonError } = require("../modules/logging");
 const log = message => {
   logger({
     level: "debug",
-    source: "controllers/members",
+    source: "controllers/members.js",
     message: message
   });
 };

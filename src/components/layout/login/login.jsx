@@ -13,7 +13,9 @@ export default class Login extends Form {
     errors: {},
     isUser: null,
     redirect: false,
-    error: ""
+    error: "",
+    redirectURL: "/",
+    submitText: "Submit"
   };
 
   async componentDidMount() {
@@ -25,7 +27,18 @@ export default class Login extends Form {
       .catch(err => {
         console.log(err);
       });
+
+    this.setRedirect();
   }
+
+  setRedirect = () => {
+    if (this.props.redirectURL) {
+      this.setState({ redirectURL: this.props.redirectURL });
+    }
+    if (this.props.submitText) {
+      this.setState({ submitText: this.props.submitText });
+    }
+  };
 
   schema = {
     username: Joi.string()
@@ -95,15 +108,16 @@ export default class Login extends Form {
   };
 
   render() {
+    const { redirectURL, submitText } = this.state;
     return this.state.redirect ? (
-      <Redirect to="/" />
+      <Redirect to={redirectURL} />
     ) : (
       <div className="register-form intro">
         {this.handleSubmitError()}
         <form onSubmit={this.handleSubmit}>
           {this.renderInput("username", "Username", "text")}
           {this.renderInput("password", "Password", "password")}
-          {this.renderButton("Submit")}
+          {this.renderButton(submitText)}
         </form>
       </div>
     );

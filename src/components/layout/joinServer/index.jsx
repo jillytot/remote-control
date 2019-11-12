@@ -122,34 +122,39 @@ export default class Join extends Form {
     return (
       <React.Fragment>
         <div>{invited_by.username} has invited you to join this server. </div>
-        <div className="server-info-card">
-          {this.renderServerImage()}
-          <div className="details-container">
-            <div className="details larger">
-              <span className="key-name">Server Name: </span>
-              {server.server_name}
-            </div>
-            <div className="details">
-              <span className="key-name">Owner: </span>
-              {server.owner_name}
-            </div>
-            <div className="details">
-              <span className="key-name">Created: </span> {date.toDateString()}
-            </div>
-            <div className="details">
-              {" "}
-              <span className="key-name">Members: </span>
-              {server.members}
-            </div>
-            <div className="details">
-              <span className="key-name">Live Devices: </span>
-              {server.live_devices.length}
+        <div className="join-container">
+          <div className="server-info-card">
+            {this.renderServerImage()}
+            <div className="details-container">
+              <div className="details larger">
+                <span className="key-name">Server Name: </span>
+                {server.server_name}
+              </div>
+              <div className="details">
+                <span className="key-name">Owner: </span>
+                {server.owner_name}
+              </div>
+              <div className="details">
+                <span className="key-name">Created: </span>{" "}
+                {date.toDateString()}
+              </div>
+              <div className="details">
+                {" "}
+                <span className="key-name">Members: </span>
+                {server.members}
+              </div>
+              <div className="details">
+                <span className="key-name">Live Devices: </span>
+                {server.live_devices.length}
+              </div>
             </div>
           </div>
+          <form onSubmit={this.handleSubmit}>
+            {token
+              ? this.renderButton("Join this server")
+              : this.handleSignUp()}
+          </form>
         </div>
-        <form onSubmit={this.handleSubmit}>
-          {token ? this.renderButton("Oh GOD YES!") : this.handleSignUp()}
-        </form>
       </React.Fragment>
     );
   };
@@ -157,10 +162,12 @@ export default class Join extends Form {
   handleSignUp = () => {
     const path = this.props.location.pathname;
     return (
-      <div className="">
-        Please sign-up in order to join this server:
+      <React.Fragment>
+        <div className="info-text">
+          Please sign up or log in to join this server:
+        </div>
         <LoginWidget redirectURL={path} submitText="Continue" />
-      </div>
+      </React.Fragment>
     );
   };
 

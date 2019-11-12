@@ -3,40 +3,6 @@
   margin: 24px;
 }
 
-.key-name {
-  font-weight: bold;
-  color: #b251eb;
-}
-
-.server-info-card {
-  display: flex;
-  flex-direction: row;
-  border-radius: 24px;
-  background: rgb(25, 25, 36);
-  min-height: 128px;
-  min-width: 128px;
-  /* margin-bottom: 12px; */
-  padding: 12px;
-}
-
-.server-img {
-  height: 128px;
-  margin-left: 6px;
-  margin-top: 6px;
-  border-radius: 24px;
-}
-
-.details-container {
-  padding-left: 12px;
-  padding-right: 24px;
-  font-size: 14px;
-  display: flex;
-  flex-direction: column;
-  justify-content: flex-start;
-}
-.larger {
-  font-size: 18px;
-}
 .details {
   margin: 2px;
   text-align: left;

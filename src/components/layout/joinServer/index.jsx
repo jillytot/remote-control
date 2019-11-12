@@ -7,6 +7,7 @@ import { validateInviteKey, joinServer } from "../../../config/client";
 import "./join.css";
 import defaultImages from "../../../imgs/placeholders";
 import LoginWidget from "../login/loginWidget";
+import ServerCard from "../../common/serverCard";
 
 //Mode A: Enter a key to join a server
 //Mode B: Join server through URL invite link
@@ -44,14 +45,6 @@ export default class Join extends Form {
       this.handleValidateInvite(invite);
     }
     return null;
-  };
-
-  renderServerImage = () => {
-    return (
-      <div className="server-img-container">
-        <img className="server-img" alt="" src={defaultImages.default01} />
-      </div>
-    );
   };
 
   handleValidateInvite = async url => {
@@ -117,38 +110,19 @@ export default class Join extends Form {
     const { server, invited_by } = this.state.response_data;
     const token = localStorage.getItem("token");
     console.log("Logging Props: ", this.props);
-    const date = new Date(parseInt(server.created));
+
     //  console.log(server.created, date);
     return (
       <React.Fragment>
         <div>{invited_by.username} has invited you to join this server. </div>
         <div className="join-container">
-          <div className="server-info-card">
-            {this.renderServerImage()}
-            <div className="details-container">
-              <div className="details larger">
-                <span className="key-name">Server Name: </span>
-                {server.server_name}
-              </div>
-              <div className="details">
-                <span className="key-name">Owner: </span>
-                {server.owner_name}
-              </div>
-              <div className="details">
-                <span className="key-name">Created: </span>{" "}
-                {date.toDateString()}
-              </div>
-              <div className="details">
-                {" "}
-                <span className="key-name">Members: </span>
-                {server.members}
-              </div>
-              <div className="details">
-                <span className="key-name">Live Devices: </span>
-                {server.live_devices.length}
-              </div>
-            </div>
-          </div>
+          <ServerCard
+            server_name={server.server_name}
+            owner_name={server.owner_name}
+            members={server.members}
+            live_devices={server.live_devices}
+            created={server.created}
+          />
           <form onSubmit={this.handleSubmit}>
             {token
               ? this.renderButton("Join this server")

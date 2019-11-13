@@ -49,13 +49,13 @@ export default class FrontPage extends Component {
             <div>
               In order to make Remo more secure, we've updated our site's
               encryption methods. As a result, any robot using an API key
-              generated before today will not work. You will need to generate
-              new API keys for all your robots.{" "}
+              generated before today will not work.
               <div>
                 <br />
-                You can generate new API keys by simply creating a new robot on
-                your server.
-              </div>{" "}
+                You can simply copy and paste the updated key already provided
+                for each robot under, "manage robots" to your robot's local
+                settings.
+              </div>
             </div>{" "}
           </div>
           <br />

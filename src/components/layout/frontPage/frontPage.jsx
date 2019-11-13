@@ -43,6 +43,22 @@ export default class FrontPage extends Component {
     return (
       <div className="front-page-container">
         <div className="front-page-text">
+          <div className="alert">
+            {" "}
+            <span className="bolder">Important Notice 11/13/2019 </span>
+            <div>
+              In order to make Remo more secure, we've updated our site's
+              encryption methods. As a result, any robot using an API key
+              generated before today will not work. You will need to generate
+              new API keys for all your robots.{" "}
+              <div>
+                <br />
+                You can generate new API keys by simply creating a new robot on
+                your server.
+              </div>{" "}
+            </div>{" "}
+          </div>
+          <br />
           <div>Best used on Desktop with Chrome Browser</div>
           <div>...</div>
           <div>

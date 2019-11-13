@@ -23,18 +23,18 @@ export default class EditServerForm extends Form {
 
   handleUnlistToggle = () => {
     let { settings } = this.state;
-    console.log("CHANGE SETTINGS BEFORE: ", settings);
+    // console.log("CHANGE SETTINGS BEFORE: ", settings);
     settings.unlist = !settings.unlist;
     this.setState({ settings: settings });
-    console.log("CHANGE SETTINGS AFTER: ", settings);
+    // console.log("CHANGE SETTINGS AFTER: ", settings);
   };
 
   handlePrivateToggle = () => {
     let { settings } = this.state;
-    console.log("CHANGE SETTINGS BEFORE: ", settings);
+    // console.log("CHANGE SETTINGS BEFORE: ", settings);
     settings.private = !settings.private;
     this.setState({ settings: settings });
-    console.log("CHANGE SETTINGS AFTER: ", settings);
+    // console.log("CHANGE SETTINGS AFTER: ", settings);
   };
 
   settingsObject = () => {

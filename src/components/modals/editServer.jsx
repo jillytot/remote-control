@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import EditServerForm from "./editServerForm";
+import EditServerMenu from "./editServerForm";
 
 export default class EditServer extends Component {
   handleModal = () => {
@@ -8,7 +8,7 @@ export default class EditServer extends Component {
     return [
       {
         body: (
-          <EditServerForm
+          <EditServerMenu
             onCloseModal={onCloseModal}
             server={server}
             user={user}

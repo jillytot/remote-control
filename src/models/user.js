@@ -9,7 +9,7 @@ const {
 } = require("../modules/utilities");
 const config = require("../config/server");
 const tempSecret = config.secret;
-const { logger } = require("../modules/logging");
+const { logger, jsonError } = require("../modules/logging");
 const log = message => {
   logger({
     level: "debug",
@@ -182,6 +182,23 @@ module.exports.getInfoFromUsername = async username => {
     }
   }
   return null;
+};
+
+module.exports.getPrivateInfoFromId = async user_id => {
+  const query = `SELECT * FROM users WHERE id = $1 LIMIT 1;`;
+  log(`Getting private infos for ${user_id}`);
+  try {
+    const check = await db.query(query, [user_id]);
+    if (check.rows[0]) return check.rows[0];
+  } catch (err) {
+    logger({
+      level: "error",
+      message: err,
+      color: "red",
+      source: "models/user.js"
+    });
+  }
+  return jsonError("Could not fetch user information");
 };
 
 module.exports.getUserInfoFromId = async userId => {

@@ -60,4 +60,10 @@ router.post("/validate-key", async (req, res) => {
   res.send(response);
 });
 
+router.post("/profile", auth({ user: true }), async (req, res) => {
+  const { fetchProfileInfo } = require("../../controllers/user");
+  const info = await fetchProfileInfo(req.user.id);
+  res.send(info);
+});
+
 module.exports = router;

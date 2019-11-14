@@ -28,12 +28,12 @@ const passwordResetKey = (user, setExpire) => {
   const { passResetExpires } = require("../config/server");
   let expire = false;
   const handleExpire = () => {
-    expire = setExpire || (Date.now() + passResetExpires);
+    expire = setExpire || Date.now() + passResetExpires;
   };
   return {
     key_id: `rset-${makeId()}`,
     created: createTimeStamp(),
-    expires: setExpire || (Date.now() + passResetExpires),
+    expires: setExpire || Date.now() + passResetExpires,
     ref: user.id,
     expire: expire,
     setExpiration: value => handleExpire(value)
@@ -96,4 +96,19 @@ module.exports.getPublicUserFromId = async user_id => {
   const user = await getUserInfoFromId(user_id);
   if (user) return user;
   return jsonError("Unable to get user information");
+};
+
+module.exports.fetchProfileInfo = async user_id => {
+  const { getPrivateInfoFromId } = require("../models/user");
+  const info = await getPrivateInfoFromId(user_id);
+  if (info.error) return info;
+  return {
+    username: info.username,
+    email: info.email,
+    id: info.id,
+    created: info.created,
+    settings: info.settings,
+    type: info.type,
+    status: info.status
+  };
 };

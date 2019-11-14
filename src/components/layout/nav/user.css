@@ -3,6 +3,7 @@
   font-size: 20px;
   padding: 5px 10px 5px 10px;
   text-align: right;
+  cursor: pointer;
 }
 
 .user-container {

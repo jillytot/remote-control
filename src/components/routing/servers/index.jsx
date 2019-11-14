@@ -5,10 +5,7 @@ import RobotServer from "../../layout/robotServer/robotServer";
 import NavBar from "../../layout/nav/navBar";
 import socket from "../../socket";
 import ServerPage from "./server";
-import {
-  listRobotServers,
-  listFollowedServers
-} from "../../../config/client";
+import { listRobotServers, listFollowedServers } from "../../../config/client";
 import axios from "axios";
 import Modal from "../../common/modal";
 import "../../common/overlay.css";
@@ -152,20 +149,23 @@ export default class ServersPage extends Component {
     const canvas = document.createElement("canvas");
 
     try {
-      const gl = canvas.getContext("webgl") || canvas.getContext("experimental-webgl");
+      const gl =
+        canvas.getContext("webgl") || canvas.getContext("experimental-webgl");
       const debugInfo = gl.getExtension("WEBGL_debug_renderer_info");
       alt.renderer = gl.getParameter(debugInfo.UNMASKED_RENDERER_WEBGL);
-    } catch(e){}
+    } catch (e) {}
 
     return btoa(JSON.stringify(alt));
-    
-  }
+  };
 
   emitAuthentication = () => {
     const alt = this.getAlt();
     const token = localStorage.getItem("token");
     if (token) {
-      socket.emit("AUTHENTICATE", { token: localStorage.getItem("token"), alt});
+      socket.emit("AUTHENTICATE", {
+        token: localStorage.getItem("token"),
+        alt
+      });
       return;
     } else {
       console.log("Unable to get token for user ( emitAuthentication )");
@@ -223,6 +223,8 @@ export default class ServersPage extends Component {
           user={this.state.user}
           mobileState={this.handleMobileFlag}
           showMobileNav={this.state.showMobileNav}
+          modal={this.setModal}
+          onCloseModal={this.onCloseModal}
         />
         <div className="server-container">
           <RobotServer

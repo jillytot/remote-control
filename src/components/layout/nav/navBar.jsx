@@ -6,6 +6,7 @@ import defaultImages from "../../../imgs/placeholders";
 import { Link, Redirect } from "react-router-dom";
 import socket from "../../socket";
 import GetLayout from "../../modules/getLayout";
+import UserProfile from "../userProfile/userProfile";
 
 export default class NavBar extends Component {
   constructor(props) {
@@ -47,6 +48,16 @@ export default class NavBar extends Component {
     );
   };
 
+  handleModal = () => {
+    return [
+      {
+        body: <UserProfile {...this.props} />
+      },
+      { header: "" },
+      { footer: "" }
+    ];
+  };
+
   renderBurger = () => {
     return <GetLayout renderSize={1280} renderMobile={this.handleBurger} />;
   };
@@ -74,7 +85,12 @@ export default class NavBar extends Component {
         <Link to="/"> {this.renderLogo()}</Link>
 
         <div className="user-container">
-          <div className="user">
+          <div
+            className="user"
+            onClick={() => {
+              this.props.modal(this.handleModal());
+            }}
+          >
             {this.props.user.username}{" "}
             <button className="user-logout btn" onClick={this.logout}>
               logout

@@ -2,3 +2,29 @@
   font-size: 12px;
   padding: 24px;
 }
+
+.info-container {
+  display: flex;
+  flex-direction: row;
+  font-size: 14px;
+  padding: 1px;
+}
+
+.info-key {
+  font-weight: bold;
+  padding-right: 6px;
+  color: rgb(106, 171, 255);
+}
+
+.info-chunk {
+  padding: 12px;
+  margin-top: 12px;
+  background-color: rgb(25, 25, 36);
+  border-radius: 12px;
+}
+
+.info-edit {
+  margin-left: 6px;
+  color: rgb(176, 115, 211);
+  cursor: pointer;
+}

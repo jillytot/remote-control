@@ -36,10 +36,15 @@ export default class EditEmail extends Form {
   };
 
   render() {
-    const { submitText } = this.state;
+    const { submitText, returnError } = this.state;
     return (
       <div>
         {this.handleSubmitError()}
+        {returnError ? (
+          <div className="alert">{returnError}</div>
+        ) : (
+          <React.Fragment />
+        )}
         <form onSubmit={this.handleSubmit}>
           <div className="inline">
             {this.renderInput("email", "New Email", "inline")}

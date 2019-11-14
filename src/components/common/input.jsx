@@ -8,7 +8,7 @@ const Input = React.forwardRef((props, ref) => {
   const handleErrorPlacement = () => {
     if (type === "inline" && error) {
       // passError(<div className="alert alert-danger">{error}</div>);
-      // passError(error);
+      passError(error);
       return;
     }
   };

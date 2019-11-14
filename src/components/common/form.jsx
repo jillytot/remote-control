@@ -11,7 +11,8 @@ class Form extends Component {
   state = {
     data: {},
     errors: {},
-    validation: true
+    validation: true,
+    returnError: null
   };
 
   validate = () => {
@@ -117,8 +118,10 @@ class Form extends Component {
   }
 
   handlePassError = e => {
-    console.log(e);
-    this.setState({ error: e });
+    const { returnError } = this.state;
+    if (e && e !== returnError) {
+      this.setState({ returnError: e });
+    }
   };
 
   renderTextArea(name, label, type, populate, rows, cols) {

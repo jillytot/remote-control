@@ -1,27 +1,16 @@
-import React from "react";
-import Form from "../../common/form";
-import Joi from "joi-browser";
+import React, { Component } from "react";
 import axios from "axios";
 import "./userProfile.css";
 import { userProfile } from "../../../config/client/index";
+import EditEmail from "./editEmail";
 
-export default class UserProfile extends Form {
+export default class UserProfile extends Component {
   state = {
-    data: { email: "" },
-    errors: {},
-    error: "",
-    submitText: "Update",
     fetching: true,
     submitText: "Update",
     userData: {},
-    editEmail: false
-  };
-
-  schema = {
-    email: Joi.string()
-      .email()
-      .required()
-      .label("Email")
+    editEmail: false,
+    updated: {}
   };
 
   componentDidMount() {
@@ -62,27 +51,6 @@ export default class UserProfile extends Form {
     this.props.onCloseModal();
   };
 
-  handleSubmitError = () => {
-    const { error } = this.state;
-    if (error === "") {
-      return <React.Fragment />;
-    }
-    return <div className="alert">{this.state.error}</div>;
-  };
-
-  handleEditEmail = () => {
-    const { submitText } = this.state;
-    return (
-      <React.Fragment>
-        {this.handleSubmitError()}
-        <form onSubmit={this.handleSubmit}>
-          {this.renderInput("email", "Email", "email")}
-          {this.renderButton(submitText)}
-        </form>
-      </React.Fragment>
-    );
-  };
-
   handleShowInfo = () => {
     const { editEmail } = this.state;
     const { email, username, created, id } = this.state.userData;
@@ -105,16 +73,37 @@ export default class UserProfile extends Form {
           <div className="info-container">
             <div className="info-key"> email: </div>
             <div className="info-value"> {email} </div>
-            <div className="info-edit"> ( edit ) </div>
+            <div
+              className="info-edit"
+              onClick={() => {
+                this.setState({ editEmail: !editEmail });
+              }}
+            >
+              ( edit )
+            </div>
           </div>
+          {editEmail ? this.handleEditEmail() : <React.Fragment />}
           <div className="info-container">
             <div className="info-key"> email verified: </div>
             <div className="info-value"> nope </div>
             <div className="info-edit"> ( verify ) </div>
           </div>
         </div>
-        {editEmail ? this.handleEditEmail() : <React.Fragment />}
       </div>
+    );
+  };
+
+  handleUpdated = e => {
+    console.log(e);
+  };
+
+  handleEditEmail = () => {
+    return (
+      <EditEmail
+        updated={e => {
+          this.handleUpdated(e);
+        }}
+      />
     );
   };
 

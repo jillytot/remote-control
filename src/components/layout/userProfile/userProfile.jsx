@@ -10,6 +10,7 @@ export default class UserProfile extends Component {
     submitText: "Update",
     userData: {},
     editEmail: false,
+    editEmailText: "( edit )",
     updated: {}
   };
 
@@ -79,7 +80,7 @@ export default class UserProfile extends Component {
                 this.setState({ editEmail: !editEmail });
               }}
             >
-              ( edit )
+              {editEmail ? "( cancel )" : "( edit )"}
             </div>
           </div>
           {editEmail ? this.handleEditEmail() : <React.Fragment />}

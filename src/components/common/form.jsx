@@ -109,9 +109,17 @@ class Form extends Component {
         onChange={this.handleChange}
         error={errors[name]}
         value={data[name]}
+        passError={e => {
+          this.handlePassError(e);
+        }}
       />
     );
   }
+
+  handlePassError = e => {
+    console.log(e);
+    this.setState({ error: e });
+  };
 
   renderTextArea(name, label, type, populate, rows, cols) {
     const { data, errors } = this.state;

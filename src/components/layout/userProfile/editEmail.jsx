@@ -7,13 +7,14 @@ export default class EditEmail extends Form {
     data: { email: "" },
     errors: {},
     error: "",
-    submitText: "Update"
+    submitText: "Update",
+    inline: "true"
   };
 
   schema = {
     email: Joi.string()
-      .email()
       .required()
+      .email()
       .label("Email")
   };
 
@@ -26,6 +27,11 @@ export default class EditEmail extends Form {
   };
 
   doSubmit = () => {
+    const { email } = this.state.data;
+    if (email === "") {
+      this.setState({ error: "Email cannot be blank" });
+      return;
+    }
     this.props.updated("Email Updated!");
   };
 
@@ -34,9 +40,11 @@ export default class EditEmail extends Form {
     return (
       <div>
         {this.handleSubmitError()}
-        <form onSubmit={this.handleSubmit} inline="true">
-          {this.renderInput("email", "New Email", "email")}
-          {this.renderButton(submitText)}
+        <form onSubmit={this.handleSubmit}>
+          <div className="inline">
+            {this.renderInput("email", "New Email", "inline")}
+            {this.renderButton(submitText)}
+          </div>
         </form>
       </div>
     );

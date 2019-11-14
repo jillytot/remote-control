@@ -28,3 +28,12 @@
   color: rgb(176, 115, 211);
   cursor: pointer;
 }
+
+.inline {
+  display: flex;
+  flex-direction: row;
+  padding: 2px;
+  background-color: rgb(41, 41, 59);
+  margin: 2px;
+  border-radius: 6px;
+}

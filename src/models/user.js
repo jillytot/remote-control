@@ -10,6 +10,7 @@ const {
 const config = require("../config/server");
 const tempSecret = config.secret;
 const { logger, jsonError } = require("../modules/logging");
+
 const log = message => {
   logger({
     level: "debug",
@@ -313,7 +314,6 @@ module.exports.authUser = async token => {
 
 //used by API for auth
 module.exports.authUserData = async tokenData => {
-  // const { verifyAuthToken } = require('../models/user');
   let auth = await this.verifyAuthToken(tokenData);
   return auth;
 };
@@ -568,6 +568,22 @@ module.exports.updatePassword = async user => {
     const insert = `UPDATE users SET password = $1 WHERE id = $2 RETURNING *`;
     const result = await db.query(insert, [password, id]);
     if (result.rows[0]) return true;
+  } catch (err) {
+    logger({
+      level: "error",
+      message: err,
+      color: "red",
+      source: "models/user.js"
+    });
+  }
+  return null;
+};
+
+module.exports.updateEmail = async ({ email, id }) => {
+  const query = `UPDATE users SET email = $1 WHERE id = $2 RETURNING *`;
+  try {
+    const update = await db.query(query, [email, id]);
+    if (update.rows[0]) return update.rows[0];
   } catch (err) {
     logger({
       level: "error",

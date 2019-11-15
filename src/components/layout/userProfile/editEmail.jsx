@@ -1,6 +1,7 @@
 import React from "react";
 import Form from "../../common/form";
 import Joi from "joi-browser";
+import "./userProfile.css";
 
 export default class EditEmail extends Form {
   state = {
@@ -23,16 +24,22 @@ export default class EditEmail extends Form {
     if (error === "") {
       return <React.Fragment />;
     }
-    return <div className="alert">{this.state.error}</div>;
+    return <div className="alert-inline">{this.state.error}</div>;
   };
 
-  doSubmit = () => {
+  handleUpdateEmail = async () => {
     const { email } = this.state.data;
-    if (email === "") {
-      this.setState({ error: "Email cannot be blank" });
-      return;
+    console.log("Updating Email", email);
+    return null;
+  };
+
+  doSubmit = async () => {
+    const { error } = this.state;
+    this.setState({ error: "" });
+    await this.handleUpdateEmail();
+    if (!error) {
+      this.props.updated("Email Updated!");
     }
-    this.props.updated("Email Updated!");
   };
 
   render() {
@@ -41,7 +48,7 @@ export default class EditEmail extends Form {
       <div>
         {this.handleSubmitError()}
         {returnError ? (
-          <div className="alert">{returnError}</div>
+          <div className="alert-inline">{returnError}</div>
         ) : (
           <React.Fragment />
         )}

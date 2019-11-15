@@ -1,6 +1,7 @@
 const router = require("express").Router();
 const auth = require("../auth");
 const { err } = require("../../modules/utilities");
+const { jsonError } = require("../../modules/logging");
 
 router.get("/followed", auth({ user: true }), async (req, res) => {
   const { followedServers } = require("../../controllers/user");
@@ -17,7 +18,6 @@ router.get("/followed", auth({ user: true }), async (req, res) => {
 //Will need to get user email, and this probably shouldn't need auth
 router.post("/get-password-reset", auth({ user: true }), async (req, res) => {
   const { generateResetKey } = require("../../controllers/user");
-  //req.body.email || req.body.username
   if (req.user && req.user.id) {
     console.log(`Reset Password for: ${req.user.username}`);
     const reset = await generateResetKey(req.user, req.body.expires);
@@ -66,4 +66,15 @@ router.post("/profile", auth({ user: true }), async (req, res) => {
   res.send(info);
 });
 
+router.post("/update-email", auth({ user: true }), async (req, res) => {
+  const { email } = req.body;
+  const { updateEmail } = require("../../controllers/user");
+  if (email) {
+    const update = await updateEmail({ email: email, id: req.user.id });
+    res.send(update);
+    return;
+  }
+  res.send(jsonError("Invalid email"));
+  return;
+});
 module.exports = router;

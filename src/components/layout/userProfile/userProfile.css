@@ -37,3 +37,11 @@
   margin: 2px;
   border-radius: 6px;
 }
+
+.alert-inline {
+  padding: 2px;
+  margin: 2px;
+  background-color: rgb(179, 32, 32);
+  font-size: 14px;
+  border-radius: 6px;
+}

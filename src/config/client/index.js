@@ -40,7 +40,8 @@ const defaults = {
   getControls: `${apiUrl}/controls/get-controls`,
   validateInviteKey: `${apiUrl}/robot-server/validate-invite`,
   disableInvite: `${apiUrl}/robot-server/deactivate-invite`,
-  userProfile: `${apiUrl}/user/profile`
+  userProfile: `${apiUrl}/user/profile`,
+  updateEmail: `${apiUrl}/update-email`
 };
 
 module.exports = Object.assign({}, defaults, overrides);

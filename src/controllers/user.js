@@ -102,6 +102,10 @@ module.exports.fetchProfileInfo = async user_id => {
   const { getPrivateInfoFromId } = require("../models/user");
   const info = await getPrivateInfoFromId(user_id);
   if (info.error) return info;
+  return privateInfo(info);
+};
+
+const privateInfo = info => {
   return {
     username: info.username,
     email: info.email,
@@ -111,4 +115,15 @@ module.exports.fetchProfileInfo = async user_id => {
     type: info.type,
     status: info.status
   };
+};
+
+module.exports.updateEmail = async ({ email, id }) => {
+  const { checkEmail, updateEmail } = require("../models/user");
+  const checkForDupes = await checkEmail(email);
+  if (checkForDupes) {
+    return jsonError("This email is already in use, please try another.");
+  }
+  const update = await updateEmail({ email: email, id: id });
+  if (update) return privateInfo(update);
+  return jsonError("Unable to update email, please try again later");
 };

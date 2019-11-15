@@ -45,3 +45,14 @@
   font-size: 14px;
   border-radius: 6px;
 }
+
+.success {
+  background-color: #21c975;
+}
+
+.updated {
+  font-size: 14px;
+  margin-top: 6px;
+  /* color: #21c975; */
+  font-style: italic;
+}

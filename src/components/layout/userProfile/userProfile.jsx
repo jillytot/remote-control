@@ -11,7 +11,7 @@ export default class UserProfile extends Component {
     userData: {},
     editEmail: false,
     editEmailText: "( edit )",
-    updated: {}
+    updated: ""
   };
 
   componentDidMount() {
@@ -25,7 +25,7 @@ export default class UserProfile extends Component {
   handleGetInfo = async () => {
     const token = localStorage.getItem("token");
 
-    axios
+    await axios
       .post(
         userProfile,
         {},
@@ -78,6 +78,7 @@ export default class UserProfile extends Component {
               className="info-edit"
               onClick={() => {
                 this.setState({ editEmail: !editEmail });
+                if (!editEmail) this.setState({ updated: "" });
               }}
             >
               {editEmail ? "( cancel )" : "( edit )"}
@@ -86,8 +87,8 @@ export default class UserProfile extends Component {
           {editEmail ? this.handleEditEmail() : <React.Fragment />}
           <div className="info-container">
             <div className="info-key"> email verified: </div>
-            <div className="info-value"> nope </div>
-            <div className="info-edit"> ( verify ) </div>
+            <div className="info-value"> no </div>
+            <div className="info-edit"> ( coming soon ) </div>
           </div>
         </div>
       </div>
@@ -96,6 +97,8 @@ export default class UserProfile extends Component {
 
   handleUpdated = e => {
     console.log(e);
+    this.setState({ userData: e, updated: e.message });
+    if (e.email) this.setState({ editEmail: false });
   };
 
   handleEditEmail = () => {
@@ -108,6 +111,14 @@ export default class UserProfile extends Component {
     );
   };
 
+  handleUpdateStatus = () => {
+    const { updated, editEmail } = this.state;
+    if (updated !== "" && !editEmail) {
+      return <div className="updated">{updated}</div>;
+    }
+    return <React.Fragment />;
+  };
+
   render() {
     const { user } = this.props;
     const { fetching } = this.state;
@@ -116,6 +127,7 @@ export default class UserProfile extends Component {
       <div className="modal">
         {user.username}'s profile.
         {fetching ? this.handleFetching() : this.handleShowInfo()}{" "}
+        {this.handleUpdateStatus()}
       </div>
     );
   }

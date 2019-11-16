@@ -15,6 +15,7 @@ import Channel from "./channel";
 import defaultImages from "../../../imgs/placeholders";
 import "./channels.css";
 import GetLayout from "../../modules/getLayout";
+import InviteButton from "./invites/inviteButton";
 
 export default class Channels extends Component {
   constructor(props) {
@@ -232,6 +233,13 @@ export default class Channels extends Component {
           modal={this.props.modal}
           onCloseModal={this.props.onCloseModal}
           setServer={this.props.setServer}
+        />
+        <InviteButton
+          user={user}
+          server={selectedServer}
+          modal={this.props.modal}
+          onCloseModal={this.props.onCloseModal}
+          invites={this.state.invites}
         />
         {this.displayChannels()}
         <AddChannel

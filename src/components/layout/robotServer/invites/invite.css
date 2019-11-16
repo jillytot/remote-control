@@ -1,0 +1,32 @@
+.invite-button-container {
+  /* background-color: rgb(46, 46, 104); */
+  background-color: rgb(86, 86, 119);
+  font-size: 14px;
+  cursor: pointer;
+  display: flex;
+  flex-direction: row;
+  /* padding: 3px; */
+  margin-left: 12px;
+  margin-right: 12px;
+  border-radius: 12px;
+}
+
+.invite-icon {
+  padding: 3px;
+  /* background-color: purple; */
+  /* width: 24px; */
+  height: 18px;
+  margin-left: 6px;
+}
+
+.invite-text {
+  padding: 3px;
+  /* background-color: blue; */
+  width: 100%;
+  text-align: left;
+  font-style: italic;
+}
+
+.invite-button-container:hover {
+  border: solid 1px rgb(123, 127, 173);
+}

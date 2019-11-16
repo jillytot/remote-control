@@ -55,6 +55,7 @@ export default class UserProfile extends Component {
   handleShowInfo = () => {
     const { editEmail } = this.state;
     const { email, username, created, id } = this.state.userData;
+    const date = new Date(parseInt(created)).toDateString();
 
     return (
       <div>
@@ -69,7 +70,7 @@ export default class UserProfile extends Component {
           </div>
           <div className="info-container">
             <div className="info-key"> created: </div>
-            <div className="info-value"> {created} </div>
+            <div className="info-value"> {date} </div>
           </div>
           <div className="info-container">
             <div className="info-key"> email: </div>

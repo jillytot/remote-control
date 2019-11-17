@@ -186,9 +186,22 @@ module.exports.makeInvite = async ({ user, server_id, expires }) => {
     let invite = {};
     invite.user = user;
     invite.server = checkServer;
+    invite.alias = await this.makeInviteAlias();
     if (expires) invite.expires = expires;
     invite = await generateInvite(invite);
     return invite;
   }
   return null;
+};
+
+module.exports.makeInviteAlias = () => {
+  const alias =
+    Math.random()
+      .toString(36)
+      .substring(2, 8) +
+    Math.random()
+      .toString(36)
+      .substring(2, 8);
+  console.log(alias);
+  return alias;
 };

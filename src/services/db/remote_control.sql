@@ -157,6 +157,8 @@ CREATE TABLE public.invites
     created character varying COLLATE pg_catalog."default",
     expires character varying COLLATE pg_catalog."default" NOT NULL,
     status character varying COLLATE pg_catalog."default",
+    alias character varying COLLATE pg_catalog."default",
+    is_default boolean,
     CONSTRAINT invites_pkey PRIMARY KEY (id)
 )
 WITH (

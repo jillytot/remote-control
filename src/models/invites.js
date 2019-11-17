@@ -42,17 +42,48 @@ module.exports.generateInvite = async invite => {
   make.server_id = invite.server.server_id;
   make.expires = invite.expires || "";
   make.status = "active";
+  make.alias = invite.alias;
+  const checkInvites = await this.checkForInvites(make.server_id);
+  if (!checkInvites) {
+    make.is_default = false;
+  } else {
+    make.is_default = true;
+  }
 
   const save = await this.saveInvite(make);
   if (save) return save;
   return { status: "error", error: "problem generating invite" };
 };
 
+//If server has invites, return true, else return false
+module.exports.checkForInvites = async server_id => {
+  const db = require("../services/db");
+  console.log("checking server for existing invites", server_id);
+  const query = `SELECT FROM invites WHERE server_id = ( $1 ) RETURNING *`;
+  try {
+    const result = await db.query(query, [server_id]);
+    console.log(result);
+    if (result.rows[0]) return true;
+  } catch (err) {
+    console.log(err);
+  }
+  return false;
+};
+
 module.exports.saveInvite = async invite => {
   console.log("Saving Invite to DB");
   const db = require("../services/db");
-  const { id, created_by, server_id, created, expires, status } = invite;
-  const save = `INSERT INTO invites ( id, created_by, server_id, created, expires, status ) VALUES ( $1, $2, $3, $4, $5, $6 ) RETURNING *`;
+  const {
+    id,
+    created_by,
+    server_id,
+    created,
+    expires,
+    status,
+    alias,
+    is_default
+  } = invite;
+  const save = `INSERT INTO invites ( id, created_by, server_id, created, expires, status, alias, is_default ) VALUES ( $1, $2, $3, $4, $5, $6, $7, $8 ) RETURNING *`;
   try {
     const result = await db.query(save, [
       id,
@@ -60,7 +91,9 @@ module.exports.saveInvite = async invite => {
       server_id,
       created,
       expires,
-      status
+      status,
+      alias,
+      is_default
     ]);
     if (result.rows[0]) return result.rows[0];
   } catch (err) {

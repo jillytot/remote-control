@@ -30,3 +30,67 @@
 .invite-button-container:hover {
   border: solid 1px rgb(123, 127, 173);
 }
+
+.make-invite-container {
+  padding: 12px;
+  font-size: 14px;
+}
+
+.print-invites-container {
+  background: rgb(25, 25, 36);
+  display: flex;
+  flex-direction: column;
+  margin: 24px;
+  margin-top: 12px;
+  padding: 12px;
+  border-radius: 24px;
+}
+.invite-container {
+  padding: 12px;
+  border-bottom: solid 1px blue;
+  display: flex;
+  flex-direction: column;
+}
+
+.invite-actions {
+  display: flex;
+  flex-direction: row;
+  padding-top: 2px;
+  font-size: 12px;
+}
+
+.copy-to-clipboard {
+  color: cyan;
+  cursor: pointer;
+  font-style: italic;
+  padding-left: 1px;
+  font-size: 12px;
+  /* background-color: blue; */
+}
+
+.copy-success {
+  font-style: italic;
+  margin-left: -12px;
+}
+
+.invite-form {
+  margin-top: 12px;
+}
+
+.invite-id {
+  border: 0px;
+  border-radius: 12px;
+  width: 100%;
+  height: 15px;
+  background-color: rgb(90, 68, 124);
+  resize: none;
+  color: white;
+  font-size: 12px;
+  padding: 8px;
+}
+
+.invite-id:focus {
+  outline: 0px;
+  /* border: solid 2px rgb(150, 123, 194); */
+  background-color: rgb(111, 90, 143);
+}

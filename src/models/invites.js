@@ -42,10 +42,10 @@ module.exports.generateInvite = async invite => {
   make.server_id = invite.server.server_id;
   make.expires = invite.expires || "";
   make.status = "active";
-  make.alias = invite.alias;
   const checkInvites = await this.checkForInvites(make.server_id);
-  if (!checkInvites) {
+  if (checkInvites) {
     make.is_default = false;
+    make.alias = invite.alias;
   } else {
     make.is_default = true;
   }
@@ -58,11 +58,10 @@ module.exports.generateInvite = async invite => {
 //If server has invites, return true, else return false
 module.exports.checkForInvites = async server_id => {
   const db = require("../services/db");
-  console.log("checking server for existing invites", server_id);
-  const query = `SELECT FROM invites WHERE server_id = ( $1 ) RETURNING *`;
+  // console.log("checking server for existing invites", server_id);
+  const query = `SELECT * FROM invites WHERE server_id = ( $1 )`;
   try {
     const result = await db.query(query, [server_id]);
-    console.log(result);
     if (result.rows[0]) return true;
   } catch (err) {
     console.log(err);
@@ -71,7 +70,7 @@ module.exports.checkForInvites = async server_id => {
 };
 
 module.exports.saveInvite = async invite => {
-  console.log("Saving Invite to DB");
+  // console.log("Saving Invite to DB");
   const db = require("../services/db");
   const {
     id,
@@ -106,12 +105,12 @@ module.exports.saveInvite = async invite => {
 };
 
 module.exports.getInvitesForServer = async server_id => {
-  console.log("get invites for server: ", server_id);
+  // console.log("get invites for server: ", server_id);
   const db = require("../services/db");
   const query = `SELECT * FROM invites WHERE server_id = $1`;
   try {
     const result = await db.query(query, [server_id]);
-    console.log(result.rows);
+    // console.log(result.rows);
     return result.rows;
   } catch (err) {
     console.log(err);
@@ -149,14 +148,14 @@ module.exports.generateDefaults = async () => {
     const servers = await getRobotServers();
     servers.forEach(async server => {
       const invite = await this.getInvitesForServer(server.server_id);
-      console.log("INVITE CHECK: ", invite);
+      // console.log("INVITE CHECK: ", invite);
       if (!invite[0]) {
-        console.log("GENERATING DEFAULT INVITE ...");
+        // console.log("GENERATING DEFAULT INVITE ...");
         const makeInvite = await this.generateInvite({
           user: { id: server.owner_id },
           server: { server_id: server.server_id, owner_id: server.owner_id }
         });
-        console.log("Creating Default Invite: ", makeInvite);
+        // console.log("Creating Default Invite: ", makeInvite);
         invites.push(makeInvite);
         return;
       }

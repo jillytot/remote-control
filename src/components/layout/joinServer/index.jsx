@@ -76,8 +76,9 @@ export default class Join extends Form {
   handleJoin = async () => {
     console.log("Joining Server");
     const { validated } = this.state;
-    const { server } = this.state.response_data;
-    const { invite } = this.state.data;
+    const { server, invite } = this.state.response_data;
+
+    console.log(invite);
     const token = localStorage.getItem("token");
     if (token && validated) {
       axios
@@ -85,7 +86,7 @@ export default class Join extends Form {
           joinServer,
           {
             server_id: server.server_id,
-            join: invite
+            join: invite.id
           },
           { headers: { authorization: `Bearer ${token}` } }
         )

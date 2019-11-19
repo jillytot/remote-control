@@ -1,21 +1,78 @@
 import React, { Component } from "react";
 import Form from "../../../common/form";
-//{`https://remo.tv/join/${invite.id}`}
+import axios from "axios";
+import { invite, disableInvite } from "../../../../config/client/index";
 
 export default class MakeInviteForm extends Form {
   state = { data: {} };
-
   schema = {};
 
-  doSubmit = () => {
-    console.log(this.props);
+  componentDidMount() {
+    this.setState({ invites: this.props.invites });
+  }
+
+  handleDelete = async e => {
+    const token = localStorage.getItem("token");
+    axios
+      .post(disableInvite, e, {
+        headers: { authorization: `Bearer ${token}` }
+      })
+      .then(res => {
+        if (res.data && !res.data.error) {
+          let invites = [];
+          this.state.invites.map(invite => {
+            if (invite.id === res.data.id) {
+              //do nothing
+            } else {
+              invites.push(invite);
+            }
+          });
+          this.setState({ invites: invites });
+        }
+      })
+      .catch(err => {
+        console.log(err);
+      });
+  };
+
+  doSubmit = async () => {
+    const token = localStorage.getItem("token");
+    const { server_id } = this.props.server;
+    await axios
+      .post(
+        invite,
+        { server_id: server_id },
+        {
+          headers: { authorization: `Bearer ${token}` }
+        }
+      )
+      .then(res => {
+        if (res.data && !res.data.error) {
+          let { invites } = this.state;
+          invites.push(res.data);
+          console.log(res.data, invites);
+          this.setState({ invites: invites });
+        }
+      })
+      .catch(err => {
+        console.log(err);
+      });
   };
 
   printInvites = () => {
-    const { invites } = this.props;
-    return invites.map(invite => {
-      return <PrintInvite invite={invite} />;
-    });
+    const { invites } = this.state;
+    console.log(invites, this.state);
+    if (invites)
+      return invites.map((invite, index) => {
+        if (invite.alias && !invite.is_default)
+          return (
+            <PrintInvite
+              invite={invite}
+              onDelete={this.handleDelete}
+              key={index}
+            />
+          );
+      });
   };
 
   render() {
@@ -49,27 +106,26 @@ class PrintInvite extends Component {
   };
 
   render() {
-    const { invite } = this.props;
+    const { invite, onDelete } = this.props;
     return (
       <div className="invite-container">
         <textarea
           className="invite-id"
           ref={textarea => (this.textArea = textarea)}
-          value={`https://remo.tv/join/${invite.id}`}
+          value={`https://remo.tv/join/${invite.alias}`}
         />
-        <div className="invite-actions">
-          <div className="copy-to-clipboard" onClick={this.handleCopy}>
-            copy to clipboard
+        <div className="actions-container">
+          <div className="invite-actions">
+            <div className="copy-to-clipboard" onClick={this.handleCopy}>
+              copy to clipboard
+            </div>
+            <div className="copy-success">{this.state.copySuccess}</div>
           </div>
-          <div className="copy-success">{this.state.copySuccess}</div>
+          <div className="delete-invite" onClick={() => onDelete(invite)}>
+            delete
+          </div>
         </div>
       </div>
     );
   }
 }
-
-/*
-Make an invite Alias 
-Make sure default Invite doesn't show in the list of invites
-Use the invite alias to generate the link. 
-*/

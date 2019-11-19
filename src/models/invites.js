@@ -107,10 +107,10 @@ module.exports.saveInvite = async invite => {
 module.exports.getInvitesForServer = async server_id => {
   // console.log("get invites for server: ", server_id);
   const db = require("../services/db");
-  const query = `SELECT * FROM invites WHERE server_id = $1`;
+  const active = "active";
+  const query = `SELECT * FROM invites WHERE ( server_id, status )  = ( $1, $2 )`;
   try {
-    const result = await db.query(query, [server_id]);
-    // console.log(result.rows);
+    const result = await db.query(query, [server_id, active]);
     return result.rows;
   } catch (err) {
     console.log(err);
@@ -137,6 +137,25 @@ module.exports.getInviteById = async id => {
   return {
     status: "error!",
     error: "Could not find any invites generated for this server"
+  };
+};
+
+module.exports.getInviteByAlias = async alias => {
+  console.log("Get invite by alias: ", alias);
+  const db = require("../services/db");
+  const query = `SELECT * FROM invites WHERE alias = $1 LIMIT 1`;
+  try {
+    const result = await db.query(query, [alias]);
+    if (result.rows[0]) {
+      console.log(result.rows[0]);
+      return result.rows[0];
+    }
+  } catch (err) {
+    console.log(err);
+  }
+  return {
+    status: "error!",
+    error: "Could not find any public invites generated for this server"
   };
 };
 

@@ -107,8 +107,8 @@ module.exports.validateInvite = async invite => {
 //Look for invite ID match, return information for server
 module.exports.validateServerInvite = async invite_id => {
   log(`Validate Invite for Server: ${invite_id}`);
-  const { getInviteById } = require("../models/invites");
-  const invite = await getInviteById(invite_id);
+  const { getInviteByAlias } = require("../models/invites");
+  const invite = await getInviteByAlias(invite_id);
   //Check status:
   if (invite.error) {
     log(`Invite validation Error for invite id: ${invite_id}`);
@@ -133,9 +133,15 @@ module.exports.getInviteInfoFromId = async invite_id => {
   return invite;
 };
 
+module.exports.getInviteInfoFromAlias = async alias => {
+  const { getInviteByAlias } = require("models/invites");
+  const invite = await getInviteByAlias(alias);
+  return invite;
+};
+
 module.exports.deactivateInvite = async invite => {
   const { updateInviteStatus } = require("../models/invites");
-  if (invite && invite.id) {
+  if (invite && invite.id && !invite.is_default) {
     invite.status = "inactive";
     const update = await updateInviteStatus(invite);
     if (!update.error) return update;

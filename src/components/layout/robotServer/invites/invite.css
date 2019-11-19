@@ -50,13 +50,20 @@
   border-bottom: solid 1px blue;
   display: flex;
   flex-direction: column;
+  /* background-color: pink; */
 }
-
+.actions-container {
+  display: flex;
+  flex-direction: row;
+  /* background-color: green; */
+  justify-content: space-between;
+}
 .invite-actions {
   display: flex;
   flex-direction: row;
   padding-top: 2px;
   font-size: 12px;
+  /* background-color: blue; */
 }
 
 .copy-to-clipboard {
@@ -71,6 +78,7 @@
 .copy-success {
   font-style: italic;
   margin-left: -12px;
+  margin-right: 12px;
 }
 
 .invite-form {
@@ -80,7 +88,7 @@
 .invite-id {
   border: 0px;
   border-radius: 12px;
-  width: 100%;
+  /* width: 100%; */
   height: 15px;
   background-color: rgb(90, 68, 124);
   resize: none;
@@ -93,4 +101,15 @@
   outline: 0px;
   /* border: solid 2px rgb(150, 123, 194); */
   background-color: rgb(111, 90, 143);
+}
+
+.delete-invite {
+  color: #ff5ca3;
+  font-size: 12px;
+  /* background-color: purple; */
+  cursor: pointer;
+  font-style: italic;
+}
+.delete-invite:hover {
+  text-decoration: underline;
 }

@@ -104,7 +104,7 @@ module.exports.validateInvite = async invite => {
   return validate;
 };
 
-//Look for invite ID match, return information for server
+//This method was updated to use invite.alias instead of invite.id
 module.exports.validateServerInvite = async invite_id => {
   log(`Validate Invite for Server: ${invite_id}`);
   const { getInviteByAlias } = require("../models/invites");

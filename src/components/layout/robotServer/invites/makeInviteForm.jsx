@@ -95,7 +95,8 @@ export default class MakeInviteForm extends Form {
 
 class PrintInvite extends Component {
   state = {
-    copySuccess: ""
+    copySuccess: "",
+    confirmDelete: false
   };
 
   handleCopy = e => {
@@ -105,8 +106,52 @@ class PrintInvite extends Component {
     this.setState({ copySuccess: "Copied!" });
   };
 
-  render() {
+  handleConfirmDelete = () => {
     const { invite, onDelete } = this.props;
+    const { confirmDelete } = this.state;
+
+    if (!confirmDelete) {
+      return (
+        <div
+          className="delete-invite"
+          onClick={() => {
+            this.setState({ confirmDelete: true });
+          }}
+        >
+          delete
+        </div>
+      );
+    }
+    return (
+      <React.Fragment>
+        <div className="confirm-delete">
+          {" "}
+          confirm delete ?{" "}
+          <div
+            className="delete-invite"
+            onClick={() => {
+              this.setState({ confirmDelete: false });
+              onDelete(invite);
+            }}
+          >
+            Yes
+          </div>
+          <div className="margin-left-12"> / </div>
+          <div
+            className="delete-invite"
+            onClick={() => {
+              this.setState({ confirmDelete: false });
+            }}
+          >
+            No
+          </div>
+        </div>
+      </React.Fragment>
+    );
+  };
+
+  render() {
+    const { invite } = this.props;
     return (
       <div className="invite-container">
         <textarea
@@ -121,9 +166,7 @@ class PrintInvite extends Component {
             </div>
             <div className="copy-success">{this.state.copySuccess}</div>
           </div>
-          <div className="delete-invite" onClick={() => onDelete(invite)}>
-            delete
-          </div>
+          {this.handleConfirmDelete()}
         </div>
       </div>
     );

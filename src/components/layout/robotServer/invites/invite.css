@@ -61,7 +61,7 @@
 .invite-actions {
   display: flex;
   flex-direction: row;
-  padding-top: 2px;
+  /* padding-top: 2px; */
   font-size: 12px;
   /* background-color: blue; */
 }
@@ -95,6 +95,7 @@
   color: white;
   font-size: 12px;
   padding: 8px;
+  margin-bottom: 2px;
 }
 
 .invite-id:focus {
@@ -109,7 +110,18 @@
   /* background-color: purple; */
   cursor: pointer;
   font-style: italic;
+  margin-left: 12px;
 }
 .delete-invite:hover {
   text-decoration: underline;
+}
+
+.confirm-delete {
+  display: flex;
+  flex-direction: row;
+  font-size: 12px;
+}
+
+.margin-left-12 {
+  margin-left: 12px;
 }

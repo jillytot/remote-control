@@ -23,18 +23,15 @@ const invitePt = {
 
 module.exports.generateInvite = async invite => {
   const { makeId, createTimeStamp } = require("../modules/utilities");
-  console.log(
-    "Generating Invite for Server: ",
-    invite.user.id,
-    invite.server.server_id
-  );
+  // console.log(
+  //   "Generating Invite for Server: ",
+  //   invite.user.id,
+  //   invite.server.server_id
+  // );
   let validate = false;
   if (invite.user.id === invite.server.owner_id) validate = true; //simple validation, will eventually need to check for invite authority instead
   if (!validate)
-    return {
-      status: "error!",
-      error: "You are not authorized to create this invite"
-    };
+    return jsonError("You are not authorized to create this invite");
   let make = {};
   make.created_by = invite.user.id;
   make.created = createTimeStamp();
@@ -52,7 +49,7 @@ module.exports.generateInvite = async invite => {
 
   const save = await this.saveInvite(make);
   if (save) return save;
-  return { status: "error", error: "problem generating invite" };
+  return jsonError("There was a problem generating this invite");
 };
 
 //If server has invites, return true, else return false
@@ -128,7 +125,7 @@ module.exports.getInviteById = async id => {
   try {
     const result = await db.query(query, [id]);
     if (result.rows[0]) {
-      console.log(result.rows[0]);
+      // console.log(result.rows[0]);
       return result.rows[0];
     }
   } catch (err) {

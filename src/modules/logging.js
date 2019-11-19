@@ -2,7 +2,8 @@ const printErrors = true; //only applies to json
 const printLog = true;
 
 module.exports.logger = data => {
-  if (printLog) {
+  const { logLevel } = require("../config/server/index");
+  if (printLog && logLevel === "debug") {
     let level = data.level || "info";
     const source = data.source || "";
     const message = data.message || data;

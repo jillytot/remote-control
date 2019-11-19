@@ -8,7 +8,7 @@ module.exports.extractToken = async token => {
   try {
     return (checkToken = await new Promise((resolve, reject) => {
       jwt.verify(token, tempSecret, "HS256", (err, res) => {
-        if (token) console.log("JWT Verified");
+        // if (token) console.log("JWT Verified");
         if (err) return reject(err);
         return resolve(res);
       });

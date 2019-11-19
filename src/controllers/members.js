@@ -93,7 +93,7 @@ const isOwner = member => {
 
 //Checks to make sure this particular invite is valid.
 module.exports.validateInvite = async invite => {
-  console.log("Validating Invite", invite);
+  // console.log("Validating Invite", invite);
   const { getInvitesForServer } = require("../models/invites");
   const checkInvite = await getInvitesForServer(invite.server_id);
   let validate = false;
@@ -170,7 +170,7 @@ module.exports.updateMemberCount = async robotServer => {
   const updateMemberCount = await this.getMemberCount(server_id);
 
   robotServer.status.count = updateMemberCount;
-  console.log("UPDATING ROBOT STATUS / COUNT: ", robotServer.status);
+  // console.log("UPDATING ROBOT STATUS / COUNT: ", robotServer.status);
   const updateStatus = await updateRobotServerStatus(
     server_id,
     robotServer.status
@@ -212,7 +212,7 @@ module.exports.makeInviteAlias = async testData => {
       Math.random()
         .toString(36)
         .substring(2, 6);
-  console.log(alias);
+  // console.log(alias);
   const check = await checkAlias(alias);
   if (check) {
     console.log(`Alias ${alias} is already in use, generating new alias`);

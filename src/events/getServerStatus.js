@@ -1,5 +1,6 @@
 module.exports = async (ws, data) => {
-  console.log("GET LOCAL STATUS ", data, ws.user);
+  const { logLevel } = require("../config/server/index");
+  if (logLevel === "debug") console.log("GET LOCAL STATUS ", data, ws.user);
 
   const {
     sendRobotServerStatus,

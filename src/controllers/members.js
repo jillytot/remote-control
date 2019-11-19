@@ -8,6 +8,7 @@ const log = message => {
   });
 };
 
+//TODO: Ensure that users cannot join private servers using the default invite.
 module.exports.joinServer = async member => {
   const {
     updateMemberInvites,
@@ -21,7 +22,7 @@ module.exports.joinServer = async member => {
   console.log("Joining Server");
 
   if (member.status && member.status.member)
-    return { status: "Error!", error: "this user is already a emember" };
+    return { status: "Error!", error: "this user is already a member" };
 
   const validate = await this.validateInvite({
     id: member.join,
@@ -200,14 +201,22 @@ module.exports.makeInvite = async ({ user, server_id, expires }) => {
   return null;
 };
 
-module.exports.makeInviteAlias = () => {
+//returns a 7 digit string, base 36
+module.exports.makeInviteAlias = async testData => {
+  const { checkAlias } = require("../models/invites");
   const alias =
+    testData ||
     Math.random()
       .toString(36)
-      .substring(2, 8) +
-    Math.random()
-      .toString(36)
-      .substring(2, 8);
+      .substring(2, 5) +
+      Math.random()
+        .toString(36)
+        .substring(2, 6);
   console.log(alias);
+  const check = await checkAlias(alias);
+  if (check) {
+    console.log(`Alias ${alias} is already in use, generating new alias`);
+    return this.makeInviteAlias();
+  }
   return alias;
 };

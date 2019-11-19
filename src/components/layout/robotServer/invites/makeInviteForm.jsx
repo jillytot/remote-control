@@ -157,7 +157,7 @@ class PrintInvite extends Component {
         <textarea
           className="invite-id"
           ref={textarea => (this.textArea = textarea)}
-          value={`https://remo.tv/join/${invite.alias}`}
+          value={`remo.tv/join/${invite.alias}`}
         />
         <div className="actions-container">
           <div className="invite-actions">

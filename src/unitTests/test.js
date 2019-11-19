@@ -31,7 +31,8 @@ const testInvite = {
 
 const test = async () => {
   try {
-    await test__updateInviteStatus();
+    await test___makeInviteAlias();
+    // await test__updateInviteStatus();
     // await test__checkServerName();
     // await test__deleteChannel();
     // await test__getRobotFromId();
@@ -46,6 +47,12 @@ const test = async () => {
   }
 
   process.exit(0);
+};
+
+const test___makeInviteAlias = async () => {
+  const { makeInviteAlias } = require("../controllers/members");
+  const result = await makeInviteAlias("qrr112");
+  console.log(result);
 };
 
 const test__updateInviteStatus = async () => {

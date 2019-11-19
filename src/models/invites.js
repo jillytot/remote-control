@@ -141,13 +141,13 @@ module.exports.getInviteById = async id => {
 };
 
 module.exports.getInviteByAlias = async alias => {
-  console.log("Get invite by alias: ", alias);
+  // console.log("Get invite by alias: ", alias);
   const db = require("../services/db");
   const query = `SELECT * FROM invites WHERE alias = $1 LIMIT 1`;
   try {
     const result = await db.query(query, [alias]);
     if (result.rows[0]) {
-      console.log(result.rows[0]);
+      // console.log(result.rows[0]);
       return result.rows[0];
     }
   } catch (err) {
@@ -157,6 +157,18 @@ module.exports.getInviteByAlias = async alias => {
     status: "error!",
     error: "Could not find any public invites generated for this server"
   };
+};
+
+module.exports.checkAlias = async alias => {
+  const db = require("../services/db");
+  const query = `SELECT * FROM invites WHERE alias = $1 LIMIT 1`;
+  try {
+    const result = await db.query(query, [alias]);
+    if (result.rows[0]) return true;
+  } catch (err) {
+    console.log(err);
+  }
+  return false;
 };
 
 //Tool for retroactively adding default invites

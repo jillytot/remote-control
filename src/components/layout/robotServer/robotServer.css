@@ -412,3 +412,10 @@ a:active {
   top: -1000px;
   width: 1px;
 }
+
+@media screen and (max-width: 768px) {
+  .server-channel-container {
+    height: 100%;
+    outline: solid blue 1px;
+  }
+}

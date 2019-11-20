@@ -22,11 +22,11 @@ export default class AddChannelForm extends Form {
 
   async componentDidMount() {
     //Just a test to see my API stuff is working
-    console.log(this.props);
+    // console.log(this.props);
     await axios
       .get(apiUrl)
       .then(function(response) {
-        console.log("Test Response from Add Channel", response);
+        // console.log("Test Response from Add Channel", response);
       })
       .catch(function(error) {
         console.log(error);

@@ -31,7 +31,7 @@ const auth = options => {
       }
       next();
     } catch (e) {
-      console.error("Auth Middleware Error: ", e);
+      console.log("Failed Authentication");
       res.status(500).json({ error: "Internal Server Error" });
     }
   };

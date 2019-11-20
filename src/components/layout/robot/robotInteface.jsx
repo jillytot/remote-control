@@ -10,6 +10,7 @@ import defaultImages from "../../../imgs/placeholders";
 import RenderButtons from "./renderButtons";
 import socket from "../../socket";
 import axios from "axios";
+import { ws as configSocket } from "../../../config/client/index";
 
 export default class RobotInterface extends Component {
   state = {
@@ -105,7 +106,8 @@ export default class RobotInterface extends Component {
 
   connectA = () => {
     //need to add client options for video relay
-    const protocol = window.location.protocol === "https:" ? "wss://" : "ws://";
+    const protocol =
+      window.location.protocol === "https:" ? "wss://" : configSocket;
     this.audioPlayer = new window.JSMpeg.Player(
       `${protocol}remo.tv/receive?name=${this.props.channel}-audio`,
       { video: false, disableWebAssembly: true }
@@ -113,7 +115,8 @@ export default class RobotInterface extends Component {
   };
 
   connectV = () => {
-    const protocol = window.location.protocol === "https:" ? "wss://" : "ws://";
+    const protocol =
+      window.location.protocol === "https:" ? "wss://" : configSocket;
     this.videoPlayer = new window.JSMpeg.Player(
       `${protocol}remo.tv/receive?name=${this.props.channel}-video`,
       {
@@ -352,12 +355,14 @@ export default class RobotInterface extends Component {
         {this.props.channel ? (
           <div className="robot-container">
             <div className="robot-display-container">
-              <canvas className="video-canvas" ref="video-canvas" />
-              <img
-                className="video-poster"
-                src={defaultImages.videoImg}
-                alt={"video background"}
-              />
+              <canvas className="video-canvas" ref="video-canvas">
+                <img
+                  className="video-poster"
+                  src={defaultImages.videoImg}
+                  alt={"video background"}
+                />
+              </canvas>
+
               <div className="display-controls-container">
                 <VolumeControl
                   player={this.audioPlayer}

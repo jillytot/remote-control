@@ -134,8 +134,8 @@
 .video-canvas {
   display: flex;
   width: calc(100%);
-  /* min-height: 56.25%;  16:9 aspect ratio lock */
-  min-height: calc(16 / 9 * 100%);
+  min-height: 56.25%; /*16:9 aspect ratio lock */
+  /* min-height: calc(16 / 9 * 100%); */
   top: 0;
   bottom: 0;
   z-index: 5;
@@ -149,6 +149,7 @@
   right: 0;
   width: 100%;
   z-index: 0;
+  /* transform: translate3d(0, 0, 0); */
 }
 
 .display-controls-container {

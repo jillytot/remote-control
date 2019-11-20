@@ -45,7 +45,7 @@ export default class FrontPage extends Component {
         <div className="front-page-text">
           <div className="alert">
             {" "}
-            <span className="bolder">Important Notice 11/19/2019 </span>
+            <span className="bolder">Important Notice 11/20/2019 </span>
             <div>
               In order to make Remo more secure, we've updated our site's
               encryption methods. As a result, any robot using an API key

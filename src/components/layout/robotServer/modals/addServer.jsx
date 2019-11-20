@@ -87,7 +87,6 @@ class AddServerForm extends Form {
     const token = localStorage.getItem("token");
     //axios call
     this.setState({ error: "" });
-    let redirect = ``;
 
     await axios
       .post(
@@ -107,9 +106,7 @@ class AddServerForm extends Form {
         } else {
           //Redirect to server.
           this.setState({
-            redirect: `/${response.data.server_name}/${
-              response.data.settings.default_channel
-            }`
+            redirect: `/${response.data.server_name}/${response.data.settings.default_channel}`
           });
 
           console.log("redirecting", this.state.redirect);

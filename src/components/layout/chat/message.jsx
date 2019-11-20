@@ -147,10 +147,9 @@ const Message = ({ message }) => {
 
   const handleSenderColor = message => {
     let color = "chat-user-name";
-    rainbowForLifeNames.map(name => {
+    rainbowForLifeNames.forEach(name => {
       if (message.sender.toLowerCase() === name.toLowerCase()) {
         color = "chat-user-name rainbow";
-        return;
       }
     });
     return color;

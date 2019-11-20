@@ -10,7 +10,7 @@ import EditChannel from "./modals/editChannel";
 import DisplayRobot from "./displayRobot";
 import DisplayServerDetails from "./displayServerDetails";
 import socket from "../../socket";
-import { Link, Route, Switch, Redirect } from "react-router-dom";
+import { Link, Route, Switch } from "react-router-dom";
 import Channel from "./channel";
 import defaultImages from "../../../imgs/placeholders";
 import "./channels.css";
@@ -47,7 +47,7 @@ export default class Channels extends Component {
     }
   }
 
-  componentDidMount() {
+  async componentDidMount() {
     console.log("channels mount");
     this._isMounted = true;
     this.channelListener();
@@ -60,12 +60,6 @@ export default class Channels extends Component {
         usernamesToKeep.push(user.username);
         return null;
       });
-
-      // chatroom.messages.map(message => {
-      //   if (usernamesToKeep.includes(message.sender) !== true) {
-      //     usernamesToKeep.push(message.sender);
-      //   }
-      // });
 
       Object.keys(colors).map(username => {
         if (usernamesToKeep.includes(username) !== true) {
@@ -117,36 +111,40 @@ export default class Channels extends Component {
     });
   };
 
-  channelListener = () => {
+  handleSendServerInfo = data => {
+    // console.log("SEND ROBOT SERVER INFO: ", data);
+    this.setState({
+      channels: data.channels,
+      users: this.getUserColors(data.users),
+      invites: data.invites
+    });
+    //if (this.state.currentChannel) this.handleClick(data.channels[0]);
+  };
+
+  handleActiveUsersUpdated = users => {
+    this.setState({ users: this.getUserColors(users) });
+  };
+
+  handleChannelsUpdated = data => {
     const { selectedServer } = this.props;
-
-    if (socket && this._isMounted) {
-      socket.on(SEND_ROBOT_SERVER_INFO, data => {
-        // console.log("SEND ROBOT SERVER INFO: ", data);
-        this.setState({
-          channels: data.channels,
-          users: this.getUserColors(data.users),
-          invites: data.invites
-        });
-        //if (this.state.currentChannel) this.handleClick(data.channels[0]);
+    // console.log("CHANNELS UPDATED: ", data, selectedServer);
+    if (selectedServer && data.server_id === selectedServer.server_id) {
+      // console.log("UPDATING CHANNELS");
+      this.setState({
+        channels: data.channels
       });
+    }
+  };
 
-      socket.on(ACTIVE_USERS_UPDATED, users => {
-        this.setState({ users: this.getUserColors(users) });
-      });
-
-      socket.on(CHANNELS_UPDATED, data => {
-        // console.log("CHANNELS UPDATED: ", data, selectedServer);
-        if (
-          this.props.selectedServer &&
-          data.server_id === this.props.selectedServer.server_id
-        ) {
-          // console.log("UPDATING CHANNELS");
-          this.setState({
-            channels: data.channels
-          });
-        }
-      });
+  channelListener = () => {
+    if (socket) {
+      socket.on(SEND_ROBOT_SERVER_INFO, data =>
+        this.handleSendServerInfo(data)
+      );
+      socket.on(ACTIVE_USERS_UPDATED, users =>
+        this.handleActiveUsersUpdated(users)
+      );
+      socket.on(CHANNELS_UPDATED, data => this.handleChannelsUpdated(data));
     }
   };
 
@@ -262,7 +260,7 @@ export default class Channels extends Component {
 
   handleMobilePanel = () => {
     const { showMobileNav } = this.props;
-    console.log("Show Mobile Nav: ", showMobileNav);
+    // console.log("Show Mobile Nav: ", showMobileNav);
     if (showMobileNav) {
       return this.handleChannelsPanel();
     } else {
@@ -328,6 +326,9 @@ export default class Channels extends Component {
   componentWillUnmount() {
     clearInterval(this.colorCleanup);
     document.removeEventListener("keydown", this.handleKeyPress);
+    socket.off(SEND_ROBOT_SERVER_INFO, this.handleSendServerInfo);
+    socket.off(ACTIVE_USERS_UPDATED, this.handleActiveUsersUpdated);
+    socket.off(CHANNELS_UPDATED, this.handleChannelsUpdated);
   }
 }
 

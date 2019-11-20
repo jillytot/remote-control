@@ -202,7 +202,7 @@ export default class RobotInterface extends Component {
   };
 
   onGetControls = getControlData => {
-    console.log("OnGetControls: ", getControlData);
+    // console.log("OnGetControls: ", getControlData);
     if (getControlData && getControlData.buttons.length > 0) {
       this.setState({
         controls: getControlData.buttons,
@@ -353,7 +353,11 @@ export default class RobotInterface extends Component {
           <div className="robot-container">
             <div className="robot-display-container">
               <canvas className="video-canvas" ref="video-canvas" />
-              <img className="video-poster" src={defaultImages.videoImg} />
+              <img
+                className="video-poster"
+                src={defaultImages.videoImg}
+                alt={"video background"}
+              />
               <div className="display-controls-container">
                 <VolumeControl
                   player={this.audioPlayer}

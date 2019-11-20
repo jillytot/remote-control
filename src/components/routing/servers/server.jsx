@@ -30,7 +30,7 @@ export default class ServerPage extends Component {
     let found = false;
     this.props.robotServers.map(robotServer => {
       if (robotServer.server_name === this.props.match.params.name) {
-        console.log("SELECTED ROBOT SERVER: ", robotServer);
+        // console.log("SELECTED ROBOT SERVER: ", robotServer);
         this.props.setServer(robotServer);
         found = true;
         return true;
@@ -46,7 +46,7 @@ export default class ServerPage extends Component {
           this.props.match.params.name
         );
 
-        console.log("Find Server Result: ", findServer);
+        // console.log("Find Server Result: ", findServer);
         if (findServer) {
           await this.props.appendServer(findServer);
           this.props.setServer(findServer);
@@ -74,13 +74,13 @@ export default class ServerPage extends Component {
         }
       )
       .then(response => {
-        console.log(response);
+        // console.log(response);
         found = response.data;
       })
       .catch(err => {
         console.log(err);
       });
-    console.log(found);
+    // console.log(found);
     if (found && found.server_name) return found;
     return null;
   };

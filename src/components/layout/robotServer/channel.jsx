@@ -31,13 +31,15 @@ export default class Channel extends Component {
     }
   }
 
+  handleWidth = width => {
+    // console.log("WIDTH: ", width);
+    return width > 768 ? this.handleDefault() : this.handleMobile();
+  };
+
   handleLayout = () => {
     return (
       <WindowDimensionsCtx.Consumer>
-        {({ width }) => {
-          if (width !== this.state.width) this.setState({ width: width });
-          return null;
-        }}
+        {({ width }) => this.handleWidth(width)}
       </WindowDimensionsCtx.Consumer>
     );
   };
@@ -156,11 +158,6 @@ export default class Channel extends Component {
     if (this.state.redirect)
       return <Redirect to={`/${this.props.match.params.name}`} />;
 
-    return (
-      <React.Fragment>
-        {this.handleLayout()}
-        {this.state.width > 768 ? this.handleDefault() : this.handleMobile()}
-      </React.Fragment>
-    );
+    return <React.Fragment>{this.handleLayout()}</React.Fragment>;
   }
 }

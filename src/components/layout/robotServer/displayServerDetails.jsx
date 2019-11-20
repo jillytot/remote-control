@@ -5,7 +5,6 @@ import axios from "axios";
 import { joinServer, leaveServer } from "../../../config/client";
 import socket from "../../socket";
 import EditServer from "../../modals/editServer";
-import modal from "../../common/modal";
 
 export default class DisplayServerDetails extends Component {
   state = {

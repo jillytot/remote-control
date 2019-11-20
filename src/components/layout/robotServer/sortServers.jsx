@@ -14,7 +14,7 @@ const sortAll = (robotServers, followedServers) => {
 
   robotServers = robotServers.sort(compare);
 
-  robotServers.map(server => {
+  robotServers.forEach(server => {
     if (
       followedServers.includes(server.server_id) &&
       server.status.liveDevices &&
@@ -52,7 +52,7 @@ const defaultSort = robotServers => {
   // console.log(robotServers);
   robotServers = robotServers.sort(compare);
 
-  robotServers.map(server => {
+  robotServers.forEach(server => {
     if (server.status.liveDevices && server.status.liveDevices.length > 0) {
       // server.followed = false;
       live.push(server);
@@ -72,7 +72,7 @@ const sortFollowed = (robotServers, followedServers) => {
   let followed = [];
 
   robotServers = robotServers.sort(compare);
-  robotServers.map(server => {
+  robotServers.forEach(server => {
     if (
       followedServers.includes(server.server_id) &&
       server.status.liveDevices &&

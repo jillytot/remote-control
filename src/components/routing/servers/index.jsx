@@ -102,7 +102,7 @@ export default class ServersPage extends Component {
   };
 
   appendUnlistedServer = server => {
-    console.log("APPEND SERVER: ", server);
+    // console.log("APPEND SERVER: ", server);
     let updateServers = this.state.robotServers;
     if (updateServers) {
       updateServers.push(server);
@@ -188,7 +188,7 @@ export default class ServersPage extends Component {
 
   render() {
     let loadingText = null;
-    console.log("Socket Connected: ", this.state.socketConnected);
+    // console.log("Socket Connected: ", this.state.socketConnected);
     if (!this.state.socketConnected) {
       loadingText = "Connecting...";
     } else if (!this.state.user) {

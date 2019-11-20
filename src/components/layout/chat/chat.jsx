@@ -61,7 +61,7 @@ export default class Chat extends Component {
       // console.log("REMOVING MESSAGES");
       let { messages } = this.state.chatroom;
       let remove = [];
-      messages.map(message => {
+      messages.forEach(message => {
         if (message.sender_id === data.user) {
           message.type = "moderation";
           message.message = " ...message removed...";
@@ -84,7 +84,7 @@ export default class Chat extends Component {
 
   removeModerationMessagesOnLoad = messages => {
     let remove = [];
-    messages.map(message => {
+    messages.forEach(message => {
       if (message.type === "moderation") {
         //do nothing
       } else {

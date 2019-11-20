@@ -1,6 +1,5 @@
 import React from "react";
-//apparently removing "Router" from import breaks things, even though it's unused
-import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
+import { Route, Switch } from "react-router-dom";
 import "../layout/login/login.css";
 import Recovery from "../layout/recovery/recovery";
 

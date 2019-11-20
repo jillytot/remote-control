@@ -20,7 +20,7 @@ export default class MakeInviteForm extends Form {
       .then(res => {
         if (res.data && !res.data.error) {
           let invites = [];
-          this.state.invites.map(invite => {
+          this.state.invites.forEach(invite => {
             if (invite.id === res.data.id) {
               //do nothing
             } else {
@@ -50,7 +50,7 @@ export default class MakeInviteForm extends Form {
         if (res.data && !res.data.error) {
           let { invites } = this.state;
           invites.push(res.data);
-          console.log(res.data, invites);
+          // console.log(res.data, invites);
           this.setState({ invites: invites });
         }
       })
@@ -61,7 +61,7 @@ export default class MakeInviteForm extends Form {
 
   printInvites = () => {
     const { invites } = this.state;
-    console.log(invites, this.state);
+    // console.log(invites, this.state);
     if (invites)
       return invites.map((invite, index) => {
         if (invite.alias && !invite.is_default)
@@ -72,6 +72,7 @@ export default class MakeInviteForm extends Form {
               key={index}
             />
           );
+        return <React.Fragment key={index} />;
       });
   };
 
@@ -158,6 +159,7 @@ class PrintInvite extends Component {
           className="invite-id"
           ref={textarea => (this.textArea = textarea)}
           value={`remo.tv/join/${invite.alias}`}
+          readOnly
         />
         <div className="actions-container">
           <div className="invite-actions">

@@ -8,6 +8,7 @@ class GlobalStore extends Component {
   };
 
   handleSetCanvas = input => {
+    // console.log("INPUT: ", input);
     if (input) {
       if (input !== this.state.canvas) this.setState({ canvas: input });
     }

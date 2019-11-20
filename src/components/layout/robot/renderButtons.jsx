@@ -5,7 +5,7 @@ export default class RenderButtons extends Component {
   //render a single button
   handleButton = ({ aButton, style, hotKeyStyle }) => {
     const { onClick, user, controls_id, socket } = this.props;
-    const hotKeyRender = this.handleButtonStyle(aButton);
+    let hotKeyRender = this.handleButtonStyle(aButton);
     if (aButton && aButton.hot_key && aButton.key)
       hotKeyRender = "robtn robtn-hot-key";
     return (
@@ -43,12 +43,7 @@ export default class RenderButtons extends Component {
   };
 
   handleButtons = () => {
-    const {
-      controls,
-      hotKeyStyle,
-      renderPresses,
-      renderCurrentKey
-    } = this.props;
+    const { controls, renderPresses, renderCurrentKey } = this.props;
 
     if (controls) {
       return controls.map((aButton, index) => {
@@ -104,7 +99,7 @@ export default class RenderButtons extends Component {
     }
 
     return (
-      <React.Fragment>
+      <React.Fragment key={`break-${index}`}>
         {index === 0 ? <React.Fragment /> : <br />}
         {renderBreak}
       </React.Fragment>

@@ -47,7 +47,7 @@ export default class EditButtonsModal extends Form {
 
   handleCleanText = buttons => {
     let clean = [];
-    buttons.map(button => {
+    buttons.forEach(button => {
       delete button.id;
       clean.push(button);
     });

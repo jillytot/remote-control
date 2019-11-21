@@ -138,7 +138,7 @@
   /* min-height: calc(16 / 9 * 100%); */
   top: 0;
   bottom: 0;
-  z-index: 5;
+  z-index: 1;
 }
 
 .video-poster {

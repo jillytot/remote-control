@@ -176,8 +176,8 @@ export default class Channels extends Component {
         live = true;
       }
     });
-    if (live) return "list-channels live-channel";
-    return "list-channels";
+    if (live) return <div className="live-channel"> live </div>;
+    return <React.Fragment />;
   };
 
   displayChannels = () => {
@@ -197,15 +197,14 @@ export default class Channels extends Component {
             <div
               className={
                 channel.id === currentChannel
-                  ? `${this.handleCheckLiveDevices(
-                      channel
-                    )} list-channels-selected`
-                  : this.handleCheckLiveDevices(channel)
+                  ? `list-channels list-channels-selected`
+                  : `list-channels`
               }
               key={channel.id}
             >
               {"# "}
               {channel.name}
+              {this.handleCheckLiveDevices(channel)}
             </div>
           </Link>
           <EditChannel

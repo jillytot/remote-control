@@ -215,7 +215,12 @@ a:active {
 }
 
 .live-channel {
-  background: green;
+  background: #ff5ca3;
+  margin-left: 6px;
+  padding-left: 12px;
+  padding-right: 12px;
+  border-radius: 12px;
+  font-weight: bold;
 }
 
 .list-channels:hover {

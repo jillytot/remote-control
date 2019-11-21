@@ -11,7 +11,7 @@ const defaults = {
   loadMessages: 25, //number of messages chatroom will get on load
   currentAPIVersion: "/dev",
   passResetExpires: 900000, //about 15 minutes (in ms)
-  logLevel: "debu",
+  logLevel: "debug",
   db: {
     user: "postgres",
     password: "",

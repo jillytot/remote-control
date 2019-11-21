@@ -2,6 +2,15 @@ const { authUserData } = require("../models/user");
 const { authRobotData } = require("../models/robot");
 const { extractToken } = require("../modules/jwt");
 
+const { logger } = require("../modules/logging");
+const log = message => {
+  logger({
+    message: message,
+    level: "debug",
+    source: "routes/auth.js"
+  });
+};
+
 const auth = options => {
   // console.log(options);
   return async (req, res, next) => {
@@ -21,7 +30,8 @@ const auth = options => {
             req.user = await authUserData(tokenData);
           } else if (type === "rbot" && options.robot) {
             //e you need t
-
+            log(`API AUTH ROBOT: ${req.robot.name}`);
+            // console.log(req.robot, req.body);
             req.robot = await authRobotData(tokenData);
             // console.log("AUTH ROBOT: ", req.robot, req.body);
           }

@@ -5,8 +5,9 @@ const { jsonError } = require("../../modules/logging");
 
 router.get("/followed", auth({ user: true }), async (req, res) => {
   const { followedServers } = require("../../controllers/user");
-  console.log("Checking Followed Servers: ", req.user.username);
+
   if (req.user && req.user.id) {
+    console.log("Checking Followed Servers: ", req.user.username);
     const followed = await followedServers(req.user);
     res.send(followed);
     return;

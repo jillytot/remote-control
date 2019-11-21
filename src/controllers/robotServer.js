@@ -24,16 +24,13 @@ module.exports.getActiveRobotsOnServer = async server => {
       robot.status.heartBeat &&
       robot.status.heartBeat >= createTimeStamp() - liveStatusInterval * 1.25
     ) {
-      liveDevices.push(robot.id);
-      console.log("updatingLiveRobot", robot);
+      liveDevices.push(robot);
+      console.log("updatingLiveRobot", robot.name);
     }
   });
   server.status.liveDevices = liveDevices;
-  const updateStatus = await updateRobotServerStatus(
-    server.server_id,
-    server.status
-  );
-  //return updateStatus;
+  await updateRobotServerStatus(server.server_id, server.status);
+  return;
 };
 
 module.exports.deleteRobotServer = async (server_id, user_id) => {

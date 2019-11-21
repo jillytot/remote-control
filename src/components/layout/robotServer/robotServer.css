@@ -214,6 +214,10 @@ a:active {
   width: 100%;
 }
 
+.live-channel {
+  background: green;
+}
+
 .list-channels:hover {
   background-color: rgb(83, 83, 119);
 }

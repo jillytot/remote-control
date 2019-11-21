@@ -166,6 +166,20 @@ export default class Channels extends Component {
     return null;
   };
 
+  handleCheckLiveDevices = channel => {
+    const { liveDevices } = this.props.selectedServer.status;
+    let live = false;
+    liveDevices.forEach(device => {
+      const { current_channel } = device.status;
+      if (current_channel === channel.id) {
+        console.log(channel.name, "IS LIVE");
+        live = true;
+      }
+    });
+    if (live) return "list-channels live-channel";
+    return "list-channels";
+  };
+
   displayChannels = () => {
     const { channels, currentChannel } = this.state;
 
@@ -183,8 +197,10 @@ export default class Channels extends Component {
             <div
               className={
                 channel.id === currentChannel
-                  ? "list-channels list-channels-selected"
-                  : "list-channels"
+                  ? `${this.handleCheckLiveDevices(
+                      channel
+                    )} list-channels-selected`
+                  : this.handleCheckLiveDevices(channel)
               }
               key={channel.id}
             >

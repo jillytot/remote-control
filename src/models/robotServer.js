@@ -1,6 +1,14 @@
 const { makeId, createTimeStamp } = require("../modules/utilities");
 const { ACTIVE_USERS_UPDATED } = require("../events/definitions");
 const { extractToken } = require("./user");
+const { logger } = require("../modules/logging");
+const log = message => {
+  logger({
+    message: message,
+    level: "debug",
+    source: "models/robotServer.js"
+  });
+};
 
 //Template for robot server object
 const robotServerPt = {
@@ -214,7 +222,7 @@ module.exports.sendGlobalTimeout = (server_id, badUser) => {
 };
 
 module.exports.sendRobotServerStatus = (server_id, status) => {
-  // console.log("SEND ROBOT STATUS CHECK: ", server_id, status);
+  log("SEND ROBOT STATUS CHECK: ", server_id, status);
   this.emitEvent(server_id, "SERVER_STATUS", status);
 };
 

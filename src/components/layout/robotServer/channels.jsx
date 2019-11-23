@@ -172,7 +172,7 @@ export default class Channels extends Component {
     liveDevices.forEach(device => {
       const { current_channel } = device.status;
       if (current_channel === channel.id) {
-        console.log(channel.name, "IS LIVE");
+        // console.log(channel.name, "IS LIVE");
         live = true;
       }
     });

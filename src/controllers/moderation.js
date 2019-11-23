@@ -3,7 +3,7 @@ import Message from '../components/layout/chat/message';
 Server Level: 
 Done -  Timeout - No chat or controls
 Done -  Untimeout - remove a timeout
-        Kick - Remove user as a member, but doesn't ban them
+Done -  Kick - Remove user as a member, but doesn't ban them
         Ban - Removes user's ability to enter a server
         Lock - No Controls
         Mute - No TTS
@@ -32,6 +32,15 @@ module.exports.localTimeout = async moderate => {
   }
 
   // console.log("MODERATION CHECK: ", moderate);
+  return moderate.message;
+};
+
+//Stand alone command for clearing chat messages
+module.exports.clearLocalMessagesFromMember = async moderate => {
+  console.log("///////CLEAR MESSAGES FROM USER//////////", moderate);
+  moderate.error = false;
+  moderate = parseInput(moderate);
+  moderate = await getMembers(moderate);
   return moderate.message;
 };
 
@@ -147,19 +156,34 @@ const parseInput = message => {
   return { arg: arg, badUser: badUser, moderator: moderator, message: message };
 };
 
+const checkGlobalTypes = typesToCheck => {
+  let validate = false;
+  typesToCheck.forEach(type => {
+    if (typesToCheck === "staff" || typesToCheck === "global_moderator")
+      validate = true;
+  });
+  return validate;
+};
+
 const getMembers = async ({ arg, badUser, moderator, message }) => {
   console.log("Verifying users for moderation");
   const badUsername = badUser;
   const { getIdFromUsername } = require("../models/user");
   const { getMember } = require("../models/serverMembers");
+  moderator.isGlobal = checkGlobalTypes(message.type);
 
   moderator = await getMember({
     server_id: message.server_id,
     user_id: message.sender_id
   });
 
+  if (!moderator && moderator.isGlobal) {
+    //get moderator from db.
+  }
+
   //TOOD: CHECK MODERATOR ROLES, THIS SHOULD BE CHECKED BEFORE BADUSER IS SEARCHED FOR
-  if (!moderator) {
+  if (!moderator && !moderator.isGlobal) {
+    //check global type:
     message.message = `Moderation Verification Error!`;
     message.error = true;
     message.broadcast = "self";

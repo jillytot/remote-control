@@ -22,7 +22,10 @@ module.exports.getMessageType = async message => {
 
 //commands for managing the site through chat
 siteCommands = async message => {
-  const { kickMember } = require("../controllers/moderation");
+  const {
+    kickMember,
+    clearLocalMessagesFromMember
+  } = require("../controllers/moderation");
   let updateCommand = message;
   let scrubCommand = message.message
     .substr(1)
@@ -41,6 +44,8 @@ siteCommands = async message => {
   if (scrubCommand === "timeout") message = await localTimeout(message);
   if (scrubCommand === "untimeout") message = await localUnTimeout(message);
   if (scrubCommand === "kick") message = await kickMember(message);
+  // if (scrubCommand === "clear")
+  //   message = await clearLocalMessagesFromMember(message);
 
   if (scrubCommand === "mod") message.type = "moderation";
   if (scrubCommand === "unmod") message.type = "moderation";

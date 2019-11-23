@@ -5,7 +5,11 @@ import RobotServer from "../../layout/robotServer/robotServer";
 import NavBar from "../../layout/nav/navBar";
 import socket from "../../socket";
 import ServerPage from "./server";
-import { listRobotServers, listFollowedServers } from "../../../config/client";
+import {
+  listRobotServers,
+  listFollowedServers,
+  findServer
+} from "../../../config/client";
 import axios from "axios";
 import Modal from "../../common/modal";
 import "../../common/overlay.css";
@@ -111,6 +115,39 @@ export default class ServersPage extends Component {
     return null;
   };
 
+  getSelectedServer = async () => {
+    let { selectedServer } = this.state;
+    if (selectedServer) {
+      const token = localStorage.getItem("token");
+      await axios
+        .post(
+          findServer,
+          {
+            server_name: selectedServer.server_name
+          },
+          {
+            headers: { authorization: `Bearer ${token}` }
+          }
+        )
+        .then(response => {
+          const { server_id } = response.data;
+          if (server_id === selectedServer.server_id) {
+            console.log(
+              "Updating Selected Server Data",
+              selectedServer,
+              response.data
+            );
+            selectedServer.status = response.data.status;
+            this.setState({ selectedServer: selectedServer });
+          }
+        })
+        .catch(err => {
+          console.log(err);
+          setTimeout(this.getSelectedServer, 600); //retry
+        });
+    }
+  };
+
   async componentDidMount() {
     socket.on("VALIDATED", this.setUser);
     socket.on("connect", this.socketConnected);
@@ -118,6 +155,7 @@ export default class ServersPage extends Component {
     socket.on("ROBOT_SERVER_UPDATED", () => {
       this.getServers();
       this.getFollowedServers();
+      this.getSelectedServer();
       return null;
     });
 
@@ -137,7 +175,12 @@ export default class ServersPage extends Component {
     socket.off("VALIDATED", this.setUser);
     socket.off("connect", this.socketConnected);
     socket.off("disconnect", this.socketDisconnected);
-    socket.off("ROBOT_SERVER_UPDATED", this.getServers);
+    socket.off(
+      "ROBOT_SERVER_UPDATED",
+      this.getServers,
+      this.getFollowedServers,
+      this.getSelectedServer
+    );
   }
 
   getAlt = () => {

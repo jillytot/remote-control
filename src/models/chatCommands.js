@@ -44,8 +44,8 @@ siteCommands = async message => {
   if (scrubCommand === "timeout") message = await localTimeout(message);
   if (scrubCommand === "untimeout") message = await localUnTimeout(message);
   if (scrubCommand === "kick") message = await kickMember(message);
-  // if (scrubCommand === "clear")
-  //   message = await clearLocalMessagesFromMember(message);
+  if (scrubCommand === "clear")
+    message = await clearLocalMessagesFromMember(message);
 
   if (scrubCommand === "mod") message.type = "moderation";
   if (scrubCommand === "unmod") message.type = "moderation";

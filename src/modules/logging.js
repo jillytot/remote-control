@@ -2,20 +2,58 @@ const printErrors = true; //only applies to json
 const printLog = true;
 
 module.exports.logger = data => {
+  // console.log(data);
   const { logLevel } = require("../config/server/index");
   if (printLog && logLevel === "debug") {
     let level = data.level || "info";
     const source = data.source || "";
     const message = data.message || data;
     const color = data.color || "blue";
-    console.log(
-      pickLevel(level),
-      yellow(source),
-      "\n",
-      pickColor(color, message)
-    );
+
+    if (Array.isArray(message)) {
+      message.forEach((msg, index) => {
+        if (index === 0) {
+          //print header
+          makeLog({
+            level: level,
+            source: source,
+            color: color,
+            message: msg
+          });
+        } else {
+          //print remaining messages
+          printLine({ color: color, message: msg });
+        }
+      });
+    } else {
+      makeLog({
+        level: level,
+        source: source,
+        color: color,
+        message: message
+      });
+    }
   }
+
   return;
+};
+
+const printLine = ({ color = "yellow", message = null }) => {
+  console.log(pickColor(color, message));
+};
+
+const makeLog = ({
+  level = "info",
+  source = "unspecified",
+  color = "yellow",
+  message = ""
+}) => {
+  console.log(
+    pickLevel(level),
+    yellow(source),
+    "\n",
+    pickColor(color, message)
+  );
 };
 
 module.exports.simpleLog = data => {
@@ -54,7 +92,13 @@ const pickColor = (color, message) => {
 const red = message => `\u001b[1;31m ${message}`;
 const green = message => `\u001b[0;32m ${message}`;
 const yellow = message => `\u001b[0;33m ${message}`;
-const blue = message => `\u001b[0;34m ${message}`;
+const blue = message => "\u001b[0;34m" + message;
 const purple = message => `\u001b[0;35m ${message}`;
 const cyan = message => `\u001b[0;36m ${message}`;
 const white = message => `\u001b[0;15m ${message}`;
+
+// this.logger({
+//   level: "info",
+//   source: "modules/logger",
+//   message: ["test1", "test2", "test3", { test: "four" }, ["six", "seven"]]
+// });

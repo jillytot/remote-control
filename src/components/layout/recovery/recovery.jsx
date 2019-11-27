@@ -2,11 +2,9 @@ import React from "react";
 import Form from "../../common/form";
 import axios from "axios";
 import Joi from "joi-browser";
+import Forgot from "./forgot";
 import { Redirect } from "react-router-dom";
-import {
-  validateResetKey,
-  passwordReset
-} from "../../../config/client";
+import { validateResetKey, passwordReset } from "../../../config/client";
 import "../login/login.css";
 
 export default class Recovery extends Form {
@@ -126,12 +124,7 @@ export default class Recovery extends Form {
   };
 
   handleInvalidKey = () => {
-    return (
-      <div className="register-form">
-        This key is not valid, either it doesn't exist, or it could have
-        expired. Please request a new password reset
-      </div>
-    );
+    return <Forgot />;
   };
 
   render() {

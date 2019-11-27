@@ -20,8 +20,10 @@ router.get("/followed", auth({ user: true }), async (req, res) => {
 router.post("/get-password-reset", auth({ user: true }), async (req, res) => {
   const { generateResetKey } = require("../../controllers/user");
   if (req.user && req.user.id) {
+    let emailKey = false;
+    if (req.body.emailKey) emailKey = true;
     console.log(`Reset Password for: ${req.user.username}`);
-    const reset = await generateResetKey(req.user, req.body.expires);
+    const reset = await generateResetKey(req.user, req.body.expires, emailKey);
     res.send(reset);
     return;
   }

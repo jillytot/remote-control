@@ -12,6 +12,8 @@ const defaults = {
   passResetExpires: 900000, //about 15 minutes (in ms)
   logLevel: "debug",
   sendGrid: "",
+  sendMail: "",
+  urlPrefix: "https://remo.tv/",
   db: {
     user: "postgres",
     password: "",

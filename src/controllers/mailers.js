@@ -1,3 +1,4 @@
+//This is just a straight up link, will make it fancy later
 module.exports.emailResetKey = (user, { key_id }) => {
   let { sendMail } = require("../services/email");
   const { urlPrefix } = require("../config/server");

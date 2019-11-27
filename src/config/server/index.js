@@ -6,6 +6,7 @@ const defaults = {
   heartBeat: 10000,
   liveStatusInterval: 15000,
   secret: "temp_secret",
+  reCaptchaSecretKey: "6Lfg_KYUAAAAAILikAGmfmaR3IvYw3eeucDBp-TU",
   maxTimeout: 15768000, //6 months
   loadMessages: 25, //number of messages chatroom will get on load
   currentAPIVersion: "/dev",

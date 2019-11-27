@@ -40,21 +40,9 @@ const passwordResetKey = (user, setExpire) => {
   };
 };
 
-const emailResetKey = (user, { key_id }) => {
-  let { sendMail } = require("../services/email");
-  const { urlPrefix } = require("../config/server");
-  const text = `${urlPrefix}recovery/${key_id}`;
-  const html = `<a href="${text}">${text}</a>`;
-  sendMail({
-    to: user.email,
-    subject: "Remo.tv Password Reset Token",
-    text: text,
-    html: html
-  });
-};
-
 module.exports.generateResetKey = async (user, setExpire, emailKey) => {
   const { saveKey } = require("../models/keys");
+  const { emailResetKey } = require("./mailers");
   if (user) {
     const makeKey = await passwordResetKey(user, setExpire);
     const save = await saveKey(makeKey);

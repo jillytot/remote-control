@@ -45,13 +45,11 @@ module.exports.emailResetToken = async username => {
   const { generateResetKey } = require("./user");
   const user = await getInfoFromUsername(username);
   if (user) {
-    console.log(user);
-    await generateResetKey(user, {}, true);
-  } else {
-    return err("Server Error, unable to generate key");
+    const reset = await generateResetKey(user, {}, true);
+    if (reset.error) return err("Server Error, unable to generate key");
   }
   return {
-    status:
+    response:
       "A reset token has been sent to the email account associated with this username."
   };
 };

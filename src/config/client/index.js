@@ -2,7 +2,6 @@ const overrides = require("./overides");
 
 const apiUrl = overrides.apiUrl || `http://localhost:3231/api/dev`;
 const socketUrl = overrides.socketUrl || `ws://localhost:3231`;
-const ws = overrides.ws || "ws://";
 
 const defaults = {
   defaultRate: 1000, //Message rate limit for most people
@@ -15,6 +14,8 @@ const defaults = {
   reCaptchaSiteKey: "6Lfg_KYUAAAAAH1hvQdp-qDOUToVn6FQWFOvbySo",
   socketUrl: socketUrl,
   apiUrl: apiUrl,
+  recoveryPage: overrides.recoveryPage || "https://remo.tv/recovery",
+  ws: overrides.ws || "ws://",
   apiAuth: `${apiUrl}/auth`,
   apiSignup: `${apiUrl}/signup`,
   apiLogin: `${apiUrl}/login`,
@@ -36,8 +37,9 @@ const defaults = {
   setServerListing: `${apiUrl}/robot-server/settings/listing`,
   setServerPrivate: `${apiUrl}/robot-server/settings/private`,
   updateSettings: `${apiUrl}/robot-server/settings/update`,
+  requestPasswordReset: `${apiUrl}/user/request-password-reset`, //No Auth
   validateResetKey: `${apiUrl}/user/validate-key`,
-  passwordReset: `${apiUrl}/user/password-reset`,
+  passwordReset: `${apiUrl}/user/password-reset`, //execute reset w/ valid key
   getControls: `${apiUrl}/controls/get-controls`,
   validateInviteKey: `${apiUrl}/robot-server/validate-invite`,
   disableInvite: `${apiUrl}/robot-server/deactivate-invite`,

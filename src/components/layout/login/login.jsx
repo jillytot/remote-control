@@ -4,7 +4,7 @@ import Form from "../../common/form";
 import Joi from "joi-browser";
 import "./login.css";
 import axios from "axios";
-import { apiLogin } from "../../../config/client";
+import { apiLogin, recoveryPage } from "../../../config/client";
 import { Redirect } from "react-router-dom";
 
 export default class Login extends Form {
@@ -119,6 +119,9 @@ export default class Login extends Form {
           {this.renderInput("password", "Password", "password")}
           {this.renderButton(submitText)}
         </form>
+        <div className="forgot-password">
+          <a href={recoveryPage}> forgot password?</a>
+        </div>
       </div>
     );
   }

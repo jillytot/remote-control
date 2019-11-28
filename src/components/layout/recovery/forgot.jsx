@@ -2,6 +2,7 @@ import React from "react";
 import Form from "../../common/form";
 import axios from "axios";
 import Joi from "joi-browser";
+import { requestPasswordReset } from "../../../config/client";
 
 export default class Forgot extends Form {
   state = {
@@ -14,6 +15,22 @@ export default class Forgot extends Form {
   };
   schema = {
     username: Joi.string().label("Username")
+  };
+
+  handleReset = async () => {
+    const { username } = this.state.data;
+    await axios
+      .post(requestPasswordReset, { username: username })
+      .then(response => {
+        if (response.data.error) {
+          this.setError(response.data.error);
+        } else {
+          this.setState({ submitted: true, error: "" });
+        }
+      })
+      .catch(err => {
+        console.log(err);
+      });
   };
 
   setError = error => {
@@ -29,7 +46,7 @@ export default class Forgot extends Form {
   };
 
   doSubmit = () => {
-    console.log("Submitting");
+    this.handleReset();
   };
 
   handleSubmitted = () => {
@@ -55,7 +72,7 @@ export default class Forgot extends Form {
     return (
       <React.Fragment>
         <div className="register-form">
-          Please enter a username to reset:
+          {submitted ? "" : "Please enter a username to reset:"}
           {this.handleSubmitError()}
           {submitted ? this.handleSubmitted() : this.handleForm()}
         </div>

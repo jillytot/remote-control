@@ -17,11 +17,13 @@ router.get("/followed", auth({ user: true }), async (req, res) => {
 });
 
 router.post("/request-password-reset", async (req, res) => {
+  const { emailResetToken } = require("../../controllers/user");
   if (req.body.username) {
+    res.send(await emailResetToken(req.body.username));
+    return;
     //Get User
-  } else {
-    return res.status(400).json({ error: "Username is required." });
   }
+  return res.status(400).json({ error: "Username is required." });
 });
 
 //Will need to get user email, and this probably shouldn't need auth

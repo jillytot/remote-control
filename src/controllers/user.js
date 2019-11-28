@@ -40,6 +40,22 @@ const passwordResetKey = (user, setExpire) => {
   };
 };
 
+module.exports.emailResetToken = async username => {
+  const { getInfoFromUsername } = require("../models/user");
+  const { generateResetKey } = require("./user");
+  const user = await getInfoFromUsername(username);
+  if (user) {
+    console.log(user);
+    await generateResetKey(user, {}, true);
+  } else {
+    return err("Server Error, unable to generate key");
+  }
+  return {
+    status:
+      "A reset token has been sent to the email account associated with this username."
+  };
+};
+
 module.exports.generateResetKey = async (user, setExpire, emailKey) => {
   const { saveKey } = require("../models/keys");
   const { emailResetKey } = require("./mailers");

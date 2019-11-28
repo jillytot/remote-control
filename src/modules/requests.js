@@ -1,3 +1,4 @@
 module.exports.ip = req => {
-  return req.connection.remoteAddress;
+  const ip = req.headers["x-forwarded-for"] || "localHost";
+  return ip;
 };

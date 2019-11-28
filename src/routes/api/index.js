@@ -23,9 +23,9 @@ router.get("/", (req, res) => {
   res.send(displayRoutes);
 });
 
-router.get("/ip", (req, res) => {
+router.get("/ip", async (req, res) => {
   //Test for proxy
-  res.status(200).json({ ip: request.ip(req) });
+  res.status(200).json({ ip: await request.ip(req) });
 });
 
 module.exports = router;

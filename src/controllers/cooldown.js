@@ -1,7 +1,8 @@
 let usernames = [];
 let ips = [];
-const cooldown = 300000;
+const { authRequestTimeout } = require("../config/server");
 
+//This script is meant to help throttle security related requests like requesting a password reset
 Array.prototype.remove = function() {
   var what,
     a = arguments,
@@ -24,10 +25,14 @@ module.exports.addUser = user => {
     return true;
   } else {
     usernames.push(user);
-    createTimer(cooldown, usernames.remove, user);
+    createTimer(authRequestTimeout, removeUsername, user);
     console.log(usernames);
     return false;
   }
+};
+
+const removeUsername = username => {
+  usernames.remove(username);
 };
 
 module.exports.addIp = ip => {
@@ -38,10 +43,14 @@ module.exports.addIp = ip => {
     return true;
   } else {
     ips.push(ip);
-    createTimer(cooldown, ips.remove, ip);
+    createTimer(authRequestTimeout, removeIp, ip);
     console.log("ips: ", ips);
     return false;
   }
+};
+
+const removeIp = ip => {
+  ips.remove(ip);
 };
 
 module.exports.getUsernames = () => {

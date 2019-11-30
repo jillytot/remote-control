@@ -18,8 +18,20 @@ router.get("/followed", auth({ user: true }), async (req, res) => {
 
 router.post("/request-password-reset", async (req, res) => {
   const { emailResetToken } = require("../../controllers/user");
+  const { addUser, addIp } = require("../../controllers/cooldown");
+  const { ip } = require("../../modules/requests");
   if (req.body.username) {
-    //const { addUser, addIp } = require("../../controllers/cooldown");
+    const checkUser = await addUser(req.body.username);
+    const checkIp = await addIp(ip(req));
+
+    if (checkUser || checkIp) {
+      res.send(
+        jsonError(
+          "You are making too many requests, please wait a few minutes and try again."
+        )
+      );
+      return;
+    }
     res.send(await emailResetToken(req.body.username));
     return;
     //Get User

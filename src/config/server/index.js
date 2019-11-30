@@ -10,10 +10,11 @@ const defaults = {
   maxTimeout: 15768000, //6 months
   loadMessages: 25, //number of messages chatroom will get on load
   currentAPIVersion: "/dev",
-  passResetExpires: 900000, //about 15 minutes (in ms)
+  passResetExpires: 900 * 1000, //about 15 minutes (in ms)
   logLevel: "debug",
   sendGrid: "",
   sendMail: "",
+  authRequestTimeout: 300 * 1000, //5 minutes
   urlPrefix: "https://remo.tv/",
   db: {
     user: "postgres",

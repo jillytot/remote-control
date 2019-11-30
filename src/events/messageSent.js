@@ -24,6 +24,7 @@ module.exports = async (ws, message) => {
     message.type = "moderation";
     message.broadcast = "self";
     createMessage(message);
+    return;
   }
   createMessage(message);
   wss.emitInternalEvent("chatMessage", { ip: ws.ip, ...message });

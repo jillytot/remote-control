@@ -9,6 +9,8 @@ module.exports = async (ws, command) => {
   command.user = publicUser(ws.user);
   // console.log("USER FROM WS", ws.user, "COMMAND: ", command);
 
+  //TODO: Consider storing local status per user session & doing checks at the auth level
+
   if (
     !ws.user.localStatus ||
     ws.user.localStatus.server_id !== command.server
@@ -30,12 +32,10 @@ module.exports = async (ws, command) => {
     ws.user.localStatus = getLocalStatus.status;
   }
 
-  console.log("LOCAL STATUS CHECK: ", ws.user.localStatus);
-  if (
-    ws.user.status.expireTimeout > Date.now() ||
-    ws.user.localStatus.expireTimeout > Date.now()
-  )
-    return;
+  const globalExpire = ws.user.status.expireTimeout || 0;
+  const localExpire = ws.user.localStatus.expireTimeout || 0;
+
+  if (globalExpire > Date.now() || localExpire > Date.now()) return;
 
   if (await validateInput(command)) {
     console.log(

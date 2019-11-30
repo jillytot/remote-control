@@ -8,18 +8,18 @@ module.exports = async (ws, message) => {
 
   //check for timeouts
 
-  const { getUserInfoFromId, publicUser } = require("../models/user");
-  const checkStatus = await getUserInfoFromId(ws.user.id); //This user info call is the single source of truth for the message sender
-  message.user = publicUser(checkStatus);
+  const { publicUser } = require("../models/user");
+  message.user = publicUser(ws.user);
   const getLocalStatus = await getMember({
     user_id: ws.user.id,
     server_id: message.server_id
   });
-  console.log("STATUS CHECK: ", checkStatus, getLocalStatus);
-  if (
-    checkStatus.status.expireTimeout > Date.now() ||
-    getLocalStatus.status.expireTimeout > Date.now()
-  ) {
+
+  const globalExpire = ws.user.status.expireTimeout || 0;
+  const localExpire = getLocalStatus.status.expireTimeout || 0;
+
+  console.log("STATUS CHECK: ", globalExpire, localExpire);
+  if (globalExpire > Date.now() || localExpire > Date.now()) {
     message.message = "You are in timeout, and cannot send anymore messages";
     message.type = "moderation";
     message.broadcast = "self";

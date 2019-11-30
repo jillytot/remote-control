@@ -43,21 +43,7 @@ export default class FrontPage extends Component {
     return (
       <div className="front-page-container">
         <div className="front-page-text">
-          <div className="alert">
-            {" "}
-            <span className="bolder">Important Notice 11/20/2019 </span>
-            <div>
-              In order to make Remo more secure, we've updated our site's
-              encryption methods. As a result, any robot using an API key
-              generated before today will not work.
-              <div>
-                <br />
-                You can simply copy and paste the updated key already provided
-                for each robot under, "manage robots" to your robot's local
-                settings.
-              </div>
-            </div>{" "}
-          </div>
+          <DisplayAlert show={false} />
           <br />
           <div>Best used on Desktop with Chrome Browser</div>
           <div>...</div>
@@ -115,3 +101,23 @@ export default class FrontPage extends Component {
     );
   }
 }
+
+const DisplayAlert = ({ show }) => {
+  return show === true ? (
+    <div className="alert">
+      <span className="bolder">Important Notice 11/20/2019 </span>
+      <div>
+        In order to make Remo more secure, we've updated our site's encryption
+        methods. As a result, any robot using an API key generated before today
+        will not work.
+        <div>
+          <br />
+          You can simply copy and paste the updated key already provided for
+          each robot under, "manage robots" to your robot's local settings.
+        </div>
+      </div>
+    </div>
+  ) : (
+    <React.Fragment />
+  );
+};

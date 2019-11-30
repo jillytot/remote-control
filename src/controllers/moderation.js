@@ -155,7 +155,7 @@ const checkTime = ({ arg, badUser, moderator, message, ...rest }) => {
 
   if (time < 0) time = 0;
   if (time > maxTimeout) time = maxTimeout;
-  arg = time * 1000;
+  arg = Number(time * 1000);
   return { arg, badUser, moderator, message, ...rest };
 };
 
@@ -290,14 +290,16 @@ module.exports.handleLocalTimeout = async ({
     badUser.status.expireTimeout &&
     badUser.status.expireTimeout > Date.now()
   ) {
-    const addRemainder = badUser.status.expireTimeout - (time + Date.now());
+    const addRemainder = Number(
+      badUser.status.expireTimeout - (time + Date.now())
+    );
     console.log(
       "User is already timed out, checking for remainder: ",
       addRemainder
     );
     if (addRemainder > 0) time = addRemainder;
   }
-  badUser.status.expireTimeout = Date.now() + time;
+  badUser.status.expireTimeout = Number(Date.now() + time);
   console.log(
     "TIMEOUT STATUS CHECK: ",
     badUser.status,
@@ -310,7 +312,7 @@ module.exports.handleLocalTimeout = async ({
     message.message = `User ${
       badUser.username
     } has been put in timeout for ${time / 1000} seconds.`;
-    createTimer(time, clearLocalTimeout, badUser);
+    // createTimer(time, clearLocalTimeout, badUser); //TODO: Uhm, do i need a timer? Timeout should just expire, right?
   }
   return { arg, badUser, moderator, message, ...rest };
 };

@@ -59,6 +59,7 @@ module.exports.generateResetKey = async (user, setExpire, emailKey) => {
   const { emailResetKey } = require("./mailers");
   if (user) {
     const makeKey = await passwordResetKey(user, setExpire);
+    //TODO: Consider ensuring that a user can only have one active reset key at a time
     const save = await saveKey(makeKey);
     if (emailKey === true) emailResetKey(user, save);
     return save;

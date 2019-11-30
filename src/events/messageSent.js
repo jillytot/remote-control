@@ -15,13 +15,17 @@ module.exports = async (ws, message) => {
     user_id: ws.user.id,
     server_id: message.server_id
   });
-  if (!checkStatus.status.timeout && !getLocalStatus.status.timeout) {
+  console.log("STATUS CHECK: ", checkStatus, getLocalStatus);
+  if (
+    checkStatus.status.expireTimeout > Date.now() ||
+    getLocalStatus.status.expireTimeout > Date.now()
+  ) {
+    message.message = "You are in timeout, and cannot send anymore messages";
+    message.type = "moderation";
+    message.broadcast = "self";
     createMessage(message);
-    wss.emitInternalEvent('chatMessage', {ip: ws.ip, ...message})
-    return;
   }
-  message.message = "You are in timeout, and cannot send anymore messages";
-  message.type = "moderation";
-  message.broadcast = "self";
   createMessage(message);
+  wss.emitInternalEvent("chatMessage", { ip: ws.ip, ...message });
+  return;
 };

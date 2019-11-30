@@ -30,7 +30,11 @@ module.exports = async (ws, command) => {
     ws.user.localStatus = getLocalStatus.status;
   }
 
-  if (ws.user.status.timeout === true || ws.user.localStatus.timeout === true)
+  console.log("LOCAL STATUS CHECK: ", ws.user.localStatus);
+  if (
+    ws.user.status.expireTimeout > Date.now() ||
+    ws.user.localStatus.expireTimeout > Date.now()
+  )
     return;
 
   if (await validateInput(command)) {

@@ -19,6 +19,7 @@ router.get("/followed", auth({ user: true }), async (req, res) => {
 router.post("/request-password-reset", async (req, res) => {
   const { emailResetToken } = require("../../controllers/user");
   if (req.body.username) {
+    //const { addUser, addIp } = require("../../controllers/cooldown");
     res.send(await emailResetToken(req.body.username));
     return;
     //Get User

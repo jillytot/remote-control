@@ -458,21 +458,26 @@ timeout b excludes the remainder of timeout a, so timeout b = 20, and it's added
 */
 
 module.exports.timeoutUser = async (user, time, server_id) => {
-  log("TIMEOUT USER: ", user, time);
+  console.log("TIMEOUT USER: ", user.username, time);
   if (user && time) {
     let { status } = user;
     status.timeout = true;
-    if (status.expireTimeout && status.expireTimeout > Date.now()) {
-      const addRemainder = status.expireTimeout - (time + Date.now());
-      log("User is already timed out, checking for remainder: ", addRemainder);
-      if (addRemainder <= 0) return status;
-      time = addRemainder;
-    }
+    // if (status.expireTimeout && status.expireTimeout > Date.now()) {
+    //   const addRemainder = status.expireTimeout - (time + Date.now());
+    //   log("User is already timed out, checking for remainder: ", addRemainder);
+    //   if (addRemainder <= 0) return status;
+    //   time = addRemainder;
+    // }
     status.expireTimeout = Date.now() + time;
-    log("TIMEOUT STATUS CHECK: ", status, status.expireTimeout - Date.now());
+    console.log(
+      "TIMEOUT STATUS CHECK: ",
+      status,
+      status.expireTimeout - Date.now()
+    );
     user.status = status;
     let checkUpdatedStatus = await this.updateStatus(user);
-    createTimer(time, this.unTimeoutUser, user);
+    console.log(checkUpdatedStatus);
+    // createTimer(time, this.unTimeoutUser, user);
     return checkUpdatedStatus;
   }
   log("Timout Error");
@@ -483,14 +488,11 @@ module.exports.unTimeoutUser = async user => {
   log("END TIMEOUT FOR USER: ", user);
   if (user) {
     let { status } = user;
-    if (status.expireTimeout && Date.now() >= status.expireTimeout) {
-      status.timeout = false;
-      user.status = status;
-      await this.updateStatus(user);
-      return true;
-    }
-    log(`${user.username} is already timed out`);
-    return false;
+
+    status.expireTimeout = 0;
+    user.status = status;
+    await this.updateStatus(user);
+    return true;
   }
   log("Timout Error");
   return null;

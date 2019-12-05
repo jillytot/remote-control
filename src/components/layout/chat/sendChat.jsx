@@ -66,25 +66,25 @@ export default class SendChat extends Form {
       channel
     } = this.props;
 
-    if (user.status && user.status.timeout) {
-      keepGoing = false;
-      const messageBlank = {
-        time_stamp: Date.now(),
-        display_message: true,
-        type: "moderation",
-        sender: "System"
-      };
-      let toUser = "Unable to send chat messages while timed out";
-      let feedback = messageBlank;
-      feedback.message = toUser;
-      feedback.userId = user.id;
-      feedback.chat_id = chatId;
-      feedback.server_id = server_id;
-      feedback.id = uuidv4();
+    // if (user.status && user.status.expireTimeout) {
+    //   keepGoing = false;
+    //   const messageBlank = {
+    //     time_stamp: Date.now(),
+    //     display_message: true,
+    //     type: "moderation",
+    //     sender: "System"
+    //   };
+    //   let toUser = "Unable to send chat messages while timed out";
+    //   let feedback = messageBlank;
+    //   feedback.message = toUser;
+    //   feedback.userId = user.id;
+    //   feedback.chat_id = chatId;
+    //   feedback.server_id = server_id;
+    //   feedback.id = uuidv4();
 
-      onChatFeedback(feedback);
-      // console.log(toUser);
-    }
+    //   onChatFeedback(feedback);
+    //   // console.log(toUser);
+    // }
 
     if (this.state.coolDown) {
       keepGoing = false;

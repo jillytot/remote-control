@@ -181,11 +181,11 @@ module.exports.handleGlobalTimeout = async ({
 
     if (thisUser) {
       actOnUser = thisUser;
-      console.log("Chat Commands : handleTimeout : thisUser: ", thisUser);
+      // console.log("Chat Commands : handleTimeout : thisUser: ", thisUser);
       message.message = `User ${
         actOnUser.username
       } has been put in timeout for ${time / 1000} seconds.`;
-      console.log("MESSAGE FROM SET GLOBAL TIMEOUT: ", message.message);
+      // console.log("MESSAGE FROM SET GLOBAL TIMEOUT: ", message.message);
       const { sendGlobalTimeout } = require("./robotServer");
       sendGlobalTimeout(message.server_id, actOnUser);
       return message;
@@ -197,12 +197,7 @@ module.exports.handleGlobalTimeout = async ({
     let unTimeout = clearGlobalTimeout(thisUser);
     if (unTimeout) {
       actOnUser = thisUser;
-      console.log("Chat Commands : handleUntimeout : thisUser: ", thisUser);
       message.message = `User ${actOnUser.username} your timeout status has been removed`;
-
-      console.log("MESSAGE FROM GLOBAL UNTIMEOUT: ", message.message);
-      // const { sendGlobalTimeout } = require("./robotServer");
-      // sendGlobalTimeout(message.server_id, actOnUser);
       return message;
     }
 

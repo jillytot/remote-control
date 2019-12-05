@@ -462,18 +462,12 @@ module.exports.timeoutUser = async (user, time, server_id) => {
   if (user && time) {
     let { status } = user;
     status.timeout = true;
-    // if (status.expireTimeout && status.expireTimeout > Date.now()) {
-    //   const addRemainder = status.expireTimeout - (time + Date.now());
-    //   log("User is already timed out, checking for remainder: ", addRemainder);
-    //   if (addRemainder <= 0) return status;
-    //   time = addRemainder;
-    // }
     status.expireTimeout = Date.now() + time;
-    console.log(
-      "TIMEOUT STATUS CHECK: ",
-      status,
-      status.expireTimeout - Date.now()
-    );
+    // console.log(
+    //   "TIMEOUT STATUS CHECK: ",
+    //   status,
+    //   status.expireTimeout - Date.now()
+    // );
     user.status = status;
     let checkUpdatedStatus = await this.updateStatus(user);
     console.log(checkUpdatedStatus);

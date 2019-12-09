@@ -31,10 +31,6 @@ export default class Channel extends Component {
     }
   }
 
-  componentWillUnmount() {
-    this.handleChannel(false);
-  }
-
   handleWidth = width => {
     // console.log("WIDTH: ", width);
     return width > 768 ? this.handleDefault() : this.handleMobile();

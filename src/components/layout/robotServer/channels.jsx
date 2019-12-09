@@ -48,7 +48,6 @@ export default class Channels extends Component {
   }
 
   async componentDidMount() {
-    console.log("channels mount");
     this._isMounted = true;
     this.channelListener();
 
@@ -286,12 +285,9 @@ export default class Channels extends Component {
   render() {
     const { user, selectedServer } = this.props;
     const { users, currentChannel, chatTabbed, channels } = this.state;
-
     if (!channels) {
-      console.log("waiting for channels");
       return <React.Fragment />;
     }
-    // console.log("t23", channels);
 
     return (
       <React.Fragment>

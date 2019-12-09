@@ -99,9 +99,9 @@ export default class SendChat extends Form {
         server_id: server_id,
         channel_id: channel
       });
-      console.log(
-        `SEND TO CHAT, user: ${user.username} userId ${user.id} message ${sendChat} chatId ${chatId}, channelId ${channel}`
-      );
+      // console.log(
+      //   `SEND TO CHAT, user: ${user.username} userId ${user.id} message ${sendChat} chatId ${chatId}, channelId ${channel}`
+      // );
 
       this.startTimer();
     } else {

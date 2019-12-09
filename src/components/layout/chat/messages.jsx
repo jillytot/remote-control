@@ -28,7 +28,6 @@ export default class Messages extends Component {
   };
 
   handlePrintChannelName = (messages, currentIndex) => {
-    console.log(messages[currentIndex]["channel_id"]);
     if (currentIndex === 0) return true;
     if (
       messages[currentIndex - 1]["channel_id"] !==

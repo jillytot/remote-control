@@ -68,7 +68,6 @@ export default class RobotInterface extends Component {
   }
 
   emitGetControls = () => {
-    console.log("EMIT GET CONTROLS");
     const channel = this.props.channels.find(
       chan => chan.id === this.props.channel
     );

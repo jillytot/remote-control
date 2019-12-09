@@ -3,7 +3,7 @@ import Emotes from "../../../emotes/emotes";
 import defaultImages from "../../../imgs/placeholders";
 import { mobileMessageFadeOut } from "../../../config/client";
 
-const Message = ({ message }) => {
+const Message = ({ message, channelName, printChannelName }) => {
   const [fadeout, setFadeout] = useState(
     setTimeout(() => handleFade(), mobileMessageFadeOut)
   );
@@ -160,16 +160,27 @@ const Message = ({ message }) => {
     return "chat-message-container";
   };
 
+  const handleChannelName = name => {
+    return <span className="channel-name">{`# ${name} `}</span>;
+  };
+
   return (
     <div className={handleMessageContainer()}>
       <div className={handleMessageType(message)}>
+        {printChannelName === true ? (
+          <React.Fragment>
+            {handleChannelName(channelName)} <br />
+          </React.Fragment>
+        ) : (
+          <React.Fragment />
+        )}
         {handleBadges(message)}
         <span
           className={handleSenderColor(message)}
           title={new Date(parseInt(message.time_stamp)).toLocaleString()}
         >{`${handleMessageSender(message)}${
           message.type === types.self ? "" : ":"
-        }  `}</span>
+        }  `}</span>{" "}
         <span className="message-spacing">
           {handleEmotes(message.message).map(element => {
             return element;

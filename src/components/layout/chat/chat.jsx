@@ -129,6 +129,7 @@ export default class Chat extends Component {
         messages={this.getMessageColors()}
         users={users}
         showMobileNav={this.props.showMobileNav}
+        channels={this.props.channels}
       />
     );
   };

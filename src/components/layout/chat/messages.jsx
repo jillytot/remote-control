@@ -20,6 +20,24 @@ export default class Messages extends Component {
     this.scrollDown();
   }
 
+  handleChannelName = channel_id => {
+    const { channels } = this.props;
+    const name = channels.find(channel => channel.id === channel_id);
+    if (name) return name.name;
+    return "";
+  };
+
+  handlePrintChannelName = (messages, currentIndex) => {
+    console.log(messages[currentIndex]["channel_id"]);
+    if (currentIndex === 0) return true;
+    if (
+      messages[currentIndex - 1]["channel_id"] !==
+      messages[currentIndex]["channel_id"]
+    )
+      return true;
+    return false;
+  };
+
   displayMessages = messages => {
     return messages.map((message, index) => {
       if (message.display_message) {
@@ -29,6 +47,8 @@ export default class Messages extends Component {
             key={message["id"]}
             color={message.color}
             showMobileNav={this.props.showMobileNav}
+            channelName={this.handleChannelName(message.channel_id)}
+            printChannelName={this.handlePrintChannelName(messages, index)}
           />
         );
       } else {

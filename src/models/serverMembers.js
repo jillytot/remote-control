@@ -1,3 +1,4 @@
+const { jsonError } = require("../modules/logging");
 const memberPt = {
   server_id: "",
   user_id: "",
@@ -213,6 +214,32 @@ module.exports.updateMemberRoles = async member => {
   try {
     const result = await db.query(update, [roles, server_id, user_id]);
     if (result.rows[0]) return result.rows[0];
+  } catch (err) {
+    console.log(err);
+  }
+  return null;
+};
+
+module.exports.updateUsername = async member => {
+  const db = require("../services/db");
+  const { username, server_id, user_id } = member;
+  const query = `UPDATE members SET username = ( $1 ) WHERE ( server_id, user_id ) = ( $2, $3 ) RETURNING *`;
+  try {
+    const result = await db.query(query, [username, server_id, user_id]);
+    if (result.rows[0]) return result.rows[0];
+  } catch (err) {
+    console.log(err);
+  }
+  return jsonError("Unable to update username for member");
+};
+
+//FOR INTERNAL USE ONLY
+module.exports.getAllMembers = async () => {
+  const db = require("../services/db");
+  const query = `SELECT * FROM members`;
+  try {
+    const result = await db.query(query, []);
+    if (result.rows[0]) return result.rows;
   } catch (err) {
     console.log(err);
   }

@@ -205,7 +205,7 @@ module.exports.getPrivateInfoFromId = async user_id => {
 module.exports.getUserInfoFromId = async userId => {
   if (userId) {
     try {
-      log("Get username from Id: ", userId);
+      // log("Get username from Id: ", userId);
       const query = `SELECT * FROM users WHERE id = $1 LIMIT 1;`;
       const check = await db.query(query, [userId]);
       const getInfo = this.publicUser(check.rows[0]);

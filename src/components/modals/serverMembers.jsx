@@ -39,6 +39,14 @@ export default class ServerMembers extends Component {
     return;
   };
 
+  handleDisplaymembers = () => {
+    const { members } = this.state;
+    return members.map(member => {
+      return <EditMemberForm member={member} key={member.user_id} />;
+      // return <div> {member.username} </div>;
+    });
+  };
+
   render() {
     console.log(this.state, this.props);
     return (
@@ -46,7 +54,7 @@ export default class ServerMembers extends Component {
         {this.state.fetching === true ? (
           <div> Fetching Data </div>
         ) : (
-          <div> Success! </div>
+          this.handleDisplaymembers()
         )}
       </React.Fragment>
     );

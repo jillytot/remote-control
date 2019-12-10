@@ -14,6 +14,12 @@ export default class EditMemberForm extends Form {
   };
 
   render() {
-    return <div> Fetching Member </div>;
+    console.log(this.props);
+    const { username } = this.props.member;
+    return (
+      <React.Fragment>
+        <div> {username}</div>
+      </React.Fragment>
+    );
   }
 }

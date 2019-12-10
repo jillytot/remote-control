@@ -408,6 +408,11 @@ a:active {
   padding-right: 10px;
   display: flex;
   flex: 1;
+  cursor: pointer;
+}
+
+.member-count:hover {
+  background-color: rgb(50, 60, 104);
 }
 
 .hidden-clipboard {

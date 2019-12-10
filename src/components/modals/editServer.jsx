@@ -6,17 +6,19 @@ export default class EditServer extends Component {
     const { onCloseModal, server, user } = this.props;
 
     return [
-      {
-        body: (
-          <EditServerMenu
-            onCloseModal={onCloseModal}
-            server={server}
-            user={user}
-          />
-        )
-      },
-      { header: "" },
-      { footer: "" }
+      [
+        {
+          body: (
+            <EditServerMenu
+              onCloseModal={onCloseModal}
+              server={server}
+              user={user}
+            />
+          )
+        },
+        { header: "" },
+        { footer: "" }
+      ]
     ];
   };
 

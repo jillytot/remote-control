@@ -5,6 +5,7 @@ import axios from "axios";
 import { joinServer, leaveServer } from "../../../config/client";
 import socket from "../../socket";
 import EditServer from "../../modals/editServer";
+import ServerMembers from "../../modals/serverMembers";
 
 export default class DisplayServerDetails extends Component {
   state = {
@@ -204,6 +205,38 @@ export default class DisplayServerDetails extends Component {
     );
   };
 
+  handleDisplaymembers = () => {
+    const { server, user, onCloseModal } = this.props;
+    console.log("Boop");
+    return [
+      {
+        body: (
+          <ServerMembers
+            onCloseModal={onCloseModal}
+            server={server}
+            user={user}
+          />
+        )
+      },
+      { header: "" },
+      { footer: "" }
+    ];
+  };
+
+  handleMembers = () => {
+    return (
+      <div
+        className="member-count"
+        onClick={() => {
+          this.props.modal(this.handleDisplaymembers());
+        }}
+      >
+        {" "}
+        {this.handleMemberCount()}{" "}
+      </div>
+    );
+  };
+
   displayDetails = () => {
     const { server, channels, user, users } = this.props;
     if (channels && channels.length > 0) {
@@ -225,7 +258,7 @@ export default class DisplayServerDetails extends Component {
               <div>{this.handleHoverText()}</div>
             </div>
 
-            <div className="member-count"> {this.handleMemberCount()} </div>
+            {this.handleMembers()}
           </div>
           <div className="users-online-edit-container">
             <div className="display-server-info">

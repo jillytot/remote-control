@@ -1,4 +1,5 @@
 const router = require("express").Router();
+const { paginate } = require("../../modules/requests");
 const {
   createRobotServer,
   getRobotServer,
@@ -29,6 +30,13 @@ router.get("/members", async (req, res) => {
     response.error = "Unable to get members";
   }
   res.send(response);
+});
+
+router.post("/get-members", auth({ user: true }), async (req, res) => {
+  const { getMembers } = require("../../controllers/members");
+  if (!req.body.server_id) return res.send(jsonError("Invalid Server ID"));
+  const members = await getMembers(req.body.server_id);
+  return res.send(members);
 });
 
 //CREATE SERVER

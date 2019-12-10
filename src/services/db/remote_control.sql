@@ -179,6 +179,7 @@ CREATE TABLE public.members
     settings jsonb[],
     joined character varying COLLATE pg_catalog."default",
     invites character varying[] COLLATE pg_catalog."default",
+    username character varying COLLATE pg_catalog."default",
     CONSTRAINT member_pkey PRIMARY KEY (user_id, server_id),
     CONSTRAINT server_pkey FOREIGN KEY (server_id)
         REFERENCES public.robot_servers (server_id) MATCH SIMPLE

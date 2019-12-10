@@ -25,6 +25,7 @@ The client will ask for local status on whichever server they actively enter on 
 module.exports.createMember = async data => {
   console.log("Let Memeber Join Server: ", data);
   const { createTimeStamp } = require("../modules/utilities");
+  const { getUserInfoFromId } = require("../models/user");
 
   // const checkInvite = await this.validateInvite(data);
   // console.log("CHECKING INVITE", checkInvite);
@@ -39,6 +40,13 @@ module.exports.createMember = async data => {
   makeMember.server_id = data.server_id;
   makeMember.roles = []; //default role
   makeMember.settings = {};
+
+  if (data.username) {
+    makeMember.username = data.username;
+  } else {
+    const getUser = await getUserInfoFromId(data.user_id);
+    makeMember.username = getUser.username;
+  }
 
   if (data.join) {
     //If joining as a member w/ an invite
@@ -71,9 +79,10 @@ module.exports.saveMember = async member => {
     joined,
     status,
     settings,
-    invites
+    invites,
+    username
   } = member;
-  const save = `INSERT INTO members ( server_id, user_id, roles, joined, status, settings, invites) VALUES ( $1, $2, $3, $4, $5, $6, $7 ) RETURNING *`;
+  const save = `INSERT INTO members ( server_id, user_id, roles, joined, status, settings, invites, username) VALUES ( $1, $2, $3, $4, $5, $6, $7, $8 ) RETURNING *`;
   try {
     const result = await db.query(save, [
       server_id,
@@ -82,7 +91,8 @@ module.exports.saveMember = async member => {
       joined,
       status,
       settings,
-      invites
+      invites,
+      username
     ]);
     if (result.rows[0]) {
       console.log(result.rows[0]);

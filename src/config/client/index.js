@@ -45,7 +45,8 @@ const defaults = {
   disableInvite: `${apiUrl}/robot-server/deactivate-invite`,
   userProfile: `${apiUrl}/user/profile`,
   updateEmail: `${apiUrl}/user/update-email`,
-  invite: `${apiUrl}/robot-server/invite`
+  invite: `${apiUrl}/robot-server/invite`,
+  getMembers: `${apiUrl}/robot-server/get-members`
 };
 
 module.exports = Object.assign({}, defaults, overrides);

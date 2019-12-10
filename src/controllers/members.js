@@ -220,3 +220,9 @@ module.exports.makeInviteAlias = async testData => {
   }
   return alias;
 };
+
+module.exports.getMembers = async server_id => {
+  const { getMembers } = require("../models/serverMembers");
+  const members = await getMembers(server_id);
+  return members;
+};

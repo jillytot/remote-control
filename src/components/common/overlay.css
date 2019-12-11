@@ -44,9 +44,10 @@
 .modal-body {
   /* padding: 10px 15px; */
   /* padding: 5px; */
+
   text-align: center;
   background: #1d262b;
-  max-height: calc(100% - 90px);
+  max-height: calc(100vh - 90px);
   background: -webkit-linear-gradient(-45deg, #d64eb8 0%, #003fee 100%);
 }
 

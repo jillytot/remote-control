@@ -53,7 +53,8 @@ module.exports.createMember = async data => {
     //If joining as a member w/ an invite
     makeMember.invites = [data.join];
     makeMember.status = { timeout: false, expireTimeout: null, member: true };
-    makeMember.joined = createTimeStamp();
+    makeMember.joined = Date.now();
+    console.log(makeMember.joined);
     if (data.owner) {
       makeMember.roles = ["@owner", "@member"];
     }
@@ -61,7 +62,7 @@ module.exports.createMember = async data => {
     //default behavior for browsing public servers (needed to track moderation)
     makeMember.invites = [];
     makeMember.status = { timeout: false, expireTimeout: null, member: false };
-    makeMember.joined = null;
+    makeMember.joined = Date.now();
   }
 
   const save = this.saveMember(makeMember);
@@ -231,6 +232,20 @@ module.exports.updateUsername = async member => {
     console.log(err);
   }
   return jsonError("Unable to update username for member");
+};
+
+module.exports.updateJoined = async member => {
+  const db = require("../services/db");
+  const { joined, server_id, user_id } = member;
+  console.log(joined);
+  const query = `UPDATE members SET joined = ( $1 ) WHERE ( server_id, user_id ) = ( $2, $3 ) RETURNING *`;
+  try {
+    const result = await db.query(query, [joined, server_id, user_id]);
+    if (result.rows[0]) return result.rows[0];
+  } catch (err) {
+    console.log(err);
+  }
+  return jsonError("Unable to update timestamp.");
 };
 
 //FOR INTERNAL USE ONLY

@@ -12,9 +12,9 @@ export default class ServerMembers extends Component {
 
   async componentDidMount() {
     //get members API call
-    console.log("SERVER MEMBERS MOUNT");
+    //  console.log("SERVER MEMBERS MOUNT");
     await this.handleGetMembers();
-    console.log(this.state.members);
+    //  console.log(this.state.members);
   }
 
   handleGetMembers = async () => {
@@ -28,7 +28,7 @@ export default class ServerMembers extends Component {
         }
       )
       .then(response => {
-        console.log(response);
+        //   console.log(response);
         if (!response.data.error) {
           this.setState({ members: response.data, fetching: false });
         }
@@ -41,20 +41,29 @@ export default class ServerMembers extends Component {
 
   handleOnKick = e => {
     console.log(e);
+    const { members } = this.state;
+    let updateMembers = [];
+    members.forEach(member => {
+      if (member.user_id !== e) updateMembers.push(member);
+    });
+    this.setState({ members: updateMembers });
   };
 
   handleDisplaymembers = () => {
     const { members } = this.state;
     return members.map(member => {
-      return (
-        <EditMemberForm
-          member={member}
-          key={member.user_id}
-          onKick={() => this.handleOnKick()}
-          {...this.props}
-        />
-      );
-      // return <div> {member.username} </div>;
+      if (member.status.member === true) {
+        return (
+          <EditMemberForm
+            member={member}
+            key={member.user_id}
+            onKick={e => this.handleOnKick(e)}
+            {...this.props}
+          />
+        );
+      } else {
+        return <React.Fragment key={member.user_id} />;
+      }
     });
   };
 

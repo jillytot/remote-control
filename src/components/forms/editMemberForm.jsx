@@ -1,6 +1,7 @@
 import React from "react";
 import Form from "../common/form";
-
+import axios from "axios";
+import { kickMember } from "../../config/client";
 import "./editMember.css";
 
 export default class EditMemberForm extends Form {
@@ -15,20 +16,40 @@ export default class EditMemberForm extends Form {
   };
   schema = {};
 
-  componentDidMount() {
-    console.log("Mounted EditMemberForm");
-  }
+  doSubmit = () => {};
 
-  doSubmit = () => {
-    console.log("Submitted");
-  };
-
-  handleDoKick = () => {
-    const { user_id } = this.props.member;
-    const { onKick } = this.props;
+  handleDoKick = async () => {
     this.setState({ kickPending: true });
-
-    onKick(user_id);
+    const token = localStorage.getItem("token");
+    await axios
+      .post(
+        kickMember,
+        {
+          member: this.props.member,
+          server_id: this.props.server.server_id
+        },
+        {
+          headers: { authorization: `Bearer ${token}` }
+        }
+      )
+      .then(res => {
+        if (res.data.error) {
+          this.setState({
+            kickSuccess: res.data.error,
+            kickPending: false,
+            kickCompleted: true
+          });
+          return;
+        }
+        this.setState({
+          kickSuccess: res.data.message,
+          kickPending: false,
+          kickCompleted: true
+        });
+      })
+      .catch(err => {
+        console.log(err);
+      });
   };
 
   handleConfirm = () => {
@@ -36,6 +57,7 @@ export default class EditMemberForm extends Form {
     if (!confirmKick && !kickPending) return <React.Fragment />;
     if (kickPending)
       return <div className="confirm-action-container"> ...pending</div>;
+
     return (
       <div className="confirm-action-container">
         confirm kick ?{" "}
@@ -58,9 +80,9 @@ export default class EditMemberForm extends Form {
   };
 
   handleKick = () => {
-    console.log(this.state.confirmKick);
+    //  console.log(this.state.confirmKick);
     this.setState({ confirmKick: !this.state.confirmKick });
-    console.log(this.state.confirmKick);
+    //  console.log(this.state.confirmKick);
   };
 
   handleDisplaymember = () => {
@@ -73,7 +95,8 @@ export default class EditMemberForm extends Form {
         <div className="member-container">
           <div className="member-username">{username}</div>
           <div className="member-joined">{`Joined: ${date}`}</div>
-          {user.id === server.owner_id ? (
+          {user.id === server.owner_id &&
+          user.id !== this.props.member.user_id ? (
             <div className="kick-member" onClick={() => this.handleKick()}>
               {" "}
               kick{" "}
@@ -87,7 +110,33 @@ export default class EditMemberForm extends Form {
     );
   };
 
+  handleSuccess = () => {
+    const { user_id } = this.props.member;
+    const { onKick } = this.props;
+
+    const { kickSuccess } = this.state;
+    return (
+      <div className="member-container">
+        {" "}
+        <div className="member-joined">{kickSuccess}</div>
+        <div
+          className="kick-member"
+          onClick={() => {
+            onKick(user_id);
+          }}
+        >
+          Dismiss
+        </div>
+      </div>
+    );
+  };
+
   render() {
-    return <React.Fragment>{this.handleDisplaymember()}</React.Fragment>;
+    const { kickCompleted } = this.state;
+    return (
+      <React.Fragment>
+        {kickCompleted ? this.handleSuccess() : this.handleDisplaymember()}
+      </React.Fragment>
+    );
   }
 }

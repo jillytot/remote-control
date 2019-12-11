@@ -12,6 +12,7 @@ router.use("/controls", require("./controls"));
 router.use("/stats", require("./stats"));
 router.use("/user", require("./user"));
 router.use("/chat", require("./chat"));
+router.use("/moderation", require("./moderation"));
 
 //test API
 router.get("/", (req, res) => {

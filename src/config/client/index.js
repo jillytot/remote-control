@@ -46,7 +46,8 @@ const defaults = {
   userProfile: `${apiUrl}/user/profile`,
   updateEmail: `${apiUrl}/user/update-email`,
   invite: `${apiUrl}/robot-server/invite`,
-  getMembers: `${apiUrl}/robot-server/get-members`
+  getMembers: `${apiUrl}/robot-server/get-members`,
+  kickMember: `${apiUrl}/moderation/kick`
 };
 
 module.exports = Object.assign({}, defaults, overrides);

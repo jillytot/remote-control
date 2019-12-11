@@ -74,6 +74,11 @@ module.exports.kickMember = async moderate => {
     moderate = await authCommand(moderate);
   if (moderate.message["error"] === false) {
     moderate = await doKickMember(moderate);
+    // console.log(
+    //   "CHECK MODERATION EVENT: ",
+    //   moderate.message.server_id,
+    //   moderate.badUser.user_id
+    // );
     emitEvent(moderate.badUser.user_id, "MODERATION_EVENT", {
       event: "kicked",
       server_id: moderate.message.server_id
@@ -123,7 +128,7 @@ const authCommand = async ({
   //TEMPORARY! ONLY SERVER OWNERS CAN DO THINGS
   const server = await getRobotServer(message.server_id);
   moderator.isGlobal = checkGlobalTypes(message.badges);
-  console.log("/////////AUTH COMMAND: ", level, moderator.isGlobal);
+  // console.log("/////////AUTH COMMAND: ", level, moderator.isGlobal);
   if (level === "global" && moderator.isGlobal === false) {
     message = handleError(
       message,
@@ -161,7 +166,7 @@ const checkTime = ({ arg, badUser, moderator, message, ...rest }) => {
 
 //PARSE INPUT
 const parseInput = message => {
-  console.log("Parsing Command Input");
+  // console.log("Parsing Command Input", message.message);
   let arg = "";
   message.type = "moderation";
   let badUser = message.message
@@ -352,6 +357,7 @@ const localMessageRemoval = async ({ badUser }) => {
 };
 
 const localModerationEvent = data => {
+  // console.log("LOCAL MODERATION EVENT", data);
   emitLocalEvent(data.server_id, "LOCAL_MODERATION", data);
 };
 

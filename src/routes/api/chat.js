@@ -13,4 +13,5 @@ router.get("/messages", auth({ user: true }), async (req, res) => {
     error: "Could not find any recent chat messages"
   });
 });
+
 module.exports = router;

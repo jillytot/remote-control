@@ -39,10 +39,21 @@ export default class ServerMembers extends Component {
     return;
   };
 
+  handleOnKick = e => {
+    console.log(e);
+  };
+
   handleDisplaymembers = () => {
     const { members } = this.state;
     return members.map(member => {
-      return <EditMemberForm member={member} key={member.user_id} />;
+      return (
+        <EditMemberForm
+          member={member}
+          key={member.user_id}
+          onKick={() => this.handleOnKick()}
+          {...this.props}
+        />
+      );
       // return <div> {member.username} </div>;
     });
   };
@@ -54,7 +65,12 @@ export default class ServerMembers extends Component {
         {this.state.fetching === true ? (
           <div> Fetching Data </div>
         ) : (
-          this.handleDisplaymembers()
+          <React.Fragment>
+            <div className="members-header"> Members: </div>
+            <div className="members-container">
+              {this.handleDisplaymembers()}
+            </div>{" "}
+          </React.Fragment>
         )}
       </React.Fragment>
     );

@@ -29,9 +29,14 @@ const testInvite = {
   status: "inactive"
 };
 
+const testStr = "shitty ass person you are phawk";
+
 const test = async () => {
   try {
-    await test___makeInviteAlias();
+    // await test___deepFilterMessage();
+    await test___filterPhoneticMessage();
+    // await test___filterTextMessage();
+    // await test___makeInviteAlias();
     // await test__updateInviteStatus();
     // await test__checkServerName();
     // await test__deleteChannel();
@@ -47,6 +52,24 @@ const test = async () => {
   }
 
   process.exit(0);
+};
+
+const test___deepFilterMessage = async () => {
+  const { deepFilterMessage } = require("../controllers/chatFilter");
+  const result = await deepFilterMessage(testStr);
+  console.log(result);
+};
+
+const test___filterPhoneticMessage = async () => {
+  const { filterPhoneticMessage } = require("../controllers/chatFilter");
+  const result = await filterPhoneticMessage(testStr);
+  console.log("TEST RESULT: ", result);
+};
+
+const test___filterTextMessage = async () => {
+  const { filterTextMessage } = require("../controllers/chatFilter");
+  const result = await filterTextMessage(testStr);
+  console.log(result);
 };
 
 const test___makeInviteAlias = async () => {

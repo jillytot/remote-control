@@ -24,6 +24,18 @@ const defaults = {
     port: 5432,
     max: 50,
     idleTimeoutMillis: 30000
+  },
+  globalBadWordsList: {
+    normal_bad_words: {
+      //replacement word: [ array, of, bad, word, iterations ]
+      example1: ["test1", "test2", "test3"],
+      example2: ["word1", "word2", "word3"]
+    },
+    phonetic_bad_words: {
+      //lookup phonetics: https://words.github.io/metaphone/
+      // Bad Phonetic Word : Replacement Word
+      TST: "example"
+    }
   }
 };
 

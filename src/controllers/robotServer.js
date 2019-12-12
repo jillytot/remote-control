@@ -59,6 +59,8 @@ module.exports.updateSettings = async (server, user_id) => {
       getServer.settings.private = server.settings.private;
     if (server.settings.hasOwnProperty("unlist"))
       getServer.settings.unlist = server.settings.unlist;
+    if (server.settings.hasOwnProperty("phonetic_filter"))
+      getServer.settings.phonetic_filter = server.settings.phonetic_filter;
     const updateSettings = await updateRobotServerSettings(
       getServer.server_id,
       getServer.settings

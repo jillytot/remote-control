@@ -14,7 +14,7 @@ const { getRobotFromId } = robot;
 const { getChannels, deleteChannel } = require("../models/channel");
 
 const testUserId = "user-2791c4f8-8b0b-40c5-8f21-709217321a6c"; //derp
-const testServerId = "serv-51869953-62f2-4464-abb8-3266221c58de"; //herp
+const testServerId = "serv-a7602128-fe97-42f9-9527-7298501fdf1e"; //herp
 const deleteServerId = "serv-e04a0850-50f5-4ca8-889b-b25ab7f63f52";
 const testChannel = "chan-1b727055-c814-4239-95f4-0d6a69ec6b72";
 const testRobot = "rbot-9ae3d965-c0ed-4300-b16f-f184f8b7af61";
@@ -33,8 +33,9 @@ const testStr = "shitty ass person you are phawk";
 
 const test = async () => {
   try {
+    await test___getRobotServerSettings();
     // await test___deepFilterMessage();
-    await test___filterPhoneticMessage();
+    // await test___filterPhoneticMessage();
     // await test___filterTextMessage();
     // await test___makeInviteAlias();
     // await test__updateInviteStatus();
@@ -52,6 +53,13 @@ const test = async () => {
   }
 
   process.exit(0);
+};
+
+const test___getRobotServerSettings = async () => {
+  const { getRobotServerSettings } = require("../models/robotServer");
+  const testData = "serv-a7602128-fe97-42f9-9527-7298501fdf1e";
+  const result = await getRobotServerSettings(testData);
+  console.log(result, result.settings.default_channel);
 };
 
 const test___deepFilterMessage = async () => {

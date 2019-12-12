@@ -1,7 +1,6 @@
 const { makeId, createTimeStamp } = require("../modules/utilities");
 const { ACTIVE_USERS_UPDATED } = require("../events/definitions");
-const { extractToken } = require("./user");
-const { logger } = require("../modules/logging");
+const { logger, jsonError } = require("../modules/logging");
 const log = message => {
   logger({
     message: message,
@@ -357,6 +356,18 @@ module.exports.updateRobotServerSettings = async (server_id, settings) => {
   } catch (err) {
     console.log(err);
   }
+};
+
+module.exports.getRobotServerSettings = async server_id => {
+  const db = require("../services/db");
+  const query = `SELECT settings FROM robot_servers WHERE server_id = $1`;
+  try {
+    const result = await db.query(query, [server_id]);
+    if (result.rows[0]) return result.rows[0];
+  } catch (err) {
+    console.log(err);
+  }
+  return jsonError("Unable to fetch settings");
 };
 
 //Does this user own this server?

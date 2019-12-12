@@ -1,13 +1,18 @@
 const { makeId, createTimeStamp } = require("../modules/utilities");
 const { getMessageType } = require("./chatCommands");
-const { getGlobalTypes } = require("./user");
 
 //Create Message is called from events/index as an incoming socket.io event from the client
 module.exports.createMessage = async message => {
-  const { saveMessageToActiveChat } = require("./chatRoom");
+  const { filterPhoneticMessage } = require("../controllers/chatFilter");
+  const { getRobotServerSettings } = require("../models/robotServer");
   //build the message:
   let makeMess = {};
-  makeMess.message = message.message;
+  const serverSettings = await getRobotServerSettings(message.server_id);
+  if (serverSettings.settings.phonetic_filter) {
+    makeMess.message = await filterPhoneticMessage(message.message);
+  } else {
+    makeMess.message = message.message;
+  }
   makeMess.sender = message.user.username; //Will deprecate
   makeMess.sender_id = message.user.id; //Will deprecate
   makeMess.chat_id = message.chatId;

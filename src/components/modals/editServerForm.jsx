@@ -8,8 +8,8 @@ export default class EditServerForm extends Form {
   state = {
     data: {},
     errors: {},
-    settings: { unlist: null, private: null },
-    compareSettings: { unlist: null, private: null },
+    settings: { unlist: null, private: null, phonetic_filter: null },
+    compareSettings: { unlist: null, private: null, phonetic_filter: null },
     error: ""
   };
   schema = {};
@@ -37,6 +37,14 @@ export default class EditServerForm extends Form {
     // console.log("CHANGE SETTINGS AFTER: ", settings);
   };
 
+  handlePhoneticFilterToggle = () => {
+    let { settings } = this.state;
+    // console.log("CHANGE SETTINGS BEFORE: ", settings);
+    settings.phonetic_filter = !settings.phonetic_filter;
+    this.setState({ settings: settings });
+    // console.log("CHANGE SETTINGS AFTER: ", settings);
+  };
+
   settingsObject = () => {
     console.log(this.props.server.server_id);
     return {
@@ -44,7 +52,8 @@ export default class EditServerForm extends Form {
         server_id: this.props.server.server_id,
         settings: {
           unlist: this.state.settings.unlist,
-          private: this.state.settings.private
+          private: this.state.settings.private,
+          phonetic_filter: this.state.settings.phonetic_filter
         }
       }
     };
@@ -107,6 +116,16 @@ export default class EditServerForm extends Form {
               label={"Set server to private? "}
               onClick={this.handlePrivateToggle}
               critical={true}
+            />
+          </div>
+          Phonetic Chat Filter ( experimental )
+          <div className="toggle-group">
+            <span className="info"> Filter chat messages for TTS </span>
+            <Toggle
+              toggle={this.state.settings.phonetic_filter}
+              label={"Apply filter chat messages? "}
+              onClick={this.handlePhoneticFilterToggle}
+              critical={false}
             />
           </div>
           {this.renderButton("Submit", "Submit")}

@@ -90,12 +90,11 @@ export default class EditServerForm extends Form {
         </span>
         <br />
         <form onSubmit={this.handleSubmit}>
-          Public Listing
+          Make Server Unlisted
           <div className="toggle-group">
             <span className="info">
-              {" "}
-              Server will be listed in the public directory unless otherwise
-              specified{" "}
+              Your server will be unlisted from the public directory, but anyone
+              with the link can still access.
             </span>
             <Toggle
               toggle={this.state.settings.unlist}
@@ -107,8 +106,8 @@ export default class EditServerForm extends Form {
           Private Listing
           <div className="toggle-group">
             <span className="info">
-              {" "}
-              Only server members can access a private server{" "}
+              Your server will only be accessible to it's current members. you
+              can add new members by giving them an invite link.
             </span>
             <Toggle
               toggle={this.state.settings.private}
@@ -119,10 +118,14 @@ export default class EditServerForm extends Form {
           </div>
           Phonetic Chat Filter ( experimental )
           <div className="toggle-group">
-            <span className="info"> Filter chat messages for TTS </span>
+            <span className="info">
+              {" "}
+              Filter chat messages for TTS. Filter will replace problematic
+              words with more appropriate ones. Still needs some tuning.
+            </span>
             <Toggle
               toggle={this.state.settings.phonetic_filter}
-              label={"Apply filter chat messages? "}
+              label={"Apply filter to chat messages? "}
               onClick={this.handlePhoneticFilterToggle}
               critical={false}
             />

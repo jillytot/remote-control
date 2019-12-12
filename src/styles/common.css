@@ -106,7 +106,7 @@
 .toggle {
   color: white;
   font-size: 10px;
-  border-radius: 6px;
+  border-radius: 12px;
   padding: 4px;
   margin-left: 4px;
   width: 48px;
@@ -116,6 +116,7 @@
   cursor: pointer;
   height: 12px;
 }
+
 .toggle-text {
   padding: 4px;
   font-weight: bold;

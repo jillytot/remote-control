@@ -104,7 +104,6 @@ export default class EditServerForm extends Form {
               critical={true}
             />
           </div>
-          <br />
           Private Listing
           <div className="toggle-group">
             <span className="info">

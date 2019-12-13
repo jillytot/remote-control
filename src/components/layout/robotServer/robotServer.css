@@ -427,6 +427,23 @@ a:active {
   width: 1px;
 }
 
+.display-privacy {
+  font-size: 11px;
+  color: white;
+  background-color: rgb(139, 139, 167);
+  width: 14px;
+  height: 14px;
+  position: absolute;
+  left: 60px;
+  transform: translateY(-22px);
+  border-radius: 3px;
+  padding: 2px;
+}
+
+.privacy-icon {
+  height: 12px;
+  width: 12px;
+}
 @media screen and (max-width: 768px) {
   .server-channel-container {
     height: 100%;

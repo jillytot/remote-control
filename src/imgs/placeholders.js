@@ -19,6 +19,8 @@ import remoGrey from "./img/remo-grey.png";
 import videoImg from "./img/remo-video-bg.png";
 import remoSplash from "./img/remoSplash.png";
 import inviteUser from "./img/inviteUser.png";
+import privacyIcon from "./img/private.png";
+import unlistedIcon from "./img/unlisted.png";
 
 const defaultImages = {
   default01: default01,
@@ -41,7 +43,9 @@ const defaultImages = {
   remoGrey: remoGrey,
   videoImg: videoImg,
   remoSplash: remoSplash,
-  inviteUser: inviteUser
+  inviteUser: inviteUser,
+  privacyIcon: privacyIcon,
+  unlistedIcon: unlistedIcon
 };
 
 export default defaultImages;

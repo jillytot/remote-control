@@ -19,6 +19,7 @@ export default class RobotServer extends Component {
             server.status.liveDevices ? server.status.liveDevices : []
           }
           followed={server.followed}
+          settings={server.settings}
         />
       );
     });

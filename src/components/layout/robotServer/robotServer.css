@@ -38,6 +38,8 @@
 
 .display-robot-server-container {
   padding-top: 8px;
+  overflow-x: hidden;
+  position: relative;
   /* background-color: red; */
 }
 
@@ -105,6 +107,7 @@ a:active {
   /* padding-top: 8px; */
   height: calc(100vh - 48px);
   overflow-y: auto;
+  scrollbar-width: none;
 
   /* background-color: red; */
 }
@@ -428,14 +431,14 @@ a:active {
 }
 
 .display-privacy {
+  position: absolute;
+  margin-top: -22px;
+  margin-left: 60px;
   font-size: 11px;
   color: white;
   background-color: rgb(139, 139, 167);
   width: 14px;
   height: 14px;
-  position: absolute;
-  left: 60px;
-  transform: translateY(-22px);
   border-radius: 3px;
   padding: 2px;
 }

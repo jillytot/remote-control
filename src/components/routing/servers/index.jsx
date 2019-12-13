@@ -168,7 +168,11 @@ export default class ServersPage extends Component {
   }
 
   setServer = server => {
-    this.setState({ selectedServer: server });
+    this.setState({
+      selectedServer: server,
+      isShowing: false,
+      modalContent: []
+    });
   };
 
   componentWillUnmount() {
@@ -295,6 +299,7 @@ export default class ServersPage extends Component {
             />
             <Route
               path="/:name"
+              onChange={this.onRouteChange}
               render={props => (
                 <ServerPage
                   {...props}

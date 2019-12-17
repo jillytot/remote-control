@@ -164,7 +164,15 @@ export default class ServersPage extends Component {
 
   setServer = server => {
     const { selectedServer } = this.state;
-    if (selectedServer && server.server_id !== selectedServer.server_id) {
+    console.log(server, selectedServer);
+    if (
+      server === null ||
+      (server &&
+        selectedServer &&
+        server.server_id &&
+        selectedServer.server_id &&
+        server.server_id !== selectedServer.server_id)
+    ) {
       this.setState({
         selectedServer: server,
         isShowing: false,

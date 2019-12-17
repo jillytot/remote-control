@@ -55,7 +55,7 @@ const handleShowPrivacy = settings => {
         />
       </div>
     );
-  console.log(unlist, setPrivate, settings);
+  // console.log(unlist, setPrivate, settings);
   return <React.Fragment />;
 };
 

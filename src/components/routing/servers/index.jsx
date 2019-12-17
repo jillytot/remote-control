@@ -132,11 +132,6 @@ export default class ServersPage extends Component {
         .then(response => {
           const { server_id } = response.data;
           if (server_id === selectedServer.server_id) {
-            // console.log(
-            //   "Updating Selected Server Data",
-            //   selectedServer,
-            //   response.data
-            // );
             selectedServer.status = response.data.status;
             this.setState({ selectedServer: selectedServer });
           }
@@ -168,11 +163,18 @@ export default class ServersPage extends Component {
   }
 
   setServer = server => {
-    this.setState({
-      selectedServer: server,
-      isShowing: false,
-      modalContent: []
-    });
+    const { selectedServer } = this.state;
+    if (selectedServer && server.server_id !== selectedServer.server_id) {
+      this.setState({
+        selectedServer: server,
+        isShowing: false,
+        modalContent: []
+      });
+    } else {
+      this.setState({
+        selectedServer: server
+      });
+    }
   };
 
   componentWillUnmount() {

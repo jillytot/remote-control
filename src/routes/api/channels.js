@@ -67,7 +67,7 @@ router.post("/create", auth({ user: true }), async (req, res) => {
     //TODO: Add default chatroom if none is provided
     makeChannel = await createChannel({
       host_id: req.body.server_id,
-      name: req.body.channel_name
+      name: checkName
     });
 
     if (makeChannel) {

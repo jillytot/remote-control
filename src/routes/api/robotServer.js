@@ -217,14 +217,16 @@ router.post(
 
 router.post("/create", auth({ user: true }), async (req, res) => {
   const { validateServerName } = require("../../controllers/validate");
+  let storeReq = req.body;
   if (req.body.server_name) {
     const validate = validateServerName(req.body.server_name);
     if (validate.error) return res.send(validate);
+    storeReq.server_name = validate;
   } else {
     res.send(jsonError("server_name is required."));
     return;
   }
-  const buildRobotServer = await createRobotServer(req.body, req.user);
+  const buildRobotServer = await createRobotServer(storeReq, req.user);
   res.send(buildRobotServer);
   return;
 });

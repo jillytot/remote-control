@@ -7,7 +7,8 @@ module.exports.validateServerName = input => {
     input: input,
     label: "Server Name",
     max: 18,
-    min: 4
+    min: 4,
+    removeSpaces: true
   });
 };
 
@@ -16,7 +17,8 @@ module.exports.validateUserName = input => {
     input: input,
     label: "UserName",
     max: 18,
-    min: 4
+    min: 4,
+    removeSpaces: true
   });
 };
 
@@ -25,7 +27,8 @@ module.exports.validateChannelName = input => {
     input: input,
     label: "Channel Name",
     max: 18,
-    min: 3
+    min: 3,
+    removeSpaces: true
   });
 };
 
@@ -34,21 +37,22 @@ module.exports.validateRobotName = input => {
     input: input,
     label: "Robot Name",
     max: 18,
-    min: 4
+    min: 4,
+    removeSpaces: true
   });
 };
 
 module.exports.validator = (
-  { input, label, type, max, min, regex, options } = {
+  { input, label, type, max, min, regex, removeSpaces } = {
     label: label || "Input",
     type: type || "string",
-    options: options || "no_spaces",
     regex: {
       value: regex.value || alphaNum_,
       info: regex.info || "Letters, Numbers, and Underscores"
     }
   }
 ) => {
+  let updateInput = input;
   if (!input) {
     return jsonError(`A value is required for ${label}`);
   }
@@ -57,8 +61,10 @@ module.exports.validator = (
     return jsonError(`Wrong data type, ${type} required.`);
   }
 
-  if (options && options === "no_spaces") {
-    input = noSpaces(input);
+  if (removeSpaces) {
+    //  console.log("NO SPACES: ", input);
+    updateInput = updateInput.replace(/\s+/g, "");
+    //  console.log("NO SPACES RESULT: ", input);
   }
 
   if (regex && !regex.value.test(input)) {
@@ -75,5 +81,5 @@ module.exports.validator = (
     return jsonError(`${label} must be at least ${min} characters in length`);
   }
 
-  return input;
+  return updateInput;
 };

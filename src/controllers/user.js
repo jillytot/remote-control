@@ -136,11 +136,21 @@ const privateInfo = info => {
 
 module.exports.updateEmail = async ({ email, id }) => {
   const { checkEmail, updateEmail } = require("../models/user");
-  const checkForDupes = await checkEmail(email);
+  const { validateUserEmail } = require("./validate");
+
+  let input = validateUserEmail(email);
+  if (input.error) return input;
+
+  const checkForDupes = await checkEmail({ email: input });
   if (checkForDupes) {
+    console.log("CHECK FOR EMAIL DUPES: ", input, checkForDupes);
     return jsonError("This email is already in use, please try another.");
+  } else {
+    const update = await updateEmail({ email: input, id: id });
+    if (update) {
+      return privateInfo(update);
+    } else {
+      return jsonError("Unable to update email, please try again later");
+    }
   }
-  const update = await updateEmail({ email: email, id: id });
-  if (update) return privateInfo(update);
-  return jsonError("Unable to update email, please try again later");
 };

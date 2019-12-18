@@ -93,8 +93,9 @@ router.post("/profile", auth({ user: true }), async (req, res) => {
 });
 
 router.post("/update-email", auth({ user: true }), async (req, res) => {
-  const { email } = req.body;
   const { updateEmail } = require("../../controllers/user");
+  let { email } = req.body;
+
   if (email) {
     const update = await updateEmail({ email: email, id: req.user.id });
     res.send(update);

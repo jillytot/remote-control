@@ -1,22 +1,11 @@
 const router = require("express").Router();
 const auth = require("../auth");
-const Joi = require("joi");
 const {
   createChannel,
   getChannels,
-  getServerIdFromChannelId,
   deleteChannel
 } = require("../../models/channel");
 const { validateOwner } = require("../../models/robotServer");
-const { publicUser } = require("../../models/user");
-
-const schema = Joi.object().keys({
-  channel_name: Joi.string()
-    .regex(/[\w\s]+/)
-    .min(3)
-    .max(30)
-    .required()
-});
 
 router.get("/list/:id", async (req, res) => {
   let response = {};

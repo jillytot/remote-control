@@ -1,6 +1,6 @@
 const { checkType } = require("../modules/validation");
 const { jsonError } = require("../modules/logging");
-const { alphaNum_ } = require("../modules/getRegex");
+const { alphaNum_, emailRegex } = require("../modules/getRegex");
 
 module.exports.validateServerName = input => {
   return this.validator({
@@ -37,8 +37,20 @@ module.exports.validateRobotName = input => {
     input: input,
     label: "Robot Name",
     max: 18,
-    min: 4,
+    min: 3,
     removeSpaces: true
+  });
+};
+
+module.exports.validateUserEmail = input => {
+  return this.validator({
+    input: input,
+    label: "Email",
+    max: 32,
+    min: 5,
+    removeSpaces: true,
+    regex: emailRegex,
+    regexInfo: "Valid Email Format"
   });
 };
 
@@ -46,10 +58,8 @@ module.exports.validator = (
   { input, label, type, max, min, regex, removeSpaces } = {
     label: label || "Input",
     type: type || "string",
-    regex: {
-      value: regex.value || alphaNum_,
-      info: regex.info || "Letters, Numbers, and Underscores"
-    }
+    regex: regex || alphaNum_,
+    regexInfo: regexInfo || "Letters, Numbers, and Underscores"
   }
 ) => {
   let updateInput = input;
@@ -67,8 +77,8 @@ module.exports.validator = (
     //  console.log("NO SPACES RESULT: ", input);
   }
 
-  if (regex && !regex.value.test(input)) {
-    return jsonError(`${label} can only contain ${regex.info}.`);
+  if (regex && !regex.test(input)) {
+    return jsonError(`${label} can only contain ${regexInfo}.`);
   }
 
   if (max && input.length > max) {

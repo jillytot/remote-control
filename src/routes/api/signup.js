@@ -2,32 +2,39 @@ const axios = require("axios");
 const router = require("express").Router();
 const user = require("../../models/user");
 const serverSettings = require("../../config/server");
+const { jsonError } = require("../../modules/logging");
 
 router.post("/", async (req, res) => {
+  const {
+    validateUserName,
+    validateUserEmail
+  } = require("../../controllers/validate");
   // post request
   try {
     const captcha = await axios.post(
-      `https://www.google.com/recaptcha/api/siteverify?secret=${
-        serverSettings.reCaptchaSecretKey
-      }&response=${req.body.response}`
+      `https://www.google.com/recaptcha/api/siteverify?secret=${serverSettings.reCaptchaSecretKey}&response=${req.body.response}`
     );
     delete req.body.response;
     if (captcha.data.success) {
-      const createUser = await user.createUser(req.body);
+      //Validate
+      let data = req.body;
+      data.username = validateUserName(data.username);
+      if (data.username.error) res.send(data.username);
+      data.email = validateUserEmail(data.email);
+      if (data.email.error) res.send(data.email);
+
+      //Create User
+      const createUser = await user.createUser(data);
       createUser !== null ? res.send(createUser) : res.send("ok");
     } else {
       console.error("Captcha failed!");
-      res.send({
-        status: "failed",
-        error: "Unable to validate Captcha, please reload and try again"
-      });
+      res.send(
+        jsonError("Unable to validate capture, please reload and try again.")
+      );
     }
   } catch (err) {
-    res.send({
-      status: "error",
-      error: `${err.response.status} at ${err.response.config.url}`
-    });
-    console.error(`${err.response.status} at ${err.response.config.url}`);
+    res.send(jsonError(`${err.response.status} at ${err.response.config.url}`));
+    // console.error(`${err.response.status} at ${err.response.config.url}`);
   }
 });
 

@@ -33,7 +33,8 @@ const testStr = "shitty ass person you are phawk";
 
 const test = async () => {
   try {
-    await test___getRobotServerSettings();
+    await test___serverName();
+    // await test___getRobotServerSettings();
     // await test___deepFilterMessage();
     // await test___filterPhoneticMessage();
     // await test___filterTextMessage();
@@ -53,6 +54,12 @@ const test = async () => {
   }
 
   process.exit(0);
+};
+
+const test___serverName = async () => {
+  const { validateServerName } = require("../controllers/validate");
+  const result = await validateServerName("adfafadfadfadfadfadfaa");
+  console.log(result);
 };
 
 const test___getRobotServerSettings = async () => {

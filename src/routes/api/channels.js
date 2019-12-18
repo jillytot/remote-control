@@ -26,8 +26,7 @@ router.get("/list/:id", async (req, res) => {
   } else {
     response.error = "unable to get channels for specified server";
   }
-  res.send(response);
-  console.log(response);
+  res.status(200).send(response);
 });
 
 router.get("/create", async (req, res) => {
@@ -35,7 +34,7 @@ router.get("/create", async (req, res) => {
   response.server_id = "<Please provide a server_id to add channel too >";
   response.channel_name = "<Please provide a name for your new channel>";
   response.authorization = "required";
-  res.send(response);
+  res.status(200).send(response);
 });
 
 router.post("/create", auth({ user: true }), async (req, res) => {
@@ -74,7 +73,8 @@ router.post("/create", auth({ user: true }), async (req, res) => {
     response.error_details = makeChannel;
   }
 
-  res.send(response);
+  if (!response.error) res.status(201).send(response);
+  res.status(401).send(response);
   console.log(response);
 });
 
@@ -83,7 +83,7 @@ router.get("/delete", async (req, res) => {
   response.channel_id = "<Channel ID Required>";
   response.authorization = "<Authorization Required>";
 
-  res.send(response);
+  res.status(200).send(response);
   console.log(response);
 });
 
@@ -103,7 +103,8 @@ router.post("/delete", auth({ user: true }), async (req, res) => {
     const result = await deleteChannel(req.body.channel_id, req.body.server_id);
     response.status = result.status;
   }
-  res.send(response);
+  if (!response.error) res.status(200).send(response);
+  res.status(400).send(response);
 });
 
 module.exports = router;

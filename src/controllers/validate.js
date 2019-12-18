@@ -1,25 +1,79 @@
-const {
-  checkMax,
-  checkMin,
-  checkString,
-  checkAlphaNum_,
-  removeSpaces
-} = require("../modules/validation");
+const { checkType } = require("../modules/validation");
 const { jsonError } = require("../modules/logging");
+const { alphaNum_ } = require("../modules/getRegex");
 
-module.exports.validateServerName = name => {
-  const keyName = "Server name";
-  if (!checkString(name)) return jsonError("Wrong data type, string required.");
-  name = removeSpaces(name);
-  if (!checkMax(name, 18))
+module.exports.validateServerName = input => {
+  return this.validator({
+    input: input,
+    label: "Server Name",
+    max: 18,
+    min: 4
+  });
+};
+
+module.exports.validateUserName = input => {
+  return this.validator({
+    input: input,
+    label: "UserName",
+    max: 18,
+    min: 4
+  });
+};
+
+module.exports.validateChannelName = input => {
+  return this.validator({
+    input: input,
+    label: "Channel Name",
+    max: 18,
+    min: 3
+  });
+};
+
+module.exports.validateRobotName = input => {
+  return this.validator({
+    input: input,
+    label: "Robot Name",
+    max: 18,
+    min: 4
+  });
+};
+
+module.exports.validator = (
+  { input, label, type, max, min, regex, options } = {
+    label: label || "Input",
+    type: type || "string",
+    options: options || "no_spaces",
+    regex: {
+      value: regex.value || alphaNum_,
+      info: regex.info || "Letters, Numbers, and Underscores"
+    }
+  }
+) => {
+  if (!input) {
+    return jsonError(`A value is required for ${label}`);
+  }
+
+  if (type & !checkType(input, type)) {
+    return jsonError(`Wrong data type, ${type} required.`);
+  }
+
+  if (options && options === "no_spaces") {
+    input = noSpaces(input);
+  }
+
+  if (regex && !regex.value.test(input)) {
+    return jsonError(`${label} can only contain ${regex.info}.`);
+  }
+
+  if (max && input.length > max) {
     return jsonError(
-      `${keyName} can be no longer than ${18} characters in length`
+      `${label} can be no longer than ${max} characters in length.`
     );
-  if (!checkMin(name, 4))
-    return jsonError(`${keyName} must be at least ${4} characters in length`);
-  if (!checkAlphaNum_(name))
-    return jsonError(
-      `${keyName} can only contain letters, numbers, and underscores.`
-    );
-  return name;
+  }
+
+  if (min && input.length < min) {
+    return jsonError(`${label} must be at least ${min} characters in length`);
+  }
+
+  return input;
 };

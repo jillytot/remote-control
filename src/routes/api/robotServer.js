@@ -216,16 +216,17 @@ router.post(
 );
 
 router.post("/create", auth({ user: true }), async (req, res) => {
-  console.log("Generating Robot Server ", req.body, req.user);
-  const result = Joi.validate({ server_name: req.body.server_name }, schema);
-
-  console.log("Joi validation result: ", result);
-  if (result.error !== null) {
-    res.send({ error: `Could not save server: ${req.body.server_name}` });
+  const { validateServerName } = require("../../controllers/validate");
+  if (req.body.server_name) {
+    const validate = validateServerName(req.body.server_name);
+    if (validate.error) return res.send(validate);
+  } else {
+    res.send(jsonError("server_name is required."));
     return;
   }
   const buildRobotServer = await createRobotServer(req.body, req.user);
   res.send(buildRobotServer);
+  return;
 });
 
 //REMOVE SERVER

@@ -55,8 +55,8 @@ class AddServerForm extends Form {
     server: Joi.string()
       .required()
       .min(4)
-      .max(25)
-      .alphanum()
+      .max(18)
+      .regex(/^[a-zA-Z0-9_]*$/)
       .trim()
       .label("Robot Server Name")
   };
@@ -100,13 +100,14 @@ class AddServerForm extends Form {
       )
       .then(response => {
         console.log("SUBMIT SERVER RESPONSE: ", response, response.data.status);
-        if (response.data.status === "error!") {
+        if (response.data.error) {
           console.log("ERROR! ", response.data.error);
           this.setState({ error: response.data.error });
         } else {
           //Redirect to server.
           this.setState({
-            redirect: `/${response.data.server_name}/${response.data.settings.default_channel}`
+            redirect: `/${response.data.server_name}/${response.data.settings.default_channel}`,
+            error: ""
           });
 
           console.log("redirecting", this.state.redirect);

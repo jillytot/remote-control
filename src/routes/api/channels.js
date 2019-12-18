@@ -38,10 +38,16 @@ router.get("/create", async (req, res) => {
 });
 
 router.post("/create", auth({ user: true }), async (req, res) => {
+  const { validateChannelName } = require("../../controllers/validate");
   let response = {};
   let makeChannel = {};
 
   if (req.body.server_id && req.body.channel_name && req.user) {
+    const checkName = validateChannelName(req.body.channel_name);
+    if (checkName.error) {
+      res.send(checkName);
+      return;
+    }
     response.user = { username: req.user.username, id: req.user.id };
     response.server_id = req.body.server_id;
     response.channel_name = req.body.channel_name;
@@ -74,7 +80,7 @@ router.post("/create", auth({ user: true }), async (req, res) => {
   }
 
   if (!response.error) res.status(201).send(response);
-  res.status(401).send(response);
+  res.send(response);
   console.log(response);
 });
 
@@ -104,7 +110,7 @@ router.post("/delete", auth({ user: true }), async (req, res) => {
     response.status = result.status;
   }
   if (!response.error) res.status(200).send(response);
-  res.status(400).send(response);
+  res.send(response);
 });
 
 module.exports = router;

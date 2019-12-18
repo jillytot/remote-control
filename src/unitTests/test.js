@@ -58,7 +58,7 @@ const test = async () => {
 
 const test___serverName = async () => {
   const { validateServerName } = require("../controllers/validate");
-  const result = await validateServerName("adfafadfadfadfadfadfaa");
+  const result = await validateServerName("");
   console.log(result);
 };
 

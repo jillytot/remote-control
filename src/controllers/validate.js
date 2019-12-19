@@ -75,11 +75,7 @@ module.exports.validator = (
     return jsonError(`Wrong data type, ${type} required.`);
   }
 
-  if (removeSpaces) {
-    //  console.log("NO SPACES: ", input);
-    updateInput = updateInput.replace(/\s+/g, "");
-    //  console.log("NO SPACES RESULT: ", input);
-  }
+  if (removeSpaces) updateInput = updateInput.replace(/\s+/g, "");
 
   if (regex && !regex.test(input)) {
     return jsonError(`${label} can only contain ${regexInfo}.`);
@@ -95,13 +91,9 @@ module.exports.validator = (
     return jsonError(`${label} must be at least ${min} characters in length`);
   }
 
-  if (
-    filter &&
-    filter === "reserved" &&
-    reservedWordsDefault().includes(input)
-  ) {
+  if (filter === "reserved" && reservedWordsDefault().includes(updateInput)) {
     return jsonError(
-      `${input} isn't available, please try a different ${label}`
+      `${updateInput} isn't available, please try a different ${label}`
     );
   }
 

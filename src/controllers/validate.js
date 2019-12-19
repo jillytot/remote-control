@@ -74,7 +74,7 @@ module.exports.validateUserEmail = input => {
   return this.validator({
     input: input,
     label: "Email",
-    max: 32,
+    max: 64,
     min: 5,
     removeSpaces: true,
     regex: emailRegex,

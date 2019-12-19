@@ -78,7 +78,7 @@ module.exports.validateUserEmail = input => {
     min: 5,
     removeSpaces: true,
     regex: emailRegex,
-    regexInfo: "Valid Email Format"
+    regexInfo: "a valid email format, example: name@domain.com"
   });
 };
 

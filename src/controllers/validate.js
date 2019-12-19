@@ -1,6 +1,7 @@
 const { checkType } = require("../modules/validation");
 const { jsonError } = require("../modules/logging");
 const { alphaNum_, emailRegex } = require("../modules/getRegex");
+const { reservedWordsDefault } = require("../models/filters");
 
 module.exports.validateServerName = input => {
   return this.validator({
@@ -8,7 +9,8 @@ module.exports.validateServerName = input => {
     label: "Server Name",
     max: 18,
     min: 4,
-    removeSpaces: true
+    removeSpaces: true,
+    filter: "reserved"
   });
 };
 
@@ -18,7 +20,8 @@ module.exports.validateUserName = input => {
     label: "UserName",
     max: 18,
     min: 4,
-    removeSpaces: true
+    removeSpaces: true,
+    filter: "reserved"
   });
 };
 
@@ -55,11 +58,12 @@ module.exports.validateUserEmail = input => {
 };
 
 module.exports.validator = (
-  { input, label, type, max, min, regex, removeSpaces } = {
+  { input, label, type, max, min, regex, removeSpaces, filter } = {
     label: label || "Input",
     type: type || "string",
     regex: regex || alphaNum_,
-    regexInfo: regexInfo || "Letters, Numbers, and Underscores"
+    regexInfo: regexInfo || "Letters, Numbers, and Underscores",
+    filter: filter || "none"
   }
 ) => {
   let updateInput = input;
@@ -89,6 +93,16 @@ module.exports.validator = (
 
   if (min && input.length < min) {
     return jsonError(`${label} must be at least ${min} characters in length`);
+  }
+
+  if (
+    filter &&
+    filter === "reserved" &&
+    reservedWordsDefault().includes(input)
+  ) {
+    return jsonError(
+      `${input} isn't available, please try a different ${label}`
+    );
   }
 
   return updateInput;

@@ -20,7 +20,9 @@ router.post("/make", auth({ robot: true, user: true }), async (req, res) => {
   let checkUser = await getServerIdFromChannelId(req.body.channel_id);
   checkUser = await getRobotServer(checkUser.result);
   if (checkUser.owner_id === req.user.id) validate = true;
+
   if (req.body.channel_id && req.body.buttons && validate) {
+    console.log("BUTTONS LENGTH: ", req.body.buttons.length);
     const checkForControls = await getChannel(req.body.channel_id);
     const setControls = await buildButtons(
       req.body.buttons,

@@ -1,4 +1,4 @@
-const { logger } = require("../modules/logging");
+const { logger, jsonError } = require("../modules/logging");
 const log = message => {
   logger({
     level: "debug",
@@ -43,16 +43,21 @@ module.exports.getButtonInputForUser = async (user, channel_id) => {
 //output: array of button objects w/ id generated per button
 module.exports.buildButtons = async (buttons, channel_id, controls_id) => {
   const { updateControls } = require("../models/controls");
+  const { validateButtonsJSON, validateButton } = require("./validate");
   const { makeId } = require("../modules/utilities");
   let response = {};
   let newButtons = [];
   let buildControls = {};
   buildControls.channel_id = channel_id;
   buildControls.id = controls_id;
+  let foundError = false;
+  let errorData = {};
   //generate json
 
   try {
     if (buttons) {
+      const checkButtonsArray = validateButtonsJSON(buttons);
+      if (checkButtonsArray.error) return checkButtonsArray;
       buttons.forEach(button => {
         let newButton = {};
         newButton.id = `bttn-${makeId()}`;
@@ -60,8 +65,17 @@ module.exports.buildButtons = async (buttons, channel_id, controls_id) => {
         //only save valid key / value pairs
 
         //required:
-        if (button.label || button.label === "") {
-          newButton.label = button.label;
+        if (!foundError && (button.label || button.label === "")) {
+          newButton.label = validateButton({
+            input: button.label,
+            label: "Button Label",
+            notRequired: true
+          });
+          if (newButton.label.error) {
+            foundError = true;
+            errorData = newButton.label;
+            return errorData;
+          }
         } else {
           //Dont publish invalid button
           return;
@@ -73,28 +87,56 @@ module.exports.buildButtons = async (buttons, channel_id, controls_id) => {
           return;
         }
 
-        if (button.command) {
-          newButton.command = button.command;
+        if (!foundError && button.command) {
+          newButton.command = validateButton({
+            input: button.command,
+            label: "Button Command"
+          });
+          if (newButton.command.error) {
+            foundError = true;
+            errorData = newButton.command.error;
+            return errorData;
+          }
         } else {
           //Dont publish invalid button
           return;
         }
 
         //optional
-        if (button.hot_key) newButton.hot_key = button.hot_key;
-        if (button.access) newButton.access = button.access;
+        if (!foundError && button.hot_key) {
+          newButton.hot_key = validateButton({
+            input: button.hot_key,
+            label: "hot-key",
+            max: 12
+          });
+          if (newButton.hot_key.error) {
+            foundError = true;
+            errorData = newButton.hot_key;
+            return errorData;
+          }
+        }
+        if (!foundError && button.access) {
+          newButton.access = validateButton({
+            input: button.access,
+            label: "Access Level"
+          });
+          if (newButton.access.error) {
+            foundError = true;
+            errorData = newButton.access;
+            return errorData;
+          }
+        }
 
         newButtons.push(newButton);
       });
     } else {
-      return { status: "error!", error: "invalid data to generate buttons" };
+      return jsonError("invalid data to generate buttons");
     }
   } catch (err) {
-    return {
-      status: "error!",
-      error: "Problem generating buttons from input data"
-    };
+    return jsonError("Problem generating buttons from input data");
   }
+
+  if (foundError && errorData) return errorData;
 
   buildControls.buttons = newButtons;
   generateControls = await updateControls(buildControls);

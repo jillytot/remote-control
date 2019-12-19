@@ -1,7 +1,32 @@
 const { checkType } = require("../modules/validation");
 const { jsonError } = require("../modules/logging");
-const { alphaNum_, emailRegex } = require("../modules/getRegex");
+const { alphaNum_, emailRegex, asciiRegex } = require("../modules/getRegex");
 const { reservedWordsDefault } = require("../models/filters");
+
+// DATA VALIDATION
+
+module.exports.validateButtonsJSON = input => {
+  const limit = 64; //# of buttons
+  console.log("JSON ENTRIES: ", input.length);
+  if (input.length > limit)
+    return jsonError(
+      `Max entries exceeded, no more than ${limit} buttons are allowed`
+    );
+  return input;
+};
+
+module.exports.validateButton = ({ input, label, max, min, notRequired }) => {
+  console.log("VALIDATE BUTTON VALUE: ", label, input);
+  if (notRequired && input === "") return "";
+  return this.validator({
+    input: input,
+    label: label,
+    max: max || 64,
+    min: min || 1,
+    regex: asciiRegex,
+    regexInfo: "ASCII Characters"
+  });
+};
 
 module.exports.validateServerName = input => {
   return this.validator({

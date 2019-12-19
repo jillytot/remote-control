@@ -102,10 +102,6 @@ module.exports.validator = (
 
   if (removeSpaces) updateInput = updateInput.replace(/\s+/g, "");
 
-  if (regex && !regex.test(input)) {
-    return jsonError(`${label} can only contain ${regexInfo}.`);
-  }
-
   if (max && input.length > max) {
     return jsonError(
       `${label} can be no longer than ${max} characters in length.`
@@ -114,6 +110,10 @@ module.exports.validator = (
 
   if (min && input.length < min) {
     return jsonError(`${label} must be at least ${min} characters in length`);
+  }
+
+  if (regex && !regex.test(input)) {
+    return jsonError(`${label} can only contain ${regexInfo}.`);
   }
 
   if (filter === "reserved" && reservedWordsDefault().includes(updateInput)) {

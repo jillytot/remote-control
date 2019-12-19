@@ -3,6 +3,7 @@ const router = require("express").Router();
 const user = require("../../models/user");
 const serverSettings = require("../../config/server");
 const { jsonError } = require("../../modules/logging");
+const { supportEmail } = serverSettings;
 
 router.post("/", async (req, res) => {
   const {
@@ -20,6 +21,7 @@ router.post("/", async (req, res) => {
       let data = req.body;
       data.username = validateUserName(data.username);
       if (data.username.error) return res.send(data.username);
+      console.log("DATA.EMAIL: ", data.email);
       data.email = validateUserEmail(data.email);
       if (data.email.error) return res.send(data.email);
 
@@ -38,7 +40,11 @@ router.post("/", async (req, res) => {
     // res.send(jsonError(`${err.response.status} at ${err.response.config.url}`));
     // console.error(`${err.response.status} at ${err.response.config.url}`);
     console.log(err);
-    res.send(jsonError("There wasa problem creating an account."));
+    res.send(
+      jsonError(
+        `We encountered an unexpected problem while creating this account. Please try again later, or contact ${supportEmail} if the issue continues.`
+      )
+    );
   }
 });
 

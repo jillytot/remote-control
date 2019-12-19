@@ -83,7 +83,7 @@ module.exports.validateUserEmail = input => {
 };
 
 module.exports.validator = (
-  { input, label, type, max, min, regex, removeSpaces, filter } = {
+  { input, label, type, max, min, regex, regexInfo, removeSpaces, filter } = {
     label: label || "Input",
     type: type || "string",
     regex: regex || alphaNum_,

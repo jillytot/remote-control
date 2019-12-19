@@ -3,7 +3,7 @@ import "../../styles/common.css";
 
 const Input = React.forwardRef((props, ref) => {
   const { name, label, error, type, passError, ...rest } = props;
-  console.log("Input Props: ", type, ref);
+  // console.log("Input Props: ", type, ref);
 
   const handleErrorPlacement = () => {
     if (type === "inline" && error) {

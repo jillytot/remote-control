@@ -29,6 +29,7 @@ router.post("/make", auth({ robot: true, user: true }), async (req, res) => {
       req.body.channel_id,
       checkForControls.controls
     );
+    if (setControls.error) return res.send(setControls);
 
     response.status = "success";
     response.result = setControls;

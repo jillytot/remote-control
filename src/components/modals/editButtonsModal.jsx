@@ -88,12 +88,14 @@ export default class EditButtonsModal extends Form {
         if (res.data.error) {
           console.log("ERROR! ", res.data.error);
           this.setState({ error: res.data.error });
+        } else {
+          this.setState({ error: "" });
         }
       })
       .catch(err => {
         console.log(err);
       });
-    this.props.onCloseModal();
+    if (this.state.error === "") this.props.onCloseModal();
   };
 
   schema = {
@@ -122,6 +124,7 @@ export default class EditButtonsModal extends Form {
       <div className="modal">
         Edit the JSON file to customize your buttons:
         <div> </div>
+        {this.handleSubmitError()}
         <form onSubmit={this.handleSubmit}>
           <div className="">
             {this.renderTextArea(
@@ -133,7 +136,7 @@ export default class EditButtonsModal extends Form {
               70
             )}
           </div>
-          {this.handleSubmitError()}
+
           {this.renderButton("Upload")}
         </form>
       </div>

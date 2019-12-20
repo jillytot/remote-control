@@ -64,6 +64,15 @@ a {
   min-width: 192px;
   padding: 12px;
   border-radius: 6px;
+  color: white;
+}
+
+.fp-card a:link {
+  color: white;
+}
+
+.fp-card a:visited {
+  color: white;
 }
 
 .icon-element {

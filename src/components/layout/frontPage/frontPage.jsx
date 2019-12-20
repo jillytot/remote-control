@@ -3,6 +3,8 @@ import "./frontPage.css";
 import axios from "axios";
 import { getStats } from "../../../config/client";
 import defaultImages from "../../../imgs/placeholders";
+import TOS from "./tos";
+import PrivacyPolicy from "./privacyPolicy";
 
 /*
 Other fun stats to display: 
@@ -82,6 +84,8 @@ export default class FrontPage extends Component {
 
             <Patreon />
           </div>
+          <Platform />
+          <Medium />
         </div>
       </div>
     );
@@ -129,8 +133,8 @@ const AddARobot = () => {
 const Platform = () => {
   return (
     <React.Fragment>
-      <div className="fp-card">
-        Remo Web Platform Repo:
+      <div className="">
+        {`Remo Web Platform Repo: `}
         <a href="https://github.com/jillytot/remote-control">
           https://github.com/jillytot/remote-control
         </a>
@@ -170,6 +174,17 @@ const Patreon = () => {
           <br />
           Support us on Patreon!
         </a>
+      </div>
+    </React.Fragment>
+  );
+};
+
+const Medium = () => {
+  return (
+    <React.Fragment>
+      <div className="">
+        {`Medium Dev Blog: `}
+        <a href="https://medium.com/remotv">https://medium.com/remotv</a>
       </div>
     </React.Fragment>
   );

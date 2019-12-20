@@ -53,6 +53,10 @@ module.exports.reservedWordsDefault = () => {
     "private",
     "public",
     "administrator",
-    "blog"
+    "blog",
+    "TOS",
+    "privacyPolicy",
+    "privacy-policy",
+    "privacy"
   ];
 };

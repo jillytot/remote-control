@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import "./frontPage.css";
 import axios from "axios";
 import { getStats } from "../../../config/client";
+import defaultImages from "../../../imgs/placeholders";
 
 /*
 Other fun stats to display: 
@@ -45,6 +46,12 @@ export default class FrontPage extends Component {
         <div className="front-page-text">
           <DisplayAlert show={false} />
           <br />
+          <span>
+            Control & share robots online remotely in real time with remo.tv{" "}
+            <br />
+            Please check documenation and links below for more info. <br />
+          </span>
+          <br />
           <div>Best used on Desktop with Chrome Browser</div>
           <div>...</div>
           <div>
@@ -67,34 +74,13 @@ export default class FrontPage extends Component {
           </div>
           <div>...</div>
           <br />
-          <span>
-            Control & share robots online remotely in real time with remo.tv{" "}
-            <br />
-            Please check documenation and links below for more info. <br />
-            More to come!
-          </span>
-          <br />
-          <div>
-            Join Jill's discord:{" "}
-            <a href="https://discord.gg/cczJfYk">https://discord.gg/cczJfYk</a>
-          </div>
-          <div>
-            Project Github:{" "}
-            <a href="https://github.com/jillytot/remote-control">
-              https://github.com/jillytot/remote-control
-            </a>
-          </div>
-          <div>
-            Software for adding a robot:{" "}
-            <a href="https://github.com/remotv/controller">
-              https://github.com/remotv/controller
-            </a>{" "}
-          </div>
-          <div>
-            Support Jill and Remo on her Patreon Page:{" "}
-            <a href="https://www.patreon.com/letsjill">
-              https://www.patreon.com/letsjill
-            </a>{" "}
+
+          <div className="front-page-link-container">
+            <AddARobot />
+            <Discord />
+            {/* <Platform /> */}
+
+            <Patreon />
           </div>
         </div>
       </div>
@@ -119,5 +105,72 @@ const DisplayAlert = ({ show }) => {
     </div>
   ) : (
     <React.Fragment />
+  );
+};
+
+const AddARobot = () => {
+  return (
+    <React.Fragment>
+      <div className="fp-card">
+        <a href="https://github.com/remotv/controller">
+          <img
+            className="icon-element"
+            src={defaultImages.gitIcon}
+            title="https://github.com/remotv/controller"
+          />
+          <br />
+          Software for adding a robot.
+        </a>
+      </div>
+    </React.Fragment>
+  );
+};
+
+const Platform = () => {
+  return (
+    <React.Fragment>
+      <div className="fp-card">
+        Remo Web Platform Repo:
+        <a href="https://github.com/jillytot/remote-control">
+          https://github.com/jillytot/remote-control
+        </a>
+      </div>
+    </React.Fragment>
+  );
+};
+
+const Discord = () => {
+  return (
+    <React.Fragment>
+      <div className="fp-card">
+        <a href="https://discord.gg/cczJfYk">
+          <img
+            className="icon-element"
+            src={defaultImages.discordIcon}
+            title="https://discord.gg/cczJfYk"
+          />
+          <br />
+          Join our Discord.
+        </a>
+      </div>
+    </React.Fragment>
+  );
+};
+
+const Patreon = () => {
+  return (
+    <React.Fragment>
+      <div className="fp-card">
+        <a href="https://www.patreon.com/letsjill">
+          <img
+            className="icon-element"
+            src={defaultImages.patreonIcon}
+            title="https://www.patreon.com/letsjill"
+          />
+          <br />
+          Support us on Patreon!
+        </a>
+      </div>
+    </React.Fragment>
   );
 };

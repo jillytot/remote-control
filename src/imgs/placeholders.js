@@ -21,6 +21,9 @@ import remoSplash from "./img/remoSplash.png";
 import inviteUser from "./img/inviteUser.png";
 import privacyIcon from "./img/private.png";
 import unlistedIcon from "./img/unlisted.png";
+import gitIcon from "./img/Git-Icon-Black.png";
+import patreonIcon from "./img/patreon.png";
+import discordIcon from "./img/discord-512.png";
 
 const defaultImages = {
   default01: default01,
@@ -45,7 +48,10 @@ const defaultImages = {
   remoSplash: remoSplash,
   inviteUser: inviteUser,
   privacyIcon: privacyIcon,
-  unlistedIcon: unlistedIcon
+  unlistedIcon: unlistedIcon,
+  gitIcon: gitIcon,
+  patreonIcon: patreonIcon,
+  discordIcon: discordIcon
 };
 
 export default defaultImages;

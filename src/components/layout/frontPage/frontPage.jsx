@@ -140,7 +140,7 @@ const AddARobot = () => {
 
 const InlineLink = ({ link, text }) => {
   return (
-    <div className="">
+    <div className="inline-link">
       {text}
       <a
         href={link}

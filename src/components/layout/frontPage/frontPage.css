@@ -81,6 +81,10 @@ a {
   color: white;
 }
 
+.inline-link a:hover {
+  color: rgb(176, 115, 211);
+}
+
 .icon-element {
   width: 64px;
   height: 64px;

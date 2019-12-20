@@ -60,12 +60,17 @@ a {
 
 .fp-card {
   /* background: -webkit-linear-gradient(-45deg, #d64eb8 0%, #003fee 100%); */
-  background-color: rgb(57, 57, 75);
+  background-color: rgb(39, 39, 53);
   margin: 6px;
   min-width: 192px;
   padding: 12px;
   border-radius: 6px;
   color: white;
+  cursor: pointer;
+}
+
+.fp-card:hover {
+  background-color: rgb(49, 49, 66);
 }
 
 .fp-card a:link {

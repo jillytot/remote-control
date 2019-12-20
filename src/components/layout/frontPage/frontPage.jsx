@@ -3,8 +3,9 @@ import "./frontPage.css";
 import axios from "axios";
 import { getStats } from "../../../config/client";
 import defaultImages from "../../../imgs/placeholders";
-import TOS from "./tos";
-import PrivacyPolicy from "./privacyPolicy";
+
+// import TOS from "./tos";
+// import PrivacyPolicy from "./privacyPolicy";
 
 /*
 Other fun stats to display: 
@@ -80,8 +81,6 @@ export default class FrontPage extends Component {
           <div className="front-page-link-container">
             <AddARobot />
             <Discord />
-            {/* <Platform /> */}
-
             <Patreon />
           </div>
           <Platform />
@@ -112,80 +111,80 @@ const DisplayAlert = ({ show }) => {
   );
 };
 
-const AddARobot = () => {
+const FPLinkCard = ({ link, image, text }) => {
   return (
     <React.Fragment>
-      <div className="fp-card">
-        <a href="https://github.com/remotv/controller">
-          <img
-            className="icon-element"
-            src={defaultImages.gitIcon}
-            title="https://github.com/remotv/controller"
-          />
-          <br />
-          Software for adding a robot.
-        </a>
+      <div
+        className="fp-card"
+        onClick={() => {
+          window.open(link, "_blank");
+        }}
+      >
+        <img className="icon-element" src={image} title={link} alt="" />
+        <br />
+        {text}
       </div>
     </React.Fragment>
+  );
+};
+
+const AddARobot = () => {
+  return (
+    <FPLinkCard
+      link="https://github.com/remotv/controller"
+      text="Software for adding a robot."
+      image={defaultImages.gitIcon}
+    />
+  );
+};
+
+const InlineLink = ({ link, text }) => {
+  return (
+    <div className="">
+      {text}
+      <a
+        href={link}
+        onClick={() => {
+          window.open(link, "_blank");
+        }}
+      >
+        {link}
+      </a>
+    </div>
   );
 };
 
 const Platform = () => {
   return (
-    <React.Fragment>
-      <div className="">
-        {`Remo Web Platform Repo: `}
-        <a href="https://github.com/jillytot/remote-control">
-          https://github.com/jillytot/remote-control
-        </a>
-      </div>
-    </React.Fragment>
+    <InlineLink
+      link="https://github.com/jillytot/remote-control"
+      text="Remo Web Platform Repo: "
+    />
   );
 };
 
 const Discord = () => {
   return (
-    <React.Fragment>
-      <div className="fp-card">
-        <a href="https://discord.gg/cczJfYk">
-          <img
-            className="icon-element"
-            src={defaultImages.discordIcon}
-            title="https://discord.gg/cczJfYk"
-          />
-          <br />
-          Join our Discord.
-        </a>
-      </div>
-    </React.Fragment>
+    <FPLinkCard
+      link="https://discord.gg/cczJfYk"
+      text="Join our Discord."
+      image={defaultImages.discordIcon}
+    />
   );
 };
 
 const Patreon = () => {
   return (
-    <React.Fragment>
-      <div className="fp-card">
-        <a href="https://www.patreon.com/letsjill">
-          <img
-            className="icon-element"
-            src={defaultImages.patreonIcon}
-            title="https://www.patreon.com/letsjill"
-          />
-          <br />
-          Support us on Patreon!
-        </a>
-      </div>
-    </React.Fragment>
+    <FPLinkCard
+      link="https://www.patreon.com/letsjill"
+      text="Support us on Patreon!"
+      image={defaultImages.patreonIcon}
+    />
   );
 };
 
 const Medium = () => {
   return (
-    <React.Fragment>
-      <div className="">
-        {`Medium Dev Blog: `}
-        <a href="https://medium.com/remotv">https://medium.com/remotv</a>
-      </div>
-    </React.Fragment>
+    <InlineLink link="https://medium.com/remotv" text="Medium Dev Blog: " />
   );
 };

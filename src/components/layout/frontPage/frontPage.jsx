@@ -91,43 +91,6 @@ export default class FrontPage extends Component {
   }
 }
 
-const DisplayAlert = ({ show }) => {
-  return show === true ? (
-    <div className="alert">
-      <span className="bolder">Important Notice 11/20/2019 </span>
-      <div>
-        In order to make Remo more secure, we've updated our site's encryption
-        methods. As a result, any robot using an API key generated before today
-        will not work.
-        <div>
-          <br />
-          You can simply copy and paste the updated key already provided for
-          each robot under, "manage robots" to your robot's local settings.
-        </div>
-      </div>
-    </div>
-  ) : (
-    <React.Fragment />
-  );
-};
-
-const FPLinkCard = ({ link, image, text }) => {
-  return (
-    <React.Fragment>
-      <div
-        className="fp-card"
-        onClick={() => {
-          window.open(link, "_blank");
-        }}
-      >
-        <img className="icon-element" src={image} title={link} alt="" />
-        <br />
-        {text}
-      </div>
-    </React.Fragment>
-  );
-};
-
 const AddARobot = () => {
   return (
     <FPLinkCard
@@ -135,22 +98,6 @@ const AddARobot = () => {
       text="Software for adding a robot."
       image={defaultImages.gitIcon}
     />
-  );
-};
-
-const InlineLink = ({ link, text }) => {
-  return (
-    <div className="inline-link">
-      {text}
-      <a
-        href={link}
-        onClick={() => {
-          window.open(link, "_blank");
-        }}
-      >
-        {link}
-      </a>
-    </div>
   );
 };
 
@@ -186,5 +133,58 @@ const Patreon = () => {
 const Medium = () => {
   return (
     <InlineLink link="https://medium.com/remotv" text="Medium Dev Blog: " />
+  );
+};
+
+const DisplayAlert = ({ show }) => {
+  return show === true ? (
+    <div className="alert">
+      <span className="bolder">Important Notice 11/20/2019 </span>
+      <div>
+        In order to make Remo more secure, we've updated our site's encryption
+        methods. As a result, any robot using an API key generated before today
+        will not work.
+        <div>
+          <br />
+          You can simply copy and paste the updated key already provided for
+          each robot under, "manage robots" to your robot's local settings.
+        </div>
+      </div>
+    </div>
+  ) : (
+    <React.Fragment />
+  );
+};
+
+const InlineLink = ({ link, text }) => {
+  return (
+    <div className="inline-link">
+      {text}
+      <a
+        href={link}
+        onClick={() => {
+          window.open(link, "_blank");
+        }}
+      >
+        {link}
+      </a>
+    </div>
+  );
+};
+
+const FPLinkCard = ({ link, image, text }) => {
+  return (
+    <React.Fragment>
+      <div
+        className="fp-card"
+        onClick={() => {
+          window.open(link, "_blank");
+        }}
+      >
+        <img className="icon-element" src={image} title={link} alt="" />
+        <br />
+        {text}
+      </div>
+    </React.Fragment>
   );
 };

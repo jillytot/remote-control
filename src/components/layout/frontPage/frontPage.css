@@ -95,3 +95,29 @@ a {
     flex-direction: column;
   }
 }
+
+.tos-text-container {
+  background: -webkit-linear-gradient(-45deg, #d64eb8 0%, #003fee 100%);
+  padding: 24px;
+  height: 100%;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+}
+
+.tos-text {
+  background-color: rgb(36, 34, 41);
+  font-family: "Courier New", Courier, monospace;
+  font-size: 14px;
+  text-align: left;
+  font-weight: bold;
+  padding: 24px;
+  /* margin: 24px; */
+  border-radius: 24px;
+  color: rgb(202, 202, 202);
+}
+
+.tos-text:focus {
+  outline: 0px;
+}

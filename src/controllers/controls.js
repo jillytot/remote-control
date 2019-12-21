@@ -68,6 +68,7 @@ module.exports.buildButtons = async (buttons, channel_id, controls_id) => {
         if (!foundError && (button.label || button.label === "")) {
           newButton.label = validateButton({
             input: button.label,
+            max: 256,
             label: "Button Label",
             notRequired: true
           });

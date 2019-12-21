@@ -108,7 +108,7 @@ module.exports.buildButtons = async (buttons, channel_id, controls_id) => {
           newButton.hot_key = validateButton({
             input: button.hot_key,
             label: "hot-key",
-            max: 12
+            max: 16
           });
           if (newButton.hot_key.error) {
             foundError = true;

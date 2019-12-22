@@ -12,8 +12,7 @@
   background-color: #372e50;
 }
 .front-page-container::-webkit-scrollbar {
-  width: 6px;
-  /* background-color: green; */
+  width: 0px;
 }
 .front-page-container::-webkit-scrollbar-thumb {
   background-color: #484d79;
@@ -22,8 +21,8 @@
 .front-page-text {
   background-color: rgb(25, 25, 36);
   border-radius: 6px;
-  padding: 5%;
-  margin: 5%;
+  padding: 24px;
+  margin: 24px;
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -126,8 +125,8 @@ a {
   display: flex;
   flex-direction: row;
   justify-content: center;
+  margin-bottom: 24px;
   /* background: blue; */
-  margin-top: -48px;
 }
 
 .divider {

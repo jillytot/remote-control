@@ -106,6 +106,7 @@ a:active {
   max-width: 90px;
   /* padding-top: 8px; */
   height: calc(100vh - 48px);
+
   overflow-y: auto;
   scrollbar-width: none;
 

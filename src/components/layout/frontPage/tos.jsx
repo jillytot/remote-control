@@ -43,7 +43,7 @@ const TosText = formatModal => {
         we determine you are acting with the intent to cause harm, you will be
         removed.
         <br /> <br />
-        7. Eplicit language & cursing is not allowed on publicly listed servers.
+        7. Explicit language & cursing is not allowed on publicly listed servers.
         Public servers must remain family friendly. Our intention is to make
         Remo as open, inclusive, safe, and as fun as possible. For the most
         part, we ask that you be polite, kind & considerate to the people who

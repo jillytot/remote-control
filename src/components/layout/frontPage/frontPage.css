@@ -121,3 +121,16 @@ a {
 .tos-text:focus {
   outline: 0px;
 }
+
+.print-row {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  /* background: blue; */
+  margin-top: -48px;
+}
+
+.divider {
+  margin-left: 6px;
+  margin-right: 6px;
+}

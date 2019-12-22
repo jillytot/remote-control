@@ -86,10 +86,23 @@ export default class FrontPage extends Component {
           <Platform />
           <Medium />
         </div>
+        <div className="print-row">
+          <DisplayTOS />
+          <div className="divider">{" | "}</div>
+          <DisplayPrivacyPolicy />
+        </div>
       </div>
     );
   }
 }
+
+const DisplayTOS = () => {
+  return <SingleLink link="/tos" text="terms of service " />;
+};
+
+const DisplayPrivacyPolicy = () => {
+  return <SingleLink link="/privacy-policy" text="privacy policy" />;
+};
 
 const AddARobot = () => {
   return (
@@ -153,6 +166,21 @@ const DisplayAlert = ({ show }) => {
     </div>
   ) : (
     <React.Fragment />
+  );
+};
+
+const SingleLink = ({ link, text }) => {
+  return (
+    <div className="inline-link">
+      <a
+        href={link}
+        onClick={() => {
+          window.open(link, "_blank");
+        }}
+      >
+        {text}
+      </a>
+    </div>
   );
 };
 

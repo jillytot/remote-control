@@ -174,7 +174,8 @@ const SingleLink = ({ link, text }) => {
     <div className="inline-link">
       <a
         href={link}
-        onClick={() => {
+        onClick={e => {
+          e.preventDefault();
           window.open(link, "_blank");
         }}
       >
@@ -190,7 +191,8 @@ const InlineLink = ({ link, text }) => {
       {text}
       <a
         href={link}
-        onClick={() => {
+        onClick={e => {
+          e.preventDefault();
           window.open(link, "_blank");
         }}
       >

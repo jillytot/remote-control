@@ -205,16 +205,19 @@ const InlineLink = ({ link, text }) => {
 const FPLinkCard = ({ link, image, text }) => {
   return (
     <React.Fragment>
-      <div
-        className="fp-card"
-        onClick={() => {
+      <a
+        href={link}
+        onClick={e => {
+          e.preventDefault();
           window.open(link, "_blank");
         }}
       >
-        <img className="icon-element" src={image} title={link} alt="" />
-        <br />
-        {text}
-      </div>
+        <div className="fp-card">
+          <img className="icon-element" src={image} title={link} alt="" />
+          <br />
+          {text}
+        </div>
+      </a>
     </React.Fragment>
   );
 };

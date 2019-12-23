@@ -6,7 +6,7 @@ import RecoveryPage from "./recoveryPage";
 import JoinServerPage from "./joinServerPage";
 import TOS from "../layout/frontPage/tos";
 import PrivacyPolicy from "../layout/frontPage/privacyPolicy";
-import Patreon from "./patreon";
+import Patreon from "./patreon/index";
 
 export default class IndexRouter extends Component {
   constructor(props) {

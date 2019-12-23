@@ -3,6 +3,7 @@ import axios from "axios";
 import "./userProfile.css";
 import { userProfile } from "../../../config/client/index";
 import EditEmail from "./editEmail";
+import LinkPatreon from "../../forms/linkPatreon/index";
 
 export default class UserProfile extends Component {
   state = {
@@ -16,10 +17,11 @@ export default class UserProfile extends Component {
 
   componentDidMount() {
     this.handleGetInfo();
+    // console.log(this.props.locationSearch);
   }
 
   handleUpdateEmail = async () => {
-    console.log("Update Email");
+    // console.log("Update Email");
   };
 
   handleGetInfo = async () => {
@@ -34,7 +36,7 @@ export default class UserProfile extends Component {
         }
       )
       .then(response => {
-        console.log("Response Data: ", response.data);
+        // console.log("Response Data: ", response.data);
         if (!response.data.error || !response.error) {
           this.setState({ fetching: false, userData: response.data });
         }
@@ -91,13 +93,14 @@ export default class UserProfile extends Component {
             <div className="info-value"> no </div>
             <div className="info-edit"> ( coming soon ) </div>
           </div>
+          <LinkPatreon {...this.props} />
         </div>
       </div>
     );
   };
 
   handleUpdated = e => {
-    console.log(e);
+    // console.log(e);
     this.setState({ userData: e, updated: e.message });
     if (e.email) this.setState({ editEmail: false });
   };
@@ -123,7 +126,7 @@ export default class UserProfile extends Component {
   render() {
     const { user } = this.props;
     const { fetching } = this.state;
-    console.log(user);
+    // console.log(user);
     return (
       <div className="modal">
         {user.username}'s profile.

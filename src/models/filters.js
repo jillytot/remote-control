@@ -57,6 +57,7 @@ module.exports.reservedWordsDefault = () => {
     "TOS",
     "privacyPolicy",
     "privacy-policy",
-    "privacy"
+    "privacy",
+    "patreon"
   ];
 };

@@ -1,12 +1,6 @@
 import React, { Component } from "react";
 import "./overlay.css";
 
-/*
-  Modal is rendered in layout.jsx
-  The component that calls model can just simple send and object containing the content
-  the content object can then be parsed out here
-  */
-
 export default class Modal extends Component {
   scrollDown = () => {
     const { container } = this.refs;

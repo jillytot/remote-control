@@ -12,6 +12,9 @@ const defaults = {
   breakPoint: 768, //mobile layout resolution
   mobileMessageFadeOut: 5000, //how long do mobile messages display in chat before they fade out
   reCaptchaSiteKey: "6Lfg_KYUAAAAAH1hvQdp-qDOUToVn6FQWFOvbySo",
+  patreonClientID:
+    "qzqYm-sCfZsMr-Va7LoFGRsNPBPO_bNb_TpLbxCOLSRVod_4t7sI2ezCVu3VMQ7o",
+  urlPrefix: "https://remo.tv/",
   socketUrl: socketUrl,
   apiUrl: apiUrl,
   recoveryPage: overrides.recoveryPage || "https://remo.tv/recovery",

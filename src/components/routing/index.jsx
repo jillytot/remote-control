@@ -6,6 +6,7 @@ import RecoveryPage from "./recoveryPage";
 import JoinServerPage from "./joinServerPage";
 import TOS from "../layout/frontPage/tos";
 import PrivacyPolicy from "../layout/frontPage/privacyPolicy";
+import Patreon from "./patreon";
 
 export default class IndexRouter extends Component {
   constructor(props) {
@@ -22,6 +23,7 @@ export default class IndexRouter extends Component {
           <Route component={JoinServerPage} path="/join" />
           <Route component={TOS} path="/tos" />
           <Route component={PrivacyPolicy} path="/privacy-policy" />
+          <Route component={Patreon} path="/patreon" />
           <Route component={ServersPage} path="/" />
         </Switch>
       </Router>

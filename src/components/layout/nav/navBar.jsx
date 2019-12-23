@@ -7,6 +7,7 @@ import { Link, Redirect } from "react-router-dom";
 import socket from "../../socket";
 import GetLayout from "../../modules/getLayout";
 import UserProfile from "../userProfile/userProfile";
+import queryString from "query-string";
 
 export default class NavBar extends Component {
   constructor(props) {
@@ -15,6 +16,26 @@ export default class NavBar extends Component {
       redirect: false
     };
   }
+
+  componentDidMount() {
+    this.handleQuery();
+  }
+
+  handleQuery = () => {
+    const { locationSearch } = this.props;
+    const values = queryString.parse(locationSearch);
+    console.log(values);
+    if (values) {
+      try {
+        if (values.modal && values.modal === "profile") {
+          console.log("Open Profile from Query String");
+          this.props.modal(this.handleModal());
+        }
+      } catch (err) {
+        console.log(err);
+      }
+    }
+  };
 
   logout = () => {
     localStorage.removeItem("token");
@@ -83,7 +104,6 @@ export default class NavBar extends Component {
       <div className="nav-container">
         {this.renderBurger()}
         <Link to="/"> {this.renderLogo()}</Link>
-
         <div className="user-container">
           <div
             className="user"

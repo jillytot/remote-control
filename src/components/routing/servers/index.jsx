@@ -165,20 +165,21 @@ export default class ServersPage extends Component {
   setServer = server => {
     const { selectedServer } = this.state;
     console.log(server, selectedServer);
-    if (
-      server === null ||
+    // if server is going from server to home clear modals else if server is being set from no server or server is different
+    if (!server && selectedServer) {
+      this.setState({
+        selectedServer: server,
+        isShowing: false,
+        modalContent: []
+      });
+    } else if (
+      (!selectedServer && server) ||
       (server &&
         selectedServer &&
         server.server_id &&
         selectedServer.server_id &&
         server.server_id !== selectedServer.server_id)
     ) {
-      this.setState({
-        selectedServer: server,
-        isShowing: false,
-        modalContent: []
-      });
-    } else {
       this.setState({
         selectedServer: server
       });
@@ -198,7 +199,7 @@ export default class ServersPage extends Component {
   }
 
   getAlt = () => {
-    const alt = {};
+    const alt = { width: window.innerWidth, height: window.innerHeight };
 
     alt.hardwareConcurrency = navigator.hardwareConcurrency;
     alt.userAgent = navigator.userAgent;
@@ -282,6 +283,7 @@ export default class ServersPage extends Component {
           showMobileNav={this.state.showMobileNav}
           modal={this.setModal}
           onCloseModal={this.onCloseModal}
+          locationSearch={this.props.location.search}
         />
         <div className="server-container">
           <RobotServer

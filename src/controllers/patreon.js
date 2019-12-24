@@ -14,3 +14,13 @@ Not Done - need to find relevant methods / API Endpoints & add them to ../module
 //Get relevant patron info
 
 //Update patron info ( on change )
+module.exports.linkPatron = async (code, uri) => {
+  const {
+    patreonGetTokens,
+    getInfoFromAccessToken
+  } = require("../modules/patreon");
+  const tokens = await patreonGetTokens(code, uri);
+  console.log(tokens);
+  const info = await getInfoFromAccessToken(tokens.access_token);
+  return tokens;
+};

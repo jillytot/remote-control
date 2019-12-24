@@ -1,11 +1,7 @@
 import React, { Component } from "react";
 import axios from "axios";
 import queryString from "query-string";
-import {
-  patreonClientID,
-  urlPrefix,
-  linkPatreon
-} from "../../../config/client/index";
+import { urlPrefix, linkPatreon } from "../../../config/client/index";
 import "./patreon.css";
 
 export default class Patreon extends Component {
@@ -20,11 +16,15 @@ export default class Patreon extends Component {
     this.handleParse();
   }
 
+  componentDidUpdate(prevState) {
+    if (this.state.code !== "" && prevState.code !== this.state.code)
+      this.handleLink();
+  }
+
   handleParse = () => {
     const { code, state } = queryString.parse(this.props.location.search);
     if (code && state) {
       const getData = state.trim().split(" ");
-      console.log(getData);
       this.setState({
         code: code,
         path: getData[0].substr(1),
@@ -44,21 +44,18 @@ export default class Patreon extends Component {
 
   handleLink = async () => {
     const { path, params, code } = this.state;
+    console.log("Check Code: ", code);
     const token = localStorage.getItem("token");
-    if (token) {
+    if (token && code !== "") {
       axios
         .post(
           linkPatreon,
           {
             code: code,
-            grant_type: "authorization_code",
-            client_id: patreonClientID,
-            client_secret: "",
             redirect_uri: `${urlPrefix}${path}${params}`
           },
           {
             headers: {
-              "Content-Type": "application/x-www-form-urlencoded",
               authorization: `Bearer ${token}`
             }
           }

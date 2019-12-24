@@ -17,6 +17,9 @@ const defaults = {
   authRequestTimeout: 300 * 1000, //5 minutes
   urlPrefix: "https://remo.tv/",
   supportEmail: "jill@remo.tv",
+  patreonClientID:
+    "qzqYm-sCfZsMr-Va7LoFGRsNPBPO_bNb_TpLbxCOLSRVod_4t7sI2ezCVu3VMQ7o",
+  patreonClientSecret: "",
   db: {
     user: "postgres",
     password: "",

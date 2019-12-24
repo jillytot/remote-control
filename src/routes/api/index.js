@@ -13,6 +13,7 @@ router.use("/stats", require("./stats"));
 router.use("/user", require("./user"));
 router.use("/chat", require("./chat"));
 router.use("/moderation", require("./moderation"));
+router.use("/integrations", require("./integrations"));
 
 //test API
 router.get("/", (req, res) => {

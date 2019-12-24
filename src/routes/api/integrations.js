@@ -4,7 +4,7 @@ const { jsonError } = require("../../modules/logging");
 const auth = require("../auth");
 
 router.post("/patreon", auth({ user: true }), async (req, res) => {
-  console.log("///////PATREON DATA////////: ", req.body);
+  //   const { handleOAuthRedirectRequest } = require("../../modules/patreon");
   const body = {
     code: req.body.code,
     grant_type: "authorization_code",
@@ -15,6 +15,8 @@ router.post("/patreon", auth({ user: true }), async (req, res) => {
   const headers = {
     "Content-Type": "application/x-www-form-urlencoded"
   };
+
+  console.log("///////PATREON DATA////////: ", body, headers);
   res.send(body.code);
 });
 

@@ -15,7 +15,7 @@ router.post("/patreon", auth({ user: true }), async (req, res) => {
   const headers = {
     "Content-Type": "application/x-www-form-urlencoded"
   };
-  res.send({ body, headers });
+  res.send(body.code);
 });
 
 module.exports = router;

@@ -1,6 +1,11 @@
 import React, { Component } from "react";
 import axios from "axios";
 import queryString from "query-string";
+import {
+  patreonClientID,
+  urlPrefix,
+  linkPatreon
+} from "../../../config/client/index";
 import "./patreon.css";
 
 export default class Patreon extends Component {
@@ -27,10 +32,45 @@ export default class Patreon extends Component {
         status: "Link in progress ... "
       });
     } else {
-      this.setState({
-        status:
-          "There was a problem with this request, please try again later..."
-      });
+      this.handleError();
+    }
+  };
+
+  handleError = () => {
+    this.setState({
+      status: "There was a problem with this request, please try again later..."
+    });
+  };
+
+  handleLink = async () => {
+    const { path, params, code } = this.state;
+    const token = localStorage.getItem("token");
+    if (token) {
+      axios
+        .post(
+          linkPatreon,
+          {
+            code: code,
+            grant_type: "authorization_code",
+            client_id: patreonClientID,
+            client_secret: "",
+            redirect_uri: `${urlPrefix}${path}${params}`
+          },
+          {
+            headers: {
+              "Content-Type": "application/x-www-form-urlencoded",
+              authorization: `Bearer ${token}`
+            }
+          }
+        )
+        .then(response => {
+          console.log("Link Patreon Response: ", response.data);
+        })
+        .catch(err => {
+          console.log(err);
+        });
+    } else {
+      this.handleError();
     }
   };
 

@@ -1,11 +1,11 @@
 const { jsonError } = require("../modules/logging");
 //Leaving this all untested for now : ]
 
-module.exports.savePatron = async ({ user_id, username }) => {
+module.exports.savePatron = async ({ user_id, username, token_data }) => {
   const db = require("../services/db");
-  const save = `INSERT INTO patreon (user_id, username ) VALUES ( $1, $2) RETURNING *`;
+  const save = `INSERT INTO patreon (user_id, username, token_data ) VALUES ( $1, $2, $3) RETURNING *`;
   try {
-    const result = await db.query(save, [user_id, username]);
+    const result = await db.query(save, [user_id, username, token_data]);
     if (result.rows[0]) {
       console.log("Update Key Result: ", result.rows[0]);
       return result.rows[0];
@@ -51,7 +51,7 @@ module.exports.getPatron = async ({ user_id }) => {
   try {
     const result = await db.query(query, [user_id]);
     if (result.rows[0]) return result.rows[0];
-    else return jsonError("No Patreon data found for this user");
+    else return null;
   } catch (err) {
     console.log(err);
   }

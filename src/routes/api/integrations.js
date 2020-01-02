@@ -8,8 +8,8 @@ router.post("/patreon", auth({ user: true }), async (req, res) => {
   const { code, redirect_uri } = req.body;
   const uri = `${urlPrefix}patreon`;
   if (code && uri) {
-    console.log("Link Patron Input: ", code, uri);
-    const link = await linkPatron(req.body.code, uri);
+    // console.log("Link Patron Input: ", code, uri);
+    const link = await linkPatron(req.body.code, uri, req.user);
     console.log("/////LINK RESULT: ", link);
   }
 

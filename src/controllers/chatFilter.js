@@ -1,5 +1,5 @@
 // const globalBadWordsList = require("./globalBadWordsList.json");
-const { globalBadWordsList } = require("../config/server");
+const { globalBadWordsList, filterWhiteList } = require("../config/server");
 
 /**
  * Scan the message for offending phonetic matches and replace them with a
@@ -13,17 +13,18 @@ const { globalBadWordsList } = require("../config/server");
  * @returns {String} the string but with any matching phonics replaced with family friendly fun time
  */
 module.exports.filterPhoneticMessage = payload => {
-  console.log("Input: ", payload);
+  // console.log("Input: ", payload);
   const metaphone = require("metaphone");
   const phoneticBadWords = Object.keys(globalBadWordsList.phonetic_bad_words);
   const replacementWords = Object.values(globalBadWordsList.phonetic_bad_words);
   let returnPayload = "";
-  // Split the payload at each space. Also works for single word payloads.
-  const words = payload.split(" ");
+  // Split the payload at each word boundary. Also works for single word payloads.
+  const words = payload.split(/\W/);
   // iterate through the message for bad words
   words.forEach(word => {
     const idx = phoneticBadWords.indexOf(metaphone(word));
-    if (idx >= 0) {
+    const isWL = filterWhiteList.indexOf(word.toLowerCase());
+    if (idx >= 0 && isWL === -1) {
       // substitute as needed
       returnPayload += replacementWords[idx] + " ";
     } else {
@@ -47,8 +48,7 @@ module.exports.filterPhoneticMessage = payload => {
 module.exports.filterTextMessage = payload => {
   console.log(globalBadWordsList);
   let returnPayload = "";
-  /** @TODO split on any non-word character */
-  const messageSplit = payload.split(" ");
+  const messageSplit = payload.split(/\W/);
   const listOfBadWords = Object.values(globalBadWordsList.normal_bad_words);
   const replacements = Object.keys(globalBadWordsList.normal_bad_words);
 
@@ -88,6 +88,7 @@ module.exports.deepFilterMessage = payload => {
   const replacements = Object.keys(globalBadWordsList.normal_bad_words);
   payload += " ";
   let returnPayload = "";
+  // Remove duplicate letters
   for (let i = 0; i < payload.length - 1; i++) {
     const letterOne = payload.substring(i, i + 1).toLowerCase();
     const letterTwo = payload.substring(i + 1, i + 2).toLowerCase();

@@ -21,42 +21,59 @@ module.exports.linkPatron = async (code, uri, user) => {
     getInfoFromAccessToken
   } = require("../modules/patreon");
   const tokenData = await patreonGetTokens(code, uri);
-  console.log("//////////////PATREON GET TOKENS: ", tokenData);
+  // console.log("//////////////PATREON GET TOKENS: ", tokenData);
   if (tokenData.access_token) {
-    const savePatron = await this.savePatronLink(user, tokenData);
-    console.log("SAVE PATRON RESULT: ", savePatron);
+    const getPatronId = await getInfoFromAccessToken(tokenData.access_token);
+    if (!getPatronId.error) {
+      const saveLink = await this.savePatronLink(user, getPatronId);
+      if (!saveLink.error)
+        return {
+          patron_data: saveLink,
+          token_data: tokenData
+        };
+      //token data required for redirect
+      else return saveLink;
+    }
+    return jsonError("Link Patron Error: Possible bad access token data");
   }
-
-  //Get Info!
-  const info = await getInfoFromAccessToken(tokenData.access_token);
-  console.log("/////////////GET INFO FROM ACCESS TOKENS: ", info);
-  return info;
 };
 
-module.exports.savePatronLink = async (user, tokenData) => {
+module.exports.savePatronLink = async (user, patronId) => {
   const {
     savePatron,
     getPatron,
-    patronUpdateToken
+    patronUpdateId,
+    checkPatreonId
   } = require("../models/patreon");
 
-  //check to see if patron exists:
-  const check = await getPatron({ user_id: user.id });
+  const checkPatron = await checkPatreonId(patronId); //check if patreon_id is in use
+  const check = await getPatron({ user_id: user.id }); //check if user has already linked account
+
+  //if patreon_id has already been linked to an existing account, return error
+  if (
+    (checkPatron && !check) ||
+    (checkPatron && check && check.patreon_id !== patronId)
+  )
+    return jsonError("This patreon account is in use by another remo user");
+
+  //Update patreon_id if account entry already exists
   if (check) {
     console.log("Entry found for user: ", check.user_id);
-    const updateToken = await patronUpdateToken({
-      user_id: user.id,
-      token_data: tokenData
-    });
-    return updateToken;
-
-    //If no entry, make one!
+    if (check.patreon_id !== patronId) {
+      const updateUser = await patronUpdateId({
+        user_id: user.id,
+        patreon_id: patronId
+      });
+      return updateUser;
+    } else {
+      return check;
+    }
   } else {
-    //save Tokens
+    //save new link
     const save = await savePatron({
       user_id: user.id,
       username: user.username,
-      token_data: tokenData
+      patreon_id: patronId
     });
     return save;
   }

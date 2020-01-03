@@ -1,11 +1,11 @@
 const { jsonError } = require("../modules/logging");
 //Leaving this all untested for now : ]
 
-module.exports.savePatron = async ({ user_id, username, token_data }) => {
+module.exports.savePatron = async ({ user_id, username, patreon_id }) => {
   const db = require("../services/db");
-  const save = `INSERT INTO patreon (user_id, username, token_data ) VALUES ( $1, $2, $3) RETURNING *`;
+  const save = `INSERT INTO patreon (user_id, username, patreon_id ) VALUES ( $1, $2, $3) RETURNING *`;
   try {
-    const result = await db.query(save, [user_id, username, token_data]);
+    const result = await db.query(save, [user_id, username, patreon_id]);
     if (result.rows[0]) {
       console.log("Update Key Result: ", result.rows[0]);
       return result.rows[0];
@@ -19,24 +19,11 @@ module.exports.savePatron = async ({ user_id, username, token_data }) => {
 };
 
 //Udpate Token Data
-module.exports.patronUpdateToken = async ({ user_id, token_data }) => {
+module.exports.patronUpdateId = async ({ user_id, patreon_id }) => {
   const db = require("../services/db");
-  const query = `UPDATE patreon SET token_data = ( $1 ) WHERE ( user_id) = ( $2 ) RETURNING *`;
+  const query = `UPDATE patreon SET patreon_id = ( $1 ) WHERE ( user_id ) = ( $2 ) RETURNING *`;
   try {
-    const result = await db.query(query, [token_data, user_id]);
-    if (result.rows[0]) return result.rows[0];
-  } catch (err) {
-    console.log(err);
-  }
-  return jsonError("There was a problem updating Patron Data");
-};
-
-//Update Pledge Data
-module.exports.patronUpdatePledgeData = async ({ user_id, pledge_data }) => {
-  const db = require("../services/db");
-  const query = `UPDATE patreon SET pledge_data = ( $1 ) WHERE ( user_id) = ( $2 ) RETURNING *`;
-  try {
-    const result = await db.query(query, [pledge_data, user_id]);
+    const result = await db.query(query, [patreon_id, user_id]);
     if (result.rows[0]) return result.rows[0];
   } catch (err) {
     console.log(err);
@@ -56,4 +43,22 @@ module.exports.getPatron = async ({ user_id }) => {
     console.log(err);
   }
   return jsonError("There was a problem fetching data for this user");
+};
+
+//Returns true if this Patreon ID is found
+module.exports.checkPatreonId = async patreon_id => {
+  const db = require("../services/db");
+  const query = `SELECT * from patreon WHERE  ( patreon_id ) = ( $1 )`;
+  try {
+    const result = await db.query(query, [patreon_id]);
+    if (result.rows[0]) return true;
+    return null;
+  } catch (err) {
+    console.log(err);
+  }
+  return jsonError("There was a problem fetching data for this user");
+};
+
+module.exports.removePatreonLink = async patreon_id => {
+  //TODO
 };

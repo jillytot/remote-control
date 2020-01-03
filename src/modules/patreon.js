@@ -18,16 +18,34 @@ module.exports.patreonGetTokens = async (redirectCode, redirectUri) => {
 };
 
 module.exports.getInfoFromAccessToken = async token => {
+  const { jsonError } = require("./logging");
   try {
     const pledgerClient = patreon.patreon(token);
     const info = await pledgerClient("/current_user");
-    console.log("PatreonInfo", info.rawJson);
-    console.log(
-      "PatreonInfoPledges",
-      info.rawJson.data.relationships.pledges.data
-    );
-    console.log("PatreonInfoIncluded", info.rawJson.included);
+
+    const { store } = info;
+    const getPatron = store.findAll("user").map(user => user.serialize());
+    const getPatronId = getPatron[0].data.id;
+    // console.log("TEST: ", test, "ID: ", test[0].data.id);
+    return getPatronId;
+    // test.forEach(t => {
+    //   const { attributes, relationships } = t.data;
+    //   console.log(
+    //     t.data
+    //     "ATTRIBUTES: ",
+    //     attributes,
+    //     "RELATIONSHIPS: ",
+    //     relationships
+    //   );
+    // });
+    // console.log("PLEDGES: ", info.rawJson.data.relationships.pledges);
+    // console.log("PatreonInfo", info.rawJson);
+    // return {
+    //   pledges: info.rawJson.data.relationships.pledges.data,
+    //   info: info.rawJson.included
+    // };
   } catch (err) {
-    console.log("Get Info Err", err);
+    console.log(err);
+    return jsonError("Bad token data.");
   }
 };

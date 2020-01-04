@@ -1,9 +1,11 @@
 import React, { Component } from "react";
 import { urlPrefix, patreonClientID, patreonUrl } from "../../../config/client";
+import Confirm from "../../common/confirm/index";
 
 export default class LinkPatreon extends Component {
   state = {
-    linked: ""
+    displayConfirm: false,
+    displayPending: false
   };
 
   componentDidMount() {
@@ -40,7 +42,47 @@ export default class LinkPatreon extends Component {
     return <React.Fragment />;
   };
 
+  handleDisplayLink = () => {
+    return (
+      <a href={this.handleRedirect()}>
+        <div className="info-edit"> ( link account ) </div>
+      </a>
+    );
+  };
+
+  handleConfirm = () => {
+    console.log("CONFIRMED!");
+  };
+
+  handleCancel = () => {
+    this.setState({
+      displayConfirm: false,
+      displayPending: false
+    });
+  };
+
+  handleDisplayRemoveLink = () => {
+    const { displayConfirm } = this.state;
+    return (
+      <div
+        className="info-edit"
+        onClick={() => {
+          this.setState({ displayConfirm: !displayConfirm });
+        }}
+      >
+        ( remove )
+      </div>
+    );
+  };
+
+  handleActions = () => {
+    const { patreon_id } = this.props;
+    if (patreon_id) return this.handleDisplayRemoveLink();
+    return this.handleDisplayLink();
+  };
+
   handleDisplay = () => {
+    const { displayConfirm, displayPending } = this.state;
     return (
       <React.Fragment>
         <a
@@ -54,14 +96,18 @@ export default class LinkPatreon extends Component {
             Support Remo on Patreon & get perks!
           </div>{" "}
         </a>
-
         <div className="info-container">
           <div className="info-key">patreon: </div>
           <div className="info-value"> {this.handleLinked()} </div>{" "}
-          <a href={this.handleRedirect()}>
-            <div className="info-edit"> ( link account ) </div>
-          </a>
+          {this.handleActions()}
         </div>
+        <Confirm
+          input="removal"
+          displayConfirm={displayConfirm}
+          displayPending={displayPending}
+          onConfirm={this.handleConfirm}
+          onCancel={this.handleCancel}
+        />
         {this.handleDisplayRewards()}
       </React.Fragment>
     );

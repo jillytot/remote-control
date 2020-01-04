@@ -39,7 +39,7 @@ export default class UserProfile extends Component {
         // console.log("Response Data: ", response.data);
         if (!response.data.error || !response.error) {
           this.setState({ fetching: false, userData: response.data });
-          console.log(response.data);
+          // console.log(response.data);
         }
       })
       .catch(err => {

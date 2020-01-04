@@ -21,18 +21,12 @@ module.exports.linkPatron = async (code, uri, user) => {
     getInfoFromAccessToken
   } = require("../modules/patreon");
   const tokenData = await patreonGetTokens(code, uri);
-  // console.log("//////////////PATREON GET TOKENS: ", tokenData);
-  if (tokenData.access_token) {
+  console.log("//////////////PATREON GET TOKENS: ", tokenData);
+  if (tokenData && tokenData.access_token) {
     const getPatronId = await getInfoFromAccessToken(tokenData.access_token);
     if (!getPatronId.error) {
       const saveLink = await this.savePatronLink(user, getPatronId);
-      if (!saveLink.error)
-        return {
-          patron_data: saveLink,
-          token_data: tokenData
-        };
-      //token data required for redirect
-      else return saveLink;
+      return saveLink;
     }
     return jsonError("Link Patron Error: Possible bad access token data");
   }

@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import axios from "axios";
 import queryString from "query-string";
+import { Redirect } from "react-router-dom";
 import { urlPrefix, linkPatreon } from "../../../config/client/index";
 import "./patreon.css";
 
@@ -9,14 +10,15 @@ export default class Patreon extends Component {
     code: "",
     path: "",
     params: "",
-    status: "fetching data ..."
+    status: "fetching data ...",
+    redirect: false
   };
 
   componentDidMount() {
     this.handleParse();
   }
 
-  componentDidUpdate(prevState) {
+  componentDidUpdate(prevProps, prevState) {
     if (this.state.code !== "" && prevState.code !== this.state.code)
       this.handleLink();
   }
@@ -43,10 +45,10 @@ export default class Patreon extends Component {
   };
 
   handleLink = async () => {
-    const { path, params, code } = this.state;
+    const { path, params, code, redirect } = this.state;
     console.log("Check Code: ", code);
     const token = localStorage.getItem("token");
-    if (token && code !== "") {
+    if (token && code !== "" && !redirect) {
       axios
         .post(
           linkPatreon,
@@ -62,6 +64,14 @@ export default class Patreon extends Component {
         )
         .then(response => {
           console.log("Link Patreon Response: ", response.data);
+          if (response.data.patreon_id) {
+            this.setState({
+              status: "Link successful! Let's get you back to Remo.",
+              redirect: true
+            });
+          } else {
+            this.handleError();
+          }
         })
         .catch(err => {
           console.log(err);
@@ -72,7 +82,12 @@ export default class Patreon extends Component {
   };
 
   render() {
-    const { status } = this.state;
-    return <div className="feedback"> {status} </div>;
+    const { status, redirect } = this.state;
+
+    return redirect ? (
+      <Redirect to={`/?modal=profile`} />
+    ) : (
+      <div className="feedback"> {status} </div>
+    );
   }
 }

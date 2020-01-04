@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import "./frontPage.css";
 import axios from "axios";
-import { getStats } from "../../../config/client";
+import { getStats, patreonUrl } from "../../../config/client";
 import defaultImages from "../../../imgs/placeholders";
 
 // import TOS from "./tos";
@@ -136,7 +136,7 @@ const Discord = () => {
 const Patreon = () => {
   return (
     <FPLinkCard
-      link="https://www.patreon.com/letsjill"
+      link={patreonUrl}
       text="Support us on Patreon!"
       image={defaultImages.patreonIcon}
     />

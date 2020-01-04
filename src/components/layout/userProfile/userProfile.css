@@ -56,3 +56,20 @@
   /* color: #21c975; */
   font-style: italic;
 }
+
+.remo-green {
+  color: #7cff1e;
+}
+
+.info-header {
+  display: flex;
+  flex-direction: row;
+  font-size: 14px;
+  padding: 1px;
+  margin-top: 12px;
+  font-weight: bold;
+}
+
+.patreon {
+  color: #ffa557;
+}

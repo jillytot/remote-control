@@ -24,9 +24,9 @@ module.exports.getInfoFromAccessToken = async token => {
     const info = await pledgerClient("/current_user");
 
     const { store } = info;
-    const getPatron = store.findAll("user").map(user => user.serialize());
+    const getPatron = await store.findAll("user").map(user => user.serialize());
     const getPatronId = getPatron[0].data.id;
-    // console.log("TEST: ", test, "ID: ", test[0].data.id);
+    console.log("TEST: ", getPatron, "ID: ", getPatron[0].data.id);
     return getPatronId;
     // test.forEach(t => {
     //   const { attributes, relationships } = t.data;

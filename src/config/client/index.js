@@ -15,6 +15,7 @@ const defaults = {
   patreonClientID:
     "qzqYm-sCfZsMr-Va7LoFGRsNPBPO_bNb_TpLbxCOLSRVod_4t7sI2ezCVu3VMQ7o",
   urlPrefix: "https://remo.tv/",
+  patreonUrl: "https://www.patreon.com/letsjill",
   socketUrl: socketUrl,
   apiUrl: apiUrl,
   recoveryPage: overrides.recoveryPage || "https://remo.tv/recovery",

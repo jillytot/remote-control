@@ -39,6 +39,7 @@ export default class UserProfile extends Component {
         // console.log("Response Data: ", response.data);
         if (!response.data.error || !response.error) {
           this.setState({ fetching: false, userData: response.data });
+          console.log(response.data);
         }
       })
       .catch(err => {
@@ -88,15 +89,21 @@ export default class UserProfile extends Component {
             </div>
           </div>
           {editEmail ? this.handleEditEmail() : <React.Fragment />}
-          <div className="info-container">
-            <div className="info-key"> email verified: </div>
-            <div className="info-value"> no </div>
-            <div className="info-edit"> ( coming soon ) </div>
-          </div>
-          <LinkPatreon {...this.props} />
+
+          <LinkPatreon {...this.state.userData} />
         </div>
       </div>
     );
+  };
+
+  handleVerifiedEmail = () => {
+    /* <div className="info-container">
+            <div className="info-key"> email verified: </div>
+            <div className="info-value"> no </div>
+            <div className="info-edit"> ( coming soon ) </div>
+          </div> */
+
+    return <React.Fragment></React.Fragment>;
   };
 
   handleUpdated = e => {

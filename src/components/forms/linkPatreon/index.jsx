@@ -8,11 +8,16 @@ export default class LinkPatreon extends Component {
 
   componentDidMount() {
     console.log("Patreon: ", this.props);
+    this.handleParams();
   }
 
-  handleRedirect = () => {
+  handleParams = () => {
     const sendParams = `${window.location.pathname}+${this.props.locationSearch}`;
+    return sendParams;
+  };
 
+  handleRedirect = () => {
+    const sendParams = this.handleParams();
     return `https://www.patreon.com/oauth2/authorize?response_type=code&client_id=${patreonClientID}&redirect_uri=${urlPrefix}patreon&state=${sendParams}`;
   };
 

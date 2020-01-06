@@ -36,3 +36,7 @@
   margin-left: -12px;
   margin-right: 12px;
 }
+
+.error {
+  color: rgb(179, 32, 32);
+}

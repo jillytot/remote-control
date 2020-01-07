@@ -53,7 +53,8 @@ export default class Confirm extends Component {
     const { displayConfirm, displayPending, displaySuccess } = this.props;
     if (!displayConfirm && !displayPending) return <React.Fragment />;
     if (displayConfirm && !displayPending) return this.handleDisplayConfirm();
-    if (displayConfirm && displayPending) return this.handleDisplayPending();
+    if (displayConfirm && displayPending && displaySuccess === "")
+      return this.handleDisplayPending();
     if (displayConfirm && displayPending && displaySuccess !== "")
       return this.handleDisplaySuccess();
   };
@@ -71,7 +72,7 @@ export default class Confirm extends Component {
     return (
       <div className={textStyle}>
         <div className=""> {`${displaySuccess} `}</div>
-        <div className="do-action" onClick={() => () => onComplete()}>
+        <div className="do-action" onClick={() => onComplete()}>
           {` - dismiss `}
         </div>
       </div>

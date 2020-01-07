@@ -1,6 +1,12 @@
 import React, { Component } from "react";
-import { urlPrefix, patreonClientID, patreonUrl } from "../../../config/client";
+import {
+  urlPrefix,
+  patreonClientID,
+  patreonUrl,
+  removePatreon
+} from "../../../config/client";
 import Confirm from "../../common/confirm/index";
+import axios from "axios";
 
 export default class LinkPatreon extends Component {
   state = {
@@ -11,7 +17,7 @@ export default class LinkPatreon extends Component {
   };
 
   componentDidMount() {
-    console.log("Patreon: ", this.props);
+    // console.log("Patreon: ", this.props);
     this.handleParams();
   }
 
@@ -54,8 +60,40 @@ export default class LinkPatreon extends Component {
 
   handleConfirm = async () => {
     this.setState({ displayPending: true });
-    //await action to complete
-    //this.setState({ displaySuccess: "Success Message" });
+    const token = localStorage.getItem("token");
+    await axios
+      .post(
+        removePatreon,
+        {},
+        {
+          headers: { authorization: `Bearer ${token}` }
+        }
+      )
+      .then(res => {
+        console.log("DELETE PATREON LINK RESULT: ", res.data);
+        if (res.data.error) {
+          this.setState({
+            displaySuccess: res.data.error,
+            displayError: true
+          });
+          return;
+        } else {
+          this.setState({ displaySuccess: res.data });
+          return;
+        }
+      })
+      .catch(err => {
+        console.log("REMOVE PATREON LINK ERROR: ", err);
+        // setTimeout(this.setTimeout, 600); //retry
+      });
+  };
+
+  handleTimeout = () => {
+    this.setState({
+      displayConfirm: false,
+      displayPending: false,
+      displaySuccess: "Request taking too long, try again later."
+    });
   };
 
   handleDisplayConfirm = () => {
@@ -88,6 +126,8 @@ export default class LinkPatreon extends Component {
       displayPending: false,
       displaySuccess: ""
     });
+
+    //Trigger user profile to get updated data.
   };
 
   handleCancel = () => {

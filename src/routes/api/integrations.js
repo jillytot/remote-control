@@ -2,14 +2,13 @@ const router = require("express").Router();
 const { urlPrefix } = require("../../config/server");
 const auth = require("../auth");
 
-/**
- * External service integration management from client
- */
+//External service integration management for client
 
 /**
+ * LINK PATREON ACCOUNT:
  * Input Required:
- *  code: <string>
- *  redirect_uri: <string> Currently Unused
+ *  code: <string> : provided by patreon client
+ *  redirect_uri: <string> : currently unused
  *  user: { user Object }
  *
  * Response Success: Object containing { patreon_id: <string> }
@@ -29,7 +28,10 @@ router.post("/patreon", auth({ user: true }), async (req, res) => {
 });
 
 /**
- * Input Required: user_id <string>
+ * REMOVE PATREON ACCOUNT LINK:
+ * Input Required:
+ *  user_id: <string>
+ *
  * Response Success: <string>
  * Response Error: { error: "error message." }
  */

@@ -121,13 +121,14 @@ export default class LinkPatreon extends Component {
   };
 
   handleComplete = () => {
+    const { onProfileUpdated } = this.props;
     this.setState({
       displayConfirm: false,
       displayPending: false,
       displaySuccess: ""
     });
 
-    //Trigger user profile to get updated data.
+    onProfileUpdated(); //Trigger user profile to get updated data.
   };
 
   handleCancel = () => {

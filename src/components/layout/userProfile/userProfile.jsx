@@ -47,6 +47,10 @@ export default class UserProfile extends Component {
       });
   };
 
+  handleProfileUpdated = () => {
+    this.handleGetInfo();
+  };
+
   handleFetching = () => {
     return <div className="infos"> Fetching Infos ...</div>;
   };
@@ -90,7 +94,11 @@ export default class UserProfile extends Component {
           </div>
           {editEmail ? this.handleEditEmail() : <React.Fragment />}
 
-          <LinkPatreon {...this.state.userData} {...this.props} />
+          <LinkPatreon
+            {...this.state.userData}
+            {...this.props} //Never do this again, keep it strict!
+            onProfileUpdated={this.handleProfileUpdated}
+          />
         </div>
       </div>
     );

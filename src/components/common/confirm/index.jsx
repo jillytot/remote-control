@@ -8,7 +8,7 @@ import "./confirm.css";
 /**
  * Example Parent State: 
  * state = {
-    displayConfirm: false,
+    displayConfirm: false, //Recommend using this conditional to render <Confirm />
     displayPending: false,
     displayError: false,
     displaySuccess: ""
@@ -34,7 +34,7 @@ import "./confirm.css";
   * onComplete(): inhereted via props
   handleComplete = () => {
     this.setState({ 
-      displayConfirm: false, //Recommend using this conditional to render <Confirm />
+      displayConfirm: false, 
       displayPending: false,
       displayError: false
       displaySuccess: ""
@@ -46,7 +46,6 @@ import "./confirm.css";
       displayError ( Optional ) : Formats success message as an error
       
    * Todo ( maybe ) : Style Options
-
  */
 
 export default class Confirm extends Component {

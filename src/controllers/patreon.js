@@ -6,13 +6,16 @@ Done - User goes to profile and clicks on "link Patreon Account",
 Done - User is taken to page to approve linking account to remo, providing a redirect uri. 
 Done - User is redirected back to remo.tv/patreon w/ code, state & uri from patreon auth. 
 Done - code, and uri are retrieved from the clientside, then used to make a server side API call to get tokens
-Current - tokens are saved to user in DB, and used to make api requests through patreon client
-Not Done - need to find relevant methods / API Endpoints & add them to ../modules/patreon
+Done - Save unique ID from Patreon w/ user reference
+Current - Ability to remove Patreon Link from account
+Not Done - Get campaign data from remo Patreon & populate rewards based on that
+Not Done - Sync rewards perodically, and / or on event. 
 */
 
-//Save Patron info needed to link remo user to user's patreon account
-
-//Get relevant patron info
+/**
+ * Controller for managing Patreon Reward integration :
+ * Input From: ../routes/api/integrations
+ */
 
 //Update patron info ( on change )
 module.exports.linkPatron = async (code, uri, user) => {
@@ -21,7 +24,7 @@ module.exports.linkPatron = async (code, uri, user) => {
     getInfoFromAccessToken
   } = require("../modules/patreon");
   const tokenData = await patreonGetTokens(code, uri);
-  console.log("//////////////PATREON GET TOKENS: ", tokenData);
+  // console.log("//////////////PATREON GET TOKENS: ", tokenData);
   if (tokenData && tokenData.access_token) {
     const getPatronId = await getInfoFromAccessToken(tokenData.access_token);
     if (!getPatronId.error) {
@@ -52,7 +55,7 @@ module.exports.savePatronLink = async (user, patronId) => {
 
   //Update patreon_id if account entry already exists
   if (check) {
-    console.log("Entry found for user: ", check.user_id);
+    // console.log("Entry found for user: ", check.user_id);
     if (check.patreon_id !== patronId) {
       const updateUser = await patronUpdateId({
         user_id: user.id,
@@ -71,4 +74,10 @@ module.exports.savePatronLink = async (user, patronId) => {
     });
     return save;
   }
+};
+
+module.exports.removePatreon = async user_id => {
+  const { removePatreonLink } = require("../models/patreon");
+  const remove = await removePatreonLink(user_id);
+  return remove;
 };

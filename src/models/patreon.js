@@ -59,6 +59,14 @@ module.exports.checkPatreonId = async patreon_id => {
   return jsonError("There was a problem fetching data for this user");
 };
 
-module.exports.removePatreonLink = async patreon_id => {
-  //TODO
+module.exports.removePatreonLink = async user_id => {
+  const db = require("../services/db");
+  const query = `DELETE FROM patreon WHERE ( user_id ) = ( $1 )`;
+  try {
+    const result = await db.query(query, [user_id]);
+    if (result.rowCount > 0) return "Link successfully removed.";
+  } catch (err) {
+    console.log(err);
+  }
+  return jsonError("Unable to remove Patreon Link");
 };

@@ -19,9 +19,7 @@ router.post("/patreon", auth({ user: true }), async (req, res) => {
   const { code, redirect_uri } = req.body;
   const uri = `${urlPrefix}patreon`;
   if (code && uri) {
-    // console.log("Link Patron Input: ", code, uri);
     const link = await linkPatron(req.body.code, uri, req.user);
-    console.log("/////LINK RESULT: ", link);
     res.send(link);
     return;
   }
@@ -37,9 +35,7 @@ router.post("/patreon", auth({ user: true }), async (req, res) => {
  */
 router.post("/patreon-remove", auth({ user: true }), async (req, res) => {
   const { removePatreon } = require("../../controllers/patreon");
-  console.log("Removing Patreon Link...");
   const remove = await removePatreon(req.user.id);
-  console.log("Remove Patreon Link Result: ", remove);
   return res.send(remove);
 });
 

@@ -17,7 +17,6 @@ export default class LinkPatreon extends Component {
   };
 
   componentDidMount() {
-    // console.log("Patreon: ", this.props);
     this.handleParams();
   }
 
@@ -70,7 +69,6 @@ export default class LinkPatreon extends Component {
         }
       )
       .then(res => {
-        console.log("DELETE PATREON LINK RESULT: ", res.data);
         if (res.data.error) {
           this.setState({
             displaySuccess: res.data.error,

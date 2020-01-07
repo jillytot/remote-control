@@ -7,7 +7,6 @@ module.exports.savePatron = async ({ user_id, username, patreon_id }) => {
   try {
     const result = await db.query(save, [user_id, username, patreon_id]);
     if (result.rows[0]) {
-      console.log("Update Key Result: ", result.rows[0]);
       return result.rows[0];
     }
   } catch (e) {

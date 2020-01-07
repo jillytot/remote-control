@@ -80,9 +80,7 @@ export default class EditMemberForm extends Form {
   };
 
   handleKick = () => {
-    //  console.log(this.state.confirmKick);
     this.setState({ confirmKick: !this.state.confirmKick });
-    //  console.log(this.state.confirmKick);
   };
 
   handleDisplaymember = () => {

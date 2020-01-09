@@ -6,20 +6,26 @@ const defaults = {
   heartBeat: 10000,
   liveStatusInterval: 15000,
   secret: "temp_secret",
-  reCaptchaSecretKey: "6Lfg_KYUAAAAAILikAGmfmaR3IvYw3eeucDBp-TU",
+  reCaptchaSecretKey: overides.reCaptchaSecretKey,
   maxTimeout: 15768000, //Seconds, not milliseconds
   loadMessages: 25, //number of messages chatroom will get on load
   currentAPIVersion: "/dev",
   passResetExpires: 900 * 1000, //about 15 minutes (in ms)
   logLevel: "debug",
-  sendGrid: "",
+  sendGrid: overides.sendGrid,
   sendMail: "",
   authRequestTimeout: 300 * 1000, //5 minutes
   urlPrefix: "https://remo.tv/",
   supportEmail: "jill@remo.tv",
+
+  //PATREON STUFF
   patreonClientID:
     "qzqYm-sCfZsMr-Va7LoFGRsNPBPO_bNb_TpLbxCOLSRVod_4t7sI2ezCVu3VMQ7o",
-  patreonClientSecret: "",
+  patreonClientSecret: overides.patreonClientSecret,
+  creatorAccessToken: overides.creatorAccessToken,
+  creatorRefreshToken: overides.creatorRefreshToken,
+  campaignId: "3356897",
+
   db: {
     user: "postgres",
     password: "",
@@ -29,6 +35,8 @@ const defaults = {
     max: 50,
     idleTimeoutMillis: 30000
   },
+
+  //BadWords
   globalBadWordsList: {
     normal_bad_words: {
       //replacement word: [ array, of, bad, word, iterations ]

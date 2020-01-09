@@ -69,3 +69,17 @@ module.exports.removePatreonLink = async user_id => {
   }
   return jsonError("Unable to remove Patreon Link");
 };
+
+module.exports.updatePatronRewards = async data => {
+  const { patreon_id } = data;
+  const db = require("../services/db");
+  const query = `UPDATE patreon SET active_rewards = ( $1 ) WHERE ( patreon_id ) = ( $2 ) RETURNING *`;
+  try {
+    const result = await db.query(query, [data, patreon_id]);
+    if (result.rows[0]) return result.rows[0];
+    return null;
+  } catch (err) {
+    console.log(err);
+  }
+  return jsonError("Could not update rewards for user");
+};

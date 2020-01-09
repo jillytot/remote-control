@@ -33,7 +33,9 @@ const testStr = "shitty ass person you are phawk";
 
 const test = async () => {
   try {
-    await test___serverName();
+    await test___syncPatreonData();
+    //await test___getRemoPeldgeData();
+    // await test___serverName();
     // await test___getRobotServerSettings();
     // await test___deepFilterMessage();
     // await test___filterPhoneticMessage();
@@ -50,10 +52,39 @@ const test = async () => {
     // await test__getRobotServer();
     // await test__deleteRobotServer();
   } catch (err) {
-    console.log(err);
+    console.log("TEST ERROR: ", err);
   }
 
   process.exit(0);
+};
+
+const test___syncPatreonData = async () => {
+  const { getPatreonData } = require("../controllers/patreon");
+  await getPatreonData();
+  console.log("Done");
+};
+
+const test___getRemoPeldgeData = async () => {
+  const { getRemoPledgeData } = require("../modules/patreon");
+  const { campaignId } = require("../config/server");
+  const pledges = await getRemoPledgeData();
+
+  try {
+    pledges.map(pledge => {
+      if (pledge.creator && pledge.patron && pledge.reward) {
+        console.log("Patron Id", pledge.patron.id);
+        console.log("Reward Title", pledge.reward.title);
+        console.log("Reward ID: ", pledge.reward.id);
+        console.log("Campaign Id", pledge.reward.campaign.id);
+        console.log(pledge.reward);
+        if (pledge.reward.campaign.id === campaignId) {
+          console.log("Save Data");
+        }
+      }
+    });
+  } catch (err) {
+    console.log(err);
+  }
 };
 
 const test___serverName = async () => {

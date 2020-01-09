@@ -81,3 +81,55 @@ module.exports.removePatreon = async user_id => {
   const remove = await removePatreonLink(user_id);
   return remove;
 };
+
+//Get pledge data dump from Patreon & Find campaign reward data
+module.exports.getPatreonData = async () => {
+  const { getRemoPledgeData } = require("../modules/patreon");
+  const { campaignId } = require("../config/server");
+  console.log("CHECK PATREON DATA! /////////////");
+  try {
+    const pledges = await getRemoPledgeData();
+    console.log("Pledges Count: ", pledges.length);
+    pledges.map(async pledge => {
+      if (
+        pledge.reward &&
+        pledge.reward.campaign &&
+        pledge.reward.campaign.id
+      ) {
+        const { id } = pledge.reward.campaign;
+        if (id && id === campaignId) {
+          await this.savePledgeData(pledge);
+        }
+      }
+    });
+  } catch (err) {
+    console.log(err);
+  }
+  return null;
+};
+
+//Check remo accounts who've linked their Patreon and save reward data for that user
+module.exports.savePledgeData = async pledge => {
+  const { checkPatreonId, updatePatronRewards } = require("../models/patreon");
+  console.log("Patreon Data Found: ", pledge.patron.full_name);
+  let data = {};
+  if (pledge.creator && pledge.patron && pledge.reward) {
+    data.patreon_id = pledge.patron.id;
+    //TODO: Currently does not handle multiple rewards. Not sure if that is a thing.
+    data = {
+      patreon_id: pledge.patron.id,
+      reward_title: pledge.reward.title,
+      reward_id: pledge.reward.id,
+      reward_amount: pledge.reward.amount
+      //Todo: Get Total Contribution
+    };
+    console.log("Save Patron Data: ", data);
+    const checkForPatron = await checkPatreonId(id);
+    if (checkForPatron) {
+      console.log("Entry Found, saving reward data");
+      const save = await updatePatronRewards(data);
+      console.log(save);
+      return save;
+    }
+  }
+};

@@ -26,26 +26,20 @@ module.exports.getInfoFromAccessToken = async token => {
     const { store } = info;
     const getPatron = await store.findAll("user").map(user => user.serialize());
     const getPatronId = getPatron[0].data.id;
-    console.log("TEST: ", getPatron, "ID: ", getPatron[0].data.id);
+    // console.log("TEST: ", getPatron, "ID: ", getPatron[0].data.id);
     return getPatronId;
-    // test.forEach(t => {
-    //   const { attributes, relationships } = t.data;
-    //   console.log(
-    //     t.data
-    //     "ATTRIBUTES: ",
-    //     attributes,
-    //     "RELATIONSHIPS: ",
-    //     relationships
-    //   );
-    // });
-    // console.log("PLEDGES: ", info.rawJson.data.relationships.pledges);
-    // console.log("PatreonInfo", info.rawJson);
-    // return {
-    //   pledges: info.rawJson.data.relationships.pledges.data,
-    //   info: info.rawJson.included
-    // };
   } catch (err) {
     console.log(err);
     return jsonError("Bad token data.");
   }
+};
+
+module.exports.getRemoPledgeData = async () => {
+  const { creatorAccessToken, campaignId } = require("../config/server");
+  const client = patreon.patreon(creatorAccessToken);
+  const result = await client(`/campaigns/${campaignId}/pledges`);
+  const { store } = result;
+  const pledges = store.findAll("pledge");
+
+  return pledges;
 };

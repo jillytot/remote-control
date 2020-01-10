@@ -97,11 +97,11 @@ export default class FrontPage extends Component {
 }
 
 const DisplayTOS = () => {
-  return <SingleLink link="/tos" text="terms of service " />;
+  return <SingleLink link="/tos" text="Terms Of Service " />;
 };
 
 const DisplayPrivacyPolicy = () => {
-  return <SingleLink link="/privacy-policy" text="privacy policy" />;
+  return <SingleLink link="/privacy-policy" text="Privacy Policy" />;
 };
 
 const AddARobot = () => {

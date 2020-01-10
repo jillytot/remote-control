@@ -37,11 +37,13 @@ module.exports.getInfoFromAccessToken = async token => {
 module.exports.getRemoPledgeData = async () => {
   const { creatorAccessToken, campaignId } = require("../config/server");
   const client = patreon.patreon(creatorAccessToken);
+
+  //stahp spamming my console!
   const result = await client(
     `/campaigns/${campaignId}/pledges?page%5Bcount%5D=10000`
   );
+  //TODO: May need a totally different method than using Patreon Module.
   const { store } = result;
   const pledges = store.findAll("pledge");
-
   return pledges;
 };

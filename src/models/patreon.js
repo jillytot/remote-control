@@ -46,16 +46,16 @@ module.exports.getPatron = async ({ user_id }) => {
 
 //Returns true if this Patreon ID is found
 module.exports.checkPatreonId = async patreon_id => {
-  console.log("CHECK PATREON ID: ", patreon_id);
+  // console.log("CHECK PATREON ID: ", patreon_id);
   const db = require("../services/db");
   const query = `SELECT * from patreon WHERE  ( patreon_id ) = ( $1 )`;
   try {
     const result = await db.query(query, [patreon_id]);
     if (result.rows[0]) {
-      console.log("Entry Found for Patron");
+      // console.log("Entry Found for Patron");
       return true;
     }
-    console.log("No linked entry found for Patron");
+    // console.log("No linked entry found for Patron");
     return null;
   } catch (err) {
     console.log(err);

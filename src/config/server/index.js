@@ -25,6 +25,7 @@ const defaults = {
   creatorAccessToken: overides.creatorAccessToken,
   creatorRefreshToken: overides.creatorRefreshToken,
   campaignId: "3356897",
+  patreonSyncInterval: 30000,
 
   db: {
     user: "postgres",

@@ -46,11 +46,16 @@ module.exports.getPatron = async ({ user_id }) => {
 
 //Returns true if this Patreon ID is found
 module.exports.checkPatreonId = async patreon_id => {
+  console.log("CHECK PATREON ID: ", patreon_id);
   const db = require("../services/db");
   const query = `SELECT * from patreon WHERE  ( patreon_id ) = ( $1 )`;
   try {
     const result = await db.query(query, [patreon_id]);
-    if (result.rows[0]) return true;
+    if (result.rows[0]) {
+      console.log("Entry Found for Patron");
+      return true;
+    }
+    console.log("No linked entry found for Patron");
     return null;
   } catch (err) {
     console.log(err);
@@ -70,8 +75,7 @@ module.exports.removePatreonLink = async user_id => {
   return jsonError("Unable to remove Patreon Link");
 };
 
-module.exports.updatePatronRewards = async data => {
-  const { patreon_id } = data;
+module.exports.updatePatronRewards = async (patreon_id, data) => {
   const db = require("../services/db");
   const query = `UPDATE patreon SET active_rewards = ( $1 ) WHERE ( patreon_id ) = ( $2 ) RETURNING *`;
   try {

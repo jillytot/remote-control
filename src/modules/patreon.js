@@ -37,7 +37,9 @@ module.exports.getInfoFromAccessToken = async token => {
 module.exports.getRemoPledgeData = async () => {
   const { creatorAccessToken, campaignId } = require("../config/server");
   const client = patreon.patreon(creatorAccessToken);
-  const result = await client(`/campaigns/${campaignId}/pledges`);
+  const result = await client(
+    `/campaigns/${campaignId}/pledges?page%5Bcount%5D=10000`
+  );
   const { store } = result;
   const pledges = store.findAll("pledge");
 

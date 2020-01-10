@@ -90,7 +90,7 @@ module.exports.getPatreonData = async () => {
   try {
     const pledges = await getRemoPledgeData();
     console.log("Pledges Count: ", pledges.length);
-    pledges.map(async pledge => {
+    const promises = pledges.map(async pledge => {
       if (
         pledge.reward &&
         pledge.reward.campaign &&
@@ -102,9 +102,11 @@ module.exports.getPatreonData = async () => {
         }
       }
     });
+    await Promise.all(promises);
   } catch (err) {
     console.log(err);
   }
+
   return null;
 };
 
@@ -114,22 +116,24 @@ module.exports.savePledgeData = async pledge => {
   console.log("Patreon Data Found: ", pledge.patron.full_name);
   let data = {};
   if (pledge.creator && pledge.patron && pledge.reward) {
-    data.patreon_id = pledge.patron.id;
     //TODO: Currently does not handle multiple rewards. Not sure if that is a thing.
     data = {
-      patreon_id: pledge.patron.id,
+      // patreon_id: pledge.patron.id,
       reward_title: pledge.reward.title,
       reward_id: pledge.reward.id,
       reward_amount: pledge.reward.amount
       //Todo: Get Total Contribution
     };
-    console.log("Save Patron Data: ", data);
-    const checkForPatron = await checkPatreonId(id);
+    // console.log("Save Patron Data: ", data);
+
+    const checkForPatron = await checkPatreonId(pledge.patron.id);
+    // console.log("Check for Patron Result: ", checkForPatron);
     if (checkForPatron) {
-      console.log("Entry Found, saving reward data");
-      const save = await updatePatronRewards(data);
-      console.log(save);
+      // console.log("Entry Found, saving reward data");
+      const save = await updatePatronRewards(pledge.patron.id, data);
+      // console.log(save);
       return save;
     }
   }
+  return null;
 };

@@ -70,13 +70,14 @@ const test___getRemoPeldgeData = async () => {
   const pledges = await getRemoPledgeData();
 
   try {
+    console.log("Pledges: ", pledges.length);
     pledges.map(pledge => {
       if (pledge.creator && pledge.patron && pledge.reward) {
         console.log("Patron Id", pledge.patron.id);
         console.log("Reward Title", pledge.reward.title);
         console.log("Reward ID: ", pledge.reward.id);
         console.log("Campaign Id", pledge.reward.campaign.id);
-        console.log(pledge.reward);
+        //console.log(pledge.reward);
         if (pledge.reward.campaign.id === campaignId) {
           console.log("Save Data");
         }

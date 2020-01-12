@@ -1,17 +1,6 @@
 //Controller for managing behavior using ../modules/patreon.js
 const { jsonError } = require("../modules/logging");
 
-/* TODO: 
-Done - User goes to profile and clicks on "link Patreon Account", 
-Done - User is taken to page to approve linking account to remo, providing a redirect uri. 
-Done - User is redirected back to remo.tv/patreon w/ code, state & uri from patreon auth. 
-Done - code, and uri are retrieved from the clientside, then used to make a server side API call to get tokens
-Done - Save unique ID from Patreon w/ user reference
-Current - Ability to remove Patreon Link from account
-Not Done - Get campaign data from remo Patreon & populate rewards based on that
-Not Done - Sync rewards perodically, and / or on event. 
-*/
-
 /**
  * Controller for managing Patreon Reward integration :
  * Input From: ../routes/api/integrations
@@ -85,8 +74,8 @@ module.exports.removePatreon = async user_id => {
 /**
  * Get Pledge Data: Get & Sort data from Patreon Campaign
  * todo-1: Ensure Patron is actively contributing
- * todo-2: Handle Multiple Rewards
- * todo-3: Determine which goals Patron has contributed to
+ * todo-2: Handle Multiple Rewards ( Or check if that is even a thing )
+ * todo-3: Determine which campaign goals Patron has contributed to
  * todo-4: Get total lifetime contribution of Patron
  */
 module.exports.getPatreonData = async () => {

@@ -82,59 +82,59 @@ module.exports.removePatreon = async user_id => {
   return remove;
 };
 
-//Get pledge data dump from Patreon & Find campaign reward data
+/**
+ * Get Pledge Data: Get & Sort data from Patreon Campaign
+ * todo-1: Ensure Patron is actively contributing
+ * todo-2: Handle Multiple Rewards
+ * todo-3: Determine which goals Patron has contributed to
+ * todo-4: Get total lifetime contribution of Patron
+ */
 module.exports.getPatreonData = async () => {
-  const { getRemoPledgeData } = require("../modules/patreon");
-  const { campaignId } = require("../config/server");
-  console.log("checking patreon data: ");
+  const { getPledgeData } = require("../modules/patreon");
   try {
-    const pledges = await getRemoPledgeData();
-    // console.log("Pledges Count: ", pledges.length);
-    const promises = pledges.map(async pledge => {
-      if (
-        pledge.reward &&
-        pledge.reward.campaign &&
-        pledge.reward.campaign.id
-      ) {
-        const { id } = pledge.reward.campaign;
-        if (id && id === campaignId) {
-          await this.savePledgeData(pledge);
-        }
+    const { data, included } = await getPledgeData();
+    // console.log("pledges: ", data.length, "included: ", included.length);
+    const promises = await data.map(async item => {
+      const { relationships } = item;
+      if (relationships.reward.data && relationships.reward.data.id) {
+        let pledge = {
+          patreon_id: relationships.patron.data.id,
+          reward_id: relationships.reward.data.id
+        };
+
+        included.map(item => {
+          if (item.type === "reward" && item.id === pledge.reward_id) {
+            pledge.reward_title = item.attributes.title;
+            pledge.reward_amount = item.attributes.amount;
+          }
+        });
+        await this.savePledgeData(pledge);
       }
     });
     await Promise.all(promises);
   } catch (err) {
     console.log(err);
   }
-
   return null;
 };
 
-//Check remo accounts who've linked their Patreon and save reward data for that user
+/**
+ * Save Pledge Data: Check if Patron has a linked account, save data accordingly
+ */
 module.exports.savePledgeData = async pledge => {
   const { checkPatreonId, updatePatronRewards } = require("../models/patreon");
-  // console.log("Patreon Data Found: ", pledge.patron.full_name);
-  let data = {};
-  if (pledge.creator && pledge.patron && pledge.reward) {
-    //TODO: Currently does not handle multiple rewards. Not sure if that is a thing.
-    data = {
-      // patreon_id: pledge.patron.id,
-      reward_title: pledge.reward.title,
-      reward_id: pledge.reward.id,
-      reward_amount: pledge.reward.amount
-      //Todo: Get Total Contribution
-    };
-    // console.log("Save Patron Data: ", data);
-
-    const checkForPatron = await checkPatreonId(pledge.patron.id);
-    // console.log("Check for Patron Result: ", checkForPatron);
-    if (checkForPatron) {
-      // console.log("Entry Found, saving reward data");
-      const save = await updatePatronRewards(pledge.patron.id, data);
-      // console.log(save);
-      return save;
-    }
+  //TODO: Currently does not handle multiple rewards. Not sure if that is a thing.
+  const data = {
+    reward_title: pledge.reward_title,
+    reward_id: pledge.reward_id,
+    reward_amount: pledge.reward_amount
+  };
+  const checkForPatron = await checkPatreonId(pledge.patreon_id);
+  if (checkForPatron) {
+    const save = await updatePatronRewards(pledge.patreon_id, data);
+    return save;
   }
+
   return null;
 };
 

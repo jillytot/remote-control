@@ -33,6 +33,7 @@ const testStr = "shitty ass person you are phawk";
 
 const test = async () => {
   try {
+    // await test___getPledgeData();
     await test___syncPatreonData();
     //await test___getRemoPeldgeData();
     // await test___serverName();
@@ -56,6 +57,39 @@ const test = async () => {
   }
 
   process.exit(0);
+};
+
+const test___getPledgeData = async () => {
+  const { getPledgeData } = require("../modules/patreon");
+  const { campaignId } = require("../config/server");
+
+  try {
+    let pledges = [];
+    const { data, included } = await getPledgeData();
+    // console.log("pledges: ", data.length, "included: ", included.length);
+    data.map(item => {
+      const { relationships } = item;
+      if (relationships.reward.data && relationships.reward.data.id) {
+        let pledge = {
+          patreon_id: relationships.patron.data.id,
+          reward_id: relationships.reward.data.id
+        };
+
+        included.map(item => {
+          if (item.type === "reward" && item.id === pledge.reward_id) {
+            pledge.reward_title = item.attributes.title;
+            pledge.reward_amount = item.attributes.amount;
+            // console.log(item.attributes);
+          }
+        });
+
+        // console.log("Pledge: ", pledge);
+        pledges.push(pledge);
+      }
+    });
+  } catch (err) {
+    console.log(err);
+  }
 };
 
 const test___syncPatreonData = async () => {

@@ -37,13 +37,27 @@ export default class LinkPatreon extends Component {
     }
   };
 
+  handleDisplayStatus = () => {
+    const { active_rewards } = this.props;
+    if (active_rewards.reward_title) {
+      return (
+        <div className="info-container">
+          <div className="info-key">status: </div>
+          <div className="info-value"> Active Contributor </div>
+        </div>
+      );
+    }
+  };
+
   handleDisplayRewards = () => {
-    const { patreon_id } = this.props;
+    const { patreon_id, active_rewards } = this.props;
+    const reward = active_rewards.reward_title || "No active rewards found.";
+    console.log("Patreon Props: ", this.props);
     if (patreon_id)
       return (
         <div className="info-container">
           <div className="info-key">perks: </div>
-          <div className="info-value"> ...soon </div>
+          <div className="info-value">{reward} </div>
         </div>
       );
     return <React.Fragment />;

@@ -53,9 +53,10 @@ router.post("/delete", auth({ user: true }), async (req, res) => {
 });
 
 router.post("/key", auth({ user: true }), async (req, res) => {
-  const { createRobotAuth } = require("../../models/robot");
+  const { createRobotAuth, getRobotFromId } = require("../../models/robot");
   let response = {};
-  if (req.body.robot_id) {
+  const getRobot = await getRobotFromId(req.body.robot_id);
+  if (getRobot && getRobot.owner_id && getRobot.owner_id === req.user.id) {
     try {
       response.key = await createRobotAuth(req.body.robot_id);
       response.status = "success!";

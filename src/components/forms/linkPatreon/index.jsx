@@ -6,6 +6,7 @@ import {
   removePatreon
 } from "../../../config/client";
 import Confirm from "../../common/confirm/index";
+import Rewards from "./rewards";
 import axios from "axios";
 
 export default class LinkPatreon extends Component {
@@ -40,15 +41,7 @@ export default class LinkPatreon extends Component {
   handleDisplayRewards = () => {
     const { patreon_id, active_rewards } = this.props;
     if (patreon_id) {
-      let reward = "No active rewards found.";
-      if (active_rewards && active_rewards.reward_title)
-        reward = active_rewards.reward_title;
-      return (
-        <div className="info-container">
-          <div className="info-key">perks: </div>
-          <div className="info-value">{reward} </div>
-        </div>
-      );
+      return <Rewards {...active_rewards} />;
     }
     return <React.Fragment />;
   };

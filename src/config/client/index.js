@@ -21,10 +21,10 @@ const defaults = {
   mobileMessageFadeOut: 5000, //how long do mobile messages display in chat before they fade out
 
   //URL Management:
-  urlPrefix: overrides.urlPrefix || "https://remo.tv/",
+  urlPrefix: "https://remo.tv/",
   socketUrl: socketUrl,
   apiUrl: apiUrl,
-  recoveryPage: `${this.urlPrefix}recovery`,
+  recoveryPage: overrides.recoveryPage || "https://remo.tv/recovery",
   ws: overrides.ws || "ws://",
 
   //User Signup / Login:

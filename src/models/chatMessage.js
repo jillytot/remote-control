@@ -40,6 +40,7 @@ module.exports.createMessage = async message => {
   //a message isn't a chat message, a chat message is just a type of message
   //Currently, all messages are sent from client/src/components/chat/sendChat.jsx
   makeMess.type = message.type || "";
+  if (message.patreon) makeMess.patreon = message.patreon;
 
   //Turn this back on once you start removing active chats from memmory
   //saveMessageToActiveChat(makeMess);
@@ -47,8 +48,7 @@ module.exports.createMessage = async message => {
   // console.log("Generating Chat Message: ", makeMess);
   makeMess = await getMessageType(makeMess);
   this.sendMessage(makeMess);
-  const save = await this.saveMessage(makeMess);
-  console.log(save);
+  await this.saveMessage(makeMess);
   return;
 };
 
@@ -71,6 +71,7 @@ module.exports.createRobotMessage = async message => {
     message.userId
   );
   makeMess.type = message.type;
+
   // console.log("Generating Robot Chat Message: ", makeMess);
   //makeMess = await getMessageType(makeMess);
   this.sendMessage(makeMess);
@@ -172,12 +173,26 @@ needs more design : D
 
 //returns chat badges for a user both globally and for the specified server
 module.exports.getBadges = async (checkRoles, server_id, userId) => {
+  const { getPatron } = require("../models/patreon");
+
   if (checkRoles) {
     // do nothing
     console.log("CHECK TYPES :", checkRoles);
   } else {
     checkRoles = [];
   }
+
+  //handle Patreon:
+  const checkPatreon = await getPatron({ user_id: userId });
+  console.log("PATREON CHECK: ", checkPatreon);
+  if (
+    checkPatreon &&
+    checkPatreon.active_rewards &&
+    checkPatreon.active_rewards.reward_amount
+  ) {
+    checkRoles.push(`patreon${checkPatreon.active_rewards.reward_amount}`);
+  }
+
   console.log("GET BADGES PRE-CHECK: ", checkRoles, server_id, userId);
   const { getLocalTypes } = require("./robotServer");
   const addTypes = await getLocalTypes(server_id, userId);

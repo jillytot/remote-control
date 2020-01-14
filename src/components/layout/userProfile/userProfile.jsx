@@ -62,7 +62,6 @@ export default class UserProfile extends Component {
   handleShowInfo = () => {
     const { editEmail } = this.state;
     const { email, username, created, id } = this.state.userData;
-    console.log(this.state.userData);
     const date = new Date(parseInt(created)).toDateString();
 
     return (

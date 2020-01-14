@@ -32,6 +32,7 @@ module.exports.patronUpdateId = async ({ user_id, patreon_id }) => {
 
 //get patron data:
 module.exports.getPatron = async ({ user_id }) => {
+  // console.log("GET PATRON CHECK: ", user_id)
   const db = require("../services/db");
   const query = `SELECT * from patreon WHERE  ( user_id ) = ( $1 )`;
   try {

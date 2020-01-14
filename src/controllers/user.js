@@ -120,15 +120,15 @@ module.exports.fetchProfileInfo = async user_id => {
   const { getPatron } = require("../models/patreon");
   let info = await getPrivateInfoFromId(user_id);
   const checkPatreon = await getPatron({ user_id });
-  console.log("CHECK PATREON: ", checkPatreon);
+  // console.log("CHECK PATREON: ", checkPatreon);
   //check for Patreon Link
   if (info.error) return info;
   info = privateInfo(info);
   if (checkPatreon) {
-    console.log("PATREON INFO FOUND!");
+    // console.log("PATREON INFO FOUND!");
     info.patreon_id = checkPatreon.patreon_id;
     info.active_rewards = checkPatreon.active_rewards;
-    console.log(info);
+    // console.log(info);
   }
   return info;
 };

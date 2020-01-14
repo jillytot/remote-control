@@ -66,6 +66,11 @@ module.exports.getPledgeData = async () => {
       return res.data;
     })
     .catch(err => {
-      console.log(err);
+      console.log(
+        "Error Fetching Patreon Data: ",
+        err.response.status,
+        err.response.statusText
+      );
+      return jsonError(err.response.statusText);
     });
 };

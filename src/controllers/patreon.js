@@ -81,26 +81,29 @@ module.exports.removePatreon = async user_id => {
 module.exports.getPatreonData = async () => {
   const { getPledgeData } = require("../modules/patreon");
   try {
-    const { data, included } = await getPledgeData();
-    // console.log("pledges: ", data.length, "included: ", included.length);
-    const promises = await data.map(async item => {
-      const { relationships } = item;
-      if (relationships.reward.data && relationships.reward.data.id) {
-        let pledge = {
-          patreon_id: relationships.patron.data.id,
-          reward_id: relationships.reward.data.id
-        };
+    const getData = await getPledgeData();
+    if (getData && getData.data && getData.included) {
+      const { data, included } = getData;
+      // console.log("pledges: ", data.length, "included: ", included.length);
+      const promises = await data.map(async item => {
+        const { relationships } = item;
+        if (relationships.reward.data && relationships.reward.data.id) {
+          let pledge = {
+            patreon_id: relationships.patron.data.id,
+            reward_id: relationships.reward.data.id
+          };
 
-        included.map(item => {
-          if (item.type === "reward" && item.id === pledge.reward_id) {
-            pledge.reward_title = item.attributes.title;
-            pledge.reward_amount = item.attributes.amount;
-          }
-        });
-        await this.savePledgeData(pledge);
-      }
-    });
-    await Promise.all(promises);
+          included.map(item => {
+            if (item.type === "reward" && item.id === pledge.reward_id) {
+              pledge.reward_title = item.attributes.title;
+              pledge.reward_amount = item.attributes.amount;
+            }
+          });
+          await this.savePledgeData(pledge);
+        }
+      });
+      await Promise.all(promises);
+    }
   } catch (err) {
     console.log(err);
   }

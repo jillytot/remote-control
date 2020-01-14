@@ -101,16 +101,13 @@ export default class UserProfile extends Component {
   };
 
   handleDisplayPatreon = () => {
-    /** Disabling Patreon for now. 
-     *  return (
+    return (
       <LinkPatreon
         {...this.state.userData}
         {...this.props} //Never do this again, keep it strict!
         onProfileUpdated={this.handleProfileUpdated}
       />
     );
-     */
-    return <React.Fragment />;
   };
 
   handleVerifiedEmail = () => {

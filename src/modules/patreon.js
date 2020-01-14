@@ -2,6 +2,7 @@ const patreon = require("patreon");
 const CLIENT_ID = require("../config/server/").patreonClientID;
 const CLIENT_SECRET = require("../config/server/").patreonClientSecret;
 const axios = require("axios");
+const { jsonError } = require("./logging");
 
 /**
  * Patreon Module:

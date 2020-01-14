@@ -29,16 +29,22 @@ module.exports.savePatronLink = async (user, patronId) => {
     savePatron,
     getPatron,
     patronUpdateId,
-    checkPatreonId
+    getPatronByPatreonId
   } = require("../models/patreon");
 
-  const checkPatron = await checkPatreonId(patronId); //check if patreon_id is in use
-  const check = await getPatron({ user_id: user.id }); //check if user has already linked account
+  //Check and see if there is a user account associated with this Patreon ID
+  const checkPatron = await getPatronByPatreonId(patronId);
+  //Check of this user already has a linked account
+  const check = await getPatron({ user_id: user.id });
 
-  //if patreon_id has already been linked to an existing account, return error
+  //return errors
+  if (check && check.error) return check.error;
+  if (checkPatron && checkPatron.error) return checkPatron.error;
+
+  //If patreon_id is linked to a different user_id, return error
   if (
     (checkPatron && !check) ||
-    (checkPatron && check && check.patreon_id !== patronId)
+    (checkPatron && check && checkPatron.user_id !== user.id)
   )
     return jsonError("This patreon account is in use by another remo user");
 

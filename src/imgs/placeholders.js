@@ -25,6 +25,10 @@ import gitIcon from "./img/Git-Icon-Black.png";
 import patreonIcon from "./img/patreon.png";
 import discordIcon from "./img/discord-512.png";
 
+//patreon Badges:
+import patreon100 from "./img/patreon100.png";
+import patreon500 from "./img/patreon500.png";
+
 const defaultImages = {
   default01: default01,
   default02: default02,
@@ -51,7 +55,11 @@ const defaultImages = {
   unlistedIcon: unlistedIcon,
   gitIcon: gitIcon,
   patreonIcon: patreonIcon,
-  discordIcon: discordIcon
+  discordIcon: discordIcon,
+
+  //patreon Badges:
+  patreon100: patreon100,
+  patreon500: patreon500
 };
 
 export default defaultImages;

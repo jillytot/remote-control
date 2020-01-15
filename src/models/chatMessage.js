@@ -195,6 +195,8 @@ module.exports.getBadges = async (checkRoles, server_id, userId) => {
 
   console.log("GET BADGES PRE-CHECK: ", checkRoles, server_id, userId);
   const { getLocalTypes } = require("./robotServer");
+
+  //getLocalTypes can probably be replaced now that local status is is called in controllers/chatMessages/messageHandler()
   const addTypes = await getLocalTypes(server_id, userId);
   addTypes.forEach(type => {
     checkRoles.push(type);

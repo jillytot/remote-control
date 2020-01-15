@@ -33,8 +33,21 @@ module.exports.getInfoFromAccessToken = async token => {
 
     const { store } = info;
     const getPatron = await store.findAll("user").map(user => user.serialize());
-    const getPatronId = getPatron[0].data.id;
-    // console.log("TEST: ", getPatron, "ID: ", getPatron[0].data.id);
+    let getPatronId = "";
+    getPatron.map(patron => {
+      // console.log(patron.data);
+      if (
+        patron.data &&
+        patron.data.relationships &&
+        patron.data.relationships.pledges
+      )
+        getPatronId = patron.data.id;
+    });
+    if (getPatronId === "")
+      return jsonError(
+        "Unexpected data from Patreon API, please let us know and try again later"
+      );
+
     return getPatronId;
   } catch (err) {
     console.log(err);

@@ -53,7 +53,23 @@ const Message = ({ message, channelName, printChannelName }) => {
     if (badges && badges.length > 0) {
       // console.log("BADGES GET: ", badges);
       return badges.map(badge => {
+        const checkString = badge.substring(0, 7);
         // console.log("BADGE GET: ", badge);
+        if (checkString === "patreon") {
+          //badge === "patreon100"
+          // console.log("ADD BADGE!");
+          return (
+            <span key={message.id + badge}>
+              <img
+                className="message-badge"
+                src={defaultImages["moderator"]}
+                alt={badge}
+                title={"Patreon Supporter"}
+              />
+            </span>
+          );
+        }
+
         if (badge === "staff") {
           // console.log("ADD BADGE!");
           return (
@@ -147,11 +163,26 @@ const Message = ({ message, channelName, printChannelName }) => {
 
   const handleSenderColor = message => {
     let color = "chat-user-name";
+
+    //Older method with hardcoded names.
+    //since rainbow names never expire, a server side implementation is required to replace this method
     rainbowForLifeNames.forEach(name => {
       if (message.sender.toLowerCase() === name.toLowerCase()) {
         color = "chat-user-name rainbow";
       }
     });
+
+    const { badges } = message;
+
+    //Make username rainbow color if they have a patreon badge
+    if (badges && badges.length > 0) {
+      // console.log("BADGES GET: ", badges);
+      badges.map(badge => {
+        const checkString = badge.substring(0, 7);
+        if (checkString === "patreon") color = "chat-user-name rainbow";
+      });
+    }
+
     return color;
   };
 

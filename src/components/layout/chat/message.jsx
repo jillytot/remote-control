@@ -53,16 +53,118 @@ const Message = ({ message, channelName, printChannelName }) => {
     if (badges && badges.length > 0) {
       // console.log("BADGES GET: ", badges);
       return badges.map(badge => {
-        const checkString = badge.substring(0, 7);
+        // const checkString = badge.substring(0, 7);
         // console.log("BADGE GET: ", badge);
-        if (checkString === "patreon") {
-          //badge === "patreon100"
-          // console.log("ADD BADGE!");
+        if (badge === "patreon100") {
           return (
             <span key={message.id + badge}>
               <img
                 className="message-badge"
-                src={defaultImages["moderator"]}
+                src={defaultImages["patreon100"]}
+                alt={badge}
+                title={"Patreon Supporter"}
+              />
+            </span>
+          );
+        }
+
+        if (badge === "patreon500") {
+          return (
+            <span key={message.id + badge}>
+              <img
+                className="message-badge"
+                src={defaultImages["patreon500"]}
+                alt={badge}
+                title={"Patreon Supporter"}
+              />
+            </span>
+          );
+        }
+
+        if (badge === "patreon700") {
+          return (
+            <span key={message.id + badge}>
+              <img
+                className="message-badge"
+                src={defaultImages["patreon700"]}
+                alt={badge}
+                title={"Patreon Supporter"}
+              />
+            </span>
+          );
+        }
+
+        if (badge === "patreon1000") {
+          return (
+            <span key={message.id + badge}>
+              <img
+                className="message-badge"
+                src={defaultImages["patreon1000"]}
+                alt={badge}
+                title={"Patreon Supporter"}
+              />
+            </span>
+          );
+        }
+
+        if (badge === "patreon1000") {
+          return (
+            <span key={message.id + badge}>
+              <img
+                className="message-badge"
+                src={defaultImages["patreon1000"]}
+                alt={badge}
+                title={"Patreon Supporter"}
+              />
+            </span>
+          );
+        }
+
+        if (badge === "patreon1500") {
+          return (
+            <span key={message.id + badge}>
+              <img
+                className="message-badge"
+                src={defaultImages["patreon1500"]}
+                alt={badge}
+                title={"Patreon Supporter"}
+              />
+            </span>
+          );
+        }
+
+        if (badge === "patreon2500") {
+          return (
+            <span key={message.id + badge}>
+              <img
+                className="message-badge"
+                src={defaultImages["patreon2500"]}
+                alt={badge}
+                title={"Patreon Supporter"}
+              />
+            </span>
+          );
+        }
+
+        if (badge === "patreon3500") {
+          return (
+            <span key={message.id + badge}>
+              <img
+                className="message-badge"
+                src={defaultImages["patreon3500"]}
+                alt={badge}
+                title={"Patreon Supporter"}
+              />
+            </span>
+          );
+        }
+
+        if (badge === "patreon5000") {
+          return (
+            <span key={message.id + badge}>
+              <img
+                className="message-badge"
+                src={defaultImages["patreon5000"]}
                 alt={badge}
                 title={"Patreon Supporter"}
               />

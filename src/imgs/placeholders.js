@@ -28,6 +28,12 @@ import discordIcon from "./img/discord-512.png";
 //patreon Badges:
 import patreon100 from "./img/patreon100.png";
 import patreon500 from "./img/patreon500.png";
+import patreon700 from "./img/patreon700.png";
+import patreon1000 from "./img/patreon1000.png";
+import patreon1500 from "./img/patreon1500.png";
+import patreon2500 from "./img/patreon2500.png";
+import patreon3500 from "./img/patreon3500.png";
+import patreon5000 from "./img/patreon5000.png";
 
 const defaultImages = {
   default01: default01,
@@ -59,7 +65,13 @@ const defaultImages = {
 
   //patreon Badges:
   patreon100: patreon100,
-  patreon500: patreon500
+  patreon500: patreon500,
+  patreon700: patreon700,
+  patreon1000: patreon1000,
+  patreon1500: patreon1500,
+  patreon2500: patreon2500,
+  patreon3500: patreon3500,
+  patreon5000: patreon5000
 };
 
 export default defaultImages;

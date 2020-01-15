@@ -131,6 +131,7 @@ module.exports.savePledgeData = async pledge => {
 };
 
 module.exports.syncPatreonData = async () => {
+  console.log("Pledge Data Sync");
   await this.getPatreonData();
   checkInterval();
 };

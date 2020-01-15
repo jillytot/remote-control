@@ -38,6 +38,7 @@ export default class LinkPatreon extends Component {
     }
   };
 
+  //
   handleDisplayRewards = () => {
     const { patreon_id, active_rewards } = this.props;
     if (patreon_id) {

@@ -354,14 +354,8 @@ export default class RobotInterface extends Component {
         {this.props.channel ? (
           <div className="robot-container">
             <div className="robot-display-container">
-              <canvas className="video-canvas" ref="video-canvas">
-                <img
-                  className="video-poster"
-                  src={defaultImages.videoImg}
-                  alt={"video background"}
-                />
-              </canvas>
-
+              <canvas className="video-canvas" ref="video-canvas"/>
+              <img className="video-poster" src={defaultImages.videoImg} alt={"video background"}/>
               <div className="display-controls-container">
                 <VolumeControl
                   player={this.audioPlayer}

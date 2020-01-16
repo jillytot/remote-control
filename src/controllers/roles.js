@@ -1,3 +1,5 @@
+const { jsonError } = require("../modules/logging");
+
 //Manage & Verify member roles for server.
 
 //local roles, global roles
@@ -5,6 +7,10 @@
 //can add moderator
 
 //LOCAL ROLES
-module.exports.verifyLocalRole = async (server_id, user_id, role) => {};
+module.exports.authLocal = async (user, server, role) => {
+  console.log.log("Checking Roles: ");
+  if (user.id === server.owner_id) return { authorized: true };
+  return jsonError("Not authorized");
+};
 
 //GLOBAL ROLES

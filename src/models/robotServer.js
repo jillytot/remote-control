@@ -253,11 +253,9 @@ module.exports.getRobotServer = async server_id => {
   try {
     const query = "SELECT * FROM robot_servers WHERE server_id = $1 LIMIT 1";
     const result = await db.query(query, [server_id]);
-    if (result.rows[0]) {
-      const showResult = result.rows[0];
-      console.log(showResult.server_name);
-      return showResult;
-    }
+    if (result.rows[0]) return result.rows[0];
+
+    // return jsonError(`Unable to find server with id: ${server_id}`);
   } catch (err) {
     console.log(err);
     return null;

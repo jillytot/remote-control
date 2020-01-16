@@ -257,18 +257,12 @@ module.exports.getChannel = async channel_id => {
     const query = `SELECT * FROM channels WHERE id = $1 LIMIT 1`;
     const result = await db.query(query, [channel_id]);
     // console.log(result.rows[0]);
-    if (result.rows[0]) {
-      return result.rows[0];
-    } else {
-      return {
-        status: "error!",
-        error: "Unable to fetch channel with ID: ",
-        channel_id
-      };
-    }
+    if (result.rows[0]) return result.rows[0];
+    return jsonError(`Unable to find channel with id: ${channel_id}`);
   } catch (err) {
     console.log(err);
   }
+  return jsonError("There was an issue fetching information for this channel");
 };
 
 module.exports.getAllChannels = async () => {

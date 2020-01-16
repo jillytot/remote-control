@@ -6,6 +6,7 @@ const {
   deleteChannel
 } = require("../../models/channel");
 const { validateOwner } = require("../../models/robotServer");
+const { jsonError } = require("../../modules/logging");
 
 router.get("/list/:id", async (req, res) => {
   let response = {};
@@ -101,6 +102,21 @@ router.post("/delete", auth({ user: true }), async (req, res) => {
   }
   if (!response.error) res.status(200).send(response);
   res.send(response);
+});
+
+/**
+ * Set Default Channel:
+ * Input Required: user, channel_id, server_id
+ * Response Success: { server: { settings } }
+ * Response Error: { error: Error Message }
+ */
+router.post("/set_default", auth({ user: true }), async (req, res) => {
+  const { setDefaultChannel } = require("../../controllers/channels");
+  if (!req.body.channel_id) return jsonError("Channel ID Required.");
+  if (!req.body.server_id) return jsonError("Server ID Required.");
+  const { channel_id, server_id } = req.body;
+  const setDefault = await setDefaultChannel(req.user, channel_id, server_id);
+  res.send(setDefault);
 });
 
 module.exports = router;

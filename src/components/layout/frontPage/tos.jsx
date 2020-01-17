@@ -1,4 +1,5 @@
 import React from "react";
+import { supportEmail } from "../../../config/client";
 import "./frontPage.css";
 
 const TOS = formatModal => {
@@ -28,7 +29,7 @@ const TosText = formatModal => {
         result in a global ban.
         <br /> <br />
         2. No sexually explicit, violent, or other law breaking behavior such as
-        illegal drug use is not allowed.
+        illegal drug use is allowed.
         <br /> <br />
         3. Do not intentionally try to cause harm to anyone's robots or
         property. Broadcasters who make their robots publicly available usually
@@ -43,9 +44,9 @@ const TosText = formatModal => {
         we determine you are acting with the intent to cause harm, you will be
         removed.
         <br /> <br />
-        7. Explicit language & cursing is not allowed on publicly listed servers.
-        Public servers must remain family friendly. Our intention is to make
-        Remo as open, inclusive, safe, and as fun as possible. For the most
+        7. Explicit language & cursing is not allowed on publicly listed
+        servers. Public servers must remain family friendly. Our intention is to
+        make Remo as open, inclusive, safe, and as fun as possible. For the most
         part, we ask that you be polite, kind & considerate to the people who
         offer their robots for public use.
         <br />
@@ -57,7 +58,7 @@ const TosText = formatModal => {
         platforms like Patreon, we cannot make any garuntees we will deliver on
         any expecations. All money exchanged through or for the platform is at
         the user's own risk. We will still do our best to honor any agreements
-        or promises, so please contact jill@remo.tv for any issues you have.
+        or promises, so please contact {supportEmail} for any issues you have.
       </div>
     </div>
   );

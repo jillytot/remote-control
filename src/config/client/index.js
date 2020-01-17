@@ -33,6 +33,9 @@ const defaults = {
   apiSignup: `${apiUrl}/signup`,
   apiLogin: `${apiUrl}/login`,
 
+  //Support:
+  supportEmail: "jill@remo.tv",
+
   //General API
   listRobotServers: `${apiUrl}/robot-server/list`,
   addServer: `${apiUrl}/robot-server/create`,

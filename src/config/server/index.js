@@ -49,7 +49,26 @@ const defaults = {
       // Bad Phonetic Word : Replacement Word
       TST: "example"
     }
-  }
+  },
+  filterWhiteList: [
+    "cant",
+    "as",
+    "count",
+    "fact",
+    "kind",
+    "take",
+    "took",
+    "dog",
+    "duck",
+    "fig",
+    "neck",
+    "pose",
+    "piece",
+    "pass",
+    "shout",
+    "sheet",
+    "chat"
+  ]
 };
 
 module.exports = Object.assign({}, defaults, overides);

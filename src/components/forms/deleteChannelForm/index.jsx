@@ -98,7 +98,7 @@ export default class DeleteChannel extends Component {
     return (
       <React.Fragment>
         <div className="inline-container">
-          <div className="inline-label"> Delete Channel: </div>
+          <div className="inline-label label-danger"> Delete Channel: </div>
           <div className="inline-info" />
           <div className="inline-spacer" />
           <div

@@ -3,11 +3,17 @@ import EditChannelForm from "./editChannelForm";
 
 export default class EditChannel extends Component {
   handleModal = () => {
-    const { onCloseModal, channel } = this.props;
+    const { onCloseModal, channel, server } = this.props;
 
     return [
       {
-        body: <EditChannelForm onCloseModal={onCloseModal} channel={channel} />
+        body: (
+          <EditChannelForm
+            onCloseModal={onCloseModal}
+            channel={channel}
+            server={server}
+          />
+        )
       },
       { header: "" },
       { footer: "" }

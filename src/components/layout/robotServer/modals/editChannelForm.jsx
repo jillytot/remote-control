@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import DeleteChannel from "../../../forms/deleteChannelForm/index";
+import SetDefaultChannel from "../../../forms/setDefaultChannel/index";
 import "../../../forms/inlineForms.css";
 
 export default class EditChannelForm extends Component {
@@ -11,6 +12,7 @@ export default class EditChannelForm extends Component {
 
   handleDisplayOptions = () => {
     const { displayUpdate } = this.state;
+    console.log("Channel Modal Props: ", this.props);
     return (
       <React.Fragment>
         {displayUpdate !== "" ? (
@@ -18,6 +20,10 @@ export default class EditChannelForm extends Component {
         ) : (
           <React.Fragment />
         )}
+        <SetDefaultChannel
+          channel={this.props.channel}
+          server={this.props.server}
+        />
         <DeleteChannel
           channel={this.props.channel}
           onDeleted={this.handleDeleted}

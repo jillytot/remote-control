@@ -86,7 +86,7 @@ router.get("/delete", async (req, res) => {
 
 /**
  * Delete Channel:
- * Input Required: user, channel_id
+ * Input Required: user Object, channel_id
  * Response Success: { status: "success!", result: { deleted channel }}
  * Response Error: { error: "Error Message" }
  */
@@ -111,7 +111,7 @@ router.post("/delete", auth({ user: true }), async (req, res) => {
 
 /**
  * Set Default Channel:
- * Input Required: user, channel_id, server_id
+ * Input Required: user Object, channel_id, server_id
  * Response Success: { server: { settings } }
  * Response Error: { error: Error Message }
  */

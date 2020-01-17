@@ -14,6 +14,10 @@
   font-weight: bold;
 }
 
+.label-danger {
+  color: #ff5ca3;
+}
+
 .inline-info {
   color: #636363;
   margin-left: 6px;
@@ -26,6 +30,12 @@
   display: flex;
   justify-content: flex-end;
   cursor: pointer;
+}
+
+.inline-no-action {
+   color: #00dfd3;
+  display: flex;
+  justify-content: flex-end;
 }
 
 .inline-action:hover {

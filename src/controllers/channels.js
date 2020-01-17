@@ -28,6 +28,8 @@ module.exports.setDefaultChannel = async (user, channel_id, server_id) => {
     updateRobotServerSettings
   } = require("../models/robotServer");
 
+  console.log("Update Robot Settings");
+
   //get server information:
   const server = await getRobotServer(server_id);
   if (!server) return jsonError(`Unable to find server with id: ${server_id}`);
@@ -43,7 +45,11 @@ module.exports.setDefaultChannel = async (user, channel_id, server_id) => {
 
   //Update Settings:
   settings.default_channel = checkChannel.id;
-  const updateSettings = await updateRobotServerSettings(server.server_id);
+  const updateSettings = await updateRobotServerSettings(
+    server.server_id,
+    settings
+  );
   if (!updateSettings) return jsonError("Could not update settings for server");
+  // console.log("Update Settings Result: ", updateSettings);
   return updateSettings;
 };

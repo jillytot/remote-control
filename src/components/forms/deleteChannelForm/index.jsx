@@ -14,8 +14,6 @@ export default class DeleteChannel extends Component {
 
   handleDelete = async () => {
     const token = localStorage.getItem("token");
-    console.log("SUBMITTED: ", this.props);
-
     await axios
       .post(
         deleteChannel,

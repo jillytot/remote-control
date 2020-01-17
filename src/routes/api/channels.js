@@ -113,9 +113,9 @@ router.post("/delete", auth({ user: true }), async (req, res) => {
  * Set Default Channel:
  * Input Required: user Object, channel_id, server_id
  * Response Success: { server: { settings } }
- * Response Error: { error: Error Message }
+ * Response Error: { error: "Error Message" }
  */
-router.post("/set_default", auth({ user: true }), async (req, res) => {
+router.post("/set-default", auth({ user: true }), async (req, res) => {
   const { setDefaultChannel } = require("../../controllers/channels");
   if (!req.body.channel_id) return jsonError("Channel ID Required.");
   if (!req.body.server_id) return jsonError("Server ID Required.");

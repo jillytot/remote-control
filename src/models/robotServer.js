@@ -341,7 +341,8 @@ module.exports.updateRobotServerStatus = async (server_id, status) => {
 
 module.exports.updateRobotServerSettings = async (server_id, settings) => {
   const db = require("../services/db");
-  console.log("Updating Robot Server Status: ", server_id);
+  // console.log("Updating Robot Server Status: ", server_id, settings);
+
   try {
     const update = `UPDATE robot_servers SET settings = $1 WHERE server_id = $2 RETURNING *`;
     const result = await db.query(update, [settings, server_id]);

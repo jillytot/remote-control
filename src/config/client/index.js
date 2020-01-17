@@ -38,8 +38,6 @@ const defaults = {
   addServer: `${apiUrl}/robot-server/create`,
   joinServer: `${apiUrl}/robot-server/join`,
   leaveServer: `${apiUrl}/robot-server/leave`,
-  addChannel: `${apiUrl}/channels/create`,
-  deleteChannel: `${apiUrl}/channels/delete`,
   addRobot: `${apiUrl}/robot/setup`,
   deleteRobot: `${apiUrl}/robot/delete`,
   robotAPIKey: `${apiUrl}/robot/key`,
@@ -63,6 +61,11 @@ const defaults = {
   invite: `${apiUrl}/robot-server/invite`,
   getMembers: `${apiUrl}/robot-server/get-members`,
   kickMember: `${apiUrl}/moderation/kick`,
+
+  //Channels:
+  addChannel: `${apiUrl}/channels/create`,
+  deleteChannel: `${apiUrl}/channels/delete`,
+  setDefaultChannel: `${apiUrl}/channels/set-default`,
 
   //Patreon
   patreonUrl: "https://www.patreon.com/letsjill",

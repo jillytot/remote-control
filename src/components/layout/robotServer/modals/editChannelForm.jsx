@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import DeleteChannel from "../../../forms/deleteChannelForm/index";
-import SetDefaultChannel from "../../../forms/setDefaultChannel/index";
+import DefaultChannel from "../../../forms/defaultChannel/index";
 import "../../../forms/inlineForms.css";
 
 export default class EditChannelForm extends Component {
@@ -20,7 +20,7 @@ export default class EditChannelForm extends Component {
         ) : (
           <React.Fragment />
         )}
-        <SetDefaultChannel
+        <DefaultChannel
           channel={this.props.channel}
           server={this.props.server}
         />

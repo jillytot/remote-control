@@ -8,7 +8,7 @@ const { jsonError } = require("../modules/logging");
 
 //LOCAL ROLES
 module.exports.authLocal = async (user, server, role) => {
-  console.log.log("Checking Roles: ");
+  console.log("Checking Roles: ");
   if (user.id === server.owner_id) return { authorized: true };
   return jsonError("Not authorized");
 };

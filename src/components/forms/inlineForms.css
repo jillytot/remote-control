@@ -1,0 +1,48 @@
+.inline-container {
+  padding: 12px;
+  /* border-bottom: solid 1px blue; */
+  display: flex;
+  flex-direction: row;
+  font-size: 14px;
+  background: rgb(31, 31, 46);
+  margin-bottom: 2px;
+  border-radius: 6px;
+}
+
+.inline-label {
+  color: #1f93ff;
+  font-weight: bold;
+}
+
+.inline-info {
+  color: #636363;
+  margin-left: 6px;
+  display: flex;
+  flex: 1;
+}
+
+.inline-action {
+  color: #ff5ca3;
+  display: flex;
+  justify-content: flex-end;
+  cursor: pointer;
+}
+
+.inline-action:hover {
+  text-decoration: underline;
+}
+
+.inline-group {
+  background: rgb(25, 25, 36);
+  display: flex;
+  flex-direction: column;
+  margin: 24px;
+  margin-top: 12px;
+  padding: 12px;
+  border-radius: 12px;
+  width: 100%;
+}
+
+.inline-group-header {
+  margin-top: 12px;
+}

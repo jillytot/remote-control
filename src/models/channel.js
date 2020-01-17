@@ -173,10 +173,9 @@ module.exports.deleteChannel = async (channel_id, server_id) => {
     if (checkChannelCount && checkChannelCount.length <= 1) {
       // console.log("YOU CANNOT DELETE A CHANNEL IF YOU ONLY HAVE ONE LEFT");
       // console.log(checkChannelCount);
-      response.status = "Error!";
-      response.error =
-        "You cannot delete your last remaining channel, please create another if you wish to delete this one";
-      return response;
+      return jsonError(
+        "Unable to delete channel, server must contain at least one channel."
+      );
     }
 
     const result = await db.query(remove, [channel_id]);

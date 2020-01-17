@@ -1,47 +1,45 @@
-import React from "react";
-import Form from "../../../common/form";
-// import Joi from "joi-browser";
-import axios from "axios";
-import { deleteChannel } from "../../../../config/client";
+import React, { Component } from "react";
+import DeleteChannel from "../../../forms/deleteChannelForm/index";
+import "../../../forms/inlineForms.css";
 
-export default class EditChannelForm extends Form {
-  state = { data: {}, errors: {} };
+export default class EditChannelForm extends Component {
+  state = { displayUpdate: "", channelDeleted: false };
 
-  schema = {};
+  handleUpdated = () => {
+    this.setState({ displayUpdate: "Channel Settings Updated " });
+  };
 
-  doSubmit = async () => {
-    const token = localStorage.getItem("token");
-    console.log("SUBMITTED: ", this.props);
+  handleDeleted = () => {
+    this.setState({ channelDeleted: true });
+  };
 
-    await axios
-      .post(
-        deleteChannel,
-        {
-          channel_id: this.props.channel.id,
-          server_id: this.props.channel.host_id
-        },
-        {
-          headers: { authorization: `Bearer ${token}` }
-        }
-      )
-      .catch(err => {
-        console.log("Add Server Error: ", err);
-      });
-
-    this.props.onCloseModal();
+  handleDisplayOptions = () => {
+    return (
+      <React.Fragment>
+        <DeleteChannel
+          channel={this.props.channel}
+          onUpdated={this.handleUpdated}
+          onDeleted={this.handleDeleted}
+        />
+      </React.Fragment>
+    );
   };
 
   render() {
+    const { channelDeleted } = this.state;
     return (
       <div className="modal">
-        Editing Channel:{" "}
-        <span className="register-form-emphasis">
-          {this.props.channel.name}
-        </span>
-        <form onSubmit={this.handleSubmit}>
-          <div>Delete: </div>
-          {this.renderButton("Submit", "Submit")}
-        </form>
+        {`# ${this.props.channel.name}:`}
+        <div className="inline-group">
+          {!channelDeleted ? (
+            this.handleDisplayOptions()
+          ) : (
+            <div className="">
+              {" "}
+              This channel has been deleted, you may close modal to continue{" "}
+            </div>
+          )}
+        </div>
       </div>
     );
   }

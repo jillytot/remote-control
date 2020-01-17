@@ -84,7 +84,12 @@ router.get("/delete", async (req, res) => {
   console.log(response);
 });
 
-//Delete Channel
+/**
+ * Delete Channel:
+ * Input Required: user, channel_id
+ * Response Success: { status: "success!", result: { deleted channel }}
+ * Response Error: { error: "Error Message" }
+ */
 router.post("/delete", auth({ user: true }), async (req, res) => {
   console.log("DELETING CHANNEL: ", req.body.channel_id);
   let response = {};
@@ -98,9 +103,9 @@ router.post("/delete", auth({ user: true }), async (req, res) => {
     response.validated = true;
     // response.validate = true;
     const result = await deleteChannel(req.body.channel_id, req.body.server_id);
+    if (result.error) return res.send(result);
     response.status = result.status;
   }
-  if (!response.error) res.status(200).send(response);
   res.send(response);
 });
 

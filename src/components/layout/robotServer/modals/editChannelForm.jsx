@@ -5,20 +5,21 @@ import "../../../forms/inlineForms.css";
 export default class EditChannelForm extends Component {
   state = { displayUpdate: "", channelDeleted: false };
 
-  handleUpdated = () => {
-    this.setState({ displayUpdate: "Channel Settings Updated " });
-  };
-
   handleDeleted = () => {
     this.setState({ channelDeleted: true });
   };
 
   handleDisplayOptions = () => {
+    const { displayUpdate } = this.state;
     return (
       <React.Fragment>
+        {displayUpdate !== "" ? (
+          <div className="inline-label">{this.state.displayUpdate}</div>
+        ) : (
+          <React.Fragment />
+        )}
         <DeleteChannel
           channel={this.props.channel}
-          onUpdated={this.handleUpdated}
           onDeleted={this.handleDeleted}
         />
       </React.Fragment>
@@ -34,8 +35,7 @@ export default class EditChannelForm extends Component {
           {!channelDeleted ? (
             this.handleDisplayOptions()
           ) : (
-            <div className="">
-              {" "}
+            <div className="inline-label">
               This channel has been deleted, you may close modal to continue{" "}
             </div>
           )}

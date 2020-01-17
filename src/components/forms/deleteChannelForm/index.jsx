@@ -52,14 +52,14 @@ export default class DeleteChannel extends Component {
   };
 
   handleComplete = () => {
-    const { onUpdated } = this.props;
+    // const { onUpdated } = this.props;
     this.setState({
       displayConfirm: false,
       displayPending: false,
       displaySuccess: ""
     });
 
-    onUpdated(); //Update Parent component
+    // onUpdated(); //Update Parent component
   };
 
   handleCancel = () => {

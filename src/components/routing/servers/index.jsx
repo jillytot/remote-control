@@ -133,6 +133,8 @@ export default class ServersPage extends Component {
           const { server_id } = response.data;
           if (server_id === selectedServer.server_id) {
             selectedServer.status = response.data.status;
+            selectedServer.settings = response.data.settings;
+            // console.log("SELECTED SERVER RESPONSE: ", response.data);
             this.setState({ selectedServer: selectedServer });
           }
         })
@@ -150,6 +152,11 @@ export default class ServersPage extends Component {
     socket.on("ROBOT_SERVER_UPDATED", () => {
       this.getServers();
       this.getFollowedServers();
+      this.getSelectedServer();
+      return null;
+    });
+    socket.on("SELECTED_SERVER_UPDATED", () => {
+      console.log("UPDATING SELECTED SERVER!");
       this.getSelectedServer();
       return null;
     });
@@ -196,6 +203,7 @@ export default class ServersPage extends Component {
       this.getFollowedServers,
       this.getSelectedServer
     );
+    socket.off("SELECTED_SERVER_UPDATED", this.getSelectedServer);
   }
 
   getAlt = () => {

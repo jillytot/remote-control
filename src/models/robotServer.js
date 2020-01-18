@@ -185,6 +185,7 @@ module.exports.getRobotServerCount = async () => {
   return "...";
 };
 
+//This sends an event to all users and triggers them to pull updated data from the API.
 module.exports.updateRobotServer = () => {
   const wss = require("../services/wss");
   wss.emitEvent("ROBOT_SERVER_UPDATED");

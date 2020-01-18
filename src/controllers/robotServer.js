@@ -1,6 +1,16 @@
 const { err } = require("../modules/utilities");
 const { jsonError } = require("../modules/logging");
 
+//Triggers API call from client to update the currently selected robot server
+module.exports.updateSelectedServer = server_id => {
+  const wss = require("../services/wss");
+  wss.clients.forEach(ws => {
+    if (ws.server_id === server_id) {
+      ws.emitEvent("SELECTED_SERVER_UPDATED");
+    }
+  });
+};
+
 module.exports.checkForLiveRobots = async () => {
   const { getRobotServers } = require("../models/robotServer");
   const servers = await getRobotServers();

@@ -90,7 +90,7 @@ export default class DeleteChannelForm extends Component {
         </div>
         {displayConfirm ? (
           <Confirm
-            input="Delete Channel" //What is the action being confirmed?
+            confirmText="Delete Channel" //What is the action being confirmed?
             displayConfirm={displayConfirm}
             displayPending={displayPending}
             onConfirm={this.handleConfirm}

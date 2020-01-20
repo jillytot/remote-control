@@ -102,7 +102,7 @@ export default class LinkPatreon extends Component {
     if (displayConfirm) {
       return (
         <Confirm
-          input="removal" //What is the action being confirmed?
+          confirmText="removal" //What is the action being confirmed?
           displayConfirm={displayConfirm}
           displayPending={displayPending}
           onConfirm={this.handleConfirm}

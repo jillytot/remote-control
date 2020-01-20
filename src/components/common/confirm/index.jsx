@@ -80,10 +80,10 @@ export default class Confirm extends Component {
   };
 
   handleDisplayConfirm = () => {
-    const { input, onConfirm, onCancel } = this.props;
+    const { confirmText, onConfirm, onCancel } = this.props;
     return (
       <div className="confirm-action-container">
-        {`Confirm ${input || "Action"} ?`}
+        {`Confirm ${confirmText || "Action"} ?`}
         <div className="do-action" onClick={() => onConfirm()}>
           {` Yes `}
         </div>

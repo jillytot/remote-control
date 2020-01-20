@@ -1,0 +1,23 @@
+@import "../../../styles/variables.scss";
+@import "../mixins/mixins.scss";
+
+.DeleteChannelForm {
+  &__container {
+    @include inline-container;
+    justify-content: space-between;
+  }
+  &__label {
+    color: $color-remo-pink;
+    font-weight: bold;
+  }
+  &__action {
+    color: $color-remo-pink;
+    display: flex;
+    justify-content: flex-end;
+    cursor: pointer;
+  }
+  &__action:hover,
+  &__action:focus {
+    text-decoration: underline;
+  }
+}

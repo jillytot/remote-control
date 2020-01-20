@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import DeleteChannel from "../../../forms/deleteChannelForm/index";
+import { DeleteChannelForm } from "../../../forms/DeleteChannelForm";
 import DefaultChannel from "../../../forms/defaultChannel/index";
 import "../../../forms/inlineForms.css";
 
@@ -24,7 +24,7 @@ export default class EditChannelForm extends Component {
           channel={this.props.channel}
           server={this.props.server}
         />
-        <DeleteChannel
+        <DeleteChannelForm
           channel={this.props.channel}
           onDeleted={this.handleDeleted}
         />

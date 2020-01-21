@@ -103,7 +103,7 @@ $color-amethyst-smoke: rgb(158, 143, 182);
 $color-purple-mountains-majesty: rgb(150, 123, 194);
 $color-mauve: rgb(198, 162, 255);
 $color-lavender: rgb(176, 115, 211);
-$color-medium-purple-1: #954ed6;
+$color-medium-purple-1: #954ed6; //Gradient Purple
 $color-medium-purple-2: #b251eb;
 
 $color-blue-ribbon: #003fee;
@@ -127,3 +127,10 @@ $color-chartreuse: #7cff1e;
 $color-yellow: #ffff00;
 $color-laser-lemon: #f7ff66;
 $color-texas-rose: #ffa557;
+
+$remo-gradient: -webkit-linear-gradient(-45deg, #954ed6 0%, #009bee 100%);
+
+//Button Colors ( does not currently include robot interface buttons ):
+$button-default: $remo-gradient;
+$button-danger: -webkit-linear-gradient(-45deg, #b31515 0%, #ee3b94 100%);
+$button-inactive: -webkit-linear-gradient(-45deg, #414141 0%, #5e5e5e 100%);

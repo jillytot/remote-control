@@ -79,14 +79,14 @@ export default class DeleteChannelForm extends Component {
         <div className="DeleteChannelForm__container">
           <div className="DeleteChannelForm__label"> Delete Channel: </div>
 
-          <div
+          <button
             className="DeleteChannelForm__action"
             onClick={() => {
               this.setState({ displayConfirm: !displayConfirm });
             }}
           >
             Delete
-          </div>
+          </button>
         </div>
         {displayConfirm ? (
           <Confirm

@@ -1,0 +1,66 @@
+@import "../variables.scss";
+
+//Default Styles for app UI, does not include robot interface buttons
+@mixin button-default {
+  border-radius: 10px;
+  color: white;
+  border: 0px;
+  font-size: 16px;
+  padding: 7px 14px 7px 14px;
+  margin: 2px;
+  background: $button-default;
+  &:hover {
+    box-shadow: inset 0 0 0 2px yellow;
+    cursor: pointer;
+  }
+  &:active {
+    transform: translateY(4px);
+  }
+}
+
+@mixin button-delete {
+  @include button-default;
+  background: $button-danger;
+}
+
+@mixin button-gray {
+  @include button-default;
+  background: $button-inactive;
+}
+
+@mixin button-inactive {
+  @include button-gray;
+  &:hover {
+    box-shadow: none;
+  }
+  &:active {
+    transform: none;
+  }
+}
+
+//Inline Styles:
+@mixin inline-adjustment {
+  font-size: 12px;
+  // font-weight: bold;
+  padding: 5px, 10px, 5px, 10px;
+}
+
+@mixin button-inline-default {
+  @include button-default;
+  @include inline-adjustment;
+}
+
+@mixin button-inline-delete {
+  @include button-delete;
+  @include inline-adjustment;
+}
+
+@mixin button-inline-gray {
+  @include button-gray;
+  @include inline-adjustment;
+}
+
+@mixin button-inline-inactive {
+  @include button-inactive;
+  @include inline-adjustment;
+}

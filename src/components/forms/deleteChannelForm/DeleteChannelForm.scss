@@ -1,4 +1,5 @@
 @import "../../../styles/variables.scss";
+@import "../../../styles/mixins/buttonStyles.scss";
 @import "../mixins/mixins.scss";
 
 .DeleteChannelForm {
@@ -9,15 +10,12 @@
   &__label {
     color: $color-remo-pink;
     font-weight: bold;
+    align-self: center;
   }
   &__action {
-    color: $color-remo-pink;
-    display: flex;
-    justify-content: flex-end;
-    cursor: pointer;
+    @include button-inline-gray;
   }
-  &__action:hover,
-  &__action:focus {
-    text-decoration: underline;
+  &__cancel-action {
+    @include button-gray;
   }
 }

@@ -165,7 +165,3 @@ module.exports.updateEmail = async ({ email, id }) => {
     }
   }
 };
-
-module.exports.validateEmail = async user => {
-  return user;
-};

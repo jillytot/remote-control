@@ -11,6 +11,7 @@ const defaults = {
   loadMessages: 25, //number of messages chatroom will get on load
   currentAPIVersion: "/dev",
   passResetExpires: 900 * 1000, //about 15 minutes (in ms)
+  emailValidationExpires: 3600 * 1000 * 24, //24 hours
   logLevel: "debug",
   sendGrid: overides.sendGrid,
   sendMail: "",

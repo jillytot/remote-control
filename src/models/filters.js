@@ -58,6 +58,7 @@ module.exports.reservedWordsDefault = () => {
     "privacyPolicy",
     "privacy-policy",
     "privacy",
-    "patreon"
+    "patreon",
+    "email_validation"
   ];
 };

@@ -1,14 +1,14 @@
 import React, { Component } from "react";
 import axios from "axios";
 import { deleteChannel } from "../../../config/client";
-import Confirm from "../../common/confirm/index";
+import Confirm from "../../common/Confirm/Confirm";
 import "./DeleteChannelForm.scss";
 
 export default class DeleteChannelForm extends Component {
   state = {
     displayConfirm: false, //Toggle Confirm
     displayPending: false,
-    displaySuccess: "", //Response Message
+    displayResult: "", //Response Message
     displayError: false
   };
 
@@ -29,12 +29,12 @@ export default class DeleteChannelForm extends Component {
         // console.log("Delete Channel Response: ", res.data);
         if (res.data.error) {
           this.setState({
-            displaySuccess: res.data.error,
+            displayResult: res.data.error,
             displayError: true
           });
           return;
         } else {
-          this.setState({ displaySuccess: "Channel Successfully Deleted." });
+          this.setState({ displayResult: "Channel Successfully Deleted." });
           this.props.onDeleted();
           return;
         }
@@ -54,7 +54,7 @@ export default class DeleteChannelForm extends Component {
     this.setState({
       displayConfirm: false,
       displayPending: false,
-      displaySuccess: ""
+      displayResult: ""
     });
 
     // onUpdated(); //Update Parent component
@@ -71,7 +71,7 @@ export default class DeleteChannelForm extends Component {
     const {
       displayConfirm,
       displayPending,
-      displaySuccess,
+      displayResult,
       displayError
     } = this.state;
     return (
@@ -79,27 +79,28 @@ export default class DeleteChannelForm extends Component {
         <div className="DeleteChannelForm__container">
           <div className="DeleteChannelForm__label"> Delete Channel: </div>
 
-          <button
-            className="DeleteChannelForm__action"
-            onClick={() => {
-              this.setState({ displayConfirm: !displayConfirm });
-            }}
-          >
-            Delete
-          </button>
+          {displayConfirm ? (
+            <Confirm
+              confirmText="Delete Channel" //What is the action being confirmed?
+              displayConfirm={displayConfirm}
+              displayPending={displayPending}
+              onConfirm={this.handleConfirm}
+              onCancel={this.handleCancel}
+              onComplete={this.handleComplete}
+              displayResult={displayResult}
+              displayError={displayError}
+            />
+          ) : (
+            <button
+              className="DeleteChannelForm__action"
+              onClick={() => {
+                this.setState({ displayConfirm: !displayConfirm });
+              }}
+            >
+              Delete
+            </button>
+          )}
         </div>
-        {displayConfirm ? (
-          <Confirm
-            confirmText="Delete Channel" //What is the action being confirmed?
-            displayConfirm={displayConfirm}
-            displayPending={displayPending}
-            onConfirm={this.handleConfirm}
-            onCancel={this.handleCancel}
-            onComplete={this.handleComplete}
-            displaySuccess={displaySuccess}
-            displayError={displayError}
-          />
-        ) : null}
       </React.Fragment>
     );
   }

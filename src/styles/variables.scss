@@ -102,7 +102,7 @@ $color-wild-blue-yonder: rgb(123, 127, 173);
 $color-amethyst-smoke: rgb(158, 143, 182);
 $color-purple-mountains-majesty: rgb(150, 123, 194);
 $color-mauve: rgb(198, 162, 255);
-$color-lavender: rgb(176, 115, 211);
+$color-lavender: rgb(176, 115, 211); //default Link
 $color-medium-purple-1: #954ed6; //Gradient Purple
 $color-medium-purple-2: #b251eb;
 
@@ -111,7 +111,7 @@ $color-torea-bay: #0d3091;
 $color-blue-zodiac: #162755;
 $color-cerulean: #009bee;
 $color-dodger-blue: #1f93ff; //Remo Blue
-$color-malibu-1: rgb(106, 171, 255);
+$color-malibu-1: rgb(106, 171, 255); //Link Color Blue
 $color-cornflower-blue: rgb(91, 142, 236);
 $color-havelock-blue: rgb(66, 116, 209);
 
@@ -134,3 +134,12 @@ $remo-gradient: -webkit-linear-gradient(-45deg, #954ed6 0%, #009bee 100%);
 $button-default: $remo-gradient;
 $button-danger: -webkit-linear-gradient(-45deg, #b31515 0%, #ee3b94 100%);
 $button-inactive: -webkit-linear-gradient(-45deg, #414141 0%, #5e5e5e 100%);
+
+//Error Colors:
+$color-error-text: rgb(179, 32, 32);
+
+//Link Colors:
+// $color-link-default: $color-malibu-1;
+$color-link-default: $color-lavender;
+$color-link-default-hover: cyan;
+$color-link-gray: #acacac;

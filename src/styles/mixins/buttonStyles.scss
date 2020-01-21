@@ -41,7 +41,6 @@
 //Inline Styles:
 @mixin inline-adjustment {
   font-size: 12px;
-  // font-weight: bold;
   padding: 5px, 10px, 5px, 10px;
 }
 
@@ -63,4 +62,22 @@
 @mixin button-inline-inactive {
   @include button-inactive;
   @include inline-adjustment;
+}
+
+@mixin button-as-text-default {
+  background-color: transparent;
+  color: $color-link-default;
+  cursor: pointer;
+  font-style: italic;
+  font-size: 14px;
+  border: none;
+  &:hover {
+    color: $color-link-default-hover;
+    cursor: pointer;
+  }
+}
+
+@mixin button-as-text-gray {
+  @include button-as-text-default;
+  color: $color-link-gray;
 }

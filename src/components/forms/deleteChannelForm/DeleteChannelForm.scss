@@ -15,7 +15,7 @@
   &__action {
     @include button-inline-gray;
   }
-  &__cancel-action {
-    @include button-gray;
+  &__action-confirm {
+    @include button-inline-delete;
   }
 }

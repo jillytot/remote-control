@@ -1,3 +1,9 @@
+/* This can be deleted once the following components are updated to use the new format: 
+*   DeleteChannelForm - Done
+*   linkPatreon/index.jsx
+*   defaultChannel/index.jsx
+*/
+
 .do-action {
   color: #ff5ca3;
   font-size: 12px;

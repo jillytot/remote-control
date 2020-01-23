@@ -10,7 +10,10 @@ module.exports.validateEmail = async (user, setExpire) => {
 
   //Check validation status:
   if (getUser && getUser.status && getUser.status.email_validated) {
-    //No need to validate
+    //Should I resend?
+    return {
+      response: "This email address has already been validated"
+    };
   }
 
   //Generate Validation Key
@@ -48,7 +51,8 @@ const generateKey = (user, setExpire) => {
 //Check if Key exists
 module.exports.validateKey = async ({ key_id }) => {
   const { getKey } = require("../models/keys");
+  const { jsonError } = require("../modules/logging");
   const validate = await getKey({ key_id: key_id });
   if (validate) return validate;
-  return err("Invalid Key");
+  return jsonError("Invalid Key");
 };

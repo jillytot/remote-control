@@ -1,3 +1,12 @@
+const { logger, jsonError } = require("../modules/logging");
+const log = message => {
+  logger({
+    level: "debug",
+    source: "models/channel",
+    message: message
+  });
+};
+
 /*
 A channel can be composed of several elements, 
 like a chatroom, a video feed, and a control interface. 
@@ -10,8 +19,7 @@ that needs to be changed before to much more work is done.
 const { makeId, createTimeStamp } = require("../modules/utilities");
 // const socketEvents = require("../events/events");
 const { getChatRooms } = require("./chatRoom");
-const { CHANNELS_UPDATED, GET_CHAT_ROOMS } = require("../events/definitions");
-console.log(CHANNELS_UPDATED, GET_CHAT_ROOMS);
+const { CHANNELS_UPDATED } = require("../events/definitions");
 
 channelPrototype = {
   name: "Channel Name",
@@ -44,18 +52,14 @@ module.exports.emitEvent = (channel_id, event, data) => {
 };
 
 module.exports.createChannel = async data => {
-  console.log("Channel Data: ", data);
+  log(`Channel Data: ${data}`);
 
   if (!data.chat) {
     //TODO: Create "default chatroom" setting, and use that here instead.
     const getDefaultChat = await getChatRooms(data.host_id);
     data.chat = getDefaultChat[0].id;
 
-    console.log(
-      "No Chatroom found, adding default chat: ",
-      getDefaultChat,
-      data.chat
-    );
+    console.log("No Chatroom found, adding default chat");
   }
 
   let makeChannel = {};
@@ -69,10 +73,11 @@ module.exports.createChannel = async data => {
   makeChannel.status = statusPt;
 
   const { createControls } = require("./controls");
-  console.log("Making Controls: ", makeChannel.id);
-  makeChannel.controls = await createControls({ channel_id: makeChannel.id });
+  log(`Making Controls: ${makeChannel.id}`);
+  makeControls = await createControls({ channel_id: makeChannel.id });
+  makeChannel.controls = makeControls.id;
   // makeChannel.controls = checkChannelElement("");
-  console.log("Generating Channel: ", makeChannel);
+  log(`Generating Channel: ${makeChannel.id}`);
   this.saveChannel(makeChannel);
   // pushToActiveChannels(makeChannel);
 
@@ -160,26 +165,27 @@ module.exports.updateServerChannels = async server_id => {
 
 module.exports.deleteChannel = async (channel_id, server_id) => {
   const db = require("../services/db");
+  const { tempEnsureDefaultChannel } = require("../controllers/channels");
   const remove = `DELETE FROM channels WHERE id =$1`;
   let response = {};
   try {
     const checkChannelCount = await this.getChannels(server_id);
     if (checkChannelCount && checkChannelCount.length <= 1) {
-      console.log("YOU CANNOT DELETE A CHANNEL IF YOU ONLY HAVE ONE LEFT");
-      console.log(checkChannelCount);
-      response.status = "Error!";
-      response.error =
-        "You cannot delete your last remaining channel, please create another if you wish to delete this one";
-      return response;
+      // console.log("YOU CANNOT DELETE A CHANNEL IF YOU ONLY HAVE ONE LEFT");
+      // console.log(checkChannelCount);
+      return jsonError(
+        "Unable to delete channel, server must contain at least one channel."
+      );
     }
 
     const result = await db.query(remove, [channel_id]);
-    // if (result.rows > 0) {
+    // if (result.rows[0]) {
     response.status = "success!";
     response.result = result.rows[0];
+    await tempEnsureDefaultChannel(server_id, channel_id);
     this.updateServerChannels(server_id);
-
     return response;
+    //}
   } catch (err) {
     response.error = err;
     response.status = "error!";
@@ -194,12 +200,12 @@ module.exports.getServerIdFromChannelId = async channel_id => {
   try {
     const query = "SELECT * FROM channels WHERE id = $1 LIMIT 1";
     const result = await db.query(query, [channel_id]);
-    console.log(
-      "Get Server ID from channel ID: ",
-      channel_id,
-      result.rows.length,
-      result.rows
-    );
+    // console.log(
+    //   "Get Server ID from channel ID: ",
+    //   channel_id,
+    //   result.rows.length,
+    //   result.rows
+    // );
     if (result.rows.length > 0) {
       response.status = "success!";
       response.result = result.rows[0].host_id;
@@ -217,7 +223,7 @@ module.exports.getServerIdFromChannelId = async channel_id => {
 
 module.exports.setControls = async controlData => {
   const { sendUpdatedControls } = require("./controls");
-  console.log("SET CONTROLS CHECK: ", controlData);
+  // console.log("SET CONTROLS CHECK: ", controlData);
   //save new controls to channel
   const db = require("../services/db");
   const { channel_id, id } = controlData;
@@ -226,7 +232,7 @@ module.exports.setControls = async controlData => {
   try {
     const result = await db.query(insert, [id, channel_id]);
     if (result.rows[0]) {
-      console.log("Controls Set: ", result.rows[0]);
+      // console.log("Controls Set: ", result.rows[0]);
       const channel_controls = result.rows[0];
       sendUpdatedControls(channel_controls.controls, channel_controls.id);
       return result.rows[0];
@@ -237,20 +243,38 @@ module.exports.setControls = async controlData => {
   } catch (err) {
     response.status = "error";
     response.error = "could not set controls for channel";
-    console.log(err);
+    console.log(err.detail);
   }
 };
 
-/* 
-Todo: 
-Have server own this instead of chatroom directly
-put chatroom under channels
-reflect the new structure on the client side
+//Get data for individual channel
+module.exports.getChannel = async channel_id => {
+  if (!channel_id) return { status: "error!", error: "channel ID required" };
+  const db = require("../services/db");
+  console.log("Fetch data for channel: ", channel_id);
+  try {
+    const query = `SELECT * FROM channels WHERE id = $1 LIMIT 1`;
+    const result = await db.query(query, [channel_id]);
+    // console.log(result.rows[0]);
+    if (result.rows[0]) return result.rows[0];
+    return jsonError(`Unable to find channel with id: ${channel_id}`);
+  } catch (err) {
+    console.log(err);
+  }
+  return jsonError("There was an issue fetching information for this channel");
+};
 
-module exports: 
-channelEvents
-getChannels
-pushToActiveChannels
-deleteChannel
+module.exports.getAllChannels = async () => {
+  const db = require("../services/db");
+  const query = `SELECT * FROM channels`;
+  try {
+    const result = await db.query(query);
+    if (result.rows[0]) return result.rows;
+  } catch (err) {
+    console.log(err);
+  }
+  return null;
+};
 
-*/
+//tests
+//console.log(this.getChannel("chan-02063c30-01b8-4d6c-9712-0fa646bcc942"));

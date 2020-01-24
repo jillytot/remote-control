@@ -1,8 +1,17 @@
 import React from "react";
 import "../../styles/common.css";
 
-const Input = ({ name, label, error, type, ref, ...rest }) => {
-  console.log("Input Props: ", type, ref);
+const Input = React.forwardRef((props, ref) => {
+  const { name, label, error, type, passError, ...rest } = props;
+  // console.log("Input Props: ", type, ref);
+
+  const handleErrorPlacement = () => {
+    if (type === "inline" && error) {
+      // passError(<div className="alert alert-danger">{error}</div>);
+      passError(error);
+      return;
+    }
+  };
 
   return (
     <React.Fragment>
@@ -17,12 +26,16 @@ const Input = ({ name, label, error, type, ref, ...rest }) => {
             type={type}
             name={name}
             className={type === "chat" ? "chat-input" : "form-control"}
+            autoComplete={type === "chat" ? "off" : ""}
           />
         </div>
-        {error && <div className="alert alert-danger">{error}</div>}
+        {type === "inline"
+          ? handleErrorPlacement()
+          : type === "chat" ||
+            (error && <div className="alert alert-danger">{error}</div>)}
       </div>
     </React.Fragment>
   );
-};
+});
 
 export default Input;

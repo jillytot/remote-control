@@ -4,8 +4,9 @@ import Form from "../../common/form";
 import Joi from "joi-browser";
 import "./login.css";
 import axios from "axios";
-import { apiUrl, reCaptchaSiteKey } from "../../../config/clientSettings";
+import { apiUrl, reCaptchaSiteKey } from "../../../config/client";
 import ReCAPTCHA from "react-google-recaptcha";
+import { Redirect } from "react-router-dom";
 
 export default class Signup extends Form {
   state = {
@@ -13,7 +14,10 @@ export default class Signup extends Form {
     errors: {},
     isUser: null,
     error: "",
-    captcha: ""
+    captcha: "",
+    redirect: false,
+    redirectURL: "/",
+    submitText: "Submit"
   };
 
   schema = {
@@ -49,7 +53,19 @@ export default class Signup extends Form {
       .catch(function(error) {
         console.log(error);
       });
+
+    this.setRedirect();
   }
+
+  setRedirect = () => {
+    if (this.props.redirectURL) {
+      this.setState({ redirectURL: this.props.redirectURL });
+    }
+
+    if (this.props.submitText) {
+      this.setState({ submitText: this.props.submitText });
+    }
+  };
 
   setUser = ({ user, isUser }) => {
     // console.log("Is User?: ", isUser);
@@ -91,11 +107,16 @@ export default class Signup extends Form {
         response: captcha
       })
       .then(response => {
-        const { handleAuth } = this.props;
-        console.log(response);
-        localStorage.setItem("token", response.data.token);
-        this.props.socket.emit("AUTHENTICATE", { token: response.data.token });
-        handleAuth(localStorage.getItem("token"));
+        console.log(response.data);
+        if (response.data.error) {
+          // console.log(response.data.error);
+          this.setState({ error: response.data.error });
+        }
+
+        if (response.data.token) {
+          localStorage.setItem("token", response.data.token);
+          this.setState({ redirect: true });
+        }
       })
       .catch(function(error) {
         console.log(error);
@@ -111,9 +132,11 @@ export default class Signup extends Form {
   };
 
   render() {
-    return (
-      <div className="register-form">
-        Please do not use actual passwords or emails for this build.
+    const { redirectURL, submitText } = this.state;
+    return this.state.redirect ? (
+      <Redirect to={redirectURL}></Redirect>
+    ) : (
+      <div className="register-form intro ">
         {this.handleSubmitError()}
         <form onSubmit={this.handleSubmit}>
           {this.renderInput("username", "Username", "text")}
@@ -124,9 +147,9 @@ export default class Signup extends Form {
             sitekey={reCaptchaSiteKey}
             ref={this.recaptchaRef}
             onChange={this.handleCaptcha} // this parameter is required.
-            // theme="dark"   // Did you know captcha has a dark theme?
+            //theme="dark" // Did you know captcha has a dark theme?
           />
-          {this.renderButton("Submit")}
+          {this.renderButton(submitText)}
         </form>
       </div>
     );

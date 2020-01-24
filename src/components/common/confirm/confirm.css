@@ -1,0 +1,48 @@
+/* This can be deleted once the following components are updated to use the new format: 
+*   DeleteChannelForm - Done
+*   linkPatreon/index.jsx
+*   defaultChannel/index.jsx
+*/
+
+.do-action {
+  color: #ff5ca3;
+  font-size: 12px;
+  /* background-color: purple; */
+  cursor: pointer;
+  font-style: italic;
+  margin-left: 12px;
+}
+
+.do-action:hover {
+  text-decoration: underline;
+}
+
+.confirm-action-container {
+  display: flex;
+  flex-direction: row;
+  font-size: 12px;
+  margin-bottom: 6px;
+  justify-content: flex-end;
+  margin-right: 6px;
+}
+
+.confirm-action {
+  display: flex;
+  flex-direction: row;
+  font-size: 12px;
+  font-style: italic;
+}
+
+.margin-left-12 {
+  margin-left: 12px;
+}
+
+.action-success {
+  font-style: italic;
+  margin-left: -12px;
+  margin-right: 12px;
+}
+
+.error {
+  color: rgb(179, 32, 32);
+}

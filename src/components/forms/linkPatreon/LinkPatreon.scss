@@ -1,0 +1,22 @@
+@import "../../../styles/mixins/buttonStyles.scss";
+
+.LinkPatreon {
+  &__link {
+    @include button-as-text-default;
+  }
+  &__remove {
+    @include button-as-text-gray;
+  }
+  &__confirm-container {
+    margin-left: 6px;
+    padding-bottom: 12px;
+  }
+}
+
+.link-patreon-container {
+  background-color: orange;
+}
+
+.padding {
+  padding: 6px;
+}

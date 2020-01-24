@@ -1,19 +1,26 @@
 import React from "react";
 import "../../styles/common.css";
 
-const toggle = ({ toggle, label, onClick }) => {
+const toggle = ({ toggle, label, onClick, critical }) => {
   const toggleOn = () => {
     return (
-      <div className="toggle-on">
-        <div className="toggle-pip-on" />
+      <div className={handleType()}>
+        <div className="toggle-text">ON</div>
+        <div className="toggle-pip" />
       </div>
     );
   };
 
+  const handleType = () => {
+    if (critical) return "toggle on critical";
+    return "toggle on";
+  };
+
   const toggleOff = () => {
     return (
-      <div className="toggle-off">
-        <div className="toggle-pip-off" />
+      <div className="toggle off">
+        <div className="toggle-pip translate" />
+        <div className="toggle-text">OFF</div>
       </div>
     );
   };

@@ -1,0 +1,21 @@
+.scroll-box {
+  overflow-y: auto;
+  position: relative;
+  height: auto;
+  width: auto;
+  display: flex;
+  flex-direction: row;
+  flex: 2;
+}
+
+.scroll-box::-webkit-scrollbar-track {
+  box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
+  background-color: #372e50;
+}
+.scroll-box::-webkit-scrollbar {
+  width: 0px;
+  /* background-color: green; */
+}
+.scroll-box::-webkit-scrollbar-thumb {
+  background-color: #484d79;
+}

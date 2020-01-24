@@ -1,0 +1,10 @@
+@mixin inline-container {
+  padding: 12px;
+  /* border-bottom: solid 1px blue; */
+  display: flex;
+  flex-direction: row;
+  font-size: 14px;
+  background: rgb(31, 31, 46);
+  margin-bottom: 2px;
+  border-radius: 6px;
+}

@@ -1,19 +1,42 @@
 const router = require("express").Router();
+const { paginate } = require("../../modules/requests");
 const {
   createRobotServer,
-  getRobotServers,
   getRobotServer,
   deleteRobotServer,
   updateRobotServer
 } = require("../../models/robotServer");
-// const { publicUser, validateUser } = require("../../models/user");
+
+const { checkTypes } = require("../../models/user");
 const auth = require("../auth");
 const Joi = require("joi");
+const { jsonError, logger } = require("../../modules/logging");
 
 //LIST ACTIVE SERVERS
 router.get("/list", async (req, res) => {
-  let display = await getRobotServers();
+  const { getPublicServers } = require("../../controllers/robotServer");
+  let display = await getPublicServers();
   res.send(display);
+});
+
+router.get("/members", async (req, res) => {
+  let response = {};
+  const { getMembers } = require("../../models/serverMembers");
+  if (req.body.server_id) {
+    const listMembers = await getMembers(req.body.server_id);
+    response = listMembers;
+  } else {
+    response.status = "Error!";
+    response.error = "Unable to get members";
+  }
+  res.send(response);
+});
+
+router.post("/get-members", auth({ user: true }), async (req, res) => {
+  const { getMembers } = require("../../controllers/members");
+  if (!req.body.server_id) return res.send(jsonError("Invalid Server ID"));
+  const members = await getMembers(req.body.server_id);
+  return res.send(members);
 });
 
 //CREATE SERVER
@@ -25,19 +48,187 @@ router.get("/create", (req, res) => {
   res.send(response);
 });
 
-router.post("/create", auth, async (req, res) => {
-  console.log("Generating Robot Server ", req.body, req.token);
-  const result = Joi.validate({ server_name: req.body.server_name }, schema);
-
-  console.log("Joi validation result: ", result);
-  if (result.error !== null) {
-    res.send({ error: `Could not save server: ${req.body.server_name}` });
+//generate invite for a server, right now only owner can make this
+router.post("/invite", auth({ user: true }), async (req, res) => {
+  if (req.user && req.body.server_id) {
+    const { makeInvite } = require("../../controllers/members");
+    const generate = await makeInvite({
+      user: req.user,
+      server_id: req.body.server_id,
+      expires: req.body.expires || null
+    });
+    res.send(generate);
     return;
   }
-  const buildRobotServer = await createRobotServer(req.body, req.token);
-  buildRobotServer !== null
-    ? res.send(buildRobotServer)
-    : res.send("Error generating server");
+  (response.status = "error"), (response.error = "Unable to generate invite");
+  res.send(response);
+});
+
+//JOIN SERVER, MAIN METHOD FOR JOINING PUBLICLY LISTED SERVERS
+router.post("/join", auth({ user: true }), async (req, res) => {
+  const { joinServer } = require("../../controllers/members");
+  let response = {};
+  if (req.user && req.body.join && req.body.server_id) {
+    const join = await joinServer({
+      user_id: req.user.id,
+      server_id: req.body.server_id,
+      join: req.body.join
+    });
+
+    if (join) {
+      response = join;
+      res.send(join);
+      return;
+    }
+  }
+
+  response.status = "Error!";
+  response.error = "Unable to join server with provided information";
+  res.send(response);
+});
+
+//First step for joining a private remo server
+router.post("/validate-invite", async (req, res) => {
+  const { validateServerInvite } = require("../../controllers/members");
+  const {
+    getServerById,
+    getPublicServerInfo
+  } = require("../../controllers/robotServer");
+  const { getPublicUserFromId } = require("../../controllers/user");
+
+  if (req.body.invite) {
+    logger(req.body.invite);
+    const invite = await validateServerInvite(req.body.invite);
+
+    if (invite && !invite.error) {
+      //get server info:
+      let server = await getServerById(invite.server_id);
+      if (server) server = await getPublicServerInfo(server);
+      let invited_by = await getPublicUserFromId(invite.created_by);
+      res.send({ invite, server, invited_by });
+      return;
+    }
+  }
+  console.log("BOOP");
+  res.send(jsonError("This invite either doesn't exist, or is invalid"));
+  return;
+});
+
+router.post("/deactivate-invite", auth({ user: true }), async (req, res) => {
+  const {
+    deactivateInvite,
+    getInviteInfoFromId
+  } = require("../../controllers/members");
+  if (req.body.id) {
+    //get invite info
+    const invite = await getInviteInfoFromId(req.body.id);
+    if (req.user.id === invite.created_by) {
+      const disable = await deactivateInvite(invite);
+      res.send(disable);
+      return;
+    }
+    //TODO: Check User Role on Server to auth deactivation
+  }
+  res.send(jsonError("Unable to update Invite"));
+  return;
+});
+
+//LEAVE SERVER, DOES NOT DELETE USER FROM MEMBERLIST
+router.post("/leave", auth({ user: true }), async (req, res) => {
+  const { leaveServer } = require("../../controllers/members");
+  let response = {};
+  if (req.user && req.body.join && req.body.server_id) {
+    const leave = await leaveServer({
+      user_id: req.user.id,
+      server_id: req.body.server_id,
+      join: req.body.join
+    });
+
+    if (leave) {
+      response = leave;
+      res.send(response);
+      return;
+    }
+  }
+  response.status = "Error!";
+  response.error = "Unable to leave server";
+  res.send(response);
+});
+
+//THIS WILL COMPLETELY REMOVE A MEMBER FROM A SERVER & CONSEQUENTLY REMOVE ALL THEIR DATA
+router.post("/delete-member", auth({ user: true }), async (req, res) => {
+  const { deleteMember } = require("../../models/serverMembers");
+  let response = {};
+  if (req.user && req.body.server_id) {
+    const leave = await deleteMember({
+      user_id: req.user.id,
+      server_id: req.body.server_id
+    });
+    if (leave) {
+      response.status = "Success";
+      response.result = `Successfully Left Server ${req.body.server_id}`;
+    } else {
+      (response.status = "Error!"),
+        (response.error = "Unable to leave server...");
+    }
+  }
+  res.send(response);
+});
+
+//get list of invites for a specific server, right now only owner can request
+router.get("/invites", auth({ user: true }), async (req, res) => {
+  const { getInvitesForServer } = require("../../models/invites");
+  if (req.user && req.body.server_id) {
+    let getInvites = await getInvitesForServer(req.body.server_id);
+    res.send(getInvites);
+  }
+});
+
+router.post("/settings/update", auth({ user: true }), async (req, res) => {
+  // return res.json(req.body);
+  const { updateSettings } = require("../../controllers/robotServer");
+  if (req.body.server.settings) {
+    const update = await updateSettings(req.body.server, req.user.id);
+    if (update) res.send(update);
+    return;
+  }
+  res.send(jsonError("Unable to update server settings"));
+});
+
+router.post(
+  "/get-server",
+  auth({ user: true, robot: true }),
+  async (req, res) => {
+    const { getServerByName } = require("../../controllers/robotServer");
+    if (req.body.server_name) {
+      let user = {};
+      if (req.robot) {
+        user.id = req.robot.owner_id;
+      } else {
+        user = req.user;
+      }
+      const getServer = await getServerByName(req.body.server_name, user);
+      if (getServer) res.send(getServer);
+      return;
+    }
+    res.send({ status: "Error!", error: "Unable to find server" });
+  }
+);
+
+router.post("/create", auth({ user: true }), async (req, res) => {
+  const { validateServerName } = require("../../controllers/validate");
+  let storeReq = req.body;
+  if (req.body.server_name) {
+    const validate = validateServerName(req.body.server_name);
+    if (validate.error) return res.send(validate);
+    storeReq.server_name = validate;
+  } else {
+    res.send(jsonError("server_name is required."));
+    return;
+  }
+  const buildRobotServer = await createRobotServer(storeReq, req.user);
+  res.send(buildRobotServer);
+  return;
 });
 
 //REMOVE SERVER
@@ -48,14 +239,17 @@ router.get("/delete", async (req, res) => {
   res.send(response);
 });
 
-router.post("/delete", auth, async (req, res) => {
+router.post("/delete", auth({ user: true }), async (req, res) => {
   console.log("API / Robot Server / Delete: ", req.body);
   let response = {};
 
   if (req.user) {
-    response.validated = true;
     const robotServerToDelete = await getRobotServer(req.body.server_id);
-    if (robotServerToDelete && req.user.id === robotServerToDelete.owner_id) {
+    const moderator = await checkTypes(req.user, ["staff, global_moderator"]);
+    if (
+      (robotServerToDelete && req.user.id === robotServerToDelete.owner_id) ||
+      moderator
+    ) {
       response.deleting = req.body.server_id;
       try {
         if (await deleteRobotServer(req.body.server_id)) {
@@ -69,7 +263,7 @@ router.post("/delete", auth, async (req, res) => {
         response.error = "Could not Delete Server";
       }
     } else {
-      response.error = "Could not Delete Server";
+      response.error = "Insuffecient privileges to delete server";
     }
   } else {
     response.error = "Invalid User";

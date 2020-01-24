@@ -1,5 +1,10 @@
 node_modules
 build
+.vscode
 
 */.DS_Store
 src/models/globalBadWordsList.json
+src/config/client/overides.js
+src/config/client/overrides.js
+src/config/server/overides.js
+src/config/server/overrides.js

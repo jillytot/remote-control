@@ -40,10 +40,6 @@
   font-size: 12px;
 }
 
-/* .form-group {
-  font-size: calc(3px + 2vmin);
-} */
-
 .register-form {
   /* background-color: yellow; */
   display: flex;
@@ -100,67 +96,72 @@
   /* justify-items: center;   */
 }
 
-.modal {
-  padding: 24px;
-  border-radius: 24px;
-
-  background: -webkit-linear-gradient(-45deg, #954ed6 0%, #009bee 100%);
-}
-
 .toggle-label {
   margin-right: 5px;
   font-size: 11px;
+  color: cyan;
+  font-style: italic;
 }
 
-.toggle-on {
+.toggle {
   color: white;
+  font-size: 10px;
+  border-radius: 12px;
+  padding: 4px;
+  margin-left: 4px;
+  width: 48px;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  cursor: pointer;
+  height: 12px;
+}
+
+.toggle-text {
+  padding: 4px;
   font-weight: bold;
+}
+
+.on {
   background-color: #21c975;
-  border-radius: 24px;
-  padding: 4px;
-  margin-left: 4px;
-  width: 32px;
+  justify-content: flex-end;
 }
 
-.toggle-off {
+.off {
   background-color: #949b98;
-  font-weight: bold;
-  border-radius: 24px;
-  padding: 4px;
-  margin-left: 4px;
-  width: 32px;
 }
 
-.toggle-pip-on {
+.critical {
+  background-color: #ff5ca3;
+}
+
+.toggle-pip {
   background-color: white;
   width: 14px;
   height: 14px;
-  border-radius: 18px;
-  transition: 0.2s;
+  border-radius: 12px;
+  /* transition: 0.2s; */
 }
 
-.toggle-pip-off {
-  background-color: white;
-  width: 14px;
-  height: 14px;
-  border-radius: 18px;
+.toggle-translate {
   transform: translateX(18px);
-  transition: 0.2s;
 }
 
 .toggle-container {
   display: flex;
+  margin-top: 6px;
   flex-direction: row;
   align-items: center;
-  /* margin-bottom: 5px; */
   /* background-color: blue; */
+  justify-content: flex-end;
 }
 
 .toggle-group {
   background-color: rgb(15, 24, 39);
-  padding: 6px 24px 6px 24px;
-  border-radius: 24px;
+  padding: 12px;
+  border-radius: 12px;
   margin: 5px;
+  margin-bottom: 12px;
 }
 
 .copy-to-clipboard {
@@ -182,4 +183,10 @@
   /* background-color: green; */
   display: flex;
   margin-bottom: 5px;
+}
+
+.info {
+  font-size: 14px;
+  margin: 5px;
+  margin-bottom: 10px;
 }

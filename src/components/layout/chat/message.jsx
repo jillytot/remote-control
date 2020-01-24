@@ -1,11 +1,21 @@
-import React from "react";
+import React, { useState } from "react";
 import Emotes from "../../../emotes/emotes";
 import defaultImages from "../../../imgs/placeholders";
+import { mobileMessageFadeOut } from "../../../config/client";
 
-const Message = ({ message }) => {
+const Message = ({ message, channelName, printChannelName }) => {
+  const [fadeout, setFadeout] = useState(
+    setTimeout(() => handleFade(), mobileMessageFadeOut)
+  );
+
+  const handleFade = () => {
+    setFadeout(true);
+  };
+
   const types = {
     default: "",
     moderation: "moderation",
+    robot: "robot",
     admin: "admin",
     channel: "channel",
     special: "special",
@@ -15,11 +25,10 @@ const Message = ({ message }) => {
 
   const handleEmotes = filterMessage => {
     let filter = [];
-
     filterMessage.split(" ").forEach((word, i) => {
       if (Emotes.hasOwnProperty(word)) {
         filter.push(
-          <span key={`${word}${i}`}>
+          <span key={`${word}${i}`} title={word}>
             <img className="emote" src={Emotes[word]} alt={word} />{" "}
           </span>
         );
@@ -42,9 +51,127 @@ const Message = ({ message }) => {
     const { badges } = message;
     if (message && message.type === types.moderation) return <React.Fragment />;
     if (badges && badges.length > 0) {
-      console.log("BADGES GET: ", badges);
+      // console.log("BADGES GET: ", badges);
       return badges.map(badge => {
-        console.log("BADGE GET: ", badge);
+        // const checkString = badge.substring(0, 7);
+        // console.log("BADGE GET: ", badge);
+        if (badge === "patreon100") {
+          return (
+            <span key={message.id + badge}>
+              <img
+                className="message-badge"
+                src={defaultImages["patreon100"]}
+                alt={badge}
+                title={"Patreon Supporter"}
+              />
+            </span>
+          );
+        }
+
+        if (badge === "patreon500") {
+          return (
+            <span key={message.id + badge}>
+              <img
+                className="message-badge"
+                src={defaultImages["patreon500"]}
+                alt={badge}
+                title={"Patreon Supporter"}
+              />
+            </span>
+          );
+        }
+
+        if (badge === "patreon700") {
+          return (
+            <span key={message.id + badge}>
+              <img
+                className="message-badge"
+                src={defaultImages["patreon700"]}
+                alt={badge}
+                title={"Patreon Supporter"}
+              />
+            </span>
+          );
+        }
+
+        if (badge === "patreon1000") {
+          return (
+            <span key={message.id + badge}>
+              <img
+                className="message-badge"
+                src={defaultImages["patreon1000"]}
+                alt={badge}
+                title={"Patreon Supporter"}
+              />
+            </span>
+          );
+        }
+
+        if (badge === "patreon1000") {
+          return (
+            <span key={message.id + badge}>
+              <img
+                className="message-badge"
+                src={defaultImages["patreon1000"]}
+                alt={badge}
+                title={"Patreon Supporter"}
+              />
+            </span>
+          );
+        }
+
+        if (badge === "patreon1500") {
+          return (
+            <span key={message.id + badge}>
+              <img
+                className="message-badge"
+                src={defaultImages["patreon1500"]}
+                alt={badge}
+                title={"Patreon Supporter"}
+              />
+            </span>
+          );
+        }
+
+        if (badge === "patreon2500") {
+          return (
+            <span key={message.id + badge}>
+              <img
+                className="message-badge"
+                src={defaultImages["patreon2500"]}
+                alt={badge}
+                title={"Patreon Supporter"}
+              />
+            </span>
+          );
+        }
+
+        if (badge === "patreon3500") {
+          return (
+            <span key={message.id + badge}>
+              <img
+                className="message-badge"
+                src={defaultImages["patreon3500"]}
+                alt={badge}
+                title={"Patreon Supporter"}
+              />
+            </span>
+          );
+        }
+
+        if (badge === "patreon5000") {
+          return (
+            <span key={message.id + badge}>
+              <img
+                className="message-badge"
+                src={defaultImages["patreon5000"]}
+                alt={badge}
+                title={"Patreon Supporter"}
+              />
+            </span>
+          );
+        }
+
         if (badge === "staff") {
           // console.log("ADD BADGE!");
           return (
@@ -96,6 +223,19 @@ const Message = ({ message }) => {
             </span>
           );
         }
+
+        if (badge === "robot") {
+          return (
+            <span key={message.id + badge}>
+              <img
+                className="message-badge"
+                src={defaultImages["robot"]}
+                alt={badge}
+                title={"Robot"}
+              />
+            </span>
+          );
+        }
         return <React.Fragment key={badge} />;
       });
     }
@@ -106,8 +246,11 @@ const Message = ({ message }) => {
     if (message.type === types.moderation) {
       // console.log("Moderation Type Message");
       return `chat-message system-message`;
+    } else if (message.type === types.robot) {
+      return `chat-message robot-message`;
     } else {
       return `chat-message ${color} ${
+        // return `chat-message rainbow ${
         message.type === types.self ? types.self : ""
       }`;
     }
@@ -120,13 +263,57 @@ const Message = ({ message }) => {
     return message.sender;
   };
 
+  const handleSenderColor = message => {
+    let color = "chat-user-name";
+
+    //Older method with hardcoded names.
+    //since rainbow names never expire, a server side implementation is required to replace this method
+    rainbowForLifeNames.forEach(name => {
+      if (message.sender.toLowerCase() === name.toLowerCase()) {
+        color = "chat-user-name rainbow";
+      }
+    });
+
+    const { badges } = message;
+
+    //Make username rainbow color if they have a patreon badge
+    if (badges && badges.length > 0) {
+      // console.log("BADGES GET: ", badges);
+      badges.map(badge => {
+        const checkString = badge.substring(0, 7);
+        if (checkString === "patreon") color = "chat-user-name rainbow";
+      });
+    }
+
+    return color;
+  };
+
+  const handleMessageContainer = () => {
+    if (fadeout === true) return "chat-message-container fade-out";
+    return "chat-message-container";
+  };
+
+  const handleChannelName = name => {
+    return <span className="channel-name">{`# ${name} `}</span>;
+  };
+
   return (
-    <div>
+    <div className={handleMessageContainer()}>
       <div className={handleMessageType(message)}>
+        {printChannelName === true ? (
+          <React.Fragment>
+            {handleChannelName(channelName)} <br />
+          </React.Fragment>
+        ) : (
+          <React.Fragment />
+        )}
         {handleBadges(message)}
-        <span className="chat-user-name">{`${handleMessageSender(message)}${
+        <span
+          className={handleSenderColor(message)}
+          title={new Date(parseInt(message.time_stamp)).toLocaleString()}
+        >{`${handleMessageSender(message)}${
           message.type === types.self ? "" : ":"
-        }  `}</span>
+        }  `}</span>{" "}
         <span className="message-spacing">
           {handleEmotes(message.message).map(element => {
             return element;
@@ -138,3 +325,31 @@ const Message = ({ message }) => {
 };
 
 export default Message;
+
+const rainbowForLifeNames = [
+  "Admanta",
+  "TGCFabian",
+  "onlybrezel",
+  "robosim",
+  "backslashkieran",
+  "mikey",
+  "skeet",
+  "andrak",
+  "xyamom",
+  "RoyE",
+  "bruh116",
+  "Boland",
+  "chad",
+  "gcurtis79",
+  "neviklink",
+  "cheshy",
+  "BunkyFakerino",
+  "Remo",
+  "ReconDelta090",
+  "Peter",
+  "hgriswold89",
+  "sybergoosejr",
+  "Nocturnal",
+  "Hopper",
+  "brillan150"
+];

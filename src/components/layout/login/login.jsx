@@ -4,13 +4,18 @@ import Form from "../../common/form";
 import Joi from "joi-browser";
 import "./login.css";
 import axios from "axios";
-import { apiLogin } from "../../../config/clientSettings";
+import { apiLogin, recoveryPage } from "../../../config/client";
+import { Redirect } from "react-router-dom";
 
 export default class Login extends Form {
   state = {
     data: { username: "", password: "" },
     errors: {},
-    isUser: null
+    isUser: null,
+    redirect: false,
+    error: "",
+    redirectURL: "/",
+    submitText: "Submit"
   };
 
   async componentDidMount() {
@@ -22,7 +27,18 @@ export default class Login extends Form {
       .catch(err => {
         console.log(err);
       });
+
+    this.setRedirect();
   }
+
+  setRedirect = () => {
+    if (this.props.redirectURL) {
+      this.setState({ redirectURL: this.props.redirectURL });
+    }
+    if (this.props.submitText) {
+      this.setState({ submitText: this.props.submitText });
+    }
+  };
 
   schema = {
     username: Joi.string()
@@ -39,7 +55,6 @@ export default class Login extends Form {
   };
 
   setUser = ({ user, isUser }) => {
-    // console.log("Is User?: ", isUser);
     if (isUser === true) {
       this.setError("User name taken.");
       this.setState({ isUser: false });
@@ -50,15 +65,14 @@ export default class Login extends Form {
     }
   };
 
-  handleFeedback = () => {
-    const { isUser } = this.state;
-    return isUser === false
-      ? "Username taken, please try another."
-      : "Username";
+  setError = error => {
+    console.log(error);
+    this.setState({ error: error });
   };
 
-  setError = error => {
-    this.setState({ errors: error });
+  setErrors = errors => {
+    console.log(errors);
+    this.setState({ errors: errors });
   };
 
   doSubmit = async () => {
@@ -71,25 +85,43 @@ export default class Login extends Form {
         password: data.password
       })
       .then(res => {
-        const { handleAuth } = this.props;
-        console.log("Login response: ", res);
-        localStorage.setItem("token", res.data.token);
-        this.props.socket.emit("AUTHENTICATE", { token: res.data.token });
-        handleAuth(localStorage.getItem("token"));
+        if (res.data.error) {
+          console.log(res.data.error);
+          this.setState({ error: res.data.error });
+        }
+        if (res.data.token) {
+          localStorage.setItem("token", res.data.token);
+          this.setState({ redirect: true });
+        }
       })
       .catch(err => {
         console.log("Login Error: ", err);
       });
   };
 
+  handleSubmitError = () => {
+    const { error } = this.state;
+    if (error === "") {
+      return <React.Fragment />;
+    }
+    return <div className="alert">{this.state.error}</div>;
+  };
+
   render() {
-    return (
-      <div className="register-form">
+    const { redirectURL, submitText } = this.state;
+    return this.state.redirect ? (
+      <Redirect to={redirectURL} />
+    ) : (
+      <div className="register-form intro">
+        {this.handleSubmitError()}
         <form onSubmit={this.handleSubmit}>
           {this.renderInput("username", "Username", "text")}
           {this.renderInput("password", "Password", "password")}
-          {this.renderButton("Submit")}
+          {this.renderButton(submitText)}
         </form>
+        <div className="forgot-password">
+          <a href={recoveryPage}> forgot password?</a>
+        </div>
       </div>
     );
   }

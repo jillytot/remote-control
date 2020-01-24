@@ -4,8 +4,6 @@ GLobal : Robot Server : Channel : Channel Elements > Chat Room
 */
 
 const { makeId, createTimeStamp } = require("../modules/utilities");
-const { getActiveServer } = require("./robotServer");
-const { createMessage } = require("./chatMessage");
 
 module.exports.emitEvent = (chat_id, event, data) => {
   const wss = require("../services/wss");
@@ -47,7 +45,7 @@ module.exports.initActiveChats = async () => {
   const query = `SELECT * FROM chat_rooms`;
   try {
     result = await db.query(query);
-    console.log("Active Chatrooms Initialized", result.rows);
+    // console.log("Active Chatrooms Initialized", result.rows);
     activeChats = result.rows;
   } catch (err) {
     console.log(err);
@@ -67,7 +65,7 @@ module.exports.getActiveChat = chatId => {
 
 module.exports.saveChatRoom = async chatRoom => {
   const db = require("../services/db");
-  console.log("Saving Chat Room: ", chatRoom);
+  // console.log("Saving Chat Room: ", chatRoom);
   const { host_id, name, id, messages, created } = chatRoom;
 
   const dbPut = `INSERT INTO chat_rooms (host_id, name, id, messages, created ) VALUES($1, $2, $3, $4, $5 ) RETURNING *`;
@@ -80,12 +78,12 @@ module.exports.saveChatRoom = async chatRoom => {
 
 //Get chatrooms that belong to a robot server
 module.exports.getChatRooms = async server_id => {
-  console.log("Server Id from getChatRooms: ", server_id);
+  // console.log("Server Id from getChatRooms: ", server_id);
   const db = require("../services/db");
   const query = `SELECT name, id FROM chat_rooms WHERE host_id = $1`;
   try {
     result = await db.query(query, [server_id]);
-    console.log("Get Chatrooms from DB Result:", result.rows);
+    // console.log("Get Chatrooms from DB Result:", result.rows);
     return result.rows;
   } catch (err) {
     console.log(err);
@@ -94,12 +92,12 @@ module.exports.getChatRooms = async server_id => {
 
 //Get a single chatroom & all its contents
 module.exports.getChat = async chatId => {
-  console.log("Server Id from getChatRooms: ", chatId);
+  // console.log("Server Id from getChatRooms: ", chatId);
   const db = require("../services/db");
   const query = `SELECT * FROM chat_rooms WHERE id = $1 LIMIT 1`;
   try {
     result = await db.query(query, [chatId]);
-    console.log("Get Chat Result:", result.rows[0]);
+    // console.log("Get Chat Result:", result.rows[0]);
     return result.rows[0];
   } catch (err) {
     console.log(err);
@@ -120,13 +118,3 @@ module.exports.saveMessageToActiveChat = message => {
     JSON.stringify(activeChats, null, 2)
   );
 };
-
-// module.exports.getActiveChatFromServer = (serverId, chatId ) => {
-//   //get the specified chatroom from the list of active servers
-//   let activeServer = getActiveServer(serverId);
-//   return activeServer.chatId;
-// }
-
-// module.exports.setActiveChatFromServer = () => {
-//   //Once a message is added, send that to the server & update active servers
-// }

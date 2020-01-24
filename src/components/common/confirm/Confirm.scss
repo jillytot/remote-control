@@ -1,0 +1,38 @@
+@import "../../../styles/mixins/buttonStyles.scss";
+@import "../../../styles/variables.scss";
+
+$max-width: 320px;
+
+.Confirm {
+  &__container {
+    display: flex;
+    flex-direction: row;
+    font-size: 12px;
+    align-items: center;
+    max-width: $max-width;
+  }
+  &__action {
+    @include button-inline-gray;
+  }
+  &__action-confirm {
+    @include button-inline-delete;
+  }
+
+  &__result {
+    font-style: italic;
+    margin-left: -12px;
+    margin-right: 12px;
+    max-width: $max-width;
+  }
+  &__error {
+    font-style: italic;
+    margin-left: -12px;
+    margin-right: 12px;
+    max-width: $max-width;
+    color: $color-error-text;
+  }
+}
+
+.margin-left-12 {
+  margin-left: 12px;
+}

@@ -28,16 +28,17 @@ GRANT ALL ON SCHEMA public TO PUBLIC;
 
 CREATE TABLE public.users
 (
+
     username character varying(25) COLLATE pg_catalog."default",
     password character varying COLLATE pg_catalog."default",
     email character varying COLLATE pg_catalog."default",
-    id character varying COLLATE pg_catalog."default",
+    id character varying COLLATE pg_catalog."default" NOT NULL,
     created bigint,
     type character varying[] COLLATE pg_catalog."default",
-    check_username character varying COLLATE pg_catalog."default",
     session character varying COLLATE pg_catalog."default",
     status jsonb,
-    settings jsonb
+    settings jsonb,
+    CONSTRAINT users_pkey PRIMARY KEY (id)
 )
 WITH (
     OIDS = FALSE
@@ -47,34 +48,14 @@ TABLESPACE pg_default;
 ALTER TABLE public.users
     OWNER to postgres;
 
-
-CREATE TABLE public.robot_servers
-(
-    owner_id character varying COLLATE pg_catalog."default",
-    server_id character varying COLLATE pg_catalog."default" NOT NULL,
-    server_name character varying COLLATE pg_catalog."default",
-    users character varying[] COLLATE pg_catalog."default",
-    created character varying COLLATE pg_catalog."default",
-    settings jsonb,
-    status jsonb,
-    channels jsonb[],
-    CONSTRAINT "robotServers_pkey" PRIMARY KEY (server_id)
-)
-WITH (
-    OIDS = FALSE
-)
-TABLESPACE pg_default;
-
-ALTER TABLE public.robot_servers
-    OWNER to postgres;
-
 CREATE TABLE public.chat_rooms
 (
     name character varying COLLATE pg_catalog."default",
-    id character varying COLLATE pg_catalog."default",
+    id character varying COLLATE pg_catalog."default" NOT NULL,
     host_id character varying COLLATE pg_catalog."default",
     messages character varying[] COLLATE pg_catalog."default",
-    created character varying COLLATE pg_catalog."default"
+    created character varying COLLATE pg_catalog."default",
+    CONSTRAINT chat_rooms_pkey PRIMARY KEY (id)
 )
 WITH (
     OIDS = FALSE
@@ -84,7 +65,7 @@ TABLESPACE pg_default;
 ALTER TABLE public.chat_rooms
     OWNER to postgres;
 
-    CREATE TABLE public.channels
+CREATE TABLE public.channels
 (
     host_id character varying COLLATE pg_catalog."default",
     id character varying COLLATE pg_catalog."default" NOT NULL,
@@ -106,7 +87,7 @@ TABLESPACE pg_default;
 ALTER TABLE public.channels
     OWNER to postgres;
 
-    CREATE TABLE public.robots
+CREATE TABLE public.robots
 (
     name character varying COLLATE pg_catalog."default",
     id character varying COLLATE pg_catalog."default" NOT NULL,
@@ -128,7 +109,7 @@ TABLESPACE pg_default;
 ALTER TABLE public.robots
     OWNER to postgres;
 
-    CREATE TABLE public.controls
+CREATE TABLE public.controls
 (
      id character varying COLLATE pg_catalog."default" NOT NULL,
     channel_id character varying COLLATE pg_catalog."default",
@@ -144,4 +125,117 @@ WITH (
 TABLESPACE pg_default;
 
 ALTER TABLE public.controls
+    OWNER to postgres;
+
+
+CREATE TABLE public.robot_servers
+(
+    owner_id character varying COLLATE pg_catalog."default",
+    server_id character varying COLLATE pg_catalog."default" NOT NULL,
+    server_name character varying COLLATE pg_catalog."default",
+    created character varying COLLATE pg_catalog."default",
+    settings jsonb,
+    status jsonb,
+    channels jsonb[],
+    CONSTRAINT "robotServers_pkey" PRIMARY KEY (server_id)
+)
+WITH (
+    OIDS = FALSE
+)
+TABLESPACE pg_default;
+
+ALTER TABLE public.robot_servers
+    OWNER to postgres;
+
+
+
+CREATE TABLE public.invites
+(
+    id character varying COLLATE pg_catalog."default" NOT NULL,
+    created_by character varying COLLATE pg_catalog."default",
+    server_id character varying COLLATE pg_catalog."default",
+    created character varying COLLATE pg_catalog."default",
+    expires character varying COLLATE pg_catalog."default" NOT NULL,
+    status character varying COLLATE pg_catalog."default",
+    alias character varying COLLATE pg_catalog."default",
+    is_default boolean,
+    CONSTRAINT invites_pkey PRIMARY KEY (id)
+)
+WITH (
+    OIDS = FALSE
+)
+TABLESPACE pg_default;
+
+ALTER TABLE public.invites
+    OWNER to postgres;
+
+
+CREATE TABLE public.members
+(
+    server_id character varying COLLATE pg_catalog."default" NOT NULL,
+    user_id character varying COLLATE pg_catalog."default" NOT NULL,
+    roles character varying[] COLLATE pg_catalog."default",
+    status jsonb,
+    settings jsonb[],
+    joined character varying COLLATE pg_catalog."default",
+    invites character varying[] COLLATE pg_catalog."default",
+    username character varying COLLATE pg_catalog."default",
+    CONSTRAINT member_pkey PRIMARY KEY (user_id, server_id),
+    CONSTRAINT server_pkey FOREIGN KEY (server_id)
+        REFERENCES public.robot_servers (server_id) MATCH SIMPLE
+        ON UPDATE CASCADE
+        ON DELETE CASCADE,
+    CONSTRAINT user_pkey FOREIGN KEY (server_id)
+        REFERENCES public.robot_servers (server_id) MATCH SIMPLE
+        ON UPDATE CASCADE
+        ON DELETE CASCADE
+)
+WITH (
+    OIDS = FALSE
+)
+TABLESPACE pg_default;
+
+ALTER TABLE public.members
+    OWNER to postgres;
+
+
+CREATE TABLE public.chat_messages
+(
+    message character varying COLLATE pg_catalog."default",
+    sender character varying COLLATE pg_catalog."default",
+    sender_id character varying COLLATE pg_catalog."default",
+    chat_id character varying COLLATE pg_catalog."default",
+    server_id character varying COLLATE pg_catalog."default",
+    id character varying COLLATE pg_catalog."default" NOT NULL,
+    time_stamp character varying COLLATE pg_catalog."default",
+    broadcast character varying COLLATE pg_catalog."default",
+    display_message boolean,
+    badges character varying[] COLLATE pg_catalog."default",
+    type character varying COLLATE pg_catalog."default",
+    channel_id character varying COLLATE pg_catalog."default",
+    CONSTRAINT chat_messages_pkey PRIMARY KEY (id)
+)
+WITH (
+    OIDS = FALSE
+)
+TABLESPACE pg_default;
+
+ALTER TABLE public.chat_messages
+    OWNER to postgres;
+
+    CREATE TABLE public.generated_keys
+(
+    key_id character varying COLLATE pg_catalog."default" NOT NULL,
+    created character varying COLLATE pg_catalog."default",
+    expires character varying COLLATE pg_catalog."default",
+    ref character varying COLLATE pg_catalog."default",
+    expired character varying COLLATE pg_catalog."default",
+    CONSTRAINT generated_keys_pkey PRIMARY KEY (key_id)
+)
+WITH (
+    OIDS = FALSE
+)
+TABLESPACE pg_default;
+
+ALTER TABLE public.generated_keys
     OWNER to postgres;

@@ -19,7 +19,7 @@ const {
 
 const { sendActiveUsers } = user;
 
-const { heartBeat } = require("../config/serverSettings");
+const { heartBeat } = require("../config/server");
 let heartBeatStarted = false;
 
 //Main websocket Interface

@@ -1,116 +1,86 @@
 import React, { Component } from "react";
-import { listRobotServers } from "../../../config/clientSettings";
-import axios from "axios";
 import DisplayRobotServer from "./displayRobotServer";
-import Channels from "./channels";
 import "./robotServer.css";
-import {
-  ROBOT_SERVER_UPDATED,
-  GET_CHANNELS,
-  GET_ROBOTS
-} from "../../../events/definitions";
 import AddServer from "./modals/addServer";
+import Browse from "../../routing/servers/browse";
+import sortServers from "./sortServers";
+import GetLayout from "../../modules/getLayout";
 
 export default class RobotServer extends Component {
-  state = {
-    robotServers: [],
-    selectedServer: null //Has the user clicked on a server
-  };
-
-  componentDidUpdate(prevState) {
-    if (prevState !== this.state) {
-      this.loadServerChannels();
-    }
-  }
-
-  async componentDidMount() {
-    await this.getServers();
-    this.handleUpdateServers();
-  }
-
-  handleUpdateServers = () => {
-    const { socket } = this.props;
-    socket.on(ROBOT_SERVER_UPDATED, async () => {
-      await this.getServers();
-    });
-  };
-
-  getServers = async () => {
-    axios.get(listRobotServers).then(response => {
-      //console.log(response);
-      this.setState({ robotServers: response.data });
-    });
-  };
-
   displayServers = servers => {
-    //console.log("From Servers: ", servers);
     return servers.map(server => {
-      //console.log("Server Name: ", server.server_name);
       return (
-        <div key={server.server_id} onClick={() => this.handleClick(server)}>
-          <DisplayRobotServer
-            key={server.server_id}
-            serverName={server.server_name}
-            displayClasses={this.handleActive(server)}
-          />
-        </div>
+        <DisplayRobotServer
+          key={server.server_id}
+          defaultChannel={server.settings.default_channel}
+          serverName={server.server_name}
+          displayClasses={this.handleActive(server)}
+          liveDevices={
+            server.status.liveDevices ? server.status.liveDevices : []
+          }
+          followed={server.followed}
+          settings={server.settings}
+        />
       );
     });
   };
 
+  handleSorting = servers => {
+    const sorted = sortServers(servers, [], "default");
+    return this.displayServers(sorted);
+  };
+
   handleActive = server => {
-    if (server.active) return "display-robot-server-container selected-server";
-    return "display-robot-server-container";
+    if (
+      this.props.selectedServer &&
+      server.server_id === this.props.selectedServer.server_id
+    ) {
+      return "display-robot-server-container selected-server";
+    } else {
+      return "display-robot-server-container";
+    }
   };
 
-  handleClick = e => {
-    const { server_id } = e;
-    this.setState({ selectedServer: e });
-    console.log("Server Selected ", e.server_name);
-    const { socket, user } = this.props;
-    socket.emit(GET_CHANNELS, { user: user.id, server_id: server_id });
-    socket.emit(GET_ROBOTS, { server_id: server_id });
-    let { robotServers } = this.state;
-    robotServers.map(server => {
-      if (server_id === server.server_id) {
-        server.active = true;
-      } else {
-        server.active = false;
-      }
-      return null;
-    });
-    this.setState({ robotServers });
-  };
-
-  loadServerChannels = () => {
-    const { socket, user } = this.props;
+  handleDisplayServerPanel = () => {
+    // console.log(this.props.followedServers);
     return (
-      <Channels
-        socket={socket}
-        user={user}
-        selectedServer={this.state.selectedServer}
-        modal={this.props.modal}
-        onCloseModal={this.props.onCloseModal}
-      />
+      <div className="robot-server-container">
+        {this.handleSorting(this.props.followedServers)}
+        <Browse />
+        <AddServer
+          modal={this.props.modal}
+          onCloseModal={this.props.onCloseModal}
+        />
+        ...
+      </div>
     );
+  };
+
+  handleMobileDisplay = () => {
+    const { mobileState, showMobileNav } = this.props;
+    if (showMobileNav) {
+      return (
+        <React.Fragment>
+          {this.handleDisplayServerPanel()}
+          <div
+            className="back-drop-nav"
+            onClick={() => mobileState({ showMobileNav: !showMobileNav })}
+          />
+        </React.Fragment>
+      );
+    } else {
+      return <React.Fragment />;
+    }
   };
 
   render() {
     return (
       <React.Fragment>
-        <div className="server-channel-container">
-          <div className="robot-server-container">
-            {this.state.robotServers !== []
-              ? this.displayServers(this.state.robotServers)
-              : "Fetching Servers"}
-            <AddServer
-              modal={this.props.modal}
-              onCloseModal={this.props.onCloseModal}
-            />
-            ...
-          </div>
-          {this.loadServerChannels()}
-        </div>
+        <GetLayout
+          renderSize={1280}
+          renderDesktop={this.handleDisplayServerPanel}
+          renderMobile={this.handleMobileDisplay}
+        />
       </React.Fragment>
     );
   }

@@ -1,8 +1,9 @@
 const events = {}; //event: func
 
 // message structure {e: event name, d: data}
-module.exports.handleConnection = ws => {
+module.exports.handleConnection = (ws, req) => {
   ws.isAlive = true;
+  ws.ip = req.headers["x-real-ip"];
   ws.on("pong", () => {
     ws.isAlive = true;
   });
@@ -23,6 +24,9 @@ module.exports.handleConnection = ws => {
     } else {
       console.log("Unknown Event: ", event);
     }
+
+    // const { getWss } = require("../controllers/wss");
+    //getWss();
   });
 
   ws.emitEvent = (event, data) => {
@@ -49,10 +53,16 @@ registerEvent("AUTHENTICATE", require("./authenticate"));
 registerEvent("AUTHENTICATE_ROBOT", require("./authRobot"));
 registerEvent("GET_CHANNELS", require("./getChannels"));
 registerEvent("GET_ROBOTS", require("./getRobots"));
-registerEvent("GET_CHANNELS", require("./getChannels"));
 registerEvent("GET_CHAT", require("./getChat"));
 registerEvent("JOIN_CHANNEL", require("./joinChannel"));
 registerEvent("MESSAGE_SENT", require("./messageSent"));
+registerEvent("ROBOT_MESSAGE_SENT", require("./robotMessageSent"));
 registerEvent("BUTTON_COMMAND", require("./buttonCommand"));
 registerEvent("GET_CONTROLS", require("./getControls"));
+registerEvent("GET_LOCAL_STATUS", require("./getLocalStatus"));
+registerEvent("GET_SERVER_STATUS", require("./getServerStatus"));
+
+registerEvent("INTERNAL_LISTENER_AUTHENTICATE", require("./internalListenerAuth"));
+registerEvent("INTERNAL_LISTENER_BAN", require("./internalListenerBan"));
+registerEvent("INTERNAL_LISTENER_UNBAN", require("./internalListenerUnban"));
 //have to register them all with there definitions here

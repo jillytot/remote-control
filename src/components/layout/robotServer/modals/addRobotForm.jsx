@@ -2,20 +2,21 @@ import React from "react";
 import Form from "../../../common/form";
 import Joi from "joi-browser";
 import axios from "axios";
-import { addRobot } from "../../../../config/clientSettings";
+import { addRobot } from "../../../../config/client";
 
 export default class AddRobotForm extends Form {
   state = {
     data: { robot_name: "" },
-    errors: {}
+    errors: {},
+    error: ""
   };
 
   schema = {
     robot_name: Joi.string()
       .required()
-      .min(4)
-      .max(25)
-      .alphanum()
+      .min(3)
+      .max(18)
+      .regex(/^[a-zA-Z0-9_]*$/)
       .trim()
       .label("Robot Name")
   };
@@ -37,17 +38,33 @@ export default class AddRobotForm extends Form {
           headers: { authorization: `Bearer ${token}` }
         }
       )
+      .then(response => {
+        if (response.data.error) {
+          this.setState({ error: response.data.error });
+        } else {
+          this.setState({ error: "" });
+        }
+      })
       .catch(err => {
         console.log("Add Server Error: ", err);
       });
 
-    this.props.onCloseModal();
+    if (this.state.error === "") this.props.onCloseModal();
+  };
+
+  handleSubmitError = () => {
+    const { error } = this.state;
+    if (error === "") {
+      return <React.Fragment />;
+    }
+    return <div className="alert">{this.state.error}</div>;
   };
 
   render() {
     return (
-      <div className="register-form">
+      <div className="modal">
         Setup a new Robot:
+        {this.handleSubmitError()}
         <form onSubmit={this.handleSubmit}>
           {this.renderInput("robot_name", "Robot Name: ", "text")}
           {this.renderButton("Submit", "Submit")}

@@ -1,6 +1,16 @@
 import React, { Component } from "react";
 import { BUTTON_COMMAND } from "../../../events/definitions";
+import { buttonRate, getControls } from "../../../config/client";
+import EditOptions from "./editOptions";
 import "./robot.css";
+import VolumeControl from "./volumeControl";
+import GetLayout from "../../modules/getLayout";
+import { GlobalStoreCtx } from "../../providers/globalStore";
+import defaultImages from "../../../imgs/placeholders";
+import RenderButtons from "./renderButtons";
+import socket from "../../socket";
+import axios from "axios";
+import { ws as configSocket } from "../../../config/client/index";
 
 export default class RobotInterface extends Component {
   state = {
@@ -8,7 +18,31 @@ export default class RobotInterface extends Component {
     logClicks: [],
     displayLog: true,
     clickCounter: 0,
-    controlsId: ""
+    controlsId: "",
+    renderCurrentKey: null,
+    renderPresses: [],
+    canvasHeight: null
+  };
+
+  currentKey = null;
+
+  handleBlur = () => {
+    if (this.currentKey) {
+      this.currentKey = null;
+      this.setState({ renderCurrentKey: null });
+    }
+  };
+
+  sendCurrentKey = () => {
+    const button = this.keyMap[this.currentKey];
+    if (button && this.props.chatTabbed === false) {
+      this.handleClick({
+        user: this.props.user,
+        controls_id: this.state.controlsId,
+        socket: socket,
+        button: button
+      });
+    }
   };
 
   componentDidUpdate(prevProps) {
@@ -16,7 +50,32 @@ export default class RobotInterface extends Component {
       this.clearAV();
       this.connectAV();
     }
+    if (
+      this.refs["video-canvas"] &&
+      this.refs["video-canvas"].clientHeight &&
+      this.refs["video-canvas"].clientHeight !== this.state.canvasHeight
+    ) {
+      this.updateCanvas();
+    }
+
+    //handle channel change / channels list change and no controls id
+    if (
+      this.props.channel !== prevProps.channel ||
+      this.props.channels.length !== prevProps.channels.length
+    ) {
+      this.emitGetControls();
+    }
   }
+
+  emitGetControls = () => {
+    const channel = this.props.channels.find(
+      chan => chan.id === this.props.channel
+    );
+
+    if (channel) {
+      socket.emit("GET_CONTROLS", channel);
+    }
+  };
 
   connectAV() {
     if (this.props.channel) {
@@ -25,29 +84,53 @@ export default class RobotInterface extends Component {
     }
   }
 
-  componentDidMount() {
+  onMount = () => {
+    socket.on("GET_USER_CONTROLS", this.onGetControls);
+    socket.on(BUTTON_COMMAND, this.onButtonCommand);
+    socket.on("CONTROLS_UPDATED", this.onControlsUpdated);
     if (this.state.controls.length === 0)
       this.setState({ controls: testButtons });
-    this.commandListener();
+    this.setupKeyMap(testButtons);
+    document.addEventListener("keydown", this.handleKeyDown);
+    document.addEventListener("keyup", this.handleKeyUp);
+    document.addEventListener("blur", this.handleBlur);
+    this.sendInterval = setInterval(this.sendCurrentKey, buttonRate);
+    this.connectAV();
+    this.emitGetControls();
+  };
+
+  async componentDidMount() {
+    this.onMount();
   }
 
   connectA = () => {
+    //need to add client options for video relay
+    const protocol =
+      window.location.protocol === "https:" ? "wss://" : configSocket;
     this.audioPlayer = new window.JSMpeg.Player(
-      `ws://dev.remo.tv:1567/recieve?name=${this.props.channel}-audio`,
+      `${protocol}remo.tv/receive?name=${this.props.channel}-audio`,
       { video: false, disableWebAssembly: true }
     );
   };
 
   connectV = () => {
+    const protocol =
+      window.location.protocol === "https:" ? "wss://" : configSocket;
     this.videoPlayer = new window.JSMpeg.Player(
-      `ws://dev.remo.tv:1567/recieve?name=${this.props.channel}-video`,
+      `${protocol}remo.tv/receive?name=${this.props.channel}-video`,
       {
         canvas: this.refs["video-canvas"],
         videoBufferSize: 1 * 1024 * 1024,
         audio: false,
-        disableWebAssembly: true
+        disableWebAssembly: true,
+        opacity: true
       }
     );
+  };
+
+  updateCanvas = () => {
+    const height = this.refs["video-canvas"].clientHeight;
+    this.setState({ canvasHeight: height });
   };
 
   clearA = () => {
@@ -77,32 +160,125 @@ export default class RobotInterface extends Component {
 
   componentWillUnmount() {
     this.clearAV();
+    document.removeEventListener("keydown", this.handleKeyDown);
+    document.removeEventListener("keyup", this.handleKeyUp);
+    document.removeEventListener("blur", this.handleBlur);
+    socket.off(BUTTON_COMMAND, this.onButtonCommand);
+    socket.off("GET_USER_CONTROLS", this.onGetControls);
+    socket.off("CONTROLS_UPDATED", this.onControlsUpdated);
+
+    clearInterval(this.sendInterval);
+    // console.log("Robot Interface Unmounted");
   }
 
-  commandListener = () => {
-    const { socket } = this.props;
-    socket.on(BUTTON_COMMAND, command => {
-      console.log("Button Command Listener", command);
-      this.handleLoggingClicks(command);
+  handleKeyDown = e => {
+    if (!this.props.chatTabbed && !this.props.isModalShowing) {
+      if (this.currentKey !== e.key) {
+        this.setState({ renderCurrentKey: e.key });
+        this.currentKey = e.key;
+        this.sendCurrentKey();
+      }
+    }
+  };
+
+  handleKeyUp = e => {
+    if (e.key === this.currentKey) {
+      this.currentKey = null;
+      this.setState({ renderCurrentKey: null });
+    }
+  };
+
+  keyMap = {};
+
+  setupKeyMap = controls => {
+    const keyMap = {};
+    controls.map(button => {
+      return (keyMap[button.hot_key] = button);
     });
-    socket.on("CONTROLS_UPDATED", getControlData => {
-      console.log("CONTROLS UPDATED: ", getControlData);
-      if (getControlData && getControlData.buttons.length > 0)
-        this.setState({
-          controls: getControlData.buttons,
-          controlsId: getControlData.id
-        });
-    });
+    this.keyMap = keyMap;
+  };
+
+  onButtonCommand = command => {
+    this.handleLoggingClicks(command);
+    this.handleRenderPresses(command);
+  };
+
+  onGetControls = getControlData => {
+    // console.log("OnGetControls: ", getControlData);
+    if (getControlData && getControlData.buttons.length > 0) {
+      this.setState({
+        controls: getControlData.buttons,
+        controlsId: getControlData.id
+      });
+      this.setupKeyMap(getControlData.buttons);
+    }
+  };
+
+  onControlsUpdated = () => {
+    if (this.props.channelInfo && this.props.channelInfo.controls) {
+      socket.emit("GET_CONTROLS", this.props.channelInfo);
+    } else {
+      this.handleGetControls();
+    }
+  };
+
+  //Uses an API call to get controls for specific user.
+  handleGetControls = async () => {
+    const token = localStorage.getItem("token");
+    console.log("Get Controls for User", this.props.channel);
+    console.log(token);
+    await axios
+      .post(
+        getControls,
+        {
+          channel_id: this.props.channel
+        },
+        {
+          headers: { authorization: `Bearer ${token}` }
+        }
+      )
+      .then(res => {
+        console.log(res);
+        this.onGetControls(res.data);
+      })
+      .catch(err => {
+        console.log(err);
+      });
+    return null;
   };
 
   handleClick = click => {
-    const { socket } = this.props;
-    console.log("CLICK CHECK: ", click);
+    // console.log("CONTROLS ID: ", this.state.controlsId);
     socket.emit(BUTTON_COMMAND, {
       user: click.user,
       button: click.button,
-      controls_id: this.state.controlsId
+      controls_id: this.state.controlsId,
+      channel: this.props.channel,
+      server: this.props.server.server_id
     });
+  };
+
+  handleRenderPresses = press => {
+    let updatePresses = this.state.renderPresses;
+    press.counter = setTimeout(() => this.handleClear(press), 200);
+    updatePresses.push(press);
+    this.setState({ renderPresses: updatePresses });
+  };
+
+  handleClear = press => {
+    clearTimeout(press.counter);
+    let updatePresses = [];
+    this.state.renderPresses.map(getPress => {
+      if (press.button.id === getPress.button.id) {
+        //do nothing
+      } else {
+        updatePresses.push(getPress);
+      }
+      return null;
+    });
+
+    if (this.state.renderPresses !== updatePresses)
+      this.setState({ renderPresses: updatePresses });
   };
 
   handleLoggingClicks = click => {
@@ -128,26 +304,48 @@ export default class RobotInterface extends Component {
   };
 
   renderButtons = () => {
-    if (this.state.controls) {
-      return this.state.controls.map(button => {
-        return (
-          <button
-            className="robtn"
-            key={button.id}
-            onClick={() =>
-              this.handleClick({
-                user: this.props.user,
-                controls_id: this.state.controlsId,
-                socket: this.props.socket,
-                button: button
-              })
-            }
-          >
-            <span className="hotkey">{button.hot_key} :</span> {button.label}
-          </button>
-        );
-      });
-    }
+    return (
+      <RenderButtons
+        controls={this.state.controls}
+        renderPresses={this.state.renderPresses}
+        renderCurrentKey={this.state.renderCurrentKey}
+        onClick={e => this.handleClick(e)}
+        user={this.props.user}
+        controls_id={this.state.controlsId}
+        socket={socket}
+      />
+    );
+  };
+
+  handleDisplayActivity = () => {
+    // console.log(this.refs);
+    return (
+      <div className="display-info-container">
+        {this.state.displayLog ? this.renderClickLog() : <React.Fragment />}
+      </div>
+    );
+  };
+
+  handleMobileOptionsMenu = () => {
+    return (
+      <div
+        className="mobile-options-menu"
+        ref={options => {
+          this.options = options;
+        }}
+      >
+        ...
+      </div>
+    );
+  };
+
+  handleCanvasHeight = () => {
+    const { canvasHeight } = this.state;
+    return (
+      <GlobalStoreCtx.Consumer>
+        {({ setCanvas }) => setCanvas(canvasHeight)}
+      </GlobalStoreCtx.Consumer>
+    );
   };
 
   render() {
@@ -156,19 +354,38 @@ export default class RobotInterface extends Component {
         {this.props.channel ? (
           <div className="robot-container">
             <div className="robot-display-container">
-              <canvas className="video-canvas" ref="video-canvas" />
-              <div className="display-info-container">
-                {this.state.displayLog ? (
-                  this.renderClickLog()
-                ) : (
-                  <React.Fragment />
-                )}
-              </div>{" "}
+              <canvas className="video-canvas" ref="video-canvas">
+                <img
+                  className="video-poster"
+                  src={defaultImages.videoImg}
+                  alt={"video background"}
+                />
+              </canvas>
+
+              <div className="display-controls-container">
+                <VolumeControl
+                  player={this.audioPlayer}
+                  channel={this.props.channel}
+                />
+              </div>
+
+              <GetLayout
+                renderSize={768}
+                renderDesktop={this.handleDisplayActivity}
+              />
             </div>
+            <GetLayout renderMobile={this.handleMobileOptionsMenu} />
+            {this.handleCanvasHeight()}
             <div className="robot-controls-container">
               {this.renderButtons()}
               <br />
-              ...
+              <EditOptions
+                server={this.props.server}
+                user={this.props.user}
+                modal={this.props.modal}
+                onCloseModal={this.props.onCloseModal}
+                channel={this.props.channel}
+              />
             </div>
           </div>
         ) : (
@@ -179,9 +396,4 @@ export default class RobotInterface extends Component {
   }
 }
 
-const testButtons = [
-  { label: "forward", hot_key: "w", id: "1" },
-  { label: "back", hot_key: "s", id: "2" },
-  { label: "left", hot_key: "a", id: "4" },
-  { label: "right", hot_key: "d", id: "3" }
-];
+const testButtons = [{ break: "line", label: "", id: "1" }];

@@ -1,24 +1,50 @@
-const { authUser } = require("../models/user");
+const { authUserData } = require("../models/user");
+const { authRobotData } = require("../models/robot");
+const { extractToken } = require("../modules/jwt");
 
-const auth = async (req, res, next) => {
-  const header = req.headers["authorization"];
-  console.log("API AUTH: ", header);
+const { logger } = require("../modules/logging");
+const log = message => {
+  logger({
+    message: message,
+    level: "debug",
+    source: "routes/auth.js"
+  });
+};
 
-  if (typeof header !== "undefined") {
-    const bearer = header.split(" ");
-    const token = bearer[1];
-    req.token = token;
+const auth = options => {
+  // console.log(options);
+  return async (req, res, next) => {
+    try {
+      if (req.headers.authorization) {
+        //parse token as a first step
+        const bearer = req.headers["authorization"].split(" ");
+        const token = bearer[1];
+        const tokenData = await extractToken(token);
+        // console.log("////////////CHECK TOKEN DATA///////////", tokenData);
+        if (tokenData && tokenData.id) {
+          let type = tokenData.id.substring(0, 4);
 
-    req.user = await authUser(token);
-    if (!req.user) {
-      return res.json({ error: "Invalid Authorization" });
-    } else {
+          // console.log("API AUTH: ", tokenData);
+          if (type === "user" && options.user) {
+            //what
+            req.user = await authUserData(tokenData);
+          } else if (type === "rbot" && options.robot) {
+            //e you need t
+            log(`API AUTH ROBOT: ${req.robot.name}`);
+            // console.log(req.robot, req.body);
+            req.robot = await authRobotData(tokenData);
+            // console.log("AUTH ROBOT: ", req.robot, req.body);
+          }
+        }
+      } else {
+        return res.json({ error: "Invalid Authorization" });
+      }
       next();
+    } catch (e) {
+      console.log("Failed Authentication");
+      res.status(500).json({ error: "Internal Server Error" });
     }
-  } else {
-    //If header is undefined return Forbidden (403)
-    res.sendStatus(403);
-  }
+  };
 };
 
 module.exports = auth;

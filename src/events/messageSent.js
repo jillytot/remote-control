@@ -1,7 +1,5 @@
-const { createMessage } = require("../models/chatMessage");
-
-module.exports = (ws, message) => {
-  console.log("Message Received: ", message);
-  if (ws.user && ws.user.type) message.userType = ws.user.type;
-  createMessage(message);
+module.exports = async (ws, message) => {
+  const { messageHandler } = require("../controllers/chatMessages");
+  messageHandler(ws, message);
+  return;
 };

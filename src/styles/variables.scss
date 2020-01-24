@@ -1,0 +1,145 @@
+$color-red: #ff0000;
+$color-red: red;
+$color-white: white; // 2 dupe:
+$color-thunderbird-1: #b31515;
+$color-thunderbird-2: #b71c1c;
+
+$color-brick-red: #c92c43;
+
+$color-finn: rgb(110, 45, 76);
+$color-hibiscus: #c0376b;
+$color-mulberry: #c75f87;
+$color-charm: #d37c9d;
+$color-orchid: #d64eb8; //gradient
+$color-french-rose: #ee3b94;
+$color-remo-pink: #ff5ca3; //brand
+$color-hot-pink-2: #fa68b1;
+
+$color-white: #ffffff;
+
+// Dupe
+$color-black: #000000;
+$color-black: #010101;
+
+$color-shark-1: #19191d;
+$color-shark-2: rgb(33, 33, 37);
+
+$color-baltic-sea: rgb(36, 34, 41);
+$color-shark-3: #282c34;
+$color-outer-space: #263238;
+$color-charade: rgb(42, 44, 56);
+
+// Dupe
+$color-black-opacity-57: rgba(0, 0, 0, 0.57);
+$color-black-opacity-60: rgba(0, 0, 0, 0.6);
+
+$color-black-opacity-30: rgba(0, 0, 0, 0.3);
+$color-black-opacity-42: rgba(0, 0, 0, 0.42);
+$color-black-opacity-726: rgba(0, 0, 0, 0.726);
+$color-black-opacity-80: rgba(0, 0, 0, 0.8);
+$color-grey-opacity-5: rgba(255, 255, 255, 0.05);
+
+$color-tuna-1: rgb(60, 60, 70);
+$color-tuna-2: rgb(57, 57, 75);
+
+$color-mantle: #949b98;
+
+// DUPE
+$color-silver-chalice-1: #aaaaaa;
+$color-silver-chalice-2: rgb(172, 172, 172);
+$color-silver-chalice-3: rgb(175, 175, 175);
+
+$color-silver-1: rgb(189, 189, 189);
+$color-silver-2: rgb(202, 202, 202);
+$color-loblolly: rgb(195, 203, 211);
+$color-scorpion: rgb(121, 17, 17);
+
+// Dupe
+$color-dove-gray-1: #616161;
+$color-dove-gray-2: #636363;
+
+$color-dove-gray-3: #6e6e6e;
+$color-boulder: #7b7b7b;
+$color-gray: #808080; //(gray)
+
+// So many purples
+
+$color-steel-gray-1: rgb(25, 25, 36);
+$color-cinder: rgb(22, 19, 32);
+$color-mirage: #1c1829;
+$color-ebony: rgb(15, 24, 39);
+$color-bastille: rgb(28, 23, 34);
+
+// 2dupe:
+$color-steel-gray-2: rgb(35, 35, 51);
+$color-bleached-cedar: rgb(40, 31, 51);
+
+$color-martinique: #372e50;
+$color-ebony-clay: rgb(42, 42, 68);
+$color-port-gore: #221b3a;
+$color-cloud-burst: #263254;
+$color-bossanova: rgb(66, 49, 94);
+$color-victoria-1: rgb(90, 68, 124);
+$color-victoria-2: rgb(51, 36, 75);
+$color-scarlet-gum: #491769;
+$color-jacarta: rgb(46, 46, 104);
+$color-rhino: rgb(50, 60, 104);
+
+// 3 dupe:
+$color-gun-powder: rgb(69, 69, 90);
+$color-trout: rgb(74, 74, 95);
+$color-mulled-wine: rgb(70, 70, 99);
+
+$color-waikawa-gray: rgb(86, 99, 165);
+$color-east-bay-1: rgb(73, 83, 131);
+$color-east-bay-2: #484d79;
+
+// 2 dupe:
+$color-comet-1: rgb(83, 83, 119);
+$color-comet-2: rgb(86, 86, 119);
+
+$color-wild-blue-yonder: rgb(123, 127, 173);
+$color-amethyst-smoke: rgb(158, 143, 182);
+$color-purple-mountains-majesty: rgb(150, 123, 194);
+$color-mauve: rgb(198, 162, 255);
+$color-lavender: rgb(176, 115, 211); //default Link
+$color-medium-purple-1: #954ed6; //Gradient Purple
+$color-medium-purple-2: #b251eb;
+
+$color-blue-ribbon: #003fee;
+$color-torea-bay: #0d3091;
+$color-blue-zodiac: #162755;
+$color-cerulean: #009bee;
+$color-dodger-blue: #1f93ff; //Remo Blue
+$color-malibu-1: rgb(106, 171, 255); //Link Color Blue
+$color-cornflower-blue: rgb(91, 142, 236);
+$color-havelock-blue: rgb(66, 116, 209);
+
+$color-malibu-2: #61dafb;
+$color-robins-egg-blue-1: #00dfd3;
+$color-robins-egg-blue-2: rgb(5, 214, 186);
+$color-cyan: #00ffff;
+
+$color-mountain-meadow: #21c975;
+$color-green-1: rgb(0, 218, 0);
+$color-green-2: rgb(2, 255, 2);
+$color-chartreuse: #7cff1e;
+$color-yellow: #ffff00;
+$color-laser-lemon: #f7ff66;
+$color-texas-rose: #ffa557;
+
+$remo-gradient: -webkit-linear-gradient(-45deg, #954ed6 0%, #009bee 100%);
+
+//Button Colors ( does not currently include robot interface buttons ):
+$button-default: $remo-gradient;
+$button-danger: -webkit-linear-gradient(-45deg, #b31515 0%, #ee3b94 100%);
+$button-inactive: -webkit-linear-gradient(-45deg, #414141 0%, #5e5e5e 100%);
+
+//Error Colors:
+$color-error-text: rgb(179, 32, 32);
+
+//Link Colors:
+// $color-link-default: $color-malibu-1;
+$color-link-default: $color-lavender;
+$color-link-default-hover: cyan;
+$color-link-gray: #acacac;

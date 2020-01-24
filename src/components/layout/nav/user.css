@@ -3,6 +3,7 @@
   font-size: 20px;
   padding: 5px 10px 5px 10px;
   text-align: right;
+  cursor: pointer;
 }
 
 .user-container {
@@ -13,8 +14,11 @@
 }
 
 .logo {
-  width: 200px;
-  height: 34px;
+  /* width: 200px; */
+  height: 28px;
+}
+.mobile-logo {
+  height: 36px;
 }
 
 .nav-container {
@@ -25,6 +29,44 @@
 }
 
 .logo-container {
-  margin: 4px;
-  padding: 2px;
+  display: flex;
+  flex-direction: row;
+  margin: 10px;
+  /* margin: 4px;
+  padding: 2px; */
+}
+
+.logo-container-mobile {
+  display: flex;
+  flex-direction: row;
+  margin: 6px;
+  /* border: 1px solid rgb(69, 4, 143); */
+  border-radius: 8px;
+}
+
+.burger-container {
+  display: flex;
+  flex-direction: column;
+  margin: 6px 0px 6px 6px;
+
+  border-radius: 8px;
+  height: 36px;
+  min-width: 36px;
+  color: white;
+  justify-content: center;
+}
+
+.burger-container:hover {
+  background-color: rgb(46, 46, 104);
+}
+
+.patty {
+  display: flex;
+  background-color: rgb(158, 143, 182);
+  height: 4px;
+  margin-top: 2px;
+  margin-bottom: 2px;
+  border-radius: 12px;
+  margin-left: 6px;
+  margin-right: 6px;
 }

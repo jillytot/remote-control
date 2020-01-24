@@ -2,16 +2,31 @@ import React, { Component } from "react";
 import "../../../../styles/common.css";
 import Input from "../../../common/input";
 import Toggle from "../../../common/toggle";
-import { deleteRobot, robotAPIKey } from "../../../../config/clientSettings";
+import { deleteRobot, robotAPIKey } from "../../../../config/client";
 
 import axios from "axios";
 
 export default class RobotSettings extends Component {
   constructor(props) {
     super(props);
-    this.state = { settings: {}, apiToggle: false, apiKey: "" };
-    this.inputRef = React.createRef();
-    // this.handleCopy = this.handleCopy.bind(this);
+    this.state = {
+      settings: {},
+      apiToggle: false,
+      apiKey: "",
+      isConfirmingDelete: false
+    };
+    this.inputRef = null;
+
+    this.setInputRef = element => {
+      this.inputRef = element;
+    };
+
+    this.handleCopy = () => {
+      if (this.inputRef) {
+        this.inputRef.select();
+        document.execCommand("copy");
+      }
+    };
   }
 
   componentDidMount() {
@@ -73,13 +88,10 @@ export default class RobotSettings extends Component {
     }
   };
 
-  renderButton = label => {
+  renderButton = (label, onClick) => {
     //require validation?
     return (
-      <button
-        className={this.handleButtonType(label)}
-        onClick={e => this.handleDelete(e)}
-      >
+      <button className={this.handleButtonType(label)} onClick={onClick}>
         {label}
       </button>
     );
@@ -90,24 +102,23 @@ export default class RobotSettings extends Component {
     this.setState({ apiToggle: toggle });
   };
 
-  handleCopy = e => {
-    console.log("HANDLE COPY");
-    this.inputRef.current.select();
-
-    console.log("STEP 2");
-    document.execCommand("copy");
-    // This is just personal preference.
-    // I prefer to not show the the whole text area selected.
-
-    console.log("STEP 3");
-    e.target.focus();
-    console.log("COPIED");
-    // this.setState({ copySuccess: 'Copied!' });
+  renderDeleteConfirmation = () => {
+    return (
+      <div>
+        <h3>Are you sure you want to delete '{this.props.robot.name}'?</h3>
+        <span>Deleted things can't be brought back.</span>
+        <div>
+          {this.renderButton("Delete Robot", this.handleDelete)}
+          {this.renderButton("Cancel", () =>
+            this.setState({ isConfirmingDelete: false })
+          )}
+        </div>
+      </div>
+    );
   };
-
   render() {
     return (
-      <div className="register-form spacer">
+      <div className="modal">
         Settings for robot: {this.props.robot.name}
         <div> </div>
         <div className="toggle-group">
@@ -116,21 +127,30 @@ export default class RobotSettings extends Component {
             label={"API Key: "}
             type={this.state.apiToggle ? "form" : "password"}
             value={this.state.apiKey}
-            ref={this.inputRef}
             readOnly
           />
-          {/* <div className="toggle-clipboard-group">
+          <div className="toggle-clipboard-group">
+            <textarea
+              aria-hidden="true"
+              className="hidden-clipboard"
+              ref={this.setInputRef}
+              value={this.state.apiKey}
+            />
             <div className="copy-to-clipboard" onClick={this.handleCopy}>
               copy to clipboard
-            </div> */}
-          <Toggle
-            toggle={this.state.apiToggle}
-            label={"Show API Key"}
-            onClick={this.handleToggle}
-          />
-          {/* </div> */}
+            </div>
+            <Toggle
+              toggle={this.state.apiToggle}
+              label={"Show API Key"}
+              onClick={this.handleToggle}
+            />
+          </div>
         </div>
-        {this.renderButton("Delete Robot")}
+        {!this.state.isConfirmingDelete
+          ? this.renderButton("Delete Robot", () =>
+              this.setState({ isConfirmingDelete: true })
+            )
+          : this.renderDeleteConfirmation()}
       </div>
     );
   }

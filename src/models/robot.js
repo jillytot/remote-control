@@ -1,7 +1,7 @@
 /* 
 A user can create a robot, 
 this robot can be added to a robot_server
-A robot needs to make a secure connection to the server to recieve input
+A robot needs to make a secure connection to the server to receive input
 Input is managed through a robotInterface
 */
 
@@ -97,12 +97,12 @@ module.exports.getRobotFromId = async robot_id => {
 
 module.exports.getRobotsFromServerId = async server_id => {
   const db = require("../services/db");
-  console.log("SERVER ID CHECK: ", server_id);
+  // console.log("SERVER ID CHECK: ", server_id);
   if (server_id) {
     try {
       const query = `SELECT * FROM robots WHERE host_id = $1`;
       const check = await db.query(query, [server_id]);
-      console.log(check.rows);
+      // console.log(check.rows);
       if (check.rows[0]) return check.rows;
       return {
         status: "error",
@@ -156,11 +156,18 @@ module.exports.extractRobotToken = async token => {
   return await extractToken(token);
 };
 
+//used by WS for auth
 module.exports.authRobot = async token => {
   const auth = await this.extractRobotToken(token);
-  console.log("Extracting Robot Token: ", auth);
+  // console.log("Extracting Robot Token: ", auth);
   const robot = await this.verifyRobotToken(auth);
   return robot;
+};
+
+//used by API for auth
+module.exports.authRobotData = async tokenData => {
+  const auth = await this.verifyRobotToken(tokenData);
+  return auth;
 };
 
 module.exports.verifyRobotToken = async token => {
@@ -169,7 +176,7 @@ module.exports.verifyRobotToken = async token => {
   if (token && token.id) {
     const query = `SELECT * FROM robots WHERE id = $1 LIMIT 1`;
     const result = await db.query(query, [token["id"]]);
-    console.log("Get user from DB: ", result.rows[0]);
+    // console.log("Get user from DB: ", result.rows[0]);
     return await result.rows[0];
   } else {
     let reason = {
@@ -179,4 +186,35 @@ module.exports.verifyRobotToken = async token => {
     Promise.reject(reason);
     return null;
   }
+};
+
+module.exports.getTotalRobotCount = async () => {
+  const db = require("../services/db");
+  const count = `SELECT COUNT(*) FROM robots`;
+  try {
+    const result = await db.query(count);
+    // console.log("GET TOTAL ROBOT COUNT: ", result);
+    if (result) return result.rows[0].count;
+  } catch (err) {
+    console.log(err);
+  }
+  return "...";
+};
+
+module.exports.updateRobotStatus = async (robot_id, status) => {
+  const db = require("../services/db");
+  // console.log("Updating Robot Server Status: ", robot_id);
+  try {
+    const update = `UPDATE robots SET status = $1 WHERE id = $2 RETURNING *`;
+    const result = await db.query(update, [status, robot_id]);
+    if (result.rows[0]) {
+      const sendResult = result.rows[0];
+      // console.log("Robot Server Updated: ", sendResult);
+      return sendResult;
+      //Server Status Update will need to get sent.
+    }
+  } catch (err) {
+    console.log(err);
+  }
+  return null;
 };

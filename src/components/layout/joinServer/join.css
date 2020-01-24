@@ -1,0 +1,38 @@
+.make-window {
+  border-radius: 24px;
+  margin: 24px;
+}
+
+.details {
+  margin: 2px;
+  text-align: left;
+}
+
+a {
+  color: rgb(106, 171, 255);
+  font-size: 14px;
+}
+
+.invite-card {
+  padding: 24px;
+  background: -webkit-linear-gradient(-45deg, #d64eb8 0%, #003fee 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+}
+
+.info-text {
+  font-size: 14px;
+  padding-top: 3px;
+  padding-bottom: 3px;
+  background: #282c34;
+}
+
+.join-container {
+  /* background-color: red; */
+  background: rgb(25, 25, 36);
+  border-radius: 24px;
+  margin-top: 12px;
+  padding-bottom: 12px;
+}

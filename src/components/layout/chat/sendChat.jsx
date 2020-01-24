@@ -3,21 +3,37 @@ import React from "react";
 import Joi from "joi-browser";
 import "./chat.css";
 import { MESSAGE_SENT } from "../../../events/definitions";
-import { defaultRate } from "../../../config/clientSettings";
+import { defaultRate } from "../../../config/client";
 import uuidv4 from "uuid/v4";
+import GetLayout from "../../modules/getLayout";
 
 export default class SendChat extends Form {
+  constructor(props) {
+    super(props);
+    this.chatForm = React.createRef();
+  }
+
   state = {
     data: { sendChat: "" },
     errors: {},
     user: {},
-    //uuid: 0, //used to generate keys for locally generated messages
-    coolDown: false
+    coolDown: false,
+    indicator: false
   };
 
   componentDidMount() {
     //set the rate limit from global vars
   }
+
+  componentDidUpdate = () => {
+    // console.log(this.refs);
+
+    if (this.props.chatTabbed) {
+      this.chatForm.current.sendChat.focus();
+    } else if (this.chatForm) {
+      this.chatForm.current.sendChat.blur();
+    }
+  };
 
   startTimer = () => {
     if (!this.state.coolDown) {
@@ -33,7 +49,6 @@ export default class SendChat extends Form {
 
   schema = {
     sendChat: Joi.string()
-      .required()
       .min(1)
       .max(512)
       .trim()
@@ -42,28 +57,14 @@ export default class SendChat extends Form {
 
   doSubmit = () => {
     let keepGoing = true;
-    const { user, socket, chatId, server_id, onChatFeedback } = this.props;
-    // console.log("CHECK USER STATUS TIMEOUT: ", user.status.timeout);
-    // console.log("CHECK USER STATUS: ", user.status);
-
-    if (user.status && user.status.timeout) {
-      keepGoing = false;
-      const messageBlank = {
-        time_stamp: Date.now(),
-        displayMessage: true,
-        type: "moderation"
-      };
-      let toUser = "Unable to send chat messages while timed out";
-      let feedback = messageBlank;
-      feedback.message = toUser;
-      feedback.userId = user.id;
-      feedback.chat_id = chatId;
-      feedback.server_id = server_id;
-      feedback.id = uuidv4();
-
-      onChatFeedback(feedback);
-      console.log(toUser);
-    }
+    const {
+      user,
+      socket,
+      chatId,
+      server_id,
+      onChatFeedback,
+      channel
+    } = this.props;
 
     if (this.state.coolDown) {
       keepGoing = false;
@@ -71,8 +72,9 @@ export default class SendChat extends Form {
         1000} seconds before you can send a new message`;
       const messageBlank = {
         time_stamp: Date.now(),
-        displayMessage: true,
-        type: "moderation"
+        display_message: true,
+        type: "moderation",
+        sender: "System"
       };
 
       let feedback = messageBlank;
@@ -83,8 +85,8 @@ export default class SendChat extends Form {
       feedback.id = uuidv4();
 
       onChatFeedback(feedback);
-      console.log(toUser);
-      console.log(feedback.id);
+      // console.log(toUser);
+      // console.log(feedback.id);
     }
 
     const { sendChat } = this.state.data;
@@ -94,13 +96,12 @@ export default class SendChat extends Form {
         userId: user.id,
         message: sendChat,
         chatId: chatId,
-        server_id: server_id
+        server_id: server_id,
+        channel_id: channel
       });
-      console.log(
-        `SEND TO CHAT, user: ${user.username} userId ${
-          user.id
-        } message ${sendChat} chatId ${chatId}`
-      );
+      // console.log(
+      //   `SEND TO CHAT, user: ${user.username} userId ${user.id} message ${sendChat} chatId ${chatId}, channelId ${channel}`
+      // );
 
       this.startTimer();
     } else {
@@ -119,16 +120,90 @@ export default class SendChat extends Form {
     this.setState({ error });
   };
 
+  //This should only appear for desktop, no need for mobile
+  handleIndicator = () => {
+    // console.log(this.props.chatTabbed);
+    if (this.props.isModalShowing) {
+      return (
+        <div className="send-chat-options">
+          <div className="indicator" />
+          you are inside a modal. close it to regain control
+        </div>
+      );
+    } else if (!this.props.chatTabbed) {
+      return (
+        <div className="send-chat-options">
+          <div className="indicator indicator-active" />
+          {`Press Tab to chat or click on the chatbox`}
+        </div>
+      );
+    } else {
+      return (
+        <div className="send-chat-options">
+          <div className="indicator" />
+          {`Press Tab control the robot, or use the mouse`}
+        </div>
+      );
+    }
+  };
+
+  handleFocus = () => {
+    this.props.setChatTabbed(true);
+  };
+
+  handleBlur = () => {
+    this.props.setChatTabbed(false);
+  };
+
+  handleDefaultChatForm = () => {
+    return (
+      <React.Fragment>
+        {this.handleIndicator()}
+        <div className="send-chat-container">
+          <form
+            onSubmit={this.handleSubmit}
+            onFocus={this.handleFocus}
+            onBlur={this.handleBlur}
+            ref={this.chatForm}
+          >
+            <div className="input-field-container">
+              {this.renderChatInput("sendChat", "", "chat")}
+              {this.renderButton("Chat", "chat", "chat")}
+            </div>
+          </form>
+        </div>
+      </React.Fragment>
+    );
+  };
+
+  handleMobile = () => {
+    return (
+      <React.Fragment>
+        <form
+          onSubmit={this.handleSubmit}
+          onFocus={this.handleFocus}
+          onBlur={this.handleBlur}
+          ref={this.chatForm}
+        >
+          <div className="input-field-container">
+            {this.renderChatInput("sendChat", "", "chat")}
+            <div className="send-chat-btn">
+              {this.renderButton("Chat", "chat", "chat")}
+            </div>
+          </div>
+        </form>
+      </React.Fragment>
+    );
+  };
+
   render() {
     return (
-      <div className="send-chat-container">
-        <form onSubmit={this.handleSubmit}>
-          <div className="input-field-container">
-            {this.renderInput("sendChat", "", "chat")}
-          </div>
-          <div className="send-chat-btn"> {this.renderButton("Chat")}</div>
-        </form>
-      </div>
+      <React.Fragment>
+        <GetLayout
+          renderDesktop={this.handleDefaultChatForm}
+          renderMobile={this.handleMobile}
+        />
+      </React.Fragment>
     );
   }
 }

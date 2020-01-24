@@ -1,42 +1,57 @@
 import React, { Component } from "react";
-import Chat from "../chat/chat";
 import {
   SEND_ROBOT_SERVER_INFO,
-  GET_CHAT,
   ACTIVE_USERS_UPDATED,
-  CHANNELS_UPDATED,
-  JOIN_CHANNEL
+  CHANNELS_UPDATED
 } from "../../../events/definitions";
 import { colors } from "../../../config/colors";
-import RobotInterface from "../robot/robotInteface";
 import AddChannelForm from "./modals/addChannelForm";
 import EditChannel from "./modals/editChannel";
 import DisplayRobot from "./displayRobot";
+import DisplayServerDetails from "./displayServerDetails";
+import socket from "../../socket";
+import { Link, Route, Switch } from "react-router-dom";
+import Channel from "./channel";
+import defaultImages from "../../../imgs/placeholders";
+import "./channels.css";
+import GetLayout from "../../modules/getLayout";
+import InviteButton from "./invites/inviteButton";
 
-//placeholder
-//var chatroom = { messages: [{ sender: "user2" }] }; // (this.state.chatroom)
 export default class Channels extends Component {
-  state = {
-    channels: [],
-    users: [],
-    userColors: {},
-    currentChannel: null,
-    storeSelectedServer: null,
-    defaultLoaded: false,
-    loadControls: ""
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      channels: null,
+      users: [],
+      userColors: {},
+      currentChannel: null,
+      storeSelectedServer: null,
+      defaultLoaded: false,
+      loadControls: "",
+      chatTabbed: false
+    };
+  }
+
+  setChatTabbed = value => {
+    this.setState({ chatTabbed: value });
   };
 
   // not sure if needed, but why not
-  componentDidUpdate(prevState) {
-    if (prevState !== this.state) {
-      this.displayChannels();
+  componentDidUpdate(prevProps) {
+    if (
+      prevProps.selectedServer.server_id !== this.props.selectedServer.server_id
+    ) {
+      //console.log("SELECTED SERVER: ", this.props.selectedServer);
+      this.handleServer(true);
     }
   }
 
-  componentDidMount() {
+  async componentDidMount() {
     this._isMounted = true;
     this.channelListener();
 
+    this.handleServer();
     this.colorCleanup = setInterval(() => {
       const newColors = this.state.userColors;
       let usernamesToKeep = [];
@@ -44,12 +59,6 @@ export default class Channels extends Component {
         usernamesToKeep.push(user.username);
         return null;
       });
-
-      // chatroom.messages.map(message => {
-      //   if (usernamesToKeep.includes(message.sender) !== true) {
-      //     usernamesToKeep.push(message.sender);
-      //   }
-      // });
 
       Object.keys(colors).map(username => {
         if (usernamesToKeep.includes(username) !== true) {
@@ -60,55 +69,15 @@ export default class Channels extends Component {
       // console.log(newColors);
       this.setState({ userColors: newColors });
     }, 30000); //garbage cleanup every 30s
-
-    this.loadDefaultChannel();
+    document.addEventListener("keydown", this.handleKeyPress);
   }
 
-  loadDefaultChannel = () => {
-    //const { channels, selectedServer } = this.props;
-    const {
-      currentChannel,
-      defaultLoaded,
-      channels,
-      storeSelectedServer
-    } = this.state;
-    if (
-      this.props.selectedServer &&
-      this.props.selectedServer.server_id &&
-      this.props.selectedServer.server_id !== storeSelectedServer
-    ) {
-      this.setState({
-        storeSelectedServer: this.props.selectedServer.server_id,
-        defaultLoaded: false,
-        currentChannel: null
-      });
+  handleKeyPress = e => {
+    if (e.keyCode === 9) {
+      e.preventDefault();
+      // console.log(this.state.chatTabbed);
+      this.setChatTabbed(!this.state.chatTabbed);
     }
-    if (currentChannel || defaultLoaded) return;
-
-    if (channels && channels.length > 0) {
-      console.log("LOADING DEFAULT CHANNEL");
-      this.handleActiveChannel(channels[0]);
-    }
-    return;
-  };
-
-  handleActiveChannel = activeChannel => {
-    console.log("LOAD CHANNEL", activeChannel);
-    const { channels } = this.state;
-    const { socket } = this.props;
-    let storeChannels = channels.map(channel => {
-      if (channel.id === activeChannel.id) {
-        console.log(activeChannel, channel);
-        channel.active = true;
-      } else {
-        channel.active = false;
-      }
-      return channel;
-    });
-    if (socket) socket.emit(JOIN_CHANNEL, activeChannel.id);
-    this.setState({ channels: storeChannels });
-    this.setState({ currentChannel: activeChannel.id });
-    this.setState({ loadControls: activeChannel.controls });
   };
 
   generateColor = () => {
@@ -141,69 +110,102 @@ export default class Channels extends Component {
     });
   };
 
-  channelListener = () => {
-    const { socket, selectedServer } = this.props;
+  handleSendServerInfo = data => {
+    // console.log("SEND ROBOT SERVER INFO: ", data);
+    this.setState({
+      channels: data.channels,
+      users: this.getUserColors(data.users),
+      invites: data.invites
+    });
+    //if (this.state.currentChannel) this.handleClick(data.channels[0]);
+  };
 
-    if (socket && this._isMounted) {
-      //Currently doesn't handle channels being dynamically updated
-      socket.on(SEND_ROBOT_SERVER_INFO, data => {
-        console.log("SEND ROBOT SERVER INFO: ", data);
-        this.setState({
-          channels: data.channels,
-          users: this.getUserColors(data.users)
-        });
-        if (this.state.currentChannel) this.handleClick(data.channels[0]);
-      });
+  handleActiveUsersUpdated = users => {
+    this.setState({ users: this.getUserColors(users) });
+  };
 
-      socket.on(ACTIVE_USERS_UPDATED, users => {
-        this.setState({ users: this.getUserColors(users) });
-      });
-
-      socket.on(CHANNELS_UPDATED, data => {
-        console.log("CHANNELS UPDATED: ", data, selectedServer);
-        if (
-          this.props.selectedServer &&
-          data.server_id === this.props.selectedServer.server_id
-        ) {
-          console.log("UPDATING CHANNELS");
-          this.setState({
-            channels: data.channels
-          });
-        }
+  handleChannelsUpdated = data => {
+    const { selectedServer } = this.props;
+    // console.log("CHANNELS UPDATED: ", data, selectedServer);
+    if (selectedServer && data.server_id === selectedServer.server_id) {
+      // console.log("UPDATING CHANNELS");
+      this.setState({
+        channels: data.channels
       });
     }
   };
 
-  handleClick = channel => {
-    this.handleActiveChannel(channel);
-    console.log("CHANNEL INFO CHECK: ", channel);
-    const { socket } = this.props;
-    const chatId = channel.chat;
-    const controlsId = channel.controls;
-    socket.emit(GET_CHAT, chatId);
-    socket.emit("GET_CONTROLS", controlsId);
+  channelListener = () => {
+    if (socket) {
+      socket.on(SEND_ROBOT_SERVER_INFO, data =>
+        this.handleSendServerInfo(data)
+      );
+      socket.on(ACTIVE_USERS_UPDATED, users =>
+        this.handleActiveUsersUpdated(users)
+      );
+      socket.on(CHANNELS_UPDATED, data => this.handleChannelsUpdated(data));
+    }
+  };
+
+  handleServer = resetState => {
+    // console.log("handle server");
+    if (resetState) this.setState({ channels: null, currentChannel: null });
+    // console.log("get channels for", this.props.selectedServer.server_name);
+    socket.emit("GET_CHANNELS", {
+      user: this.props.user.id,
+      server_id: this.props.selectedServer.server_id
+    });
+  };
+
+  handleMobileClick = () => {
+    const { mobileState, showMobileNav } = this.props;
+    if (showMobileNav) {
+      return () => mobileState({ showMobileNav: !showMobileNav });
+    }
+    return null;
+  };
+
+  handleCheckLiveDevices = channel => {
+    const { liveDevices } = this.props.selectedServer.status;
+    let live = false;
+    liveDevices.forEach(device => {
+      const { current_channel } = device.status;
+      if (current_channel === channel.id) {
+        // console.log(channel.name, "IS LIVE");
+        live = true;
+      }
+    });
+    if (live) return <div className="live-channel"> live </div>;
+    return <React.Fragment />;
   };
 
   displayChannels = () => {
-    const { channels } = this.state;
-
-    this.loadDefaultChannel();
+    const { channels, currentChannel } = this.state;
 
     return channels.map((channel, index) => {
       return (
-        <div className="channel-container" key={index}>
-          <div
-            className={
-              channel.active
-                ? "list-channels list-channels-selected"
-                : "list-channels"
-            }
-            key={channel.id}
-            onClick={() => this.handleClick(channel)}
+        <div
+          className="channel-container"
+          onClick={this.handleMobileClick()}
+          key={index}
+        >
+          <Link
+            className="channel-delink"
+            to={`/${this.props.selectedServer.server_name}/${channel.id}`}
           >
-            {"# "}
-            {channel.name}
-          </div>
+            <div
+              className={
+                channel.id === currentChannel
+                  ? `list-channels list-channels-selected`
+                  : `list-channels`
+              }
+              key={channel.id}
+            >
+              {"# "}
+              {channel.name}
+              {this.handleCheckLiveDevices(channel)}
+            </div>
+          </Link>
           <EditChannel
             channel={channel}
             server={this.props.selectedServer}
@@ -224,82 +226,122 @@ export default class Channels extends Component {
     }
   };
 
-  render() {
-    const { socket, user, selectedServer } = this.props;
+  setCurrentChannel = channel => {
+    this.setState({ currentChannel: channel });
+  };
+
+  handleChannelsPanel = () => {
+    const { user, selectedServer } = this.props;
     const { users } = this.state;
+
+    return (
+      <div className={this.handleDisplayChannels()}>
+        <DisplayServerDetails
+          server={selectedServer}
+          channels={this.state.channels}
+          user={user}
+          users={users}
+          invites={this.state.invites}
+          modal={this.props.modal}
+          onCloseModal={this.props.onCloseModal}
+          setServer={this.props.setServer}
+        />
+        <InviteButton
+          user={user}
+          server={selectedServer}
+          modal={this.props.modal}
+          onCloseModal={this.props.onCloseModal}
+          invites={this.state.invites}
+        />
+        {this.displayChannels()}
+        <AddChannel
+          channels={this.state.channels}
+          server={selectedServer}
+          user={user}
+          modal={this.props.modal}
+          onCloseModal={this.props.onCloseModal}
+        />
+        <DisplayRobot
+          channels={this.state.channels}
+          server={selectedServer}
+          user={user}
+          modal={this.props.modal}
+          onCloseModal={this.props.onCloseModal}
+        />
+      </div>
+    );
+  };
+
+  handleMobilePanel = () => {
+    const { showMobileNav } = this.props;
+    // console.log("Show Mobile Nav: ", showMobileNav);
+    if (showMobileNav) {
+      return this.handleChannelsPanel();
+    } else {
+      return <React.Fragment />;
+    }
+  };
+
+  render() {
+    const { user, selectedServer } = this.props;
+    const { users, currentChannel, chatTabbed, channels } = this.state;
+    if (!channels) {
+      return <React.Fragment />;
+    }
+
     return (
       <React.Fragment>
-        <div className={this.handleDisplayChannels()}>
-          <DisplayServerDetails
-            server={selectedServer}
-            channels={this.state.channels}
-            user={user}
-            users={users}
+        <GetLayout
+          renderSize={1280}
+          renderDesktop={this.handleChannelsPanel}
+          renderMobile={this.handleMobilePanel}
+        />
+        <Switch>
+          <Route
+            path="/:name/:id"
+            render={props => (
+              <Channel
+                {...props}
+                user={user}
+                users={users}
+                currentChannel={currentChannel}
+                setCurrentChannel={this.setCurrentChannel}
+                chatTabbed={chatTabbed}
+                setChatTabbed={this.setChatTabbed}
+                channels={this.state.channels}
+                server={selectedServer}
+                getColor={this.getColor}
+                modal={this.props.modal}
+                onCloseModal={this.props.onCloseModal}
+                isModalShowing={this.props.isModalShowing}
+                showMobileNav={this.props.showMobileNav}
+                mobileState={this.props.mobileState}
+              />
+            )}
           />
-          {this.displayChannels()}
-          <AddChannel
-            channels={this.state.channels}
-            server={selectedServer}
-            user={user}
-            modal={this.props.modal}
-            onCloseModal={this.props.onCloseModal}
+          <Route
+            path="/:name"
+            render={props => (
+              <NoChannel
+                {...props}
+                setCurrentChannel={this.setCurrentChannel}
+                channels={this.state.channels}
+              />
+            )}
           />
-          <DisplayRobot
-            channels={this.state.channels}
-            server={selectedServer}
-            user={user}
-            modal={this.props.modal}
-            onCloseModal={this.props.onCloseModal}
-            socket={socket}
-          />
-        </div>
-        {users !== [] ? (
-          <React.Fragment>
-            <RobotInterface
-              user={user}
-              socket={socket}
-              channel={this.state.currentChannel}
-            />
-            <Chat user={user} socket={socket} users={users} />
-          </React.Fragment>
-        ) : (
-          <React.Fragment />
-        )}
+        </Switch>
       </React.Fragment>
     );
   }
 
   componentWillUnmount() {
     clearInterval(this.colorCleanup);
+    document.removeEventListener("keydown", this.handleKeyPress);
+    socket.off(SEND_ROBOT_SERVER_INFO, this.handleSendServerInfo);
+    socket.off(ACTIVE_USERS_UPDATED, this.handleActiveUsersUpdated);
+    socket.off(CHANNELS_UPDATED, this.handleChannelsUpdated);
   }
 }
-
-const DisplayServerDetails = ({ server, channels, user, users }) => {
-  if (channels && channels.length > 0) {
-    return (
-      <div className="server-info-container">
-        <div className="display-server-name">
-          {server.server_name}
-          {user.id === server.owner_id ? (
-            <div className="server-settings"> {`(edit)`}</div>
-          ) : (
-            <div className="server-settings" />
-          )}
-        </div>
-
-        <div className="display-server-info">
-          Users Online:
-          <ActiveUserCount users={users} />
-        </div>
-      </div>
-    );
-  }
-  return <React.Fragment />;
-};
-
-const ActiveUserCount = ({ users }) => {
-  return <span> {users.length}</span>;
-};
 
 //Add Channel
 class AddChannel extends Component {
@@ -338,5 +380,20 @@ class AddChannel extends Component {
 
   render() {
     return <React.Fragment>{this.handleDisplayAddChannel()}</React.Fragment>;
+  }
+}
+
+class NoChannel extends Component {
+  componentDidMount() {
+    this.props.setCurrentChannel(null);
+  }
+
+  render() {
+    return (
+      <div id="no-channel">
+        <img className="logo" alt="" src={defaultImages.remoGrey} />
+        <div>No Channel Selected</div>
+      </div>
+    );
   }
 }

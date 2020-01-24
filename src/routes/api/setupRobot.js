@@ -1,16 +1,7 @@
 const router = require("express").Router();
-const Joi = require("joi");
 const { createRobot, deleteRobot } = require("../../models/robot");
 const auth = require("../auth");
-
-//Use authorization head over body
-const schema = Joi.object().keys({
-  robot_name: Joi.string()
-    .regex(/[\w\s]+/)
-    .min(3)
-    .max(30)
-    .required()
-});
+const { jsonError } = require("../../modules/logging");
 
 router.get("/setup", async (req, res) => {
   res.send({
@@ -21,27 +12,19 @@ router.get("/setup", async (req, res) => {
   console.log("Send Robot Object");
 });
 
-router.post("/setup", auth, async (req, res) => {
-  console.log(req.body);
+router.post("/setup", auth({ user: true }), async (req, res) => {
+  const { validateRobotName } = require("../../controllers/validate");
+
   let response = {};
   if (req.body.robot_name && req.body.host_id) {
-    response.validate = await Joi.validate(
-      { robot_name: req.body.robot_name },
-      schema
-    );
-
-    if (!response.validate) {
-      response.status = "error";
-      res.send(response);
+    let robot_name = validateRobotName(req.body.robot_name);
+    if (robot_name.error) {
+      res.send(robot_name);
       return;
     }
   } else {
-    response.status = "error";
-    response.error = "insuffecient information to make this request";
+    res.send(jsonError("robot_name & host_id are required"));
   }
-
-  //Make sure this user is a real user, this user owns the server
-
   response.result = await createRobot({
     robot_name: req.body.robot_name,
     host_id: req.body.host_id,
@@ -51,32 +34,29 @@ router.post("/setup", auth, async (req, res) => {
   return;
 });
 
-router.post("/delete", auth, async (req, res) => {
-  console.log(req.body);
+router.post("/delete", auth({ user: true }), async (req, res) => {
   let response = {};
-  console.log;
   if (
     req.body.robot_id &&
     req.body.host_id &&
     req.user.id === req.body.owner_id
   ) {
-    console.log("DELETING ROBOT: ", req.body.robot);
     const result = await deleteRobot({
       id: req.body.robot_id,
       host_id: req.body.host_id
     });
     response.status = result.status;
-  } else {
-    response.status = "error";
-    response.error = "Cannot delete robot";
+    res.send(response);
+    return;
   }
-  res.send(response);
+  res.send(jsonError("Unable to delete robot."));
 });
 
-router.post("/key", auth, async (req, res) => {
-  const { createRobotAuth } = require("../../models/robot");
+router.post("/key", auth({ user: true }), async (req, res) => {
+  const { createRobotAuth, getRobotFromId } = require("../../models/robot");
   let response = {};
-  if (req.body.robot_id) {
+  const getRobot = await getRobotFromId(req.body.robot_id);
+  if (getRobot && getRobot.owner_id && getRobot.owner_id === req.user.id) {
     try {
       response.key = await createRobotAuth(req.body.robot_id);
       response.status = "success!";

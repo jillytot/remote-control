@@ -4,6 +4,7 @@ import { GET_ROBOTS } from "../../../events/definitions";
 import list_robot from "../../../icons/singleIcons/list_robot.svg";
 import AddRobotForm from "./modals/addRobotForm";
 import RobotSettings from "./modals/robotSettings";
+import socket from "../../socket";
 
 export default class DisplayRobot extends Component {
   state = {
@@ -11,25 +12,32 @@ export default class DisplayRobot extends Component {
   };
 
   componentDidMount() {
-    this.socketListener();
+    socket.on(GET_ROBOTS, this.socketRobotsHandler);
+    socket.on("connect", this.getRobotsEmit);
+    if (socket.connected) this.getRobotsEmit();
   }
 
-  socketListener = () => {
-    const { socket } = this.props;
-    if (socket) {
-      socket.on(GET_ROBOTS, robots => {
-        console.log("GET ROBOTS CHECK: ", robots);
-        this.setState({ robots: robots });
-      });
-      console.log(this.state.robots);
-    }
+  getRobotsEmit = () => {
+    socket.emit("GET_ROBOTS", {
+      server_id: this.props.server.server_id
+    });
+  };
+
+  componentWillUnmount() {
+    socket.off(GET_ROBOTS, this.socketRobotsHandler);
+    socket.off("connect", this.getRobotsEmit);
+  }
+
+  socketRobotsHandler = robots => {
+    // console.log("GET ROBOTS CHECK: ", robots);
+    this.setState({ robots: robots });
   };
 
   handleListRobots = () => {
     const { robots } = this.state;
     if (robots && robots.length > 0) {
       return robots.map((robot, index) => {
-        console.log(robot.name);
+        // console.log(robot.name);
         return (
           <GetRobotSettings
             robot={robot}
@@ -45,7 +53,7 @@ export default class DisplayRobot extends Component {
 
   handleDisplay = () => {
     const { server, user, channels } = this.props;
-    console.log(this.props);
+    // console.log(this.props);
     if (server && user && user.id === server.owner_id) {
       return (
         <div className="display-robot-container">

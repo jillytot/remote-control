@@ -1,0 +1,16 @@
+@import "../../layout/userProfile/mixins/mixins.scss";
+
+.VerifyEmail {
+  &__link {
+    @include info-edit;
+  }
+  &__container {
+    @include info-container;
+  }
+  &__key {
+    @include info-key;
+  }
+  &__value {
+    @include info-value;
+  }
+}

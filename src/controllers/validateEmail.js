@@ -19,11 +19,11 @@ module.exports.validateEmail = async (user, setExpire) => {
   //Generate Validation Key
   const makeKey = await generateKey(user, setExpire);
   if (makeKey.error) return makeKey;
-  const saveKey = await saveKey(makeKey);
-  if (saveKey.error) return saveKey;
+  const save = await saveKey(makeKey);
+  if (save.error) return saveKey;
 
   //email Key:
-  emailValidationKey(getUser, saveKey);
+  emailValidationKey(getUser, save);
 
   return {
     response:

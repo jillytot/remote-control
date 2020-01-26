@@ -171,9 +171,9 @@ export default class LinkPatreon extends Component {
             Support Remo on Patreon & get perks!
           </div>{" "}
         </a>
-        <div className="info-container">
-          <div className="info-key">patreon: </div>
-          <div className="info-value"> {this.handleLinked()} </div>{" "}
+        <div className="LinkPatreon__container">
+          <div className="LinkPatreon__key">patreon: </div>
+          <div className="LinkPatreon__value"> {this.handleLinked()} </div>{" "}
           {this.handleActions()}
         </div>
         {this.handleDisplayConfirm()}

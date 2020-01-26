@@ -4,6 +4,7 @@ import "./userProfile.css";
 import { userProfile } from "../../../config/client/index";
 import EditEmail from "./editEmail";
 import LinkPatreon from "../../forms/LinkPatreon/LinkPatreon";
+import VerifyEmail from "../../forms/verifyEmail/verifyEmail";
 
 export default class UserProfile extends Component {
   state = {
@@ -61,7 +62,7 @@ export default class UserProfile extends Component {
 
   handleShowInfo = () => {
     const { editEmail } = this.state;
-    const { email, username, created, id } = this.state.userData;
+    const { email, username, created, id, status } = this.state.userData;
     const date = new Date(parseInt(created)).toDateString();
 
     return (
@@ -93,6 +94,7 @@ export default class UserProfile extends Component {
             </div>
           </div>
           {editEmail ? this.handleEditEmail() : <React.Fragment />}
+          <VerifyEmail status={status} />
 
           {this.handleDisplayPatreon()}
         </div>
@@ -108,16 +110,6 @@ export default class UserProfile extends Component {
         onProfileUpdated={this.handleProfileUpdated}
       />
     );
-  };
-
-  handleVerifiedEmail = () => {
-    /* <div className="info-container">
-            <div className="info-key"> email verified: </div>
-            <div className="info-value"> no </div>
-            <div className="info-edit"> ( coming soon ) </div>
-          </div> */
-
-    return <React.Fragment></React.Fragment>;
   };
 
   handleUpdated = e => {

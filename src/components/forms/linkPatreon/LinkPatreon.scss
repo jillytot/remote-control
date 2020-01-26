@@ -1,11 +1,20 @@
-@import "../../../styles/mixins/buttonStyles.scss";
+@import "../../layout/userProfile/mixins/mixins.scss";
 
 .LinkPatreon {
+  &__container {
+    @include info-container;
+  }
+  &__key {
+    @include info-key;
+  }
+  &__value {
+    @include info-value;
+  }
   &__link {
-    @include button-as-text-default;
+    @include info-edit;
   }
   &__remove {
-    @include button-as-text-gray;
+    @include info-edit-gray;
   }
   &__confirm-container {
     margin-left: 6px;

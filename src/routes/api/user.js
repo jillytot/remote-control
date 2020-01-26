@@ -111,7 +111,7 @@ module.exports = router;
  *    User Object: { user }
  *    Set Expiration ( Optional ): int ( in milliseconds )
  *
- * Response Success: { response: "Response Message" }
+ * Response Success: { result: "Response Message" }
  * Response Error: { error: "Error message!" }
  */
 router.post("/validate-email", auth({ user: true }), async (req, res) => {

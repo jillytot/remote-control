@@ -12,7 +12,7 @@ module.exports.validateEmail = async (user, setExpire) => {
   if (getUser && getUser.status && getUser.status.email_validated) {
     //Should I resend?
     return {
-      response: "This email address has already been validated"
+      result: "This email address has already been validated"
     };
   }
 
@@ -26,7 +26,7 @@ module.exports.validateEmail = async (user, setExpire) => {
   emailValidationKey(getUser, save);
 
   return {
-    response:
+    result:
       "An email validation link has been sent to the email associated with this account."
   };
 };

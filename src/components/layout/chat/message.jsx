@@ -94,6 +94,19 @@ const Message = ({ message, channelName, printChannelName }) => {
           );
         }
 
+        if (badge === "patreon750") {
+          return (
+            <span key={message.id + badge}>
+              <img
+                className="message-badge"
+                src={defaultImages["patreon750"]}
+                alt={badge}
+                title={"Patreon Supporter"}
+              />
+            </span>
+          );
+        }
+
         if (badge === "patreon1000") {
           return (
             <span key={message.id + badge}>

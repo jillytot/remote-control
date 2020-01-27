@@ -1,0 +1,13 @@
+@import "../../../styles/mixins/inlineStyles.scss";
+
+.editEmail {
+  &__inline {
+    @include inline;
+  }
+  &__inline-alert {
+    @include inline-alert;
+  }
+  &__inline-success {
+    @include inline-success;
+  }
+}

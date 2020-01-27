@@ -123,10 +123,16 @@ $color-cyan: #00ffff;
 $color-mountain-meadow: #21c975;
 $color-green-1: rgb(0, 218, 0);
 $color-green-2: rgb(2, 255, 2);
-$color-chartreuse: #7cff1e;
+$color-chartreuse: #7cff1e; //remo-green
 $color-yellow: #ffff00;
 $color-laser-lemon: #f7ff66;
 $color-texas-rose: #ffa557;
+
+$color-dark-cool-gray: rgb(41, 41, 59);
+
+//Main brand colors:
+$remo-green: $color-chartreuse;
+$remo-orange: $color-texas-rose;
 
 $remo-gradient: -webkit-linear-gradient(-45deg, #954ed6 0%, #009bee 100%);
 

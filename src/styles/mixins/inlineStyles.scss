@@ -1,0 +1,21 @@
+@import "../variables.scss";
+
+@mixin inline {
+  display: flex;
+  flex-direction: row;
+  padding: 2px;
+  background-color: $color-dark-cool-gray;
+  margin: 2px;
+  border-radius: 6px;
+  font-size: 14px;
+}
+
+@mixin inline-success {
+  @include inline;
+  background-color: $color-mountain-meadow;
+}
+
+@mixin inline-alert {
+  @include inline;
+  background-color: $color-error-text;
+}

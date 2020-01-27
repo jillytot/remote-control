@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import axios from "axios";
-import "./userProfile.css";
+import "./userProfile.scss";
 import { userProfile } from "../../../config/client/index";
 import EditEmail from "./editEmail";
 import LinkPatreon from "../../forms/LinkPatreon/LinkPatreon";
@@ -67,31 +67,31 @@ export default class UserProfile extends Component {
 
     return (
       <div>
-        <div className="info-chunk">
-          <div className="info-container">
-            <div className="info-key"> username: </div>
-            <div className="info-value"> {username} </div>
+        <div className="userProfile__info-group-container">
+          <div className="userProfile__info-container">
+            <div className="userProfile__info-key"> username: </div>
+            <div className="userProfile__info-value"> {username} </div>
           </div>
-          <div className="info-container">
-            <div className="info-key"> user id: </div>
-            <div className="info-value"> {id} </div>
+          <div className="userProfile__info-container">
+            <div className="userProfile__info-key"> user id: </div>
+            <div className="userProfile__info-value"> {id} </div>
           </div>
-          <div className="info-container">
-            <div className="info-key"> created: </div>
-            <div className="info-value"> {date} </div>
+          <div className="userProfile__info-container">
+            <div className="userProfile__info-key"> created: </div>
+            <div className="userProfile__info-value"> {date} </div>
           </div>
-          <div className="info-container">
-            <div className="info-key"> email: </div>
-            <div className="info-value"> {email} </div>
-            <div
-              className="info-edit"
+          <div className="userProfile__info-container">
+            <div className="userProfile__info-key"> email: </div>
+            <div className="userProfile__info-value"> {email} </div>
+            <button
+              className="userProfile__info-edit"
               onClick={() => {
                 this.setState({ editEmail: !editEmail });
                 if (!editEmail) this.setState({ updated: "" });
               }}
             >
               {editEmail ? "( cancel )" : "( edit )"}
-            </div>
+            </button>
           </div>
           {editEmail ? this.handleEditEmail() : <React.Fragment />}
           <VerifyEmail status={status} />
@@ -131,7 +131,7 @@ export default class UserProfile extends Component {
   handleUpdateStatus = () => {
     const { updated, editEmail } = this.state;
     if (updated !== "" && !editEmail) {
-      return <div className="updated">{updated}</div>;
+      return <div className="userProfile__updated">{updated}</div>;
     }
     return <React.Fragment />;
   };

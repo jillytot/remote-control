@@ -1,4 +1,5 @@
 import React from "react";
+import "./LinkPatreon.scss";
 
 const Rewards = ({ reward_id, reward_title, reward_amount }) => {
   console.log(reward_id, reward_title, reward_amount);
@@ -10,9 +11,9 @@ const Rewards = ({ reward_id, reward_title, reward_amount }) => {
   }
 
   return (
-    <div className="info-container">
-      <div className="info-key">perks: </div>
-      <div className="info-value">{reward} </div>
+    <div className="LinkPatreon__container">
+      <div className="LinkPatreon__key">perks: </div>
+      <div className="LinkPatreon__value">{reward} </div>
     </div>
   );
 };

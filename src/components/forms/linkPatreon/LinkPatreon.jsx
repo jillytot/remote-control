@@ -35,7 +35,12 @@ export default class LinkPatreon extends Component {
   handleLinked = () => {
     const { patreon_id } = this.props;
     if (patreon_id) {
-      return <div className="remo-green"> {`verified: ${patreon_id}`} </div>;
+      return (
+        <div className="LinkPatreon__info-value-green">
+          {" "}
+          {`verified: ${patreon_id}`}{" "}
+        </div>
+      );
     }
   };
 
@@ -167,7 +172,7 @@ export default class LinkPatreon extends Component {
             window.open(patreonUrl, "_blank");
           }}
         >
-          <div className="info-header patreon">
+          <div className="LinkPatreon__info-header">
             Support Remo on Patreon & get perks!
           </div>{" "}
         </a>

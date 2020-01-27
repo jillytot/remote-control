@@ -1,7 +1,7 @@
 import React from "react";
 import Form from "../../common/form";
 import Joi from "joi-browser";
-import "./userProfile.css";
+import "./editEmail.scss";
 import axios from "axios";
 import { updateEmail } from "../../../config/client/index";
 
@@ -28,9 +28,9 @@ export default class EditEmail extends Form {
     }
 
     if (error === "success") {
-      return <div className="alert-inline success">Updated!</div>;
+      return <div className="editEmail__inline-success">Updated!</div>;
     } else {
-      return <div className="alert-inline">{this.state.error}</div>;
+      return <div className="editEmail__inline-alert">{this.state.error}</div>;
     }
   };
 
@@ -79,12 +79,12 @@ export default class EditEmail extends Form {
       <div>
         {this.handleSubmitError()}
         {returnError && error !== "success" ? (
-          <div className="alert-inline">{returnError}</div>
+          <div className="editEmail__inline-alert">{returnError}</div>
         ) : (
           <React.Fragment />
         )}
         <form onSubmit={this.handleSubmit}>
-          <div className="inline">
+          <div className="editEmail__inline">
             {this.renderInput("email", "New Email", "inline")}
             {this.renderButton(submitText)}
           </div>

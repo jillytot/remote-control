@@ -1,4 +1,5 @@
 @import "../../../../styles/mixins/buttonStyles.scss";
+@import "../../../../styles//variables.scss";
 //rehashing styles from userProfile.css to work with scss
 
 @mixin info-container {
@@ -27,4 +28,31 @@
 @mixin info-value {
   font-size: 14px;
   color: white;
+}
+
+@mixin info-group-container {
+  padding: 12px;
+  margin-top: 12px;
+  background-color: rgb(25, 25, 36);
+  border-radius: 12px;
+}
+
+@mixin fetching {
+  font-size: 12px;
+  padding: 24px;
+}
+
+@mixin updated {
+  font-size: 14px;
+  margin-top: 6px;
+  font-style: italic;
+}
+
+@mixin info-header {
+  display: flex;
+  flex-direction: row;
+  font-size: 14px;
+  padding: 1px;
+  margin-top: 12px;
+  font-weight: bold;
 }

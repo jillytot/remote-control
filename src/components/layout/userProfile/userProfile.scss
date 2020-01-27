@@ -1,0 +1,27 @@
+@import "./mixins/mixins.scss";
+
+// Refactoring:
+.userProfile {
+  &__info-container {
+    @include info-container;
+  }
+  &__info-key {
+    @include info-key;
+  }
+  &__info-group-container {
+    @include info-group-container;
+  }
+  &__info-edit {
+    @include info-edit;
+  }
+  &__info-value {
+    @include info-value;
+  }
+
+  &__fetching {
+    @include fetching;
+  }
+  &__updated {
+    @include updated;
+  }
+}

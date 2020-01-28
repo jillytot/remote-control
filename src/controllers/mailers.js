@@ -15,7 +15,7 @@ module.exports.emailResetKey = (user, { key_id }) => {
 module.exports.emailValidationKey = (user, { key_id }) => {
   let { sendMail } = require("../services/email");
   const { urlPrefix } = require("../config/server");
-  const text = `${urlPrefix}email-validate/${key_id}`;
+  const text = `${urlPrefix}validate-email/${key_id}`;
   const html = `<a href="${text}">${text}</a>`;
   sendMail({
     to: user.email,

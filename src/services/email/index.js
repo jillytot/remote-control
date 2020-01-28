@@ -9,7 +9,7 @@ module.exports.sendMail = async ({
   text = "",
   html = ""
 }) => {
-  console.log("Sending Mail", to, subject, text);
+  console.log("Sending Mail from: ", sendMail, "To: ", to, subject, text);
   mail.send({
     to: to,
     from: sender,

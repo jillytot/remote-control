@@ -1,4 +1,5 @@
 @import "../../layout/userProfile/mixins/mixins.scss";
+@import "../../../styles/mixins/inlineStyles.scss";
 
 .VerifyEmail {
   &__link {
@@ -12,5 +13,18 @@
   }
   &__value {
     @include info-value;
+  }
+  &__success {
+    @include inline-success;
+  }
+  &__error {
+    @include inline-alert;
+  }
+  &__dismiss {
+    @include info-edit;
+    color: white;
+  }
+  &__inline {
+    @include inline;
   }
 }

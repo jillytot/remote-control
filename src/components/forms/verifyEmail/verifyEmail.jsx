@@ -6,7 +6,8 @@ import "./verifyEmail.scss";
 export default class VerifyEmail extends Component {
   state = {
     status: "No.",
-    error: false
+    error: false,
+    response: ""
   };
 
   componentDidMount() {
@@ -32,25 +33,46 @@ export default class VerifyEmail extends Component {
         if (response.data.error) {
           this.setState({ status: response.data.error, error: true });
         } else {
-          this.setState({ error: false, status: response.data.result });
+          this.setState({ error: false, response: response.data.result });
         }
       });
   };
 
   render() {
     const { email_verified } = this.props;
-    const { status } = this.state;
+    const { status, response, error } = this.state;
+    let responseStyle = "VerifyEmail__success";
+    if (error) responseStyle = "VerifyEmail__error";
     return (
-      <div className="VerifyEmail__container">
-        <div className="VerifyEmail__key"> email verified: </div>
-        <div className="VerifyEmail__value"> {status} </div>
-        <button
-          className="VerifyEmail__link"
-          onClick={() => this.handleVerify()}
-        >
-          {`( send verification email )`}
-        </button>
-      </div>
+      <React.Fragment>
+        <div className="VerifyEmail__container">
+          <div className="VerifyEmail__key"> email verified: </div>
+          <div className="VerifyEmail__value"> {status} </div>
+          {email_verified ? (
+            <React.Fragment />
+          ) : (
+            <button
+              className="VerifyEmail__link"
+              onClick={() => this.handleVerify()}
+            >
+              {`( send verification email )`}
+            </button>
+          )}
+        </div>
+        {response ? (
+          <div className={responseStyle}>
+            <div className={responseStyle}>{response} </div>
+            <div
+              className="VerifyEmail__dismiss"
+              onClick={() => this.setState({ response: "" })}
+            >
+              dismiss
+            </div>
+          </div>
+        ) : (
+          <React.Fragment />
+        )}
+      </React.Fragment>
     );
   }
 }

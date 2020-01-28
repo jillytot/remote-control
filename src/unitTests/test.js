@@ -33,9 +33,10 @@ const testStr = "shitty ass person you are phawk";
 
 const test = async () => {
   try {
+    await test___validateEmail();
     // await test___getPledgeData();
-    await test___syncPatreonData();
-    //await test___getRemoPeldgeData();
+    // await test___syncPatreonData();
+    // await test___getRemoPeldgeData();
     // await test___serverName();
     // await test___getRobotServerSettings();
     // await test___deepFilterMessage();
@@ -57,6 +58,15 @@ const test = async () => {
   }
 
   process.exit(0);
+};
+
+const test___validateEmail = async () => {
+  const { validateEmail } = require("../controllers/validateEmail");
+  let user = {};
+  user.id = "user-2791c4f8-8b0b-40c5-8f21-709217321a6c";
+  const test = await validateEmail(user);
+  console.log(test);
+  console.log("Done");
 };
 
 const test___getPledgeData = async () => {

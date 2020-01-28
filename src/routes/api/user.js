@@ -115,11 +115,10 @@ module.exports = router;
  * Response Error: { error: "Error message!" }
  */
 router.post("/validate-email", auth({ user: true }), async (req, res) => {
-  //const { validateEmail } = require("../../controllers/validateEmail");
+  const { validateEmail } = require("../../controllers/validateEmail");
   if (!req.user) return jsonError("User required");
   const { expire } = req.body || null;
-  const validate = { result: "Test Response" };
   console.log("REQUEST EMAIL VALIDATION...");
-  // const validate = await validateEmail(req.user, expire);
+  const validate = await validateEmail(req.user, expire);
   res.send(validate);
 });

@@ -23,11 +23,11 @@ module.exports.validateEmail = async (user, setExpire) => {
   if (save.error) return save;
 
   //email Key:
-  emailValidationKey(getUser, save);
+  await emailValidationKey(getUser, save);
 
   return {
     result:
-      "An email validation link has been sent to the email associated with this account."
+      "An email validation link has been sent to the email address associated with this account."
   };
 };
 

@@ -22,6 +22,7 @@
   }
   &__dismiss {
     @include info-edit;
+    padding: 12px;
     color: white;
   }
   &__inline {

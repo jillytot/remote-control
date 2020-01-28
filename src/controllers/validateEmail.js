@@ -27,7 +27,7 @@ module.exports.validateEmail = async (user, setExpire) => {
 
   return {
     result:
-      "An email validation link has been sent to the email address associated with this account."
+      "A validation link has been sent to the email address associated with this account."
   };
 };
 

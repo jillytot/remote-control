@@ -24,6 +24,7 @@
     @include info-edit;
     padding: 12px;
     color: white;
+    text-decoration: underline;
   }
   &__inline {
     @include inline;

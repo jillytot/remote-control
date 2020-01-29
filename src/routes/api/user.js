@@ -124,31 +124,25 @@ router.post("/validate-email", auth({ user: true }), async (req, res) => {
 });
 
 /**
- * Input:
- *  email_key: <string> ( key id );
+ * Input: ( No Auth Required )
+ *  key_id: < string >
  *
- * Response Success: { email_validated: true }
+ * Response Success: { email_verified: true }
  * Response Error: { error: "Error Message." }
  */
-router.post(
-  "/validate-email-with-key",
-  auth({ user: true }),
-  async (req, res) => {
-    const {
-      useEmailValidationKey
-    } = require("../../controllers/validateEmail");
-    const { email_key } = req.body;
-    if (email_key) {
-      const validate = await useEmailValidationKey(email_key);
-      if (validate) return res.send(validate);
-    } else {
-      res.send(jsonError("email_key is required"));
-      return;
-    }
-    res.send(
-      jsonError(
-        "Something went wrong during the validation process. Please try again later"
-      )
-    );
+router.post("/validate-email-with-key", async (req, res) => {
+  const { useEmailValidationKey } = require("../../controllers/validateEmail");
+  const { key_id } = req.body;
+  if (key_id) {
+    const validate = await useEmailValidationKey(key_id);
+    if (validate) return res.send(validate);
+  } else {
+    res.send(jsonError("key_id is required"));
+    return;
   }
-);
+  res.send(
+    jsonError(
+      "Something went wrong during the validation process. Please try again later."
+    )
+  );
+});

@@ -1,0 +1,9 @@
+@mixin response {
+  position: absolute;
+  width: 300px;
+  height: 50px;
+  top: 50%;
+  left: 50%;
+  margin-left: -150px; /* margin is -0.5 * dimension */
+  margin-top: -25px;
+}

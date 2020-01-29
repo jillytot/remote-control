@@ -59,7 +59,7 @@ module.exports.useEmailValidationKey = async key => {
   const { supportEmail } = require("../config/server");
 
   //Match key to DB, return error if not valid
-  let getKey = await this.validateKey(key);
+  let getKey = await this.validateKey({ key_id: key });
   if (getKey.error) return getKey;
 
   //If key is valid, match key ref to user:
@@ -70,7 +70,7 @@ module.exports.useEmailValidationKey = async key => {
     );
 
   //Update user status and expire the key
-  user.status.email_validated = true;
+  user.status.email_verified = true;
   getKey.expired = true;
   const updateUser = await updateStatus(user);
   const expireKey = await updateKey(getKey);
@@ -80,7 +80,7 @@ module.exports.useEmailValidationKey = async key => {
     );
 
   //
-  return { email_validated: true };
+  return { email_verified: true };
 };
 
 //Check if Key exists
@@ -88,6 +88,10 @@ module.exports.validateKey = async ({ key_id }) => {
   const { getKey } = require("../models/keys");
   const { jsonError } = require("../modules/logging");
   const validate = await getKey({ key_id: key_id });
+  if (validate && validate.expired)
+    return jsonError(
+      "This key is is no longer valid, please make a new email validation request."
+    );
   if (validate) return validate;
   return jsonError("Invalid Key");
 };

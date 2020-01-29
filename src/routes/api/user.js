@@ -122,3 +122,33 @@ router.post("/validate-email", auth({ user: true }), async (req, res) => {
   const validate = await validateEmail(req.user, expire);
   res.send(validate);
 });
+
+/**
+ * Input:
+ *  email_key: <string> ( key id );
+ *
+ * Response Success: { email_validated: true }
+ * Response Error: { error: "Error Message." }
+ */
+router.post(
+  "/validate-email-with-key",
+  auth({ user: true }),
+  async (req, res) => {
+    const {
+      useEmailValidationKey
+    } = require("../../controllers/validateEmail");
+    const { email_key } = req.body;
+    if (email_key) {
+      const validate = await useEmailValidationKey(email_key);
+      if (validate) return res.send(validate);
+    } else {
+      res.send(jsonError("email_key is required"));
+      return;
+    }
+    res.send(
+      jsonError(
+        "Something went wrong during the validation process. Please try again later"
+      )
+    );
+  }
+);

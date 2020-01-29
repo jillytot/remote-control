@@ -33,6 +33,7 @@ const defaults = {
   apiSignup: `${apiUrl}/signup`,
   apiLogin: `${apiUrl}/login`,
   requestEmailValidation: `${apiUrl}/user/validate-email`,
+  validateEmailWithKey: `${apiUrl}/user/validate-email-with-key`,
 
   //Support:
   supportEmail: "jill@remo.tv",

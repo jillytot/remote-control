@@ -1,4 +1,5 @@
 /**
+ * PART 1: KEY GENERATION
  * Input From: src/routes/api/user.js
  */
 module.exports.validateEmail = async (user, setExpire) => {
@@ -46,6 +47,40 @@ const generateKey = (user, setExpire) => {
     expire: expire,
     setExpiration: value => handleExpire(value)
   };
+};
+
+/**
+ * Part II:  Use Validation Key
+ * Input from: /src/routes/api/user
+ */
+module.exports.useEmailValidationKey = async key => {
+  const { updateStatus, getUserInfoFromId } = require("../models/user");
+  const { updateKey } = require("../models/keys");
+  const { supportEmail } = require("../config/server");
+
+  //Match key to DB, return error if not valid
+  let getKey = await this.validateKey(key);
+  if (getKey.error) return getKey;
+
+  //If key is valid, match key ref to user:
+  let user = await getUserInfoFromId(getKey.ref);
+  if (!user || (user && user.error))
+    return jsonError(
+      "Error matching key to user, please request a new validation link"
+    );
+
+  //Update user status and expire the key
+  user.status.email_validated = true;
+  getKey.expired = true;
+  const updateUser = await updateStatus(user);
+  const expireKey = await updateKey(getKey);
+  if (!updateUser || !expireKey)
+    return jsonError(
+      `There was a problem validating this key, please try again, or contact ${supportEmail} for help.`
+    );
+
+  //
+  return { email_validated: true };
 };
 
 //Check if Key exists

@@ -1,5 +1,5 @@
 import React from "react";
-import "./LinkPatreon.scss";
+import "./linkPatreon.scss";
 
 const Rewards = ({ reward_id, reward_title, reward_amount }) => {
   console.log(reward_id, reward_title, reward_amount);

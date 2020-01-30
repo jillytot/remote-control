@@ -3,7 +3,7 @@ import axios from "axios";
 import "./userProfile.scss";
 import { userProfile } from "../../../config/client/index";
 import EditEmail from "./editEmail";
-import LinkPatreon from "../../forms/LinkPatreon/LinkPatreon";
+import LinkPatreon from "../../forms/linkPatreon/linkPatreon";
 import VerifyEmail from "../../forms/verifyEmail/verifyEmail";
 
 export default class UserProfile extends Component {

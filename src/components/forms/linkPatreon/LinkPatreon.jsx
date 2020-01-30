@@ -8,7 +8,7 @@ import {
 import Confirm from "../../common/Confirm/Confirm";
 import Rewards from "./rewards";
 import axios from "axios";
-import "./LinkPatreon.scss";
+import "./linkPatreon.scss";
 
 export default class LinkPatreon extends Component {
   state = {

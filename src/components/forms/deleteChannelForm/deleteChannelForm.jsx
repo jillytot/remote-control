@@ -1,8 +1,8 @@
 import React, { Component } from "react";
 import axios from "axios";
 import { deleteChannel } from "../../../config/client";
-import Confirm from "../../common/Confirm/Confirm";
-import "./DeleteChannelForm.scss";
+import Confirm from "../../common/confirm/confirm";
+import "./deleteChannelForm.scss";
 
 export default class DeleteChannelForm extends Component {
   state = {

@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { DeleteChannelForm } from "../../../forms/DeleteChannelForm";
+import DeleteChannelForm from "../../../forms/deleteChannelForm/deleteChannelForm";
 import DefaultChannel from "../../../forms/defaultChannel/index";
 import "../../../forms/inlineForms.css";
 

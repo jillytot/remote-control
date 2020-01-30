@@ -11,9 +11,10 @@ export default class VerifyEmail extends Component {
   };
 
   componentDidMount() {
-    const { email_verified } = this.props;
+    const { email_verified } = this.props.status;
+    console.log("Email Verified: ", email_verified);
     if (email_verified) {
-      this.setState({ status: email_verified });
+      this.setState({ status: "Yes." });
     }
   }
 
@@ -39,8 +40,9 @@ export default class VerifyEmail extends Component {
   };
 
   render() {
-    const { email_verified } = this.props;
+    const { email_verified } = this.props.status;
     const { status, response, error } = this.state;
+    console.log("Verify Email Status: ", status);
     let responseStyle = "VerifyEmail__success";
     if (error) responseStyle = "VerifyEmail__error";
     return (

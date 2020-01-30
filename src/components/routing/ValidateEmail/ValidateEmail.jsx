@@ -19,7 +19,7 @@ export default class ValidateEmail extends Component {
         console.log(res.data);
         if (res.data.error) {
           this.setState({ status: res.data.error });
-        } else if (res.data.email_validated) {
+        } else if (res.data.email_verified) {
           this.setState({ redirect: true });
         }
       })
@@ -54,7 +54,6 @@ export default class ValidateEmail extends Component {
 
   render() {
     const { status } = this.state;
-    console.log("From Render: ", this.props.match);
     return this.state.redirect ? (
       <Redirect to={`/?modal=profile`} />
     ) : (

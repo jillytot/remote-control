@@ -159,9 +159,20 @@ module.exports.updateEmail = async ({ email, id }) => {
   } else {
     const update = await updateEmail({ email: input, id: id });
     if (update) {
+      await this.resetVerifiedEmailStatus(update);
       return privateInfo(update);
     } else {
       return jsonError("Unable to update email, please try again later");
     }
   }
+};
+
+module.exports.resetVerifiedEmailStatus = async user => {
+  const { updateStatus } = require("../models/user");
+  user.status.email_verified = false;
+  const update = await updateStatus(user);
+  if (update) {
+    return true;
+  }
+  return null;
 };

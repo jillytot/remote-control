@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import "./Confirm.scss";
+import "./confirm.scss";
 
 //This is an updated version of the index.jsx confirm component
 //It uses buttons instead of divs & appears inline

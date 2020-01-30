@@ -5,7 +5,7 @@ import {
   patreonUrl,
   removePatreon
 } from "../../../config/client";
-import Confirm from "../../common/Confirm/Confirm";
+import Confirm from "../../common/confirm/confirm";
 import Rewards from "./rewards";
 import axios from "axios";
 import "./linkPatreon.scss";

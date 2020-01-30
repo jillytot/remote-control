@@ -18,6 +18,16 @@ export default class VerifyEmail extends Component {
     }
   }
 
+  componentDidUpdate(prevProps) {
+    if (this.props.status !== prevProps.status) {
+      if (this.props.status.email_verified) {
+        this.setState({ status: "Yes." });
+      } else {
+        this.setState({ status: "No." });
+      }
+    }
+  }
+
   handleVerify = async () => {
     console.log("verify");
     const token = localStorage.getItem("token");

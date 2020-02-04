@@ -55,3 +55,24 @@ module.exports.setDefaultChannel = async (user, channel_id, server_id) => {
   // console.log("Update Settings Result: ", updateSettings);
   return updateSettings;
 };
+
+/**
+ * Input From: /src/routes/api/channels/rename
+ */
+module.exports.renameChannel = (user, channel_id, channel_name) => {
+  const { updateChannelName, getChannel } = require("../models/channel");
+  const { getRobotServer } = require("../models/robotServer");
+  const { authLocal } = require("./roles");
+
+
+  //Check and see if this user is allowed to update the channe name.
+  let server = null;
+  let channel = await getChannel(channel_id);
+  if ( channel ) server = await getRobotServer(channel.host_id);
+  const validate = await authLocal(user, server, null);
+  if (validate.error) return validate;
+  
+  //rename the channel: 
+  const update = await updateChannelName({ name: channel_name, id: channel.id });
+  return update;
+};

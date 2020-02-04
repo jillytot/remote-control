@@ -124,4 +124,26 @@ router.post("/set-default", auth({ user: true }), async (req, res) => {
   res.send(setDefault);
 });
 
+/**
+ * Rename Channel:
+ * Inputs:
+ *  user: { user object }
+ *  id: ( string ) channel id
+ *  name: ( string ) new channel name
+ *
+ * Response Success: { channel, { name: "New Name" }}
+ * Response Error: { error: "Error Message" }
+ */
+router.post("/rename", auth({ user: true }), async (req, res) => {
+  const { renameChannel } = require("../../controllers/channels");
+  const { id, name } = req.body;
+  if (id && name) {
+    const result = await renameChannel(req.user, id, name);
+    res.send(result);
+    return;
+  }
+  res.send(jsonError("Channel ID & New Channel name required."));
+  return;
+});
+
 module.exports = router;

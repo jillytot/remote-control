@@ -221,7 +221,7 @@ module.exports.getServerIdFromChannelId = async channel_id => {
   }
 };
 
-module.exports.renameChannel = async ({ name, id }) => {
+module.exports.updateChannelName = async ({ name, id }) => {
   const db = require("../services/db");
   const query = `UPDATE channels SET name = $1 WHERE id = $2 RETURNING *`;
   try {

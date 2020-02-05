@@ -20,3 +20,18 @@
   @include inline;
   background-color: $color-error-text;
 }
+
+@mixin text-area {
+  border: 0px;
+  border-radius: 12px;
+  height: 15px;
+  display: flex;
+  flex: 2;
+  background-color: $color-victoria-1;
+  resize: none;
+  color: white;
+  font-size: 12px;
+  padding: 8px;
+  margin-bottom: 2px;
+  margin-left: 12px;
+}

@@ -33,7 +33,7 @@
 }
 
 .inline-no-action {
-   color: #00dfd3;
+  color: #00dfd3;
   display: flex;
   justify-content: flex-end;
 }
@@ -55,4 +55,10 @@
 
 .inline-group-header {
   margin-top: 12px;
+}
+
+.display-update {
+  font-size: 14px;
+  font-weight: bold;
+  color: white;
 }

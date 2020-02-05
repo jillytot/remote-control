@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import DeleteChannelForm from "../../../forms/deleteChannelForm/deleteChannelForm";
 import DefaultChannel from "../../../forms/defaultChannel/index";
+import RenameChannel from "../../../forms/renameChannel/renameChannel";
 import "../../../forms/inlineForms.css";
 
 export default class EditChannelForm extends Component {
@@ -11,15 +12,14 @@ export default class EditChannelForm extends Component {
   };
 
   handleDisplayOptions = () => {
-    const { displayUpdate } = this.state;
-    console.log("Channel Modal Props: ", this.props);
     return (
       <React.Fragment>
-        {displayUpdate !== "" ? (
-          <div className="inline-label">{this.state.displayUpdate}</div>
-        ) : (
-          <React.Fragment />
-        )}
+        <RenameChannel
+          channel={this.props.channel}
+          server={this.props.server}
+          onUpdated={e => this.handleUpdated(e)}
+        />
+
         <DefaultChannel
           channel={this.props.channel}
           server={this.props.server}
@@ -32,8 +32,12 @@ export default class EditChannelForm extends Component {
     );
   };
 
+  handleUpdated = update => {
+    this.setState({ displayUpdate: update });
+  };
+
   render() {
-    const { channelDeleted } = this.state;
+    const { channelDeleted, displayUpdate } = this.state;
     return (
       <div className="modal">
         {`# ${this.props.channel.name}:`}
@@ -46,6 +50,11 @@ export default class EditChannelForm extends Component {
             </div>
           )}
         </div>
+        {displayUpdate !== "" ? (
+          <div className="display-update">{this.state.displayUpdate}</div>
+        ) : (
+          <React.Fragment />
+        )}
       </div>
     );
   }

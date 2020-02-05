@@ -1,0 +1,72 @@
+@import "../../../styles/variables.scss";
+@import "../../../styles/mixins/buttonStyles.scss";
+@import "../mixins/mixins.scss";
+@import "../../../styles/mixins/inlineStyles.scss";
+
+.renameChannel {
+  &__container {
+    @include inline-container;
+    justify-content: space-between;
+  }
+  &__inline-form {
+    @include inline;
+    background-color: none;
+    background: none;
+    padding: 0px;
+    margin: 0px;
+  }
+  &__label {
+    @include label;
+  }
+  &__name {
+    @include text-area;
+  }
+  &__alert {
+    @include inline-alert;
+  }
+  &__success {
+    @include inline-success;
+  }
+  &__edit {
+    @include button-as-text-gray;
+  }
+  &__action {
+    @include button-inline-gray;
+  }
+  &__action-confirm {
+    @include button-inline-delete;
+  }
+}
+
+.btn {
+  @include button-as-text-gray;
+  font-size: 12px;
+  padding: 5px 10px 5px 10px;
+  background: $button-inactive;
+  color: white;
+  font-style: normal;
+}
+
+.btn:disabled {
+  color: gray;
+}
+
+.form-control {
+  border-radius: 12px;
+  background-color: $color-victoria-1;
+  flex: 2;
+  color: white;
+  font-size: 12px;
+  padding: 8px;
+  width: 250px;
+  height: 10px;
+}
+
+.form-container {
+  margin: none;
+  width: 100%;
+}
+
+.form-group {
+  font-size: 12px;
+}

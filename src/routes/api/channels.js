@@ -70,7 +70,6 @@ router.post("/create", auth({ user: true }), async (req, res) => {
     response.error_details = makeChannel;
   }
 
-  console.log(response);
   if (!response.error) return res.status(201).send(response);
   else return res.send(response);
 });
@@ -91,7 +90,6 @@ router.get("/delete", async (req, res) => {
  * Response Error: { error: "Error Message" }
  */
 router.post("/delete", auth({ user: true }), async (req, res) => {
-  console.log("DELETING CHANNEL: ", req.body.channel_id);
   let response = {};
   if (req.body.channel_id && req.body.server_id && req.user)
     response.channel_id = req.body.channel_id;
@@ -101,7 +99,6 @@ router.post("/delete", auth({ user: true }), async (req, res) => {
   validate = await validateOwner(req.user.id, response.server_id);
   if (validate) {
     response.validated = true;
-    // response.validate = true;
     const result = await deleteChannel(req.body.channel_id, req.body.server_id);
     if (result.error) return res.send(result);
     response.status = result.status;

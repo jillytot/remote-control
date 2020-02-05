@@ -79,7 +79,7 @@ $color-ebony-clay: rgb(42, 42, 68);
 $color-port-gore: #221b3a;
 $color-cloud-burst: #263254;
 $color-bossanova: rgb(66, 49, 94);
-$color-victoria-1: rgb(90, 68, 124);
+$color-victoria-1: rgb(90, 68, 124); //inline text area background
 $color-victoria-2: rgb(51, 36, 75);
 $color-scarlet-gum: #491769;
 $color-jacarta: rgb(46, 46, 104);
@@ -134,6 +134,7 @@ $color-green-background: #008f47;
 //Main brand colors:
 $remo-green: $color-chartreuse;
 $remo-orange: $color-texas-rose;
+$remo-blue: $color-dodger-blue;
 
 $remo-gradient: -webkit-linear-gradient(-45deg, #954ed6 0%, #009bee 100%);
 

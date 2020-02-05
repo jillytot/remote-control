@@ -1,3 +1,5 @@
+@import "../../../styles/variables.scss";
+
 @mixin inline-container {
   padding: 12px;
   /* border-bottom: solid 1px blue; */
@@ -7,4 +9,14 @@
   background: rgb(31, 31, 46);
   margin-bottom: 2px;
   border-radius: 6px;
+}
+
+@mixin label {
+  color: $remo-blue;
+  font-weight: bold;
+  align-self: center;
+}
+
+@mixin info {
+  color: $remo-blue;
 }

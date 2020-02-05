@@ -33,7 +33,6 @@ export default class AddChannelForm extends Form {
     const { channel_name } = this.state.data;
     const { server } = this.props;
     const token = localStorage.getItem("token");
-    console.log("SUBMITTED: ", channel_name, addChannel);
 
     await axios
       .post(

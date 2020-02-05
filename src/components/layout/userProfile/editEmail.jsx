@@ -38,7 +38,7 @@ export default class EditEmail extends Form {
     const { email } = this.state.data;
     const { updated } = this.props;
     const token = localStorage.getItem("token");
-    console.log("Updating Email", email);
+
     await axios
       .post(
         updateEmail,
@@ -48,7 +48,6 @@ export default class EditEmail extends Form {
         }
       )
       .then(response => {
-        console.log(response.data);
         if (response.data.email) {
           this.setState({ error: "success" });
           updated({

@@ -8,9 +8,8 @@
     justify-content: space-between;
   }
   &__label {
+    @include label;
     color: $color-remo-pink;
-    font-weight: bold;
-    align-self: center;
   }
   &__action {
     @include button-inline-gray;

@@ -124,7 +124,7 @@ router.post("/set-default", auth({ user: true }), async (req, res) => {
 /**
  * Rename Channel:
  * Inputs:
- *  user: { user object }
+ *  auth: ( string ) Bearer Token from User
  *  id: ( string ) channel id
  *  name: ( string ) new channel name
  *

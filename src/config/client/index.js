@@ -71,6 +71,7 @@ const defaults = {
   addChannel: `${apiUrl}/channels/create`,
   deleteChannel: `${apiUrl}/channels/delete`,
   setDefaultChannel: `${apiUrl}/channels/set-default`,
+  renameChannel: `${apiUrl}/channels/rename`,
 
   //Patreon
   patreonUrl: "https://www.patreon.com/letsjill",

@@ -47,6 +47,10 @@
   &__action-confirm {
     @include button-inline-delete;
   }
+  &__dismiss {
+    @include button-as-text-gray;
+    color: white;
+  }
   &__btn {
     @include button-as-text-gray;
     font-size: 12px;
@@ -61,5 +65,9 @@
 
   &__group {
     font-size: 12px;
+  }
+  &__alert-message {
+    display: flex;
+    flex: 1;
   }
 }

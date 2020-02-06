@@ -4,7 +4,7 @@ import Input from "./input";
 import Select from "./select";
 import TextArea from "./textArea";
 import TextAreaChat from "./textAreaChat";
-//import HotKeyListener from "../hotKeyListener";
+import InlineInput from "./inlineInput/inlineInput";
 import "../../styles/common.css";
 
 class Form extends Component {
@@ -104,6 +104,23 @@ class Form extends Component {
     const { data, errors } = this.state;
     return (
       <Input
+        type={type}
+        name={name}
+        label={label}
+        onChange={this.handleChange}
+        error={errors[name]}
+        value={data[name]}
+        passError={e => {
+          this.handlePassError(e);
+        }}
+      />
+    );
+  }
+
+  renderInlineInput(name, label, type) {
+    const { data, errors } = this.state;
+    return (
+      <InlineInput
         type={type}
         name={name}
         label={label}

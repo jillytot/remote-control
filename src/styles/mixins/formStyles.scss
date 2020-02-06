@@ -1,0 +1,43 @@
+@import "../variables.scss";
+
+@mixin form-group {
+  font-size: 14px;
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-end;
+}
+
+@mixin form-container {
+  margin: 5px;
+  display: flex;
+  flex-direction: column;
+}
+
+@mixin form-control {
+  border-radius: 5px;
+  margin-left: 5px;
+  display: flex;
+  flex-direction: row;
+  border: solid 0px;
+  width: 150px;
+}
+
+@mixin form-label {
+  font-size: 14px;
+  padding: 5px;
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-end;
+  align-items: center;
+}
+
+@mixin inline-form-control {
+  border-radius: 12px;
+  background-color: $color-victoria-1;
+  flex: 2;
+  color: white;
+  font-size: 12px;
+  padding: 8px;
+  height: 10px;
+  border: none;
+}

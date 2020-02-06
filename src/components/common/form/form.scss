@@ -1,0 +1,42 @@
+@import "../../../styles/mixins/buttonStyles.scss";
+@import "../../../styles/mixins/inlineStyles.scss";
+@import "../../../styles/mixins/formStyles.scss";
+
+.form {
+  &__btn {
+    @include button-default;
+  }
+  &__btn-delete {
+    @include button-delete;
+  }
+  &__btn-gray {
+    @include button-gray;
+  }
+  &__btn-inactive {
+    @include button-inactive;
+  }
+  &__btn-inline-default {
+    @include button-inline-default;
+  }
+  &__btn-inline-delete {
+    @include button-inline-delete;
+  }
+  &__btn-inline-gray {
+    @include button-inline-gray;
+  }
+  &__btn-inline-inactive {
+    @include button-inline-inactive;
+  }
+  &__group {
+    @include form-group;
+  }
+  &__container {
+    @include form-container;
+  }
+  &__control {
+    @include form-control;
+  }
+  &__label {
+    @include form-label;
+  }
+}

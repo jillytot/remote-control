@@ -6,7 +6,9 @@
 .renameChannel {
   &__container {
     @include inline-container;
+    align-items: center;
     justify-content: space-between;
+    margin: none;
   }
   &__inline-form {
     @include inline;
@@ -14,6 +16,14 @@
     background: none;
     padding: 0px;
     margin: 0px;
+  }
+  &__content-container {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+  }
+  &__info {
+    @include info;
   }
   &__label {
     @include label;
@@ -29,6 +39,7 @@
   }
   &__edit {
     @include button-as-text-gray;
+    margin-left: 6px;
   }
   &__action {
     @include button-inline-gray;
@@ -36,37 +47,19 @@
   &__action-confirm {
     @include button-inline-delete;
   }
-}
+  &__btn {
+    @include button-as-text-gray;
+    font-size: 12px;
+    padding: 5px 10px 5px 10px;
+    background: $button-inactive;
+    color: white;
+    font-style: normal;
+  }
+  &__btn:disabled {
+    color: gray;
+  }
 
-.btn {
-  @include button-as-text-gray;
-  font-size: 12px;
-  padding: 5px 10px 5px 10px;
-  background: $button-inactive;
-  color: white;
-  font-style: normal;
-}
-
-.btn:disabled {
-  color: gray;
-}
-
-.form-control {
-  border-radius: 12px;
-  background-color: $color-victoria-1;
-  flex: 2;
-  color: white;
-  font-size: 12px;
-  padding: 8px;
-  width: 250px;
-  height: 10px;
-}
-
-.form-container {
-  margin: none;
-  width: 100%;
-}
-
-.form-group {
-  font-size: 12px;
+  &__group {
+    font-size: 12px;
+  }
 }

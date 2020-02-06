@@ -8,7 +8,8 @@ export default class RenameChannel extends Form {
     data: { channel_name: "" },
     edit: false,
     errors: {},
-    error: ""
+    error: "",
+    edit: false
   };
 
   componentDidMount() {
@@ -33,20 +34,53 @@ export default class RenameChannel extends Form {
     return <div className="alert">{this.state.error}</div>;
   };
 
+  renderInlineButton = label => {
+    //require validation?
+    if (this.state.validation === true) {
+      return (
+        <button className="renameChannel__action" disabled={this.validate()}>
+          {label}
+        </button>
+      );
+    }
+    return <button className="renameChannel__action">{label}</button>;
+  };
+
   doSubmit = () => {};
 
   render() {
+    const { edit } = this.state;
+    const { name } = this.props.channel;
     return (
       <React.Fragment>
         <div className="renameChannel__container">
           <div className="renameChannel__label">Channel Name: </div>
-
-          <form onSubmit={this.handleSubmit}>
-            <div className="renameChannel__inline-form">
-              {this.renderInput("channel_name", "", "inline")}
-              {this.renderButton("Update")}
+          {edit ? (
+            <form onSubmit={this.handleSubmit}>
+              <div className="renameChannel__inline-form">
+                {this.renderInlineInput("channel_name", "", "inline")}
+                {this.renderInlineButton("Update")}
+                <button
+                  className="renameChannel__action-confirm"
+                  onClick={() => this.setState({ edit: !edit })}
+                >
+                  {" "}
+                  Cancel
+                </button>
+              </div>
+            </form>
+          ) : (
+            <div className="renameChannel__content-container">
+              <div className="renameChannel__info"> {name}</div>
+              <button
+                className="renameChannel__edit"
+                onClick={() => this.setState({ edit: !edit })}
+              >
+                {" "}
+                edit{" "}
+              </button>
             </div>
-          </form>
+          )}
         </div>
         {this.handleSubmitError()}
       </React.Fragment>

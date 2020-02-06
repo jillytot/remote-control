@@ -1,0 +1,11 @@
+@import "../../../styles/mixins/formStyles.scss";
+
+.inlineInput {
+  &__control {
+    @include inline-form-control;
+    margin-right: 6px;
+  }
+  &__label {
+    @include form-label;
+  }
+}

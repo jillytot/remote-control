@@ -66,6 +66,7 @@ export default class RenameChannel extends Form {
 
   doSubmit = async () => {
     const token = localStorage.getItem("token");
+    const { onChange } = this.props;
     this.setState({ status: "...Sending Request.", edit: false });
     await axios
       .post(
@@ -82,11 +83,13 @@ export default class RenameChannel extends Form {
         console.log("Update Channel Response: ", response);
         if (response.data.error)
           this.setState({ error: response.data.error, status: "" });
-        else
+        else {
           this.setState({
             success: "Channel name updated successfully!",
             status: ""
           });
+          onChange(response.data.name);
+        }
       })
       .catch(err => {
         console.log(err);
@@ -123,7 +126,7 @@ export default class RenameChannel extends Form {
 
   render() {
     const { edit } = this.state;
-    const { name } = this.props.channel;
+    const { displayName } = this.props;
     return (
       <React.Fragment>
         <div className="renameChannel__container">
@@ -132,14 +135,14 @@ export default class RenameChannel extends Form {
             this.handleEdit()
           ) : (
             <div className="renameChannel__content-container">
-              <div className="renameChannel__info"> {name}</div>
+              <div className="renameChannel__info"> {displayName}</div>
               <button
                 className="renameChannel__edit"
                 onClick={() =>
                   this.setState({
                     edit: !edit,
                     error: "",
-                    data: { channel_name: name }
+                    data: { channel_name: displayName }
                   })
                 }
               >

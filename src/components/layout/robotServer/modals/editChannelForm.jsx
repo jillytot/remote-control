@@ -5,19 +5,24 @@ import RenameChannel from "../../../forms/renameChannel/renameChannel";
 import "../../../forms/inlineForms.css";
 
 export default class EditChannelForm extends Component {
-  state = { displayUpdate: "", channelDeleted: false };
+  state = { displayUpdate: "", channelDeleted: false, name: "" };
 
   handleDeleted = () => {
     this.setState({ channelDeleted: true });
   };
+
+  componentDidMount() {
+    this.setState({ name: this.props.channel.name });
+  }
 
   handleDisplayOptions = () => {
     return (
       <React.Fragment>
         <RenameChannel
           channel={this.props.channel}
+          displayName={this.state.name}
           server={this.props.server}
-          onUpdated={e => this.handleUpdated(e)}
+          onChange={e => this.handleNameChange(e)}
         />
 
         <DefaultChannel
@@ -32,15 +37,16 @@ export default class EditChannelForm extends Component {
     );
   };
 
-  handleUpdated = update => {
-    this.setState({ displayUpdate: update });
+  handleNameChange = name => {
+    this.setState({ name: name });
   };
 
   render() {
     const { channelDeleted, displayUpdate } = this.state;
+
     return (
       <div className="modal">
-        {`# ${this.props.channel.name}:`}
+        {`# ${this.state.name}:`}
         <div className="inline-group">
           {!channelDeleted ? (
             this.handleDisplayOptions()

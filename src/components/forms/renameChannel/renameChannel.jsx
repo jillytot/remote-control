@@ -3,6 +3,7 @@ import Form from "../../common/form";
 import Joi from "joi-browser";
 import axios from "axios";
 import { renameChannel } from "../../../config/client/index";
+import InlineResponse from "../../common/inlineResult/inlineResult";
 import "./renameChannel.scss";
 
 export default class RenameChannel extends Form {
@@ -12,7 +13,8 @@ export default class RenameChannel extends Form {
     errors: {},
     error: "",
     edit: false,
-    status: ""
+    status: "",
+    success: ""
   };
 
   componentDidMount() {
@@ -29,22 +31,26 @@ export default class RenameChannel extends Form {
       .label("Channel Name")
   };
 
-  handleSubmitError = () => {
-    const { error } = this.state;
-    if (error === "") {
-      return <React.Fragment />;
-    }
-    return (
-      <div className="renameChannel__alert">
-        <div className="renameChannel__alert-message">{this.state.error}</div>
-        <button
-          className="renameChannel__dismiss"
-          onClick={() => this.setState({ error: "" })}
-        >
-          dismiss
-        </button>
-      </div>
-    );
+  handleCloseResponse = () => {
+    this.setState({ error: "", success: "", returnError: "" });
+  };
+
+  handleSubmitResponse = () => {
+    const { error, success } = this.state;
+    if (error !== "")
+      return (
+        <InlineResponse message={error} onClose={this.handleCloseResponse} />
+      );
+    if (success !== "")
+      return (
+        <InlineResponse
+          message={success}
+          type="success"
+          onClose={this.handleCloseResponse}
+        />
+      );
+
+    return null;
   };
 
   renderInlineButton = label => {
@@ -61,7 +67,7 @@ export default class RenameChannel extends Form {
 
   doSubmit = async () => {
     const token = localStorage.getItem("token");
-    this.setState({ status: "...Sending Request." });
+    this.setState({ status: "...Sending Request.", edit: false });
     await axios
       .post(
         renameChannel,
@@ -77,6 +83,11 @@ export default class RenameChannel extends Form {
         console.log("Update Channel Response: ", response);
         if (response.data.error)
           this.setState({ error: response.data.error, status: "" });
+        else
+          this.setState({
+            success: "Channel name updated successfully!",
+            status: ""
+          });
       })
       .catch(err => {
         console.log(err);
@@ -125,14 +136,23 @@ export default class RenameChannel extends Form {
               <div className="renameChannel__info"> {name}</div>
               <button
                 className="renameChannel__edit"
-                onClick={() => this.setState({ edit: !edit, error: "" })}
+                onClick={() =>
+                  this.setState({
+                    edit: !edit,
+                    error: "",
+                    data: { channel_name: name }
+                  })
+                }
               >
                 edit
               </button>
             </div>
           )}
         </div>
-        {this.handleSubmitError()}
+        {this.handleSubmitResponse()}
+        {edit && this.state.returnError ? (
+          <InlineResponse message={this.state.returnError} />
+        ) : null}
       </React.Fragment>
     );
   }

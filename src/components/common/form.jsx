@@ -136,7 +136,7 @@ class Form extends Component {
 
   handlePassError = e => {
     const { returnError } = this.state;
-    if (e && e !== returnError) {
+    if (e !== returnError) {
       this.setState({ returnError: e });
     }
   };

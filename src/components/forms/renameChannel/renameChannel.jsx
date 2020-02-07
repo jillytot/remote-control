@@ -12,7 +12,6 @@ export default class RenameChannel extends Form {
     edit: false,
     errors: {},
     error: "",
-    edit: false,
     status: "",
     success: ""
   };

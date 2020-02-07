@@ -63,7 +63,8 @@ module.exports.renameChannel = async (user, channel_id, channel_name) => {
   const { authLocal } = require("./roles");
   const { validateChannelName } = require("./validate");
 
-  console.log("Updating Channel Name: ", channel_name);
+  const genericError =
+    "There was a problem with update channel name request, please try again later";
 
   //Ensure channel name is formatted correctly, and isn't a duplicate name.
   const validateName = validateChannelName(channel_name);
@@ -75,10 +76,8 @@ module.exports.renameChannel = async (user, channel_id, channel_name) => {
   let server = null;
   let channel = await getChannel(channel_id);
   if (channel) server = await getRobotServer(channel.host_id);
-  else
-    return jsonError(
-      "There was a problem with this request, please try again later"
-    );
+  else return jsonError(genericError);
+  if (!server) return jsonError(genericError);
   const validate = await authLocal(user, server, null);
   if (validate.error) return validate;
 
@@ -87,6 +86,8 @@ module.exports.renameChannel = async (user, channel_id, channel_name) => {
     name: channel_name,
     id: channel.id
   });
+  console.log("Update Selected Server: ", server.server_id);
+  this.updateChannelsOnServer(server.server_id);
   return update;
 };
 
@@ -100,4 +101,12 @@ module.exports.checkChannelName = async (channel_name, server_id) => {
   if (dupe === true)
     return jsonError("You cannot have duplicate channel names");
   return null;
+};
+
+module.exports.updateChannelsOnServer = async server_id => {
+  const { CHANNELS_UPDATED } = require("../events/definitions");
+  const { emitEvent } = require("../models/robotServer");
+  const { getChannels } = require("../models/channel");
+  const channels = await getChannels(server_id);
+  emitEvent(server_id, CHANNELS_UPDATED, channels);
 };

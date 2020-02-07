@@ -19,7 +19,6 @@ that needs to be changed before to much more work is done.
 const { makeId, createTimeStamp } = require("../modules/utilities");
 // const socketEvents = require("../events/events");
 const { getChatRooms } = require("./chatRoom");
-const { CHANNELS_UPDATED } = require("../events/definitions");
 
 channelPrototype = {
   name: "Channel Name",
@@ -152,13 +151,10 @@ module.exports.getChannels = async server_id => {
   }
 };
 
-module.exports.updateServerChannels = async server_id => {
-  const robotServer = require("./robotServer");
-  let sendData = {};
-  sendData.channels = await this.getChannels(server_id);
-  sendData.server_id = server_id;
-
-  robotServer.emitEvent(server_id, CHANNELS_UPDATED, sendData);
+//Moving to /controllers
+module.exports.updateServerChannels = server_id => {
+  const { updateChannelsOnServer } = require("../controllers/channels");
+  updateChannelsOnServer(server_id);
 };
 
 //Adds channel to a server based on server_id

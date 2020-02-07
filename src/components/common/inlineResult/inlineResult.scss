@@ -1,0 +1,19 @@
+@import "../../../styles/mixins/inlineStyles.scss";
+@import "../../../styles/mixins/buttonStyles.scss";
+
+.inlineResult {
+  &__error-container {
+    @include inline-alert;
+  }
+  &__success-container {
+    @include inline-success;
+  }
+  &__message {
+    display: flex;
+    flex: 1;
+  }
+  &__dismiss {
+    @include button-as-text-gray;
+    color: white;
+  }
+}

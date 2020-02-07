@@ -29,7 +29,6 @@ module.exports.setDefaultChannel = async (user, channel_id, server_id) => {
   } = require("../models/robotServer");
   const { updateSelectedServer } = require("./robotServer");
 
-
   //get server information:
   const server = await getRobotServer(server_id);
   if (!server) return jsonError(`Unable to find server with id: ${server_id}`);
@@ -58,29 +57,36 @@ module.exports.setDefaultChannel = async (user, channel_id, server_id) => {
 /**
  * Input From: /src/routes/api/channels/rename
  */
-module.exports.renameChannel = (user, channel_id, channel_name) => {
+module.exports.renameChannel = async (user, channel_id, channel_name) => {
   const { updateChannelName, getChannel } = require("../models/channel");
   const { getRobotServer } = require("../models/robotServer");
   const { authLocal } = require("./roles");
   const { validateChannelName } = require("./validate");
 
+  console.log("Updating Channel Name: ", channel_name);
 
-  //Ensure channel name is formatted correctly, and isn't a duplicate name. 
+  //Ensure channel name is formatted correctly, and isn't a duplicate name.
   const validateName = validateChannelName(channel_name);
   if (validateName.error) return validateName;
   const checkForDupes = this.checkChannelName(channel_name);
   if (checkForDupes.error) return checkForDupes;
 
-
   //Check and see if this user is allowed to update the channel name.
   let server = null;
   let channel = await getChannel(channel_id);
-  if ( channel ) server = await getRobotServer(channel.host_id);
+  if (channel) server = await getRobotServer(channel.host_id);
+  else
+    return jsonError(
+      "There was a problem with this request, please try again later"
+    );
   const validate = await authLocal(user, server, null);
   if (validate.error) return validate;
-  
-  //rename the channel: 
-  const update = await updateChannelName({ name: channel_name, id: channel.id });
+
+  //rename the channel:
+  const update = await updateChannelName({
+    name: channel_name,
+    id: channel.id
+  });
   return update;
 };
 
@@ -88,9 +94,10 @@ module.exports.checkChannelName = async (channel_name, server_id) => {
   const { getChannels } = require("../models/channel");
   const check = await getChannels(server_id);
   let dupe = null;
-  check.forEach( channel => {
+  check.forEach(channel => {
     if (channel.name === channel_name) dupe = true;
-  })
-  if (dupe === true) return jsonError("You cannot have duplicate channel names");
+  });
+  if (dupe === true)
+    return jsonError("You cannot have duplicate channel names");
   return null;
-}
+};

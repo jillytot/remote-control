@@ -41,8 +41,7 @@ export default class RenameChannel extends Form {
           className="renameChannel__dismiss"
           onClick={() => this.setState({ error: "" })}
         >
-          {" "}
-          dismiss{" "}
+          dismiss
         </button>
       </div>
     );
@@ -76,7 +75,8 @@ export default class RenameChannel extends Form {
       )
       .then(response => {
         console.log("Update Channel Response: ", response);
-        if (response.data.error) this.setState({ error: response.data.error });
+        if (response.data.error)
+          this.setState({ error: response.data.error, status: "" });
       })
       .catch(err => {
         console.log(err);

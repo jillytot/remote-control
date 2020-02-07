@@ -38,13 +38,14 @@ export default class Channels extends Component {
   };
 
   // not sure if needed, but why not
-  componentDidUpdate(prevProps) {
+  componentDidUpdate(prevProps, prevState) {
     if (
       prevProps.selectedServer.server_id !== this.props.selectedServer.server_id
     ) {
       //console.log("SELECTED SERVER: ", this.props.selectedServer);
       this.handleServer(true);
     }
+    // if (prevState.channels !== this.state.channels) this.displayChannels();
   }
 
   async componentDidMount() {
@@ -127,10 +128,10 @@ export default class Channels extends Component {
   handleChannelsUpdated = data => {
     const { selectedServer } = this.props;
     // console.log("CHANNELS UPDATED: ", data, selectedServer);
-    if (selectedServer && data.server_id === selectedServer.server_id) {
+    if (selectedServer) {
       // console.log("UPDATING CHANNELS");
       this.setState({
-        channels: data.channels
+        channels: data
       });
     }
   };
@@ -143,7 +144,7 @@ export default class Channels extends Component {
       socket.on(ACTIVE_USERS_UPDATED, users =>
         this.handleActiveUsersUpdated(users)
       );
-      socket.on(CHANNELS_UPDATED, data => this.handleChannelsUpdated(data));
+      socket.on(CHANNELS_UPDATED, this.handleChannelsUpdated);
     }
   };
 

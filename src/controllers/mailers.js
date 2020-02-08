@@ -6,7 +6,7 @@ module.exports.emailResetKey = (user, { key_id }) => {
   const html = `<a href="${text}">${text}</a>`;
   sendMail({
     to: user.email,
-    subject: "Remo.tv Password Reset Token",
+    subject: "Remo.TV - Password Reset Token",
     text: text,
     html: html
   });
@@ -19,7 +19,7 @@ module.exports.emailValidationKey = (user, { key_id }) => {
   const html = `<a href="${text}">${text}</a>`;
   sendMail({
     to: user.email,
-    subject: "Remo.tv - Please validate your email address.",
+    subject: "Remo.TV - Please validate your email address.",
     text: text,
     html: html
   });

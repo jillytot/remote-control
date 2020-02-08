@@ -47,6 +47,7 @@ module.exports.emitEvent = (user_id, event, data) => {
 };
 
 module.exports.createUser = async user => {
+  const { validateEmail } = require("../controllers/validateEmail");
   let response = {};
   //ALWAYS SAVE EMAIL AS LOWERCASE!!!!!
   const email = user.email.toLowerCase();
@@ -99,6 +100,9 @@ module.exports.createUser = async user => {
     ]);
 
     const token = await this.createAuthToken(user);
+
+    //Send Email Validation on creation:
+    validateEmail(user);
 
     return { status: "Account successfully created", token: token };
   } catch (err) {

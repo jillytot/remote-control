@@ -4,7 +4,7 @@ import "./inlineResult.scss";
  * Inputs:
  *    message: ( string ) any
  *    type: ( string ) "error" - default, "success"
- *    onClose: ( function ) handled by parent component
+ *    onClose: ( function ) optional, handled by parent component
  */
 const InlineResponse = ({ message, type = type || "error", onClose }) => {
   return (

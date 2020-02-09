@@ -24,7 +24,8 @@ const { ACTIVE_USERS_UPDATED } = require("../events/definitions");
 //User status Prototype:
 const statusPt = {
   //server_id: global refers to global status
-  timeout: false
+  timeout: false,
+  displayWelcome: true
   //types: [] //Global Only
 };
 //server_id: Status, individual server status per user will mirror the global status as much as possible

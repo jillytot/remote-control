@@ -146,3 +146,16 @@ router.post("/validate-email-with-key", async (req, res) => {
     )
   );
 });
+
+/**
+ * Input: { user object }
+ * Auth: Required
+ *
+ * Response Success: "OK".
+ * Response Error: N/A
+ */
+router.post("/welcome", auth({ user: true }), async (req, res) => {
+  const { setWelcomeFalse } = require("../../controllers/users/welcome");
+  if (req.user) setWelcomeFalse(req.user);
+  res.send("OK.");
+});

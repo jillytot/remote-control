@@ -307,7 +307,7 @@ const Message = ({ message, channelName, printChannelName }) => {
   };
 
   const handleChannelName = name => {
-    return <span className="channel-name">{`# ${name} `}</span>;
+    if (name) return <span className="channel-name">{`# ${name} `}</span>;
   };
 
   return (

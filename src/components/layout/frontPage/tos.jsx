@@ -17,15 +17,15 @@ const TosText = formatModal => {
     <div className={formatModal === true ? "" : "tos-text-container"}>
       <div className="tos-text">
         Remo is a privately owned and operated web application for interactive
-        telepresence experiences. This platform is open for anyone to
-        experiement with and use, provided you follow a few basic rules. While
-        following the rules and guidelines, it is still up to the owner's
-        descretion on who or who may not use the site, and your membership may
-        be terminated at any time for any reason.
+        telepresence experiences. This platform is open for anyone to experiment
+        with and use, provided you follow a few basic rules. While following the
+        rules and guidelines, it is still up to the owner's discretion on who or
+        who may not use the site, and your membership may be terminated at any
+        time for any reason.
         <br />
         <br />
-        1. Do no harm, and be kind. Hate speech such as racist, mysognistic, or
-        anti-lgbt language will not be tollerated, and will likely & immediately
+        1. Do no harm, and be kind. Hate speech such as racist, misogynistic, or
+        anti-lgbt language will not be tolerated, and will likely & immediately
         result in a global ban.
         <br /> <br />
         2. No sexually explicit, violent, or other law breaking behavior such as
@@ -38,7 +38,7 @@ const TosText = formatModal => {
         4. Do not cause any harm to people & animals.
         <br /> <br />
         5. This is not a spy cam website. Any video streams that appear to
-        violiate the privacy of others will be quickly shutdown.
+        violate the privacy of others will be quickly shutdown.
         <br /> <br />
         6. No Trolling. While you may not explicitly be breaking any rules, if
         we determine you are acting with the intent to cause harm, you will be
@@ -55,8 +55,8 @@ const TosText = formatModal => {
         hardware owned and operated by it's users or other parties. It is up to
         broadcasters to make sure they are not putting anyone in harms way.
         While we also appreciate donations & other contributions through
-        platforms like Patreon, we cannot make any garuntees we will deliver on
-        any expecations. All money exchanged through or for the platform is at
+        platforms like Patreon, we cannot make any guarantees we will deliver on
+        any expectations. All money exchanged through or for the platform is at
         the user's own risk. We will still do our best to honor any agreements
         or promises, so please contact {supportEmail} for any issues you have.
       </div>

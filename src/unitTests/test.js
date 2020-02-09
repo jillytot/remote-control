@@ -33,7 +33,8 @@ const testStr = "shitty ass person you are phawk";
 
 const test = async () => {
   try {
-    await test___validateEmail();
+    await test___misc();
+    // await test___validateEmail();
     // await test___getPledgeData();
     // await test___syncPatreonData();
     // await test___getRemoPeldgeData();
@@ -58,6 +59,10 @@ const test = async () => {
   }
 
   process.exit(0);
+};
+
+const test___misc = async () => {
+  return null;
 };
 
 const test___validateEmail = async () => {

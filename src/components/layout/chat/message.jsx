@@ -308,6 +308,7 @@ const Message = ({ message, channelName, printChannelName }) => {
 
   const handleChannelName = name => {
     if (name) return <span className="channel-name">{`# ${name} `}</span>;
+    return <React.Fragment />;
   };
 
   return (

@@ -47,7 +47,7 @@ export default class DefaultChannel extends Component {
   };
 
   handleStatus = () => {
-    const { status, error } = this.state;
+    const { status } = this.state;
     if (status !== "")
       return <div className="inline-no-action"> {status} </div>;
     return (

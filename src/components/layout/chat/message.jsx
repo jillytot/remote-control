@@ -295,6 +295,7 @@ const Message = ({ message, channelName, printChannelName }) => {
       badges.map(badge => {
         const checkString = badge.substring(0, 7);
         if (checkString === "patreon") color = "chat-user-name rainbow";
+        return null;
       });
     }
 

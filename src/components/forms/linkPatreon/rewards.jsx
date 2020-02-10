@@ -19,8 +19,3 @@ const Rewards = ({ reward_id, reward_title, reward_amount }) => {
 };
 
 export default Rewards;
-
-const rewardMap = [
-  { reward_id: 4079650, reward_amount: 100 },
-  { reward_id: 4079645, reward_amount: 500 }
-];

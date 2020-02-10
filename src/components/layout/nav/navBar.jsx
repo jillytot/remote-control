@@ -25,7 +25,7 @@ export default class NavBar extends Component {
   handleQuery = () => {
     const { locationSearch } = this.props;
     const values = queryString.parse(locationSearch);
-    console.log(values);
+    // console.log(values);
     if (values) {
       try {
         if (values.modal && values.modal === "profile") {

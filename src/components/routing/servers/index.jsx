@@ -51,13 +51,13 @@ export default class ServersPage extends Component {
   //Mobile Navigation Handler
   handleMobileFlag = e => {
     const { showMobileNav } = e;
-    console.log("Mobile Flag Test", e);
+    // console.log("Mobile Flag Test", e);
     this.setState({ showMobileNav });
     return null;
   };
 
   setModal = input => {
-    console.log("Modal Input: ", input);
+    // console.log("Modal Input: ", input);
     let updateContent = this.state.modalContent;
     input.map(getInput => updateContent.push(getInput));
     this.setState({
@@ -156,7 +156,7 @@ export default class ServersPage extends Component {
       return null;
     });
     socket.on("SELECTED_SERVER_UPDATED", () => {
-      console.log("UPDATING SELECTED SERVER!");
+      // console.log("UPDATING SELECTED SERVER!");
       this.getSelectedServer();
       return null;
     });
@@ -171,7 +171,7 @@ export default class ServersPage extends Component {
 
   setServer = server => {
     const { selectedServer } = this.state;
-    console.log(server, selectedServer);
+    // console.log(server, selectedServer);
     // if server is going from server to home clear modals else if server is being set from no server or server is different
     if (!server && selectedServer) {
       this.setState({

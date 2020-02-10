@@ -25,7 +25,7 @@ export default class FrontPage extends Component {
 
   async componentDidMount() {
     await axios.get(getStats).then(res => {
-      console.log(res);
+      // console.log(res);
       this.setState({
         activeUsers: res.data.activeUsers,
         totalUsers: res.data.totalUsers,

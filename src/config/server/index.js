@@ -18,6 +18,7 @@ const defaults = {
   authRequestTimeout: 300 * 1000, //5 minutes
   urlPrefix: "https://remo.tv/",
   supportEmail: "jill@remo.tv",
+  reRouteOutboundEmail: "",
 
   //PATREON STUFF
   patreonClientID:

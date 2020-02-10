@@ -10,47 +10,9 @@ export default class Welcome extends Component {
     messageLoaded: false
   };
 
-  handleContent = () => {
-    return (
-      <div className="welcome__container">
-        <div className="welcome__header">Welcome to Remo.TV</div>
-        <div className="welcome__content-container">
-          <img
-            src={Images.remoSplash}
-            className="welcome__splash"
-            alt="Remo.TV"
-          />
-          <div className="welcome__text">
-            Thanks for signing up and joining the Remo.TV community.
-            <br />
-            <br />
-            We have sent a validation link to the email address you provided.
-            <br />
-            For security reasons, your access to Remo may be limited without a
-            validated email account.
-            <br />
-            <br />
-            By continuing to Remo, you are agreeing to our{" "}
-            <InlineLink link="/tos" text="Terms of Service" /> {` & `}
-            <InlineLink link="/privacy-policy" text="Privacy Policy" />.
-            <br />
-            <br />
-          </div>
-
-          <button
-            className="welcome__btn"
-            onClick={() => this.props.onCloseModal()}
-          >
-            Continue to Remo
-          </button>
-        </div>
-      </div>
-    );
-  };
-
   handleWelcomeStatus = async () => {
     const token = localStorage.getItem("token");
-    axios
+    await axios
       .post(
         welcome,
         {},
@@ -67,11 +29,11 @@ export default class Welcome extends Component {
   };
 
   handleDisplayModal = () => {
-    this.setState({ messageLoaded: true });
+    if (!this.state.messageLoaded) this.setState({ messageLoaded: true });
     this.handleWelcomeStatus();
     return [
       {
-        body: this.handleContent()
+        body: <HandleContent {...this.props} />
       },
       { header: "" },
       { footer: "" }
@@ -79,12 +41,54 @@ export default class Welcome extends Component {
   };
 
   render() {
-    const { displayWelcome } = this.props.user;
+    const { displayWelcome } = this.props.user.status;
+    console.log(this.props);
+    console.log("Display Welcome: ", displayWelcome);
     const { messageLoaded } = this.state;
-    return !messageLoaded ? (
+    return displayWelcome && !messageLoaded ? (
       this.props.modal(this.handleDisplayModal())
     ) : (
       <React.Fragment />
     );
   }
 }
+
+const HandleContent = ({ onCloseModal }) => {
+  return (
+    <div className="welcome__container">
+      <div className="welcome__header">Welcome to Remo.TV</div>
+      <div className="welcome__content-container">
+        <img
+          src={Images.remoSplash}
+          className="welcome__splash"
+          alt="Remo.TV"
+        />
+        <div className="welcome__text">
+          Thanks for signing up and joining the Remo.TV community.
+          <br />
+          <br />
+          We have sent a validation link to the email address you provided.
+          <br />
+          For security reasons, your access to Remo may be limited without a
+          validated email account.
+          <br />
+          <br />
+          By continuing to Remo, you are agreeing to our{" "}
+          <InlineLink link="/tos" text="Terms of Service" /> {` & `}
+          <InlineLink link="/privacy-policy" text="Privacy Policy" />.
+          <br />
+          <br />
+        </div>
+
+        <button
+          className="welcome__btn"
+          onClick={() => {
+            onCloseModal();
+          }}
+        >
+          Continue to Remo
+        </button>
+      </div>
+    </div>
+  );
+};

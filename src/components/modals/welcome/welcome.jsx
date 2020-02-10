@@ -21,7 +21,7 @@ export default class Welcome extends Component {
         }
       )
       .then(res => {
-        console.log(res.data);
+        if (res.data.error) console.log(res.data);
       })
       .catch(err => {
         console.log(err);
@@ -42,8 +42,6 @@ export default class Welcome extends Component {
 
   render() {
     const { displayWelcome } = this.props.user.status;
-    console.log(this.props);
-    console.log("Display Welcome: ", displayWelcome);
     const { messageLoaded } = this.state;
     return displayWelcome && !messageLoaded ? (
       this.props.modal(this.handleDisplayModal())

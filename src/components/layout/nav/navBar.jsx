@@ -8,6 +8,7 @@ import socket from "../../socket";
 import GetLayout from "../../modules/getLayout";
 import UserProfile from "../userProfile/userProfile";
 import queryString from "query-string";
+import Welcome from "../../modals/welcome/welcome";
 
 export default class NavBar extends Component {
   constructor(props) {
@@ -104,6 +105,7 @@ export default class NavBar extends Component {
       <div className="nav-container">
         {this.renderBurger()}
         <Link to="/"> {this.renderLogo()}</Link>
+        <Welcome {...this.props} />
         <div className="user-container">
           <div
             className="user"

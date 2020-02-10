@@ -14,29 +14,32 @@ export default class Welcome extends Component {
   handleContent = () => {
     return (
       <div className="welcome__container">
-        <div className="welcome__header">Welcome to Remo!</div>
-        <div className="welcome__text">
-          Thanks for signing up and joining the Remo.TV community.
-          <br />
-          <br />
-          We have sent a validation link to the email address you provided.
-          <br />
-          For security reasons, your access to Remo may be limited without a
-          validated account.
-          <br />
-          <br />
-          By continuing to Remo, you are agreeing to our{" "}
-          <InlineLink link="/tos" text="Terms of Service" /> {` & `}
-          <InlineLink link="/privacy-policy" text="Privacy Policy" />
-          <br />
-          <br />
+        <div className="welcome__header">Welcome to Remo.TV</div>
+        <div className="welcome__content-container">
+          <div className="welcome__text">
+            Thanks for signing up and joining the Remo.TV community.
+            <br />
+            <br />
+            We have sent a validation link to the email address you provided.
+            <br />
+            For security reasons, your access to Remo may be limited without a
+            validated email account.
+            <br />
+            <br />
+            By continuing to Remo, you are agreeing to our{" "}
+            <InlineLink link="/tos" text="Terms of Service" /> {` & `}
+            <InlineLink link="/privacy-policy" text="Privacy Policy" />.
+            <br />
+            <br />
+          </div>
+
+          <button
+            className="welcome__btn"
+            onClick={() => this.props.onCloseModal()}
+          >
+            Continue to Remo
+          </button>
         </div>
-        <button
-          className="welcome__btn"
-          onClick={() => this.props.onCloseModal()}
-        >
-          Continue to Remo
-        </button>
       </div>
     );
   };
@@ -74,8 +77,8 @@ export default class Welcome extends Component {
   render() {
     const { displayWelcome } = this.props.user;
     const { messageLoaded } = this.state;
-    return displayWelcome && !messageLoaded ? (
-      this.props.modal(this.handleDisplayModal)
+    return !messageLoaded ? (
+      this.props.modal(this.handleDisplayModal())
     ) : (
       <React.Fragment />
     );

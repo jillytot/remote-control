@@ -1,9 +1,23 @@
 @import "../../../styles/mixins/buttonStyles.scss";
+@import "../../../styles/variables.scss";
 
 .welcome {
   &__container {
     display: flex;
     flex-direction: column;
+    padding: 24px;
+  }
+  &__header {
+    margin-bottom: 6px;
+  }
+
+  &__text {
+    font-size: 14px;
+  }
+  &__content-container {
+    background: $color-ebony;
+    padding: 24px;
+    border-radius: 24px;
   }
   &__btn {
     @include button-default;

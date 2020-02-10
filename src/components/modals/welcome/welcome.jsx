@@ -1,8 +1,7 @@
 import React, { Component } from "react";
 import axios from "axios";
 import { welcome } from "../../../config/client/index";
-// import TOS from "../../layout/frontPage/tos";
-// import PrivacyPolicy from "../../layout/frontPage/privacyPolicy";
+import Images from "../../../imgs/placeholders";
 import InlineLink from "../../common/links/inlineLink";
 import "./welcome.scss";
 
@@ -16,6 +15,11 @@ export default class Welcome extends Component {
       <div className="welcome__container">
         <div className="welcome__header">Welcome to Remo.TV</div>
         <div className="welcome__content-container">
+          <img
+            src={Images.remoSplash}
+            className="welcome__splash"
+            alt="Remo.TV"
+          />
           <div className="welcome__text">
             Thanks for signing up and joining the Remo.TV community.
             <br />

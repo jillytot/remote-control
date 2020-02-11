@@ -9,13 +9,13 @@ export default class BrowseServers extends Component {
 
   componentDidMount() {
     this.props.setServer(null);
-    console.log(this.props);
+    // console.log(this.props);
   }
 
   handleSorting = () => {
     const { robotServers, followedServers } = this.props;
     const sorted = sortServers(robotServers, followedServers, "default");
-    console.log(sorted);
+    // console.log(sorted);
     return this.handleDisplayServers(sorted);
   };
 

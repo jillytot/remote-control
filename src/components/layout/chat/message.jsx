@@ -263,7 +263,7 @@ const Message = ({ message, channelName, printChannelName }) => {
     } else if (message.type === types.robot) {
       return `chat-message robot-message`;
     } else if (message.type === "event") {
-      return `chat-message special`;
+      return `chat-message event-message`;
     } else {
       return `chat-message ${color} ${
         // return `chat-message rainbow ${

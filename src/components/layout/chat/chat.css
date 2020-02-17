@@ -188,8 +188,8 @@
 }
 
 .event-message {
-  color: rgb(198, 162, 255);
-  background-color: rgb(51, 36, 75);
+  color: white;
+  background: -webkit-linear-gradient(-45deg, #954ed6 0%, #009bee 100%);
   padding: 5px;
 }
 
@@ -231,7 +231,11 @@
 
 .special {
   color: white;
-  background: -webkit-linear-gradient(-45deg, #954ed6 0%, #009bee 100%);
+  background: -webkit-linear-gradient(
+    -45deg,
+    rgb(149, 78, 214) 0%,
+    rgb(0, 155, 238) 100%
+  );
   padding: 5px;
 }
 
@@ -357,6 +361,14 @@
     font-size: 12px;
     padding-right: 6px;
     width: auto;
+  }
+
+  .event-message {
+    background: -webkit-linear-gradient(
+      -45deg,
+      rgba(149, 78, 214, 0.726) 0%,
+      rgba(0, 155, 238, 0.726) 100%
+    );
   }
 
   .fade-out {

@@ -187,6 +187,12 @@
   padding: 5px;
 }
 
+.event-message {
+  color: rgb(198, 162, 255);
+  background-color: rgb(51, 36, 75);
+  padding: 5px;
+}
+
 .messages-container {
   justify-content: left;
   text-align: left;
@@ -226,6 +232,7 @@
 .special {
   color: white;
   background: -webkit-linear-gradient(-45deg, #954ed6 0%, #009bee 100%);
+  padding: 5px;
 }
 
 .self {

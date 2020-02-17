@@ -20,7 +20,8 @@ const Message = ({ message, channelName, printChannelName }) => {
     channel: "channel",
     special: "special",
     siteCommand: "site-command",
-    self: "self"
+    self: "self",
+    event: "event"
   };
 
   const handleEmotes = filterMessage => {
@@ -261,6 +262,8 @@ const Message = ({ message, channelName, printChannelName }) => {
       return `chat-message system-message`;
     } else if (message.type === types.robot) {
       return `chat-message robot-message`;
+    } else if (message.type === "event") {
+      return `chat-message special`;
     } else {
       return `chat-message ${color} ${
         // return `chat-message rainbow ${
@@ -270,7 +273,10 @@ const Message = ({ message, channelName, printChannelName }) => {
   };
 
   const handleMessageSender = message => {
-    if (message && message.type === types.moderation) {
+    if (
+      message &&
+      (message.type === types.moderation || message.type === "event")
+    ) {
       return "System";
     }
     return message.sender;

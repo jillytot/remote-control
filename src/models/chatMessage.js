@@ -14,7 +14,7 @@ module.exports.createMessage = async message => {
     makeMess.message = message.message;
   }
   makeMess.sender = message.user.username; //Will deprecate
-  makeMess.sender_id = message.user.id; //Will deprecate
+  makeMess.sender_id = message.user.id || message.user.user_id; //Will deprecate
   makeMess.chat_id = message.chatId;
   makeMess.server_id = message.server_id;
   makeMess.id = `mesg-${makeId()}`;
@@ -134,7 +134,6 @@ module.exports.saveMessage = async getMessage => {
 module.exports.getRecentMessages = async (chat_id, numberOfMessages) => {
   const db = require("../services/db");
   //TODO: Maybe don't return messages more than 24 hours old
-  console.log("MESSAGE CHECK 2: ", chat_id, numberOfMessages);
   const query = `SELECT * FROM chat_messages WHERE chat_id = $1 ORDER BY time_stamp DESC LIMIT ${numberOfMessages ||
     10}`;
   try {

@@ -85,7 +85,7 @@ export default class Chat extends Component {
   removeModerationMessagesOnLoad = messages => {
     let remove = [];
     messages.forEach(message => {
-      if (message.type === "moderation") {
+      if (message.type === "moderation" || message.type === "event") {
         //do nothing
       } else {
         remove.push(message);

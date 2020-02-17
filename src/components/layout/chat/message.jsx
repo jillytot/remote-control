@@ -314,7 +314,13 @@ const Message = ({ message, channelName, printChannelName }) => {
   };
 
   const handleChannelName = name => {
-    if (name) return <span className="channel-name">{`# ${name} `}</span>;
+    if (name)
+      return (
+        <React.Fragment>
+          <span className="channel-name">{`# ${name} `}</span>
+          <br />
+        </React.Fragment>
+      );
     return <React.Fragment />;
   };
 
@@ -322,9 +328,7 @@ const Message = ({ message, channelName, printChannelName }) => {
     <div className={handleMessageContainer()}>
       <div className={handleMessageType(message)}>
         {printChannelName === true ? (
-          <React.Fragment>
-            {handleChannelName(channelName)} <br />
-          </React.Fragment>
+          <React.Fragment>{handleChannelName(channelName)}</React.Fragment>
         ) : (
           <React.Fragment />
         )}

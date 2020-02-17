@@ -4,7 +4,7 @@ module.exports = async (server, follower) => {
   const { getRobotServerSettings } = require("../../models/robotServer");
   //Todo: Check server settings for printing new follower to chat
   const { settings } = await getRobotServerSettings(server.server_id);
-  console.log("Get Settings for Server: ", settings);
+  //
   if (settings.announce_followers_in_chat !== false) {
     const { username } = follower;
     const alert = alertMessages(username);

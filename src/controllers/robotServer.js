@@ -63,20 +63,29 @@ module.exports.updateSettings = async (server, user_id) => {
     getRobotServer,
     updateRobotServerSettings
   } = require("../models/robotServer");
+  const { authLocal } = require("./roles");
+
   let getServer = await getRobotServer(server.server_id);
-  if (getServer.owner_id === user_id) {
+  const authUpdate = await authLocal(getServer, { id: user_id });
+
+  if (authUpdate.authorized) {
     if (server.settings.hasOwnProperty("private"))
       getServer.settings.private = server.settings.private;
     if (server.settings.hasOwnProperty("unlist"))
       getServer.settings.unlist = server.settings.unlist;
     if (server.settings.hasOwnProperty("phonetic_filter"))
       getServer.settings.phonetic_filter = server.settings.phonetic_filter;
+    if (server.settings.hasOwnProperty("announce_followers_in_chat"))
+      getServer.settings.announce_followers_in_chat =
+        server.settings.announce_followers_in_chat;
     const updateSettings = await updateRobotServerSettings(
       getServer.server_id,
       getServer.settings
     );
     if (updateSettings) return updateSettings.settings;
   }
+
+  this.updateSelectedServer(getServer.server_id);
   return null;
 };
 

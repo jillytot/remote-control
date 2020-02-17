@@ -8,16 +8,32 @@ export default class EditServerForm extends Form {
   state = {
     data: {},
     errors: {},
-    settings: { unlist: null, private: null, phonetic_filter: null },
-    compareSettings: { unlist: null, private: null, phonetic_filter: null },
+    settings: {
+      unlist: null,
+      private: null,
+      phonetic_filter: null,
+      announce_followers_in_chat: null
+    },
+    compareSettings: {
+      unlist: null,
+      private: null,
+      phonetic_filter: null,
+      announce_followers_in_chat: null
+    },
     error: ""
   };
   schema = {};
 
   componentDidMount() {
+    let { settings } = this.props.server;
+
+    //default to true if no settings for this property exists
+    if (!settings.hasOwnProperty("announce_followers_in_chat"))
+      settings.announce_followers_in_chat = true;
+
     this.setState({
-      settings: this.props.server.settings,
-      compareSettings: this.props.server.settings
+      settings: settings,
+      compareSettings: settings
     });
   }
 
@@ -45,6 +61,13 @@ export default class EditServerForm extends Form {
     // console.log("CHANGE SETTINGS AFTER: ", settings);
   };
 
+  handleAnnouceFollowersInChat = () => {
+    let { settings } = this.state;
+    // console.log("CHANGE SETTINGS BEFORE: ", settings);
+    settings.announce_followers_in_chat = !settings.announce_followers_in_chat;
+    this.setState({ settings: settings });
+  };
+
   settingsObject = () => {
     console.log(this.props.server.server_id);
     return {
@@ -53,7 +76,9 @@ export default class EditServerForm extends Form {
         settings: {
           unlist: this.state.settings.unlist,
           private: this.state.settings.private,
-          phonetic_filter: this.state.settings.phonetic_filter
+          phonetic_filter: this.state.settings.phonetic_filter,
+          announce_followers_in_chat: this.state.settings
+            .announce_followers_in_chat
         }
       }
     };
@@ -90,7 +115,7 @@ export default class EditServerForm extends Form {
         </span>
         <br />
         <form onSubmit={this.handleSubmit}>
-          Make Server Unlisted
+          Make Server Unlisted:
           <div className="toggle-group">
             <span className="info">
               Your server will be unlisted from the public directory, but anyone
@@ -103,7 +128,7 @@ export default class EditServerForm extends Form {
               critical={true}
             />
           </div>
-          Private Listing
+          Private Listing:
           <div className="toggle-group">
             <span className="info">
               Your server will only be accessible to it's current members. you
@@ -116,7 +141,7 @@ export default class EditServerForm extends Form {
               critical={true}
             />
           </div>
-          Phonetic Chat Filter ( experimental )
+          Phonetic Chat Filter ( experimental ):
           <div className="toggle-group">
             <span className="info">
               {" "}
@@ -127,6 +152,18 @@ export default class EditServerForm extends Form {
               toggle={this.state.settings.phonetic_filter}
               label={"Apply filter to chat messages? "}
               onClick={this.handlePhoneticFilterToggle}
+              critical={false}
+            />
+          </div>
+          Announce New Members in Chat:
+          <div className="toggle-group">
+            <span className="info">
+              Print a message to chat when a new member joins the server.
+            </span>
+            <Toggle
+              toggle={this.state.settings.announce_followers_in_chat}
+              label={"Print new member announcements to chat?"}
+              onClick={this.handleAnnouceFollowersInChat}
               critical={false}
             />
           </div>

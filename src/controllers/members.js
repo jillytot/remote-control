@@ -18,6 +18,7 @@ module.exports.joinServer = async member => {
     updateMemberRoles
   } = require("../models/serverMembers");
   const { getRobotServer } = require("../models/robotServer");
+  const { newFollower } = require("./notifications");
 
   console.log("Joining Server");
 
@@ -52,6 +53,9 @@ module.exports.joinServer = async member => {
     member = await updateMemberInvites(member);
 
     const robotServer = await getRobotServer(member.server_id);
+    console.log(".members.join: ", member);
+    console.log(newFollower);
+    newFollower(robotServer, member);
     this.updateMemberCount(robotServer);
 
     return member;

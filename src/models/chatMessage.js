@@ -152,6 +152,7 @@ module.exports.getRecentMessages = async (chat_id, numberOfMessages) => {
 module.exports.sendMessage = message => {
   const chatRoomModel = require("../models/chatRoom");
   const userModel = require("../models/user");
+  const serverModel = require("../models/robotServer");
   //TODO: ensure that chatRoom is provided by /src/events/index and not the message directly from the client
 
   if (message.broadcast === "self") {
@@ -159,9 +160,14 @@ module.exports.sendMessage = message => {
     return;
   }
 
-  let chatRoom = message.chat_id;
-  // console.log("Chat Room from SendMessage: ", chatRoom, message);
-  chatRoomModel.emitEvent(chatRoom, "MESSAGE_RECEIVED", message);
+  if (message.chat_id) {
+    let chatRoom = message.chat_id;
+    chatRoomModel.emitEvent(chatRoom, "MESSAGE_RECEIVED", message);
+  }
+
+  if (message.broadcast === "server") {
+    serverModel.emitEvent(message.server_id, "MESSAGE_RECEIVED", message);
+  }
 };
 
 //Definitely needs more work

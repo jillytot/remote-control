@@ -18,8 +18,9 @@ module.exports.filterPhoneticMessage = payload => {
   const phoneticBadWords = Object.keys(globalBadWordsList.phonetic_bad_words);
   const replacementWords = Object.values(globalBadWordsList.phonetic_bad_words);
   let returnPayload = "";
-  // Split the payload at each word boundary. Also works for single word payloads.
-  const words = payload.split(/\W/);
+  // Split the payload at each space. Splitting on word boundaries would've been
+  // nice, but broke punctuation and i suck a regex. Also works for single word payloads.
+  const words = payload.split(' ');
   // iterate through the message for bad words
   words.forEach(word => {
     const idx = phoneticBadWords.indexOf(metaphone(word));
@@ -31,7 +32,7 @@ module.exports.filterPhoneticMessage = payload => {
       returnPayload += word + " ";
     }
   });
-  console.log("Return Payload: ", returnPayload.trim());
+  // console.log("Return Payload: ", returnPayload.trim());
   return returnPayload.trim();
 };
 
@@ -48,7 +49,7 @@ module.exports.filterPhoneticMessage = payload => {
 module.exports.filterTextMessage = payload => {
   console.log(globalBadWordsList);
   let returnPayload = "";
-  const messageSplit = payload.split(/\W/);
+  const messageSplit = payload.split(' ');
   const listOfBadWords = Object.values(globalBadWordsList.normal_bad_words);
   const replacements = Object.keys(globalBadWordsList.normal_bad_words);
 

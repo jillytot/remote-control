@@ -1,5 +1,6 @@
 module.exports = {
-  newFollower: require("./newfollower")
+  newFollower: require("./newfollower"),
+  alertMessages: require("./alertMessages")
 };
 
 // if (!Array.isArray(roles)) roles = [roles];

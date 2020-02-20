@@ -11,9 +11,17 @@ const DisplayRobotServer = ({
   followed,
   settings
 }) => {
+  const handleClick = e => {
+    e.preventDefault();
+    console.log("server click: ", e.type, e.button);
+    if (e.type === "contextmenu" || e.button === 2) {
+      console.log("Right click");
+    }
+    return null;
+  };
   return (
     <Link to={`/${serverName}/${defaultChannel}`}>
-      <div className={displayClasses}>
+      <div className={displayClasses} onContextMenu={e => handleClick(e)}>
         <img
           className={
             liveDevices.length > 0

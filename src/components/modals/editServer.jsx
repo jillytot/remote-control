@@ -30,7 +30,7 @@ export default class EditServer extends Component {
             onClick={() => this.props.modal(this.handleModal())}
           >
             {" "}
-            {`(edit)`}
+            {`( settings )`}
           </div>
         </React.Fragment>
       );

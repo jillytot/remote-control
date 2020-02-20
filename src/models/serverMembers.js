@@ -40,7 +40,9 @@ module.exports.createMember = async data => {
   makeMember.user_id = data.user_id;
   makeMember.server_id = data.server_id;
   makeMember.roles = []; //default role
-  makeMember.settings = {};
+  makeMember.settings = {
+    enableNotifications: true
+  };
 
   if (data.username) {
     makeMember.username = data.username;
@@ -184,6 +186,20 @@ module.exports.updateMemberStatus = async member => {
   const { status, server_id, user_id } = member;
   console.log("Updating Membership Status..");
   const update = `UPDATE members SET status = $1 WHERE ( server_id, user_id ) = ( $2, $3 ) RETURNING *`;
+  try {
+    const result = await db.query(update, [status, server_id, user_id]);
+    if (result.rows[0]) return result.rows[0];
+  } catch (err) {
+    console.log(err);
+  }
+  return null;
+};
+
+module.exports.updateMemberSettings = async member => {
+  const db = require("../services/db");
+  const { status, server_id, user_id } = member;
+  console.log("Updating Membership Status..");
+  const update = `UPDATE members SET settings = $1 WHERE ( server_id, user_id ) = ( $2, $3 ) RETURNING *`;
   try {
     const result = await db.query(update, [status, server_id, user_id]);
     if (result.rows[0]) return result.rows[0];

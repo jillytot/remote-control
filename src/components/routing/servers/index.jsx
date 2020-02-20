@@ -285,6 +285,7 @@ export default class ServersPage extends Component {
             />
           </React.Fragment>
         )}
+
         <NavBar
           user={this.state.user}
           mobileState={this.handleMobileFlag}

@@ -39,6 +39,17 @@ router.post("/get-members", auth({ user: true }), async (req, res) => {
   return res.send(members);
 });
 
+router.post("/get-member", auth({ user: true }), async (req, res) => {
+  const { getMember } = require("../../controllers/members");
+  const { server_id } = req.body;
+  if (server_id) return res.send(jsonError("Invalid Server ID"));
+  const member = await getMember({
+    user_id: req.body.user.id,
+    server_id: server_id
+  });
+  return res.send(member);
+});
+
 //CREATE SERVER
 router.get("/create", (req, res) => {
   const response = {

@@ -230,3 +230,9 @@ module.exports.getMembers = async server_id => {
   const members = await getMembers(server_id);
   return members;
 };
+
+module.exports.getMember = async ({ user_id, server_id }) => {
+  const { getMember } = require("../models/serverMembers");
+  const member = await getMember({ user_id: user_id, server_id: server_id });
+  return member;
+};

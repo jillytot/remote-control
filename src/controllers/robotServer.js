@@ -108,25 +108,29 @@ module.exports.getPublicServers = async () => {
   return list;
 };
 
+//user membership status is appended to the server object
 module.exports.getServerByName = async (name, user) => {
   const { getRobotServerFromName } = require("../models/robotServer");
-  const getServer = await getRobotServerFromName(name);
-  if (getServer.settings.private === true)
-    return checkMembership(getServer, user);
-  if (getServer) return getServer;
-  return err("This server doesn't exist");
+  const { getMember } = require("../models/serverMembers");
+  let getServer = await getRobotServerFromName(name);
+
+  if (!getServer) return err("This server doesn't exist");
+  const membership = await getMember({
+    user_id: user.id,
+    server_id: getServer.server_id
+  });
+  getServer.membership = membership || null;
+  console.log("GET SERVER CHECK: ", getServer);
+  if (getServer.settings.private === true) return checkMembership(getServer);
+  return getServer;
 };
 
-const checkMembership = async (server, user) => {
-  // console.log("CHECKING MEMBERSHIP FOR PRIVATE SERVER!!! ");
-  const { getMember } = require("../models/serverMembers");
-  // console.log(user);
-  const check = await getMember({
-    user_id: user.id,
-    server_id: server.server_id
-  });
+const checkMembership = async server => {
+  const { status } = server.membership;
   // console.log(check);
-  if (check.status.member === true) return server;
+  if (status.member === true) {
+    return server;
+  }
   return err("You are not a member of this server.");
 };
 

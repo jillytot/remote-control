@@ -206,23 +206,27 @@ router.post("/settings/update", auth({ user: true }), async (req, res) => {
   res.send(jsonError("Unable to update server settings"));
 });
 
+/**
+ * Input:
+ *  server_id: string
+ *  user || robot: user or robot object
+ *
+ * response success: { server object, membership: { member object }}
+ * response error: { error: "error message" }
+ */
 router.post(
   "/get-server",
   auth({ user: true, robot: true }),
   async (req, res) => {
     const { getServerByName } = require("../../controllers/robotServer");
-    if (req.body.server_name) {
-      let user = {};
-      if (req.robot) {
-        user.id = req.robot.owner_id;
-      } else {
-        user = req.user;
-      }
-      const getServer = await getServerByName(req.body.server_name, user);
-      if (getServer) res.send(getServer);
-      return;
-    }
-    res.send({ status: "Error!", error: "Unable to find server" });
+    if (!req.body.server_name)
+      return res.send(jsonError("server_name required"));
+    let getUser = {};
+    if (req.robot) getUser.id = req.robot.owner_id;
+    else getUser = req.user;
+    const getServer = await getServerByName(req.body.server_name, getUser);
+    res.send(getServer);
+    return;
   }
 );
 

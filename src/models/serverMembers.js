@@ -41,7 +41,7 @@ module.exports.createMember = async data => {
   makeMember.server_id = data.server_id;
   makeMember.roles = []; //default role
   makeMember.settings = {
-    enableNotifications: true
+    enable_notifications: true
   };
 
   if (data.username) {

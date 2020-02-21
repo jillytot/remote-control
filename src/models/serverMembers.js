@@ -14,7 +14,7 @@ Each server contains a list of members,
 An entry is created for a user who visits a server by default, 
 however member is set to false. 
 They have to join the server, or follow an invite to officially become a member. 
-If the server is set to privite, then all non-members will be unable to access it
+If the server is set to private, then all non-members will be unable to access it
   - This may not be needed, private just could be requiring membership to join the server. 
   - This would require a separate invite link to actually become a member. 
 Each member entry is used to handle status and settings per user per robot server.

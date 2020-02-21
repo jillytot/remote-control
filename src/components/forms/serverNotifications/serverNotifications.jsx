@@ -23,7 +23,7 @@ export default class ServerNotifications extends Form {
     console.log("Settings ChecK: ", settings);
     if (!settings.hasOwnProperty("enable_notifications"))
       settings.enable_notifications = true;
-    this.setState({ settings: settings });
+    this.setState({ settings: settings, compareSettings: settings });
   }
 
   doSubmit() {

@@ -53,7 +53,7 @@ export default class ServerNotifications extends Form {
               <Toggle
                 toggle={this.state.settings.enable_notifications}
                 label="Enable Notifications?"
-                onClick={() => {}}
+                onClick={this.handleNotificationToggle}
                 critical={false}
               />
             </div>

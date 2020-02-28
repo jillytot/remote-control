@@ -19,8 +19,9 @@ export default class ServerNotifications extends Form {
   schema = {};
 
   componentDidMount() {
-    let { settings } = this.props.server.membership;
-    console.log("Settings ChecK: ", settings);
+    console.log(this.props.server);
+    let { settings } = this.props.membership;
+    // console.log("Settings ChecK: ", settings);
     if (!settings.hasOwnProperty("enable_notifications"))
       settings.enable_notifications = true;
     this.setState({ settings: settings, compareSettings: settings });

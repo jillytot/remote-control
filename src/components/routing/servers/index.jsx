@@ -132,6 +132,7 @@ export default class ServersPage extends Component {
         .then(response => {
           const { server_id } = response.data;
           if (server_id === selectedServer.server_id) {
+            console.log("Selected Server Response: ", response.data);
             selectedServer = response.data;
             this.setState({ selectedServer: selectedServer });
           } else {

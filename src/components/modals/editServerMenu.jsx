@@ -1,28 +1,58 @@
 import React, { Component } from "react";
 import EditServerForm from "./editServerForm";
 import ServerNotifications from "../forms/serverNotifications/serverNotifications";
+import axios from "axios";
+import { findServer } from "../../config/client/index";
 
 export default class EditServerMenu extends Component {
-  state = {
-    current: "server_settings"
-  };
+  state = { reload: false, membership: null };
 
   componentDidMount() {
-    const user = this.props.user;
-    const server = this.props.selectedServer;
-    if (!user.id === server.owner_id) {
-      this.setState({ current: "member_settings" });
+    const { server } = this.props;
+    if (!server.membership && !this.state.reload) {
+      this.getMembership();
+      this.setState({ reload: true });
+    } else {
+      this.setState({ membership: server.membership });
     }
   }
 
+  componentDidUpdate(prevProps, prevState) {
+    if (this.state.membership !== prevState.membership) this.render();
+  }
+
+  getMembership = async () => {
+    const { server } = this.props;
+    const token = localStorage.getItem("token");
+    await axios
+      .post(
+        findServer,
+        {
+          server_name: server.server_name
+        },
+        { headers: { authorization: `Bearer ${token}` } }
+      )
+      .then(response => {
+        console.log("Get Membership: ", response.data);
+        const { membership } = response.data || null;
+        this.setState({ membership: membership });
+      })
+      .catch(err => {
+        console.log(err);
+      });
+  };
+
   render() {
-    const { current } = this.state;
+    const { server, user } = this.props;
+    const { membership } = this.state;
     return (
       <React.Fragment>
-        {current === "server_settings" ? (
+        {server.owner_id === user.id ? (
           <EditServerForm {...this.props} />
+        ) : membership ? (
+          <ServerNotifications membership={membership} {...this.props} />
         ) : (
-          <ServerNotifications {...this.props} />
+          <div> Waiting for Server Information...</div>
         )}
       </React.Fragment>
     );

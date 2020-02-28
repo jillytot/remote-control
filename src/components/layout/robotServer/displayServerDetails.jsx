@@ -264,11 +264,7 @@ export default class DisplayServerDetails extends Component {
             <div className="display-server-info">
               Users Online: <ActiveUserCount users={users} />
             </div>
-            {user.id === server.owner_id ? (
-              this.handleEdit()
-            ) : (
-              <div className="server-settings" />
-            )}
+            {this.handleEdit()}
           </div>
         </div>
       );

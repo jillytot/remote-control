@@ -20,12 +20,10 @@ export default class ServerNotifications extends Form {
   schema = {};
 
   componentDidMount = () => {
-    console.log("Server Notifications Settings Component Mounted!");
     let { settings } = this.props.membership;
     if (!settings.hasOwnProperty("enable_notifications"))
       settings.enable_notifications = true;
     this.setState({ settings: settings, compareSettings: settings });
-    console.log("TEST TOOO222OOOo2222ooo2o2o2o2o2o");
   };
 
   doSubmit() {
@@ -45,7 +43,6 @@ export default class ServerNotifications extends Form {
 
   handleButton = () => {
     const { settings, compareSettings } = this.state;
-    console.log("Settings: ", settings, "Compare Settings: ", compareSettings);
     if (JSON.stringify(settings) !== JSON.stringify(compareSettings)) {
       return this.renderButton("Save Changes");
     } else {

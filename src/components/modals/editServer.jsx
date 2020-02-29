@@ -20,7 +20,6 @@ export default class EditServer extends Component {
   };
 
   render() {
-    console.log("Show server settings");
     return (
       <React.Fragment>
         <div

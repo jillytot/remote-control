@@ -238,7 +238,7 @@ export default class DisplayServerDetails extends Component {
   };
 
   displayDetails = () => {
-    const { server, channels, user, users } = this.props;
+    const { server, channels, users } = this.props;
     if (channels && channels.length > 0) {
       return (
         <div className="server-info-container">

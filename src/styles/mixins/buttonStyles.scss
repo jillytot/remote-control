@@ -16,6 +16,9 @@
   &:active {
     transform: translateY(4px);
   }
+  &:disabled {
+    background: $button-inactive;
+  }
 }
 
 @mixin button-delete {
@@ -30,6 +33,7 @@
 
 @mixin button-inactive {
   @include button-gray;
+  color: $color-silver-chalice-1;
   &:hover {
     box-shadow: none;
   }

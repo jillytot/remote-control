@@ -6,6 +6,7 @@ import TextArea from "./textArea";
 import TextAreaChat from "./textAreaChat";
 import InlineInput from "./inlineInput/inlineInput";
 import "../../styles/common.css";
+import "./form/form.scss";
 
 class Form extends Component {
   state = {
@@ -70,8 +71,14 @@ class Form extends Component {
     }
   };
 
-  renderButton = label => {
+  renderButton = (label, state) => {
     //require validation?
+    if (state === "disabled")
+      return (
+        <button className={"form__btn-inactive"} disabled>
+          {label}
+        </button>
+      );
     if (this.state.validation === true) {
       return (
         <button

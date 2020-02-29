@@ -1,5 +1,4 @@
 const router = require("express").Router();
-const { paginate } = require("../../modules/requests");
 const {
   createRobotServer,
   getRobotServer,
@@ -287,12 +286,14 @@ router.post("/delete", auth({ user: true }), async (req, res) => {
   res.send(response);
 });
 
-module.exports = router;
+router.post(
+  "/membership/update-settings",
+  auth({ user: true }),
+  async (req, res) => {
+    const { settings } = req.body;
+    console.log("Membership Settings: ", settings);
+    res.send("Ok");
+  }
+);
 
-const schema = Joi.object().keys({
-  server_name: Joi.string()
-    .regex(/[\w\s]+/)
-    .min(3)
-    .max(30)
-    .required()
-});
+module.exports = router;

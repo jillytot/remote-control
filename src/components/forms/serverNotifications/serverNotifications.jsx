@@ -2,7 +2,9 @@ import React from "react";
 import Toggle from "../../common/toggle";
 import Form from "../../common/form";
 import "./serverNotifications.scss";
-// import axios from "axios";
+import axios from "axios";
+import InlineResponse from "../../common/inlineResult/inlineResult";
+import { membershipSettings } from "../../../config/client/index";
 
 export default class ServerNotifications extends Form {
   state = {
@@ -14,7 +16,8 @@ export default class ServerNotifications extends Form {
     },
     compareSettings: {
       enable_notifications: null
-    }
+    },
+    status: ""
   };
 
   schema = {};
@@ -26,9 +29,29 @@ export default class ServerNotifications extends Form {
     this.setState({ settings: settings, compareSettings: settings });
   };
 
-  doSubmit() {
-    console.log("submit");
-  }
+  doSubmit = async () => {
+    const { settings } = this.state;
+    this.setState({ status: "...pending." });
+    const token = localStorage.getItem("token");
+    await axios
+      .post(
+        membershipSettings,
+        {
+          settings
+        },
+        {
+          headers: { authorization: `Bearer ${token}` }
+        }
+      )
+      .then(res => {
+        console.log("Update membership settings result: ", res.data);
+        if (res.data.error) {
+          this.setState({ error: res.data.error });
+        } else {
+          this.setState({ status: "Changes saved successfully!" });
+        }
+      });
+  };
 
   handleNotificationToggle = () => {
     this.setState(state => {
@@ -50,7 +73,25 @@ export default class ServerNotifications extends Form {
     }
   };
 
+  handleStatus = () => {
+    const { status, error } = this.state;
+    if (error)
+      return (
+        <InlineResponse message={error} onClose={this.props.onCloseModal} />
+      );
+    if (status)
+      return (
+        <InlineResponse
+          message={status}
+          type="success"
+          onClose={this.props.onCloseModal}
+        />
+      );
+    return <React.Fragment />;
+  };
+
   render() {
+    const { status, error } = this.state;
     return (
       <div className="modal">
         Server Settings:
@@ -73,7 +114,9 @@ export default class ServerNotifications extends Form {
               />
             </div>
           </div>
-          {this.handleButton()}
+          {status === "" && error === ""
+            ? this.handleButton()
+            : this.handleStatus()}
         </form>
       </div>
     );

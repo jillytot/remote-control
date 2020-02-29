@@ -1,6 +1,7 @@
 import React from "react";
 import Toggle from "../../common/toggle";
 import Form from "../../common/form";
+import "./serverNotifications.scss";
 // import axios from "axios";
 
 export default class ServerNotifications extends Form {
@@ -39,17 +40,18 @@ export default class ServerNotifications extends Form {
 
   render() {
     return (
-      <div className="serverNotifications__modal">
-        Notification Settings for:
-        <span className="serverNotifications__header">
+      <div className="modal">
+        Server Settings:
+        <span className="register-form-emphasis">
           {this.props.server.server_name}
         </span>
+        <br />
         <form onSubmit={this.handleSubmit}>
           <div className="serverNotifications__container">
             Email Notifications:
-            <div className="serverNotifications__toggle-group">
+            <div className="serverNotifications__group">
               <span className="serverNotifications__info">
-                Email when events happen on this server.
+                Email me when events happen on this server.
               </span>
               <Toggle
                 toggle={this.state.settings.enable_notifications}

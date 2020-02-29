@@ -41,3 +41,19 @@
   height: 10px;
   border: none;
 }
+
+@mixin toggle-group {
+  background-color: rgb(15, 24, 39);
+  padding: 12px;
+  border-radius: 12px;
+  margin: 5px;
+  margin-bottom: 12px;
+}
+
+@mixin toggle-container {
+  display: flex;
+  margin-top: 6px;
+  flex-direction: row;
+  align-items: center;
+  justify-content: flex-end;
+}

@@ -1,0 +1,16 @@
+@import "../../../styles/mixins/formStyles.scss";
+
+.serverNotifications {
+  &__group {
+    @include toggle-group;
+  }
+  &__container {
+    @include form-container;
+  }
+  &__control {
+    @include form-control;
+  }
+  &__label {
+    @include form-label;
+  }
+}

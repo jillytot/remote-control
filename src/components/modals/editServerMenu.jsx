@@ -21,6 +21,11 @@ export default class EditServerMenu extends Component {
     if (this.state.membership !== prevState.membership) this.render();
   }
 
+  /*
+ If getSelectedServer isn't called, then we make the same API call here to 
+ ensure we have membership information. 
+  */
+
   getMembership = async () => {
     const { server } = this.props;
     const token = localStorage.getItem("token");

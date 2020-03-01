@@ -201,6 +201,7 @@ export default class DisplayServerDetails extends Component {
         user={this.props.user}
         modal={this.props.modal}
         onCloseModal={this.props.onCloseModal}
+        localStatus={this.state.localStatus}
       />
     );
   };

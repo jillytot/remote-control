@@ -21,14 +21,21 @@ export default class EditServer extends Component {
   };
 
   render() {
+    const { user, server, localStatus } = this.props;
+
     return (
       <React.Fragment>
-        <div
-          className="server-settings"
-          onClick={() => this.props.modal(this.handleModal())}
-        >
-          {`( settings )`}
-        </div>
+        {user.id === server.owner_id ||
+        (localStatus && localStatus.member === true) ? (
+          <div
+            className="server-settings"
+            onClick={() => this.props.modal(this.handleModal())}
+          >
+            {`( settings )`}
+          </div>
+        ) : (
+          <React.Fragment />
+        )}
       </React.Fragment>
     );
   }

@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import EditServerMenu from "./editServerMenu";
 
+//TODO: Do membership check here. Make sure followed servers always come paired with membership info.
 export default class EditServer extends Component {
   handleModal = () => {
     const { onCloseModal, server, user } = this.props;

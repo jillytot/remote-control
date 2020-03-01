@@ -5,6 +5,8 @@ import axios from "axios";
 import { findServer } from "../../config/client/index";
 import PaddedMessage from "../common/paddedMessage/paddedMessage";
 
+//Ideally, this should only be accessible if the user is a member of the server,
+//TODO: Conditionally render <EditServer /> if user is a member
 export default class EditServerMenu extends Component {
   state = { reload: false, membership: null };
 

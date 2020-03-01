@@ -3,6 +3,7 @@ import EditServerForm from "./editServerForm";
 import ServerNotifications from "../forms/serverNotifications/serverNotifications";
 import axios from "axios";
 import { findServer } from "../../config/client/index";
+import PaddedMessage from "../common/paddedMessage/paddedMessage";
 
 export default class EditServerMenu extends Component {
   state = { reload: false, membership: null };
@@ -55,9 +56,16 @@ export default class EditServerMenu extends Component {
         {server.owner_id === user.id ? (
           <EditServerForm {...this.props} />
         ) : membership ? (
-          <ServerNotifications membership={membership} {...this.props} />
+          membership.status.member === true ? (
+            <ServerNotifications membership={membership} {...this.props} />
+          ) : (
+            <PaddedMessage>
+              You are not a member of this server. You must join this server in
+              order to become a member.
+            </PaddedMessage>
+          )
         ) : (
-          <div> Waiting for Server Information...</div>
+          <PaddedMessage> Waiting for Server Information...</PaddedMessage>
         )}
       </React.Fragment>
     );

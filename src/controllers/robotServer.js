@@ -120,7 +120,7 @@ module.exports.getServerByName = async (name, user) => {
     server_id: getServer.server_id
   });
   getServer.membership = membership || null;
-  console.log("GET SERVER CHECK: ", getServer);
+  // console.log("GET SERVER CHECK: ", getServer);
   if (getServer.settings.private === true) return checkMembership(getServer);
   return getServer;
 };

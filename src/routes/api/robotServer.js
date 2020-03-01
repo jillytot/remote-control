@@ -286,13 +286,30 @@ router.post("/delete", auth({ user: true }), async (req, res) => {
   res.send(response);
 });
 
+/**
+ * Input:
+ *  server_id: string
+ *  user: { user object }
+ *  settings: {
+ *    enable_notifications: ( boolean ) }
+ *
+ * response success: {
+ *    settings: {...updated settings }
+ * response error: { error: "error message" }
+ */
+
 router.post(
   "/membership/update-settings",
   auth({ user: true }),
   async (req, res) => {
-    const { settings } = req.body;
-    console.log("Membership Settings: ", settings);
-    res.send("Ok");
+    const { updateMemberSettings } = require("../../controllers/members");
+    const { settings, server_id } = req.body;
+    const result = await updateMemberSettings({
+      user_id: req.user.id,
+      server_id: server_id,
+      settings: settings
+    });
+    res.send(result);
   }
 );
 

@@ -236,3 +236,30 @@ module.exports.getMember = async ({ user_id, server_id }) => {
   const member = await getMember({ user_id: user_id, server_id: server_id });
   return member;
 };
+
+module.exports.updateMemberSettings = async member => {
+  const { updateMemberSettings } = require("../models/serverMembers");
+
+  if (!member.server_id) return jsonError("Server ID required.");
+  if (!member.settings) return jsonError("Settings required");
+  let findMember = await this.getMember(member);
+  if (member.settings.hasOwnProperty("enable_notifications")) {
+    findMember.settings.enable_notifications =
+      member.settings.enable_notifications;
+  }
+  const update = await updateMemberSettings(member);
+  if (!update)
+    return jsonError(
+      "Unable to update settings for member, please try again later"
+    );
+  this.updateSelectedServerMember(findMember);
+  return update;
+};
+
+module.exports.updateSelectedServerMember = member => {
+  const wss = require("../services/wss");
+  wss.clients.forEach(ws => {
+    if (ws.server_id === member.server_id && ws.user.id === member.user_id)
+      ws.emitEvent("SELECTED_SERVER_UDPATED");
+  });
+};

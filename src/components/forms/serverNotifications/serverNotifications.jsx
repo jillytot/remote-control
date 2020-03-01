@@ -31,13 +31,16 @@ export default class ServerNotifications extends Form {
 
   doSubmit = async () => {
     const { settings } = this.state;
+    const { server_id } = this.props.membership;
+    console.log(this.props);
     this.setState({ status: "...pending." });
     const token = localStorage.getItem("token");
     await axios
       .post(
         membershipSettings,
         {
-          settings
+          settings,
+          server_id: server_id
         },
         {
           headers: { authorization: `Bearer ${token}` }

@@ -197,11 +197,11 @@ module.exports.updateMemberStatus = async member => {
 
 module.exports.updateMemberSettings = async member => {
   const db = require("../services/db");
-  const { status, server_id, user_id } = member;
+  const { settings, server_id, user_id } = member;
   console.log("Updating Membership Status..");
   const update = `UPDATE members SET settings = $1 WHERE ( server_id, user_id ) = ( $2, $3 ) RETURNING *`;
   try {
-    const result = await db.query(update, [status, server_id, user_id]);
+    const result = await db.query(update, [settings, server_id, user_id]);
     if (result.rows[0]) return result.rows[0];
   } catch (err) {
     console.log(err);

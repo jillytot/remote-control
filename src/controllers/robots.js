@@ -18,7 +18,19 @@ module.exports.robotStatus = async () => {
   await updateRobotStatus(robots);
   await checkForLiveRobots();
   updateRobotServer(); //only send update event on changes
+  announceRecentlyLive();
   checkInterval();
+};
+
+const announceRecentlyLive = async () => {
+  const { liveRobotAlert } = require("./notifications/index");
+  robots.forEach(robot => {
+    let found = false;
+    prevBots.forEach(prevBot => {
+      if (robot.id === prevBot.id) found = true;
+    });
+    if (found === false) liveRobotAlert(robot);
+  });
 };
 
 module.exports.updateChannelStatus = async ({ robot, channel_id }) => {

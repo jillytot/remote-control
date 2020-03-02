@@ -13,7 +13,7 @@ module.exports.createMessage = async message => {
   } else {
     makeMess.message = message.message;
   }
-  makeMess.sender = message.user.username; //Will deprecate
+  makeMess.sender = message.user.username || message.user.name; //Will deprecate
   makeMess.sender_id = message.user.id || message.user.user_id; //Will deprecate
   makeMess.chat_id = message.chatId;
   makeMess.server_id = message.server_id;

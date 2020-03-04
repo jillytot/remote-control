@@ -33,7 +33,8 @@ const testStr = "shitty ass person you are phawk";
 
 const test = async () => {
   try {
-    await test___misc();
+    //await test___misc();
+    await test___getMemberAndUserSettings();
     // await test___validateEmail();
     // await test___getPledgeData();
     // await test___syncPatreonData();
@@ -63,6 +64,17 @@ const test = async () => {
 
 const test___misc = async () => {
   return null;
+};
+
+const test___getMemberAndUserSettings = async () => {
+  const { getMemberAndUserSettings } = require("../models/mixedQueries");
+  const members = await getMemberAndUserSettings(
+    "serv-cf6dea8c-3b97-4145-adce-c43ae53ecca8"
+  );
+  members.forEach(member => {
+    console.log(member);
+  });
+  console.log("Done");
 };
 
 const test___validateEmail = async () => {

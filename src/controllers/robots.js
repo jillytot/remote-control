@@ -45,9 +45,13 @@ const getLiveRobots = async () => {
   let checkRobots = [];
   await wss.clients.forEach(async ws => {
     if (ws.robot) {
-      checkRobots.push(ws.robot);
+      //No dupes!
+      if (!checkRobots.some(robot => robot.id === ws.robot.id)) {
+        checkRobots.push(ws.robot);
+      }
     }
   });
+  console.log("CHECK ROBOTS CHECK: ", checkRobots.length);
   return checkRobots;
 };
 

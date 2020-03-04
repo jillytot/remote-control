@@ -3,22 +3,26 @@ const overides = require("./overrides");
 const defaults = {
   internalKey: undefined, // Undefined for disabled
   serverPort: 3231,
-  heartBeat: 10000,
-  liveStatusInterval: 15000,
   secret: "temp_secret",
   reCaptchaSecretKey: overides.reCaptchaSecretKey,
   maxTimeout: 15768000, //Seconds, not milliseconds
   loadMessages: 25, //number of messages chatroom will get on load
   currentAPIVersion: "/dev",
-  passResetExpires: 900 * 1000, //about 15 minutes (in ms)
-  emailValidationExpires: 3600 * 1000 * 24, //24 hours
   logLevel: "debug",
   sendGrid: overides.sendGrid,
   sendMail: "",
-  authRequestTimeout: 300 * 1000, //5 minutes
+
   urlPrefix: "https://remo.tv/",
   supportEmail: "jill@remo.tv",
   reRouteOutboundEmail: "",
+
+  //INTERVALS:
+  heartBeat: 10000,
+  liveStatusInterval: 15000,
+  passResetExpires: 900 * 1000, //about 15 minutes (in ms)
+  emailValidationExpires: 3600 * 1000 * 24, //24 hours
+  authRequestTimeout: 300 * 1000, //5 minutes
+  emailNotificationInterval: 3600 * 1000 * 8, //8 Hours
 
   //PATREON STUFF
   patreonClientID:

@@ -595,3 +595,14 @@ module.exports.updateEmail = async ({ email, id }) => {
   }
   return null;
 };
+
+module.exports.updateSettings = async user => {
+  const query = `UPDATE users SET settings = $1 WHERE id = $2 RETURNING *`;
+  try {
+    const result = await db.query(query, [user.settings, user.id]);
+    if (result.rows[0]) return result.rows;
+  } catch (err) {
+    console.log(err);
+  }
+  return null;
+};

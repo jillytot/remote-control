@@ -176,3 +176,19 @@ module.exports.resetVerifiedEmailStatus = async user => {
   }
   return null;
 };
+
+module.exports.updateUserSettings = async user => {
+  const { updateSettings, getPrivateInfoFromId } = require("../models/user");
+  let getUser = await getPrivateInfoFromId(user.id);
+
+  if (user.settings.hasOwnProperty("enable_email_notifications")) {
+    getUser.settings.enable_email_notifications =
+      user.settings.enable_email_notifications;
+  }
+
+  const update = await updateSettings(getUser);
+  if (update) return update;
+  return jsonError(
+    "Unable to update settings for user, please try again later."
+  );
+};

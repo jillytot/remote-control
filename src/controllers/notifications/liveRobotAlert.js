@@ -1,13 +1,16 @@
 module.exports = async robot => {
   const { createMessage } = require("../../models/chatMessage");
   const { robotAlerts } = require("./");
-  const { getRobotServerSettings } = require("../../models/robotServer");
+  const {
+    getRobotServer,
+    updateRobotServerSettings
+  } = require("../../models/robotServer");
   const { notifyFollowers } = require("./");
-  //Todo: Check server settings for printing new follower to chat
-  const { settings } = await getRobotServerSettings(robot.host_id);
+  const { emailNotificationInterval } = require("../../config/server");
 
-  console.log("/////////LIVE ROBOT UP/////////!", robot.name);
-  //
+  let { settings, status } = await getRobotServer(robot.host_id);
+
+  //Add Announce Robot setting
   if (settings.announce_followers_in_chat !== false) {
     const alert = robotAlerts(robot.name);
     createMessage({
@@ -19,7 +22,14 @@ module.exports = async robot => {
     });
   }
 
-  //notify followers:
-  notifyFollowers(robot.host_id);
-  //Todo: Check user settings for emailing follower alerts
+  const time = Date.now();
+  //TODO: send email notification setting ( server side )
+  if (
+    !status.notification_sent ||
+    status.notification_sent > time + emailNotificationInterval
+  ) {
+    notifyFollowers(robot.host_id);
+    settings.notification_sent = time;
+    updateRobotServerSettings(settings);
+  }
 };

@@ -52,14 +52,25 @@ export default class UserNotificationSettings extends Component {
   };
 
   handleContent = () => {
-    return "Content";
+    const { email_verified } = this.props.status;
+
+    if (!email_verified) return "verified email required.";
+    return (
+      <Toggle
+        toggle={this.state.settings.enable_email_notifications}
+        label=""
+        onClick={this.handleToggle}
+        critical={false}
+        inline
+      />
+    );
   };
 
   render() {
     return (
       <React.Fragment>
         <InlineItem
-          label="Enable email notifications:"
+          label="enable email notifications:"
           item={this.handleContent()}
         />
         {this.handleSubmitResponse()}

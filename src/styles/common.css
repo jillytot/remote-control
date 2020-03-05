@@ -156,6 +156,14 @@
   justify-content: flex-end;
 }
 
+.toggle-container-inline {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  /* background-color: blue; */
+  justify-content: flex-end;
+}
+
 .toggle-group {
   background-color: rgb(15, 24, 39);
   padding: 12px;

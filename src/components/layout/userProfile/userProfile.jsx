@@ -103,7 +103,7 @@ export default class UserProfile extends Component {
           </div>
           {editEmail ? this.handleEditEmail() : <React.Fragment />}
           <VerifyEmail status={status} />
-          <UserNotificationSettings settings={settings} />
+          <UserNotificationSettings settings={settings} status={status} />
           {this.handleDisplayPatreon()}
         </div>
       </div>

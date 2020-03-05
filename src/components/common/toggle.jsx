@@ -1,7 +1,7 @@
 import React from "react";
 import "../../styles/common.css";
 
-const toggle = ({ toggle, label, onClick, critical }) => {
+const toggle = ({ toggle, label, onClick, critical, inline }) => {
   const toggleOn = () => {
     return (
       <div className={handleType()}>
@@ -26,8 +26,8 @@ const toggle = ({ toggle, label, onClick, critical }) => {
   };
 
   return (
-    <div className="form-group">
-      <div className="toggle-container">
+    <div className={inline ? "" : "form-group"}>
+      <div className={inline ? "toggle-container-inline" : "toggle-container"}>
         <div className="toggle-label">{label}</div>
         <div onClick={toggle => onClick(!toggle)}>
           {toggle ? toggleOn() : toggleOff()}

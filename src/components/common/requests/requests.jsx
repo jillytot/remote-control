@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import axios from "axios";
 
 /**
@@ -6,8 +6,15 @@ import axios from "axios";
  * @param {string} url the URL we are making a request to
  * @param {string} type POST, GET, PUT, DELETE, etc...
  * @param {object} payload the object sent to the server for this request
- * @param {function} handleResult callback function handled by parent component
- *                                returns response object from the server
+ * @param {function()} handleResult callback function handled by parent component
+ *        @returns {responseObject} returns response object from the server
+ *
+ * @example
+ * <Requests url="remo.tv/api/request"
+ *           type="post"
+ *           payload={ key: "item" }
+ *           handleResult={ result => this.handleResult( result )}
+ *           />
  */
 
 const Requests = async ({ url, type, payload, handleResult }) => {
@@ -63,7 +70,7 @@ const Requests = async ({ url, type, payload, handleResult }) => {
     return;
   };
 
-  return null;
+  return <React.Fragment />;
 };
 
 export default Requests;

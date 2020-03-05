@@ -1,0 +1,13 @@
+@import "../../../styles/mixins/inlineStyles.scss";
+
+.inlineItem {
+  &__container {
+    @include inline-container;
+  }
+  &__label {
+    @include inline-label;
+  }
+  &__info {
+    @include inline-content;
+  }
+}

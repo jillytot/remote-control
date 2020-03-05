@@ -11,6 +11,25 @@
   align-items: center;
 }
 
+@mixin inline-container {
+  display: flex;
+  flex-direction: row;
+  font-size: 14px;
+  padding: 1px;
+  align-items: center;
+}
+
+@mixin inline-label {
+  font-weight: bold;
+  padding-right: 6px;
+  color: rgb(106, 171, 255);
+}
+
+@mixin inline-content {
+  font-size: 14px;
+  color: white;
+}
+
 @mixin inline-success {
   @include inline;
   background-color: $color-green-background;

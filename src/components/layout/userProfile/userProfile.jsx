@@ -5,6 +5,7 @@ import { userProfile } from "../../../config/client/index";
 import EditEmail from "./editEmail";
 import LinkPatreon from "../../forms/linkPatreon/linkPatreon";
 import VerifyEmail from "../../forms/verifyEmail/verifyEmail";
+import UserNotificationSettings from "../../forms/userNotificationSettings/userNotificationSettings";
 
 export default class UserProfile extends Component {
   state = {
@@ -62,7 +63,14 @@ export default class UserProfile extends Component {
 
   handleShowInfo = () => {
     const { editEmail } = this.state;
-    const { email, username, created, id, status } = this.state.userData;
+    const {
+      email,
+      username,
+      created,
+      id,
+      status,
+      settings
+    } = this.state.userData;
     const date = new Date(parseInt(created)).toDateString();
 
     return (
@@ -95,7 +103,7 @@ export default class UserProfile extends Component {
           </div>
           {editEmail ? this.handleEditEmail() : <React.Fragment />}
           <VerifyEmail status={status} />
-
+          <UserNotificationSettings settings={settings} />
           {this.handleDisplayPatreon()}
         </div>
       </div>

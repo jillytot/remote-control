@@ -1,6 +1,15 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
 
+/**
+ * Requests:
+ * @param {string} url the URL we are making a request to
+ * @param {string} type POST, GET, PUT, DELETE, etc...
+ * @param {object} payload the object sent to the server for this request
+ * @param {function} handleResult callback function handled by parent component
+ *                                returns response object from the server
+ */
+
 const Requests = async ({ url, type, payload, handleResult }) => {
   const [token] = useState(() => {
     return localStorage.getItem("token");

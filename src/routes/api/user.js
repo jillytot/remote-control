@@ -159,3 +159,21 @@ router.post("/welcome", auth({ user: true }), async (req, res) => {
   if (req.user) setWelcomeFalse(req.user);
   res.send("OK.");
 });
+
+/**
+ * Input: settings {
+ *    enable_email_notifications: ( boolean ) }
+ *
+ * Response Success: { user.settings object }
+ * Response Error: { error: "error message" }
+ */
+
+router.post("/update-settings", auth({ user: true }), async (req, res) => {
+  const { updateUserSettings } = require("../../controllers/user");
+  const { settings } = req.body;
+  if (!settings) return jsonError("settings required.");
+  const user = req.user;
+  user.settings = settings;
+  const update = await updateUserSettings(user);
+  return res.send(update);
+});

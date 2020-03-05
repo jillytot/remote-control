@@ -4,7 +4,7 @@ const memberPt = {
   user_id: "",
   roles: ["@everyone"],
   status: { timeout: false, expireTimeout: null, member: false },
-  settings: { notifications: false },
+  settings: { enable_email_notifications: true },
   joined: "timestamp",
   invites: []
 };

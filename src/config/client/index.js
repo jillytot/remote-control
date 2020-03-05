@@ -68,6 +68,7 @@ const defaults = {
   kickMember: `${apiUrl}/moderation/kick`,
   welcome: `${apiUrl}/user/welcome`,
   membershipSettings: `${apiUrl}/robot-server/membership/update-settings`,
+  updateUserSettings: `${apiUrl}/user/update-settings`,
 
   //Channels:
   addChannel: `${apiUrl}/channels/create`,

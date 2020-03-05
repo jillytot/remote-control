@@ -2,15 +2,14 @@ import React, { Component } from "react";
 import Toggle from "../../common/toggle";
 import InlineResponse from "../../common/inlineResult/inlineResult";
 import InlineItem from "../../styleComponents/inlineItem/inlineItem";
+import axios from "axios";
+import { updateUserSettings } from "../../../config/client";
 
 export default class UserNotificationSettings extends Component {
   state = {
-    success: "",
+    status: "",
     error: "",
     settings: {
-      enable_email_notifications: null
-    },
-    compareSettings: {
       enable_email_notifications: null
     }
   };
@@ -19,32 +18,73 @@ export default class UserNotificationSettings extends Component {
     let { settings } = this.props;
     if (!settings.hasOwnProperty("enable_email_notifications"))
       settings.enable_email_notifications = true;
-    this.setState({ settings: settings, compareSettings: settings });
+    this.setState({ settings: settings });
   }
 
   handleToggle = () => {
-    this.setState(state => {
-      return {
-        settings: {
-          ...state.settings,
-          enable_email_notifications: !state.settings.enable_email_notifications
+    const { status } = this.state;
+    if (status === "") {
+      this.setState(state => {
+        return {
+          status: "...sending request",
+          settings: {
+            ...state.settings,
+            enable_email_notifications: !state.settings
+              .enable_email_notifications
+          }
+        };
+      });
+      this.handleUpdateServer();
+    }
+  };
+
+  handleUpdateServer = async () => {
+    const token = localStorage.getItem("token");
+    await axios
+      .post(
+        updateUserSettings,
+        {
+          settings: this.state.settings
+        },
+        {
+          headers: { authorization: `Bearer ${token}` }
         }
-      };
-    });
+      )
+      .then(res => {
+        console.log("RESPONSE: ", res.data);
+        if (res.data.error) {
+          this.setState({
+            error: res.data.error
+          });
+          return;
+        } else {
+          this.setState({ status: "Request updated successfully!" });
+          return;
+        }
+      })
+      .catch(err => {
+        console.log("Add Server Error: ", err);
+      });
+  };
+
+  handleCloseResponse = () => {
+    this.setState({ status: "", error: "" });
   };
 
   handleSubmitResponse = () => {
-    const { error, success } = this.state;
+    const { error, status } = this.state;
     if (error !== "")
       return (
         <InlineResponse message={error} onClose={this.handleCloseResponse} />
       );
-    if (success !== "")
+    if (status !== "")
       return (
         <InlineResponse
-          message={success}
+          message={status}
           type="success"
-          onClose={this.handleCloseResponse}
+          onClose={
+            status === "...sending request" ? null : this.handleCloseResponse
+          }
         />
       );
 

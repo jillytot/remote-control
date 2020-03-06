@@ -18,7 +18,7 @@ module.exports = async (server_id, server_name, channel_id, robot_name) => {
       (member.status.hasOwnProperty("enable_email_notifications") &&
         member.status.enable_email_notifications === false)
     ) {
-      return null;
+      return;
     }
 
     emailLiveRobotAnnoucemnent(member, {

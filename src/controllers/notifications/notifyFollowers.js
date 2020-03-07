@@ -17,34 +17,30 @@ module.exports = async (
   //   console.log("Sending notifications to members: ");
   members.forEach(member => {
     let send = true;
-    if (member.id === owner_id) {
-      // console.log("DO NOT SEND 0", member.username);
-      send = false;
-    }
+
+    if (member.id === owner_id) send = false;
+    if (send && member.member_status.member === false) send = false;
+
     if (
       send &&
       member.member_settings.hasOwnProperty("enable_notifications") &&
       member.member_settings.enable_notifications === false
-    ) {
-      // console.log("DO NOT SEND 1", member.username);
+    )
       send = false;
-    }
+
     if (
       send &&
       member.status.hasOwnProperty("email_verified") &&
       member.status.email_verified === false
-    ) {
-      // console.log("DO NOT SEND 2", member.username);
+    )
       send = false;
-    }
+
     if (
       send &&
       member.settings.hasOwnProperty("enable_email_notifications") &&
       member.settings.enable_email_notifications === false
-    ) {
+    )
       send = false;
-      // console.log("DO NOT SEND 3", member.username);
-    }
 
     if (send)
       emailLiveRobotAnnoucemnent(member, {
@@ -54,6 +50,4 @@ module.exports = async (
       });
   });
   return;
-  //get the user for each member,
-  //filter for verified email address & global notification settings
 };

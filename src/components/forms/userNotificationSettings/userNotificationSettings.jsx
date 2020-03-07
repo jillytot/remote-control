@@ -14,6 +14,15 @@ export default class UserNotificationSettings extends Component {
     }
   };
 
+  componentDidUpdate(prevProps, prevState) {
+    if (
+      prevState.settings.enable_email_notifications !== null &&
+      prevState.settings.enable_email_notifications !==
+        this.state.settings.enable_email_notifications
+    )
+      this.handleUpdateServer();
+  }
+
   componentDidMount() {
     let { settings } = this.props;
     if (!settings.hasOwnProperty("enable_email_notifications"))
@@ -25,6 +34,12 @@ export default class UserNotificationSettings extends Component {
     const { status } = this.state;
     if (status === "") {
       this.setState(state => {
+        console.log(
+          "Before Change: ",
+          state.settings,
+          this.state.settings,
+          !state.settings.enable_email_notifications
+        );
         return {
           status: "...sending request",
           settings: {
@@ -34,7 +49,7 @@ export default class UserNotificationSettings extends Component {
           }
         };
       });
-      this.handleUpdateServer();
+      console.log("After Change: ", this.state.settings);
     }
   };
 

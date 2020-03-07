@@ -22,7 +22,7 @@ const robotServerPt = {
 
 //Used to generate / create a new robot server
 module.exports.createRobotServer = async (server, user) => {
-  console.log("About to build server: ", server, user);
+  // console.log("About to build server: ", server, user);
   const { server_name } = server;
 
   //check for unique servername
@@ -194,7 +194,7 @@ module.exports.updateRobotServer = () => {
 //Sends updated active user list to all users on a robot server
 module.exports.activeUsersUpdated = async server_id => {
   let pickServer = await this.getActiveServer(server_id);
-  console.log("Send Active Users: ", server_id);
+  // console.log("Send Active Users: ", server_id);
   this.emitEvent(server_id, ACTIVE_USERS_UPDATED, pickServer.users);
 };
 
@@ -249,7 +249,7 @@ module.exports.getLocalTypes = async (server_id, user_id) => {
 
 //Get all server information from server_id
 module.exports.getRobotServer = async server_id => {
-  console.log("CHECK: ", server_id);
+  // console.log("CHECK: ", server_id);
   const db = require("../services/db");
   try {
     const query = "SELECT * FROM robot_servers WHERE server_id = $1 LIMIT 1";
@@ -264,7 +264,7 @@ module.exports.getRobotServer = async server_id => {
 };
 
 module.exports.getRobotServerFromName = async name => {
-  console.log("CHECK FOR SERVER by name: ", name);
+  // console.log("CHECK FOR SERVER by name: ", name);
   const db = require("../services/db");
   const query = "SELECT * FROM robot_servers WHERE server_name = $1 LIMIT 1";
   try {

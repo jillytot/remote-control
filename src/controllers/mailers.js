@@ -16,7 +16,6 @@ module.exports.emailResetKey = (user, { key_id }) => {
 
 module.exports.emailValidationKey = (user, { key_id }) => {
   const { reRouteOutboundEmail } = require("../config/server/index");
-  console.log(reRouteOutboundEmail);
   let { sendMail } = require("../services/email");
   const { urlPrefix } = require("../config/server");
   const text = `${urlPrefix}validate-email/${key_id}`;

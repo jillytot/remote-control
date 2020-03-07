@@ -7,7 +7,7 @@ router.get("/followed", auth({ user: true }), async (req, res) => {
   const { followedServers } = require("../../controllers/user");
 
   if (req.user && req.user.id) {
-    console.log("Checking Followed Servers: ", req.user.username);
+    // console.log("Checking Followed Servers: ", req.user.username);
     const followed = await followedServers(req.user);
     res.send(followed);
     return;
@@ -54,7 +54,7 @@ router.post("/get-password-reset", auth({ user: true }), async (req, res) => {
 });
 
 router.post("/password-reset", async (req, res) => {
-  console.log("PASSWORD RESET");
+  // console.log("PASSWORD RESET");
   const { useResetKey } = require("../../controllers/user");
   if (req.body && req.body.key_id && req.body.password) {
     // console.log("PASSWORD RESET CHECK: ", req.body);
@@ -118,7 +118,7 @@ router.post("/validate-email", auth({ user: true }), async (req, res) => {
   const { validateEmail } = require("../../controllers/validateEmail");
   if (!req.user) return jsonError("User required");
   const { expire } = req.body || null;
-  console.log("REQUEST EMAIL VALIDATION...");
+  // console.log("REQUEST EMAIL VALIDATION...");
   const validate = await validateEmail(req.user, expire);
   res.send(validate);
 });

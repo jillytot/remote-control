@@ -79,7 +79,7 @@ module.exports.useResetKey = async ({ key_id, password }) => {
   const { getKey, updateKey } = require("../models/keys");
   const { getUserInfoFromId, createAuthToken } = require("../models/user");
   const { expired, expires, ref } = await getKey({ key_id });
-  console.log("GET KEY: ", expired, expires, Date.now());
+  // console.log("GET KEY: ", expired, expires, Date.now());
   if (expired === true || expired === "true" || expires <= Date.now()) {
     return err(
       "This key is not valid, either it doesn't exist, or it could have expired. Please request a new password reset"
@@ -154,7 +154,7 @@ module.exports.updateEmail = async ({ email, id }) => {
 
   const checkForDupes = await checkEmail({ email: input });
   if (checkForDupes) {
-    console.log("CHECK FOR EMAIL DUPES: ", input, checkForDupes);
+    // console.log("CHECK FOR EMAIL DUPES: ", input, checkForDupes);
     return jsonError("This email is already in use, please try another.");
   } else {
     const update = await updateEmail({ email: input, id: id });

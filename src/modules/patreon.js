@@ -18,7 +18,7 @@ module.exports.patreonGetTokens = async (redirectCode, redirectUri) => {
       redirectCode,
       redirectUri
     );
-    console.log("Patreon Tokens: ", tokens);
+    // console.log("Patreon Tokens: ", tokens);
     return tokens;
   } catch (err) {
     console.log(err);

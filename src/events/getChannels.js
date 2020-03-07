@@ -14,6 +14,6 @@ module.exports = async (ws, data) => {
   };
 
   // ws.user[data.server_id] = sendInfo.invites;
-  console.log(ws.user);
+  // console.log(ws.user);
   ws.emitEvent(SEND_ROBOT_SERVER_INFO, sendInfo);
 };

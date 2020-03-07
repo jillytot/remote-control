@@ -60,13 +60,13 @@ module.exports.localUnTimeout = async moderate => {
   if (moderate.message["error"] === false)
     moderate = await this.handleLocalUnTimeout(moderate);
 
-  console.log("UNTIMEOUT CHECK: ", moderate);
+  // console.log("UNTIMEOUT CHECK: ", moderate);
   return moderate.message;
 };
 
 module.exports.kickMember = async moderate => {
   const { emitEvent } = require("../models/user");
-  console.log("KICK MEMBER!");
+  // console.log("KICK MEMBER!");
   moderate.error = false;
   moderate = parseInput(moderate);
   moderate = await getMembers(moderate);
@@ -84,7 +84,7 @@ module.exports.kickMember = async moderate => {
       server_id: moderate.message.server_id
     });
     await localMessageRemoval(moderate);
-    console.log("KICK MEMBER CHECK: ", moderate.badUser.username);
+    // console.log("KICK MEMBER CHECK: ", moderate.badUser.username);
   }
   return moderate.message;
 };
@@ -203,7 +203,7 @@ const getMembers = async ({
   level,
   ...rest
 }) => {
-  console.log("Verifying users for moderation");
+  // console.log("Verifying users for moderation");
   const badUsername = badUser;
   const { getIdFromUsername } = require("../models/user");
   const { getMember } = require("../models/serverMembers");
@@ -240,7 +240,7 @@ const getMembers = async ({
 
 //CHECK TIMEOUT COMMAND FOR ERRORS
 const checkTimeout = ({ arg, badUser, moderator, message, ...rest }) => {
-  console.log("Checking timeout command for errors");
+  // console.log("Checking timeout command for errors");
 
   //YOU CAN'T TIMEOUT JILL, DONT EVEN TRY
   if (badUser.username === "jill") {
@@ -298,18 +298,18 @@ module.exports.handleLocalTimeout = async ({
     const addRemainder = Number(
       badUser.status.expireTimeout - (time + Date.now())
     );
-    console.log(
-      "User is already timed out, checking for remainder: ",
-      addRemainder
-    );
+    // console.log(
+    //   "User is already timed out, checking for remainder: ",
+    //   addRemainder
+    // );
     if (addRemainder > 0) time = addRemainder;
   }
   badUser.status.expireTimeout = Number(Date.now() + time);
-  console.log(
-    "TIMEOUT STATUS CHECK: ",
-    badUser.status,
-    badUser.status.expireTimeout - Date.now()
-  );
+  // console.log(
+  //   "TIMEOUT STATUS CHECK: ",
+  //   badUser.status,
+  //   badUser.status.expireTimeout - Date.now()
+  // );
   let checkUpdatedStatus = await updateMemberStatus(badUser); //Member Status
   if (!checkUpdatedStatus) {
     message = handleError(message, "Unable to timeout user");
@@ -323,7 +323,7 @@ module.exports.handleLocalTimeout = async ({
 };
 
 const clearLocalTimeout = async member => {
-  console.log("Clearing timeout for local member");
+  // console.log("Clearing timeout for local member");
   const { updateMemberStatus } = require("../models/serverMembers");
   member.status.expireTimeout = 0;
   member.status.timeout = false;

@@ -7,7 +7,7 @@ const { reservedWordsDefault } = require("../models/filters");
 
 module.exports.validateButtonsJSON = input => {
   const limit = 64; //# of buttons
-  console.log("JSON ENTRIES: ", input.length);
+  // console.log("JSON ENTRIES: ", input.length);
   if (input.length > limit)
     return jsonError(
       `Max entries exceeded, no more than ${limit} buttons are allowed`
@@ -16,7 +16,7 @@ module.exports.validateButtonsJSON = input => {
 };
 
 module.exports.validateButton = ({ input, label, max, min, notRequired }) => {
-  console.log("VALIDATE BUTTON VALUE: ", label, input);
+  // console.log("VALIDATE BUTTON VALUE: ", label, input);
   if (notRequired && input === "") return "";
   return this.validator({
     input: input,

@@ -34,12 +34,6 @@ export default class UserNotificationSettings extends Component {
     const { status } = this.state;
     if (status === "") {
       this.setState(state => {
-        console.log(
-          "Before Change: ",
-          state.settings,
-          this.state.settings,
-          !state.settings.enable_email_notifications
-        );
         return {
           status: "...sending request",
           settings: {
@@ -49,7 +43,6 @@ export default class UserNotificationSettings extends Component {
           }
         };
       });
-      console.log("After Change: ", this.state.settings);
     }
   };
 
@@ -66,7 +59,6 @@ export default class UserNotificationSettings extends Component {
         }
       )
       .then(res => {
-        console.log("RESPONSE: ", res.data);
         if (res.data.error) {
           this.setState({
             error: res.data.error

@@ -21,7 +21,7 @@ router.post("/", async (req, res) => {
       let data = req.body;
       data.username = validateUserName(data.username);
       if (data.username.error) return res.send(data.username);
-      console.log("DATA.EMAIL: ", data.email);
+      // console.log("DATA.EMAIL: ", data.email);
       data.email = validateUserEmail(data.email);
       if (data.email.error) return res.send(data.email);
 

@@ -14,7 +14,6 @@ module.exports.robotStatus = async () => {
   const { checkForLiveRobots } = require("../controllers/robotServer");
   prevBots = robots;
   robots = await getLiveRobots();
-  console.log("Checking Live Robots");
   await updateRobotStatus(robots);
   await checkForLiveRobots();
   updateRobotServer(); //only send update event on changes
@@ -51,7 +50,7 @@ const getLiveRobots = async () => {
       }
     }
   });
-  console.log("CHECK ROBOTS CHECK: ", checkRobots.length);
+  // console.log("CHECK ROBOTS CHECK: ", checkRobots.length);
   return checkRobots;
 };
 

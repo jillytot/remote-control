@@ -119,7 +119,7 @@ router.post("/validate-invite", async (req, res) => {
       return;
     }
   }
-  console.log("BOOP");
+  // console.log("BOOP");
   res.send(jsonError("This invite either doesn't exist, or is invalid"));
   return;
 });
@@ -254,7 +254,7 @@ router.get("/delete", async (req, res) => {
 });
 
 router.post("/delete", auth({ user: true }), async (req, res) => {
-  console.log("API / Robot Server / Delete: ", req.body);
+  // console.log("API / Robot Server / Delete: ", req.body);
   let response = {};
 
   if (req.user) {

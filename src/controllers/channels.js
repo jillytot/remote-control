@@ -13,7 +13,7 @@ module.exports.tempEnsureDefaultChannel = async (server_id, channel_id) => {
     let { settings } = getServer;
     newDefault = await getChannels(server_id);
     settings.default_channel = newDefault[0].id;
-    console.log("SETTING NEW DEFAULT CHANNEL: ", settings);
+    // console.log("SETTING NEW DEFAULT CHANNEL: ", settings);
     await updateRobotServerSettings(server_id, settings);
     updateRobotServer();
   }
@@ -86,7 +86,7 @@ module.exports.renameChannel = async (user, channel_id, channel_name) => {
     name: channel_name,
     id: channel.id
   });
-  console.log("Update Selected Server: ", server.server_id);
+  // console.log("Update Selected Server: ", server.server_id);
   this.updateChannelsOnServer(server.server_id);
   return update;
 };

@@ -86,7 +86,7 @@ module.exports.getRobotFromId = async robot_id => {
     try {
       const query = `SELECT * FROM robots WHERE id = $1 LIMIT 1`;
       const check = await db.query(query, [robot_id]);
-      console.log(check.rows[0]);
+
       if (check.rows[0]) return check.rows[0];
       return { status: "error", error: "invalid robot ID" };
     } catch (err) {
@@ -116,7 +116,6 @@ module.exports.getRobotsFromServerId = async server_id => {
 
 module.exports.sendRobotsForServer = async server_id => {
   const robotServer = require("../models/robotServer");
-  console.log("SEND ROBOTS TO SERVER CHECK: ", server_id);
   const { GET_ROBOTS } = require("../events/definitions");
   robotServer.emitEvent(
     server_id,
@@ -134,7 +133,6 @@ module.exports.deleteRobot = async robot => {
     const result = await db.query(remove, [id]);
     response.status = "success!";
     response.result = "Robot successfullly deleted";
-    console.log(response);
 
     await this.sendRobotsForServer(host_id);
     return response;

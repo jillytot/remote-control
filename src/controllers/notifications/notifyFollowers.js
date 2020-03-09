@@ -8,6 +8,7 @@ module.exports = async (
   const { getMemberAndUserSettings } = require("../../models/mixedQueries");
   const { emailLiveRobotAnnoucemnent } = require("../../controllers/mailers");
   const { robotAlerts } = require("./");
+  const { enableEmailAlerts } = require("../../config/server");
 
   if (!server_name || !robot_name || !channel_id) return;
 
@@ -15,40 +16,22 @@ module.exports = async (
   const alert = robotAlerts(robot_name, server_name);
   //
   //   console.log("Sending notifications to members: ");
-  members.forEach(member => {
-    let send = false;
-
-    if (member.id === owner_id) send = false;
-    if (send && member.member_status.member === false) send = false;
-
-    if (
-      send &&
-      member.member_settings.hasOwnProperty("enable_notifications") &&
-      member.member_settings.enable_notifications === false
-    )
-      send = false;
-
-    if (
-      (send && !member.status.hasOwnProperty("email_verified")) ||
-      (send &&
-        member.status.hasOwnProperty("email_verified") &&
-        member.status.email_verified === false)
-    )
-      send = false;
-
-    if (
-      send &&
-      member.settings.hasOwnProperty("enable_email_notifications") &&
-      member.settings.enable_email_notifications === false
-    )
-      send = false;
-
-    if (send)
-      emailLiveRobotAnnoucemnent(member, {
-        server_name: server_name,
-        channel_id: channel_id,
-        robotAlert: alert
-      });
-  });
+  if (enableEmailAlerts)
+    members.forEach(member => {
+      if (
+        member.id !== owner_id &&
+        member.status.email_verified &&
+        (member.member_settings.enable_notifications ||
+          !member.member_settings.hasOwnProperty("enable_notifications")) &&
+        (member.settings.enable_email_notifications ||
+          !member.settings.hasOwnProperty("enable_email_notifications"))
+      ) {
+        emailLiveRobotAnnoucemnent(member, {
+          server_name: server_name,
+          channel_id: channel_id,
+          robotAlert: alert
+        });
+      }
+    });
   return;
 };

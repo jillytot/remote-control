@@ -11,6 +11,7 @@ const defaults = {
   logLevel: "debug",
   sendGrid: overides.sendGrid,
   sendMail: "",
+  enableEmailAlerts: true,
 
   urlPrefix: "https://remo.tv/",
   supportEmail: "jill@remo.tv",

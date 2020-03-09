@@ -26,16 +26,16 @@ module.exports = async robot => {
   }
 
   const time = Date.now();
-  console.log("GETTING READY TO SEND NOTIFICATION!, ");
-  if (status.notification_sent)
-    console.log(
-      "Interval: ",
-      emailNotificationInterval,
-      "Notification Sent + Interval: ",
-      status.notification_sent + emailNotificationInterval,
-      "Current Time: ",
-      time
-    );
+  // console.log("GETTING READY TO SEND NOTIFICATION!, ");
+  // if (status.notification_sent)
+  //   console.log(
+  //     "Interval: ",
+  //     emailNotificationInterval,
+  //     "Notification Sent + Interval: ",
+  //     status.notification_sent + emailNotificationInterval,
+  //     "Current Time: ",
+  //     time
+  //   );
 
   if (
     !status.notification_sent ||
@@ -54,6 +54,6 @@ module.exports = async robot => {
     status.notification_sent = time;
     updateRobotServerStatus(robot.host_id, status);
   } else {
-    console.log("NOTIFICATION NOT SENT!");
+    // console.log("NOTIFICATION NOT SENT!");
   }
 };

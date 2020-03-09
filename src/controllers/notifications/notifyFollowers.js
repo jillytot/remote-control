@@ -16,7 +16,7 @@ module.exports = async (
   //
   //   console.log("Sending notifications to members: ");
   members.forEach(member => {
-    let send = true;
+    let send = false;
 
     if (member.id === owner_id) send = false;
     if (send && member.member_status.member === false) send = false;
@@ -29,9 +29,10 @@ module.exports = async (
       send = false;
 
     if (
-      send &&
-      member.status.hasOwnProperty("email_verified") &&
-      member.status.email_verified === false
+      (send && !member.status.hasOwnProperty("email_verified")) ||
+      (send &&
+        member.status.hasOwnProperty("email_verified") &&
+        member.status.email_verified === false)
     )
       send = false;
 

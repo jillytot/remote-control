@@ -28,7 +28,7 @@ module.exports = async robot => {
 
   if (
     !status.notification_sent ||
-    status.notification_sent < time + emailNotificationInterval
+    status.notification_sent > time + emailNotificationInterval
   ) {
     const getRobot = await getRobotFromId(robot.id);
     const { current_channel } = getRobot.status;

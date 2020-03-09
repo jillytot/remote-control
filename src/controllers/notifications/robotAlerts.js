@@ -3,8 +3,9 @@ module.exports = (robotName, serverName) => {
 
   const chatAlerts = [
     `Robot ${robotName} is Live!`,
-    `Dont panic! Robot ${robotName} is now online! robotYay`,
-    `${robotName} is now online, you have 10 seconds to comply!`
+    `Dont panic! Robot ${robotName} is now online! robotYay`
+    // `${robotName} is now online, you have 10 seconds to comply!`
+    // `${robotName} is now online, all systems nominal.`
   ];
 
   const emailAlerts = [

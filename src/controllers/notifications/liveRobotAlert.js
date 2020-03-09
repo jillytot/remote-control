@@ -24,11 +24,22 @@ module.exports = async robot => {
       broadcast: "server"
     });
   }
+
   const time = Date.now();
+  console.log("GETTING READY TO SEND NOTIFICATION!, ");
+  if (status.notification_sent)
+    console.log(
+      "Interval: ",
+      emailNotificationInterval,
+      "Notification Sent + Interval: ",
+      status.notification_sent + emailNotificationInterval,
+      "Current Time: ",
+      time
+    );
 
   if (
     !status.notification_sent ||
-    status.notification_sent > time + emailNotificationInterval
+    time > status.notification_sent + emailNotificationInterval
   ) {
     const getRobot = await getRobotFromId(robot.id);
     const { current_channel } = getRobot.status;
@@ -42,5 +53,7 @@ module.exports = async robot => {
     );
     status.notification_sent = time;
     updateRobotServerStatus(robot.host_id, status);
+  } else {
+    console.log("NOTIFICATION NOT SENT!");
   }
 };

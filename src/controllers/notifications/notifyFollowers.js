@@ -16,22 +16,23 @@ module.exports = async (
   const alert = robotAlerts(robot_name, server_name);
   //
   //   console.log("Sending notifications to members: ");
-  if (enableEmailAlerts)
-    // members.forEach(member => {
-    //   if (
-    //     member.id !== owner_id &&
-    //     member.status.email_verified &&
-    //     (member.member_settings.enable_notifications ||
-    //       !member.member_settings.hasOwnProperty("enable_notifications")) &&
-    //     (member.settings.enable_email_notifications ||
-    //       !member.settings.hasOwnProperty("enable_email_notifications"))
-    //   ) {
-    //     emailLiveRobotAnnoucemnent(member, {
-    //       server_name: server_name,
-    //       channel_id: channel_id,
-    //       robotAlert: alert
-    //     });
-    //   }
-    // });
-    return;
+  console.log("//////ENABLE EMAIL ALERTS: ", enableEmailAlerts);
+  if (enableEmailAlerts === true)
+    members.forEach(member => {
+      if (
+        member.id !== owner_id &&
+        member.status.email_verified &&
+        (member.member_settings.enable_notifications ||
+          !member.member_settings.hasOwnProperty("enable_notifications")) &&
+        (member.settings.enable_email_notifications ||
+          !member.settings.hasOwnProperty("enable_email_notifications"))
+      ) {
+        emailLiveRobotAnnoucemnent(member, {
+          server_name: server_name,
+          channel_id: channel_id,
+          robotAlert: alert
+        });
+      }
+    });
+  return;
 };

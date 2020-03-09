@@ -9,8 +9,8 @@ module.exports = (robotName, serverName) => {
 
   const emailAlerts = [
     `${robotName} just went live on ${serverName}`,
-    `The robot revolution is nigh! ${robotName} just went live on ${serverName}`,
-    `${robotName} just went live on ${serverName}, you have 10 seconds to comply!`
+    `The robot revolution is nigh! ${robotName} just went live on ${serverName}`
+    // `${robotName} just went live on ${serverName}, you have 10 seconds to comply!`
   ];
 
   if (serverName) alerts = emailAlerts;

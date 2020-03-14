@@ -18,7 +18,7 @@ router.post("/make", auth({ robot: true, user: true }), async (req, res) => {
   const { getRobotServer } = require("../../models/robotServer");
   
   let robotServer = await getServerIdFromChannelId(req.body.channel_id);
-  robotServer = await getRobotServer(checkUser.result);
+  robotServer = await getRobotServer(robotServer.result);
   
   if (req.robot){
     if (robotServer.server_id == req.robot.host_id) validate = true;

@@ -123,16 +123,16 @@ module.exports.buildButtons = async (buttons, channel_id, controls_id) => {
           }
         }
 
-        if (!foundError && button.cooldown) {
+        if (!foundError && (button.cooldown || button.cooldown === 0)) {
           newButton.cooldown = button.cooldown;
           const checkInt = Number.isInteger(newButton.cooldown);
           if (!checkInt)
             newButton.cooldown = jsonError(
               "Cooldown must be a single whole number ( integer )."
             );
-          if (button.cooldown > 99999)
+          if (button.cooldown > 99999 || button.cooldown < 1)
             newButton.cooldown = jsonError(
-              "Cooldown cannot be over 5 digits in length."
+              "Cooldown cannot be over 5 digits in length, or less than 1."
             );
           console.log("Cooldown Result: ", newButton);
           if (newButton.cooldown.error) {

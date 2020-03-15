@@ -21,6 +21,12 @@ module.exports.exampleControls = () => {
       command: "example",
       access: "owner",
       id: "7"
+    },
+    {
+      label: "example timer",
+      command: "timer-example",
+      id: "8",
+      cooldown: 100
     }
   ];
 };
@@ -116,6 +122,27 @@ module.exports.buildButtons = async (buttons, channel_id, controls_id) => {
             return errorData;
           }
         }
+
+        if (!foundError && button.cooldown) {
+          newButton.cooldown = button.cooldown;
+          const checkInt = Number.isInteger(newButton.cooldown);
+          if (!checkInt)
+            newButton.cooldown = jsonError(
+              "Cooldown cannot contain decimal places"
+            );
+          if (button.cooldown > 99999)
+            newButton.cooldown = jsonError(
+              "Cooldown cannot be over 5 digits in length."
+            );
+          console.log("Cooldown Result: ", newButton);
+          if (newButton.cooldown.error) {
+            console.log("Error Detected");
+            foundError = true;
+            errorData = newButton.cooldown;
+            return errorData;
+          }
+        }
+
         if (!foundError && button.access) {
           newButton.access = validateButton({
             input: button.access,

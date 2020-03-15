@@ -33,8 +33,9 @@ const testStr = "shitty ass person you are phawk";
 
 const test = async () => {
   try {
-    //await test___misc();
-    await test___getMemberAndUserSettings();
+    await test___checkType();
+    // await test___misc();
+    // await test___getMemberAndUserSettings();
     // await test___validateEmail();
     // await test___getPledgeData();
     // await test___syncPatreonData();
@@ -64,6 +65,12 @@ const test = async () => {
 
 const test___misc = async () => {
   return null;
+};
+
+const test___checkType = async () => {
+  const { checkType } = require("../modules/validation");
+  console.log(checkType("2020", "string"));
+  return;
 };
 
 const test___getMemberAndUserSettings = async () => {

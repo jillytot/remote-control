@@ -5,6 +5,10 @@ const { reservedWordsDefault } = require("../models/filters");
 
 // DATA VALIDATION
 
+//SETTINGS:
+const typeDefault = "string";
+
+//VALIDATOR Interfaces
 module.exports.validateButtonsJSON = input => {
   const limit = 64; //# of buttons
   // console.log("JSON ENTRIES: ", input.length);
@@ -15,8 +19,15 @@ module.exports.validateButtonsJSON = input => {
   return input;
 };
 
-module.exports.validateButton = ({ input, label, max, min, notRequired }) => {
-  // console.log("VALIDATE BUTTON VALUE: ", label, input);
+module.exports.validateButton = ({
+  input,
+  label,
+  max,
+  min,
+  notRequired,
+  type
+}) => {
+  console.log("VALIDATE BUTTON VALUE: ", label, input, "type: ", type);
   if (notRequired && input === "") return "";
   return this.validator({
     input: input,
@@ -24,7 +35,8 @@ module.exports.validateButton = ({ input, label, max, min, notRequired }) => {
     max: max || 64,
     min: min || 1,
     regex: asciiRegex,
-    regexInfo: "ASCII Characters"
+    regexInfo: "ASCII Characters",
+    type: type || typeDefault
   });
 };
 
@@ -85,7 +97,7 @@ module.exports.validateUserEmail = input => {
 module.exports.validator = (
   { input, label, type, max, min, regex, regexInfo, removeSpaces, filter } = {
     label: label || "Input",
-    type: type || "string",
+    type: type || typeDefault,
     regex: regex || alphaNum_,
     regexInfo: regexInfo || "Letters, Numbers, and Underscores",
     filter: filter || "none"
@@ -96,8 +108,8 @@ module.exports.validator = (
     return jsonError(`A value is required for ${label}`);
   }
 
-  if (type & !checkType(input, type)) {
-    return jsonError(`Wrong data type, ${type} required.`);
+  if (type && !checkType(input, type)) {
+    return jsonError(`Wrong data type for ${label}, ${type} required.`);
   }
 
   if (removeSpaces) updateInput = updateInput.replace(/\s+/g, "");

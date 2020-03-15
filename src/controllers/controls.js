@@ -128,7 +128,7 @@ module.exports.buildButtons = async (buttons, channel_id, controls_id) => {
           const checkInt = Number.isInteger(newButton.cooldown);
           if (!checkInt)
             newButton.cooldown = jsonError(
-              "Cooldown cannot contain decimal places"
+              "Cooldown must be a single whole number ( integer )."
             );
           if (button.cooldown > 99999)
             newButton.cooldown = jsonError(

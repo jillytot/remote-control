@@ -16,11 +16,16 @@ router.post("/make", auth({ robot: true, user: true }), async (req, res) => {
   } = require("../../models/channel");
   const { buildButtons } = require("../../controllers/controls");
   const { getRobotServer } = require("../../models/robotServer");
-
-  let checkUser = await getServerIdFromChannelId(req.body.channel_id);
-  checkUser = await getRobotServer(checkUser.result);
-  if (checkUser.owner_id === req.user.id) validate = true;
-
+  
+  let robotServer = await getServerIdFromChannelId(req.body.channel_id);
+  robotServer = await getRobotServer(robotServer.result);
+  
+  if (req.robot){
+    if (robotServer.server_id == req.robot.host_id) validate = true;
+  } else if (req.user){
+    if (robotServer.owner_id === req.user.id) validate = true;
+  }
+  
   if (req.body.channel_id && req.body.buttons && validate) {
     console.log("BUTTONS LENGTH: ", req.body.buttons.length);
     const checkForControls = await getChannel(req.body.channel_id);

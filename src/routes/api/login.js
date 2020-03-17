@@ -25,13 +25,12 @@ router.post("/", async (req, res) => {
   }
 
   const verify = await checkPassword(req.body);
-  if (verify && verify.password)
-    // console.log("Check Password Result: ", verify.password);
-    //TODO: Edge Cases for successfull login, but user has no / expired token.
+  // console.log("Check Password Result: ", verify.password);
+  //TODO: Edge Cases for successfull login, but user has no / expired token.
 
-    verify.password
-      ? res.send(verify) //Authenticate / Re-Authenticate User
-      : res.send(jsonError(loginError));
+  verify.password
+    ? res.send(verify) //Authenticate / Re-Authenticate User
+    : res.send(jsonError(loginError));
 
   if (verify.password) console.log("User has logged in: ", verify.username);
 });

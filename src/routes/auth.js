@@ -26,11 +26,9 @@ const auth = options => {
 
           // console.log("API AUTH: ", tokenData);
           if (type === "user" && options.user) {
-            //what
             req.user = await authUserData(tokenData);
           } else if (type === "rbot" && options.robot) {
-            //e you need t
-            log(`API AUTH ROBOT: ${req.robot.name}`);
+            //log(`API AUTH ROBOT: ${req.robot.name}`);
             // console.log(req.robot, req.body);
             req.robot = await authRobotData(tokenData);
             // console.log("AUTH ROBOT: ", req.robot, req.body);

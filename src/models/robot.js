@@ -175,7 +175,7 @@ module.exports.verifyRobotToken = async token => {
     const query = `SELECT * FROM robots WHERE id = $1 LIMIT 1`;
     const result = await db.query(query, [token["id"]]);
     // console.log("Get user from DB: ", result.rows[0]);
-    return await result.rows[0];
+    return result.rows[0];
   } else {
     let reason = {
       error: "cannot resolve user data from token"

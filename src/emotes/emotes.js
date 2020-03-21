@@ -2,7 +2,7 @@ import robotHi from "./imgs/robotHi.png";
 import robotHype from "./imgs/robotHype.png";
 import robotYay from "./imgs/robotYay.png";
 import jill from "./imgs/jill.png";
-import skeeter from "./imgs/skeeter.png";
+import brooke from "./imgs/brooke.png";
 import ged from "./imgs/gedyy.png";
 import tgcfabian from "./imgs/tgcfabian.png";
 import boland from "./imgs/boland.png";
@@ -15,7 +15,7 @@ const emotes = {
   robotHype: robotHype,
   robotYay: robotYay,
   jill: jill,
-  skeet: skeeter,
+  brooke: brooke,
   ged: ged,
   TGCFabian: tgcfabian,
   Boland: boland,

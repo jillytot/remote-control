@@ -20,6 +20,7 @@ module.exports = async (
   if (enableEmailAlerts === true)
     members.forEach(member => {
       if (
+        member.member_status.member &&
         member.id !== owner_id &&
         member.status.email_verified &&
         (member.member_settings.enable_notifications ||

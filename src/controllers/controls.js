@@ -21,13 +21,13 @@ module.exports.exampleControls = () => {
       command: "example",
       access: "owner",
       id: "7"
-    },
-    {
-      label: "example timer",
-      command: "timer-example",
-      id: "8",
-      cooldown: 100
     }
+    // {
+    //   label: "example timer",
+    //   command: "timer-example",
+    //   id: "8",
+    //   cooldown: 100
+    // }
   ];
 };
 

@@ -4,7 +4,7 @@
   "private": true,
   "dependencies": {
     "@sendgrid/mail": "^6.4.0",
-    "axios": "^0.19.0",
+    "axios": "^0.21.1",
     "bcrypt": "^3.0.6",
     "body-parser": "^1.19.0",
     "concurrently": "^4.1.0",
